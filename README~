@@ -14,7 +14,6 @@ Then:
 
 (don't mind the warnings...)
 
-
 - INSTALLING UNDER WINDOWS:
 BIMP plugin for Windows is already compiled and it's saved in bin/win32 directory.
 Just copy bimp.exe into the default GIMP-plugins folder:

@@ -1,0 +1,4 @@
+- MANIP_CROP: add position in manual crop
+- MANIP_WATERMARK: better watermark position buttons
+- OPERATE: errors handling
+- GUI: add preview 
