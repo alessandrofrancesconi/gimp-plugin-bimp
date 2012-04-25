@@ -7,8 +7,11 @@
 #define WATERMARK_WINDOW_W 320
 #define WATERMARK_WINDOW_H 450
 
-#define BUTTON_W WATERMARK_WINDOW_W - 80
-#define BUTTON_H 30
+#define INPUT_W 200
+#define INPUT_H 30
+
+#define LABEL_W 60
+#define LABEL_H 30
 
 #define LABEL_TRANSP_W 80
 #define LABEL_TRANSP_H 40

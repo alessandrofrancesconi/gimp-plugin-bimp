@@ -29,8 +29,8 @@
 #define USEROPTIONS_CHOOSER_W USEROPTIONS_PANEL_W - 40
 #define USEROPTIONS_CHOOSER_H 30
 
-#define FILE_PREVIEW_W USEROPTIONS_PANEL_W / 2
-#define FILE_PREVIEW_H 50
+#define FILE_PREVIEW_W 150
+#define FILE_PREVIEW_H 140
 
 #define FILE_LIST_PANEL_W INPUT_PANEL_W
 #define FILE_LIST_PANEL_H 190
@@ -42,7 +42,7 @@
 #define FILE_LIST_BUTTON_H FILE_LIST_BUTTONS_PANEL_H
 
 void bimp_show_gui(void);
-void bimp_refresh_sequence_box(void);
+void bimp_refresh_sequence_panel(void);
 void bimp_progress_bar_set(double, char*);
 void bimp_show_error_dialog(char*, GtkWidget*);
 void bimp_set_busy(gboolean);

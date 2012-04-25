@@ -29,22 +29,24 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 	vbox_text = gtk_vbox_new(FALSE, 5);
 	hbox_text_entry = gtk_hbox_new(FALSE, 5);
 	label_text = gtk_label_new("Text:");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_text), settings->textmode);
+	gtk_widget_set_size_request (label_text, LABEL_W, LABEL_H);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_text), settings->textmode);
 	entry_text = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(entry_text), 50);
 	gtk_entry_set_text(GTK_ENTRY(entry_text), settings->text);
-	gtk_widget_set_size_request (entry_text, BUTTON_W, BUTTON_H);
+	gtk_widget_set_size_request (entry_text, INPUT_W, INPUT_H);
 	
 	hbox_text_font = gtk_hbox_new(FALSE, 5);
 	label_font = gtk_label_new("Font:");
+	gtk_widget_set_size_request (label_font, LABEL_W, LABEL_H);
 	chooser_font = gtk_font_button_new_with_font(pango_font_description_to_string(settings->font));
-	gtk_widget_set_size_request (chooser_font, BUTTON_W, BUTTON_H);
+	gtk_widget_set_size_request (chooser_font, INPUT_W, INPUT_H);
 	
 	hbox_text_color = gtk_hbox_new(FALSE, 5);
 	label_color = gtk_label_new("Color:");
+	gtk_widget_set_size_request (label_color, LABEL_W, LABEL_H);
 	chooser_color = gtk_color_button_new_with_color(&(settings->color));
-	gtk_widget_set_size_request (chooser_color, BUTTON_W, BUTTON_H);
+	gtk_widget_set_size_request (chooser_color, INPUT_W, INPUT_H);
 	
 	align_radio_image = gtk_alignment_new(0, 0, 0, 0);
 	gtk_alignment_set_padding(GTK_ALIGNMENT(align_radio_image), 0, 5, 10, 0);
@@ -56,7 +58,7 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 	if (settings->imagefile != NULL) {
 		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(chooser_image), settings->imagefile);
 	}
-	gtk_widget_set_size_request (chooser_image, BUTTON_W, BUTTON_H);
+	gtk_widget_set_size_request (chooser_image, INPUT_W, INPUT_H);
 	
 	hbox_opacity = gtk_hbox_new(FALSE, 5);
 	label_opacity = gtk_label_new("Opacity:");

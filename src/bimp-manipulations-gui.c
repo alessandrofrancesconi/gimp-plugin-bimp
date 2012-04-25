@@ -1,3 +1,7 @@
+/* 
+ * Functions to open a popup dialog and edit the selected manipulation
+ */
+
 #include <gtk/gtk.h>
 #include <libgimpbase/gimpbase.h>
 #include <string.h>
@@ -39,7 +43,7 @@ void bimp_open_editwindow(manipulation man, gboolean first_time)
 	
 	vbox = gtk_vbox_new(FALSE, 10);
 	label_title = gtk_label_new(NULL);
-	gchar* titletext = g_strconcat("<big><b>", manipulation_type_string[man->type], "</b></big>", NULL);
+	gchar* titletext = g_strconcat("<big><b>", manipulation_type_string[man->type], "</b></big>", NULL); /* dialog title */
 	gtk_label_set_markup (GTK_LABEL (label_title), titletext);
 	gtk_box_pack_start(GTK_BOX(vbox), label_title, FALSE, FALSE, 0);
 	
@@ -98,12 +102,14 @@ void bimp_open_editwindow(manipulation man, gboolean first_time)
 	
 	gtk_widget_show_all(window);
 	result = gtk_dialog_run (GTK_DIALOG (window));
+	/* if the users clicks on 'OK', the proper saving function for this manipulation is called.
+	 * but if the users clicks 'CANCEL' and it was the first time the users selected this manipulation, it's removed from the list */
 	if (result == GTK_RESPONSE_ACCEPT) {
 		save(man->settings);
 	}
-	else if (result == GTK_RESPONSE_REJECT && first_time == TRUE){
+	else if (result == GTK_RESPONSE_REJECT && first_time == TRUE){ 
 		bimp_remove_manipulation(man);
-		bimp_refresh_sequence_box();
+		bimp_refresh_sequence_panel();
 	}
 	
 	gtk_widget_destroy (window);

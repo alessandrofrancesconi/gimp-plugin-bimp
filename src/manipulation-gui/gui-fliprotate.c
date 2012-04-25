@@ -9,26 +9,30 @@ GtkWidget *button_flipH, *button_flipV, *combo_rotate;
 
 GtkWidget* bimp_fliprotate_gui_new(fliprotate_settings settings)
 {
-	GtkWidget *gui, *hbox_flip;
+	GtkWidget *gui, *hbox_flip, *hbox_rotate;
 	GtkWidget *label_flip, *label_rotate;
-	GtkWidget *align_flip;
+	GtkWidget *align_flip, *align_rotate;
 	
 	gui = gtk_vbox_new(FALSE, 5);
 	
 	label_flip = gtk_label_new("Flip:");
 	hbox_flip = gtk_hbox_new(FALSE, 5);
 	align_flip = gtk_alignment_new(0.5, 0, 0, 0);
+	
 	button_flipH = gtk_toggle_button_new_with_label("Horizontally");
 	gtk_widget_set_size_request (button_flipH, BUTTON_FLIP_W, BUTTON_FLIP_H);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_flipH), settings->flipH);
 	gtk_button_set_image(GTK_BUTTON(button_flipH), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_flipH, FALSE, NULL)));
 	gtk_button_set_image_position(GTK_BUTTON(button_flipH), GTK_POS_TOP);
+	
 	button_flipV = gtk_toggle_button_new_with_label("Vertically");
 	gtk_widget_set_size_request (button_flipV, BUTTON_FLIP_W, BUTTON_FLIP_H);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_flipV), settings->flipV);
 	gtk_button_set_image(GTK_BUTTON(button_flipV), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_flipV, FALSE, NULL)));
 	gtk_button_set_image_position(GTK_BUTTON(button_flipV), GTK_POS_TOP);
 	
+	hbox_rotate = gtk_hbox_new(FALSE, 5);
+	align_rotate = gtk_alignment_new(0.5, 0, 0, 0);
 	label_rotate = gtk_label_new("Rotation:");
 	combo_rotate = gtk_combo_box_new_text();
 	gtk_widget_set_size_request (combo_rotate, COMBO_ROTATE_W, COMBO_ROTATE_H);
@@ -56,10 +60,13 @@ GtkWidget* bimp_fliprotate_gui_new(fliprotate_settings settings)
 	gtk_box_pack_start(GTK_BOX(hbox_flip), button_flipV, FALSE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(align_flip), hbox_flip);
 	
+	gtk_box_pack_start(GTK_BOX(hbox_rotate), label_rotate, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox_rotate), combo_rotate, FALSE, FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(align_rotate), hbox_rotate);
+	
 	gtk_box_pack_start(GTK_BOX(gui), label_flip, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(gui), align_flip, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(gui), label_rotate, FALSE, FALSE, 5);
-	gtk_box_pack_start(GTK_BOX(gui), combo_rotate, FALSE, FALSE, 0);	
+	gtk_box_pack_start(GTK_BOX(gui), align_rotate, FALSE, FALSE, 5);
 	
 	return gui;
 }

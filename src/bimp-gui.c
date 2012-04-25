@@ -23,7 +23,8 @@ static void open_file_chooser(GtkWidget*, gpointer);
 static void add_input_file(char*);
 static void remove_input_file(GtkWidget*, GtkTreeSelection*);
 static void remove_all_input_files(GtkWidget*, gpointer);
-static void update_preview (GtkTreeView*, gpointer);
+static void select_filename (GtkTreeView*, gpointer);
+static void update_preview(char*);
 static void set_output_folder(GtkWidget*, gpointer);
 static void toggle_alteroverwrite(GtkWidget*, gpointer);
 static void popmenus_init(void);
@@ -128,6 +129,7 @@ void bimp_show_gui()
 	}
 }
 
+/* builds and returns the upper panel with the manipulation buttons */
 static GtkWidget* sequence_panel_new()
 {
 	GtkWidget *panel;
@@ -144,12 +146,13 @@ static GtkWidget* sequence_panel_new()
 	gtk_viewport_set_shadow_type(GTK_VIEWPORT(gtk_bin_get_child(GTK_BIN(scroll_sequence))), GTK_SHADOW_NONE);
 	gtk_container_add(GTK_CONTAINER(panel), scroll_sequence);
 	
-	bimp_refresh_sequence_box();
+	bimp_refresh_sequence_panel();
 	popmenus_init();
 	
 	return panel;
 }
 
+/* builds and returns the panel with file list and options */
 static GtkWidget* option_panel_new()
 {
 	GtkWidget *panel, *hbox;
@@ -206,7 +209,7 @@ static GtkWidget* option_panel_new()
 	check_alertoverwrite = gtk_check_button_new_with_label("Alert when overwriting existing files");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_alertoverwrite), bimp_alertoverwrite);
 	
-	file_preview = gtk_label_new(""); // TODO: preview panel
+	file_preview = gtk_image_new_from_image(NULL, NULL);
 	gtk_widget_set_size_request(file_preview, FILE_PREVIEW_W, FILE_PREVIEW_H);
 	
 	/* All together */
@@ -236,10 +239,12 @@ static GtkWidget* option_panel_new()
 	g_signal_connect(G_OBJECT(button_removeall), "clicked", G_CALLBACK(remove_all_input_files), NULL);
 	g_signal_connect(G_OBJECT(button_outfolder), "selection-changed", G_CALLBACK(set_output_folder), NULL);
 	g_signal_connect(G_OBJECT(check_alertoverwrite), "toggled", G_CALLBACK(toggle_alteroverwrite), NULL);
-	//g_signal_connect(G_OBJECT(treeview_files), "cursor-changed", G_CALLBACK(update_preview), treesel_file); // TODO: preview panel
+	g_signal_connect(G_OBJECT(treeview_files), "cursor-changed", G_CALLBACK(select_filename), treesel_file);
 	
 	return panel;
 }
+
+/* following: functions that modify the file list widget (add/remove/removeall)  */
 
 static void add_input_file(char* filename) 
 {
@@ -259,6 +264,7 @@ static void remove_input_file(GtkWidget *widget, GtkTreeSelection* selection)
 		gtk_tree_model_get(model, &iter, LIST_ITEM, &selected,  -1);
 		bimp_input_filenames = g_slist_delete_link(bimp_input_filenames, g_slist_find_custom(bimp_input_filenames, selected, (GCompareFunc)strcmp));
 		refresh_fileview();
+		update_preview(NULL); /* clear the preview widget */
 		g_free(selected);
 	}
 }
@@ -268,21 +274,33 @@ static void remove_all_input_files(GtkWidget *widget, gpointer selection)
 	g_slist_free(bimp_input_filenames);
 	bimp_input_filenames = NULL;
 	refresh_fileview();
+	update_preview(NULL);
 }
 
-static void update_preview (GtkTreeView *tree_view, gpointer selection) 
+/* called when the user clicks on a filename row to update the preview widget */
+static void select_filename (GtkTreeView *tree_view, gpointer selection) 
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 	char *selected;
-	int image, drawable;
+	GdkPixbuf *pixbuf_prev;         
 	
 	if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter)) {
 		gtk_tree_model_get(model, &iter, LIST_ITEM, &selected,  -1);
-		image = gimp_file_load(GIMP_RUN_NONINTERACTIVE, (gchar*)selected, (gchar*)selected); /* load file and get image id */
-		drawable = gimp_image_merge_visible_layers(image, GIMP_CLIP_TO_IMAGE); /* merge levels and get drawable id */
-		file_preview = gimp_aspect_preview_new(gimp_drawable_get(drawable), NULL);
-		gimp_preview_draw(GIMP_PREVIEW(file_preview));
+		update_preview(selected);
+	}
+}
+
+/* updates the preview widget loading (and scaling) a new image */
+static void update_preview (gchar* filename) 
+{
+	GdkPixbuf *pixbuf_prev;         
+	
+	if (filename != NULL) {
+		pixbuf_prev = gdk_pixbuf_new_from_file_at_scale(filename, FILE_PREVIEW_W, FILE_PREVIEW_H, TRUE, NULL);
+		gtk_image_set_from_pixbuf(GTK_IMAGE(file_preview), pixbuf_prev);
+	} else {
+		gtk_image_set_from_pixbuf(GTK_IMAGE(file_preview), NULL); /* if filename is NULL, shows an "empty image" */
 	}
 }
 
@@ -317,6 +335,7 @@ static void add_to_fileview(char *str)
 	gtk_list_store_set(store, &iter, LIST_ITEM, str, -1);
 }
 
+/* update the visual of filename list */
 static void refresh_fileview() 
 {	
 	GtkListStore *store;
@@ -392,8 +411,6 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
 	if (gtk_dialog_run (GTK_DIALOG(file_chooser)) == GTK_RESPONSE_ACCEPT) {
 		selection = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(file_chooser));
 		g_slist_foreach(selection, (GFunc)add_input_file, NULL);
-		//g_slist_foreach(selection, (GFunc)g_free, NULL);
-		//g_slist_free(selection);
 	}
 	
 	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(file_chooser));
@@ -410,6 +427,8 @@ static void toggle_alteroverwrite(GtkWidget *widget, gpointer data)
 	bimp_alertoverwrite = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_alertoverwrite));
 }
 
+/* initializes the two menus that appears when the user clicks on the "add new" button 
+ * or on one of the already added manipulations */
 static void popmenus_init() 
 {
 	GtkWidget *menuitem;
@@ -472,7 +491,7 @@ static void add_manipulation_from_id(GtkMenuItem *menuitem, gpointer id)
 		g_free(error_message);
 	}
 	else {
-		bimp_refresh_sequence_box();
+		bimp_refresh_sequence_panel();
 	
 		GtkAdjustment* hadj_sequence = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(scroll_sequence));
 		gtk_adjustment_set_value(hadj_sequence, gtk_adjustment_get_upper(hadj_sequence));
@@ -493,11 +512,12 @@ static void remove_clicked_manipulation(GtkMenuItem *menuitem, gpointer user_dat
 	if (clicked_man != NULL) {
 		bimp_remove_manipulation(clicked_man);
 		g_free(clicked_man);
-		bimp_refresh_sequence_box();
+		bimp_refresh_sequence_panel();
 	}
 }
 
-void bimp_refresh_sequence_box() 
+/* update the visual of the sequence panel */
+void bimp_refresh_sequence_panel()
 {
 	GtkWidget* button;
 	
@@ -516,6 +536,7 @@ void bimp_refresh_sequence_box()
 	gtk_widget_show_all(hbox_sequence);
 }
 
+/* creates a manipulation button and appends it to the sequence box */
 static void add_manipulation_button(manipulation man) 
 {
 	GtkWidget* button;
@@ -545,6 +566,7 @@ static void open_about()
 	gtk_widget_destroy(about);
 }
 
+/* shows an error dialog with a custom message */
 void bimp_show_error_dialog(char* message, GtkWidget* parent) {
 	GtkWidget* dialog = gtk_message_dialog_new (
 		GTK_WINDOW(parent),

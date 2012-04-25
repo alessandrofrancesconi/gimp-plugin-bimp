@@ -116,9 +116,8 @@ static void show_proc_params(userdef_settings settings)
 						show = FALSE;
 					}
 					else {
-						
-						
 						if (strcmp(param_info.name, "toggle") == 0) {
+							/* but if it's named 'toggle' pretend to be a boolean value */
 							param_widget[param_i] = gtk_combo_box_new_text();
 							gtk_combo_box_append_text (GTK_COMBO_BOX(param_widget[param_i]), "NO / FALSE / 0");
 							gtk_combo_box_append_text (GTK_COMBO_BOX(param_widget[param_i]), "YES / TRUE / 1");
@@ -145,7 +144,12 @@ static void show_proc_params(userdef_settings settings)
 					
 				case GIMP_PDB_FLOAT: 
 					param_widget[param_i] = gtk_spin_button_new (NULL, 1, 1);
-					gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new (0, -G_MAXDOUBLE, G_MAXDOUBLE, 0.1, 1, 0)), 0, 1);
+					if (strcmp(param_info.name, "opacity") == 0) {
+						/* if the param is an opacity, the range goes from 0.0 to 100.0 */
+						gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new (0.0, 0.0, 100.0, 0.1, 1, 0)), 0, 1);
+					} else {
+						gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new (0.0, -G_MAXDOUBLE, G_MAXDOUBLE, 0.1, 1, 0)), 0, 1);
+					}
 					gtk_spin_button_set_value (GTK_SPIN_BUTTON(param_widget[param_i]), (float)((settings->params[param_i]).data.d_float));
 					break;
 					
@@ -177,7 +181,7 @@ static void show_proc_params(userdef_settings settings)
 					show = FALSE; 
 					break;
 					
-				/* case: this param is not (yet) supported, can't continue */
+				/* case: this param is not (yet) supported (like arrays, paths, ...), can't continue */
 				default: 
 					supported = FALSE;
 					show = FALSE; 

@@ -1,3 +1,7 @@
+/*
+ * Functions to initialize and manage manipulations
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
@@ -16,7 +20,7 @@ static manipulation manipulation_rename_new(void);
 static manipulation manipulation_userdef_new(void); 
 
 
-/* Appends an empty manipulation to the step list */
+/* Appends a default manipulation to the step list */
 manipulation bimp_append_manipulation(manipulation_type type)
 {
 	manipulation newman; /* newman, paul newman. */
@@ -59,6 +63,7 @@ manipulation bimp_append_manipulation(manipulation_type type)
 	}
 }
 
+/* remove a manipulation from the list */
 void bimp_remove_manipulation(manipulation man)
 {
 	bimp_selected_manipulations = g_slist_remove(bimp_selected_manipulations, man);

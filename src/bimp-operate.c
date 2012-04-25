@@ -1,3 +1,7 @@
+/*
+ * Functions called when the users clicks on 'APPLY'
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -535,9 +539,13 @@ static gboolean apply_rename(rename_settings settings, image_output out, char* o
 	out->filename = (char*)malloc((strlen(settings->pattern)+1) * sizeof(char));
 	strcpy(out->filename, settings->pattern);
 	strcpy(orig_filename, orig_basename);
+	
+	/* search for 'RENAME_KEY_ORIG' occurrences and replace the final filename */
 	if(strstr(out->filename, RENAME_KEY_ORIG) != NULL) {
 		out->filename = str_replace(out->filename, RENAME_KEY_ORIG, orig_filename);
 	}
+	
+	/* same thing for count and datetime */
 	
 	if(strstr(out->filename, RENAME_KEY_COUNT) != NULL)	{
 		char strcount[5];
@@ -552,6 +560,8 @@ static gboolean apply_rename(rename_settings settings, image_output out, char* o
 	free(orig_filename);
 	return TRUE;
 }
+
+/* following: set of functions that saves the image file in various formats */
 
 static gboolean image_save_bmp(image_output out) 
 {
@@ -730,6 +740,8 @@ static gboolean image_save_tiff(image_output out, int compression)
 	return TRUE;
 }
 
+/* if global var 'bimp_alertoverwrite' is TRUE and the file at 'path' exists, 
+ * asks for overwrite it with a dialog */
 static gboolean ask_overwrite(char* path, GtkWidget* parent) {
 	gboolean can_overwrite = TRUE;
 	
@@ -753,6 +765,7 @@ static gboolean ask_overwrite(char* path, GtkWidget* parent) {
 	return can_overwrite;
 }
 
+/* replace all the occurrences of 'rep' into 'orig' with text 'with' */
 static char *str_replace(char *orig, char *rep, char *with) 
 {
     char *result;
@@ -800,6 +813,7 @@ static char *str_replace(char *orig, char *rep, char *with)
     return result;
 }
 
+/* gets the filename from the given path (compatible with unix and win) */
 static char* comp_get_filename(char* path) 
 {
 	char *pfile;
@@ -817,6 +831,7 @@ static char* comp_get_filename(char* path)
     return pfile;
 }
 
+/* gets the current date and time in format "%Y-%m-%d_%H-%M" */
 static char* get_datetime() {
 	time_t rawtime;
 	struct tm * timeinfo;
