@@ -16,7 +16,7 @@
 #define FRAME_PARAM_W USERDEF_WINDOW_W - 20
 #define FRAME_PARAM_H USERDEF_WINDOW_H - LABEL_HELP_H - BUTTON_CHOOSE_H - 110
 
-#define PARAM_WIDGET_W 130
+#define PARAM_WIDGET_W 125
 #define PARAM_WIDGET_H 25
 
 GtkWidget* bimp_userdef_gui_new(userdef_settings, GtkWidget*);
