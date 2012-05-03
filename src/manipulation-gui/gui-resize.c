@@ -36,7 +36,7 @@ GtkWidget* bimp_resize_gui_new(resize_settings settings)
 	gui = gtk_vbox_new(FALSE, 5);
 	radio_percent = gtk_radio_button_new_with_label (NULL, "Set to a percentage of the original");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_percent), (settings->sizemode == RESIZE_PERCENT));
-	radio_px = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_percent), "Set exact sizes in pixel");
+	radio_px = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_percent), "Set exact size in pixel");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_px), (settings->sizemode != RESIZE_PERCENT));
 	
 	align_radio = gtk_alignment_new(0, 0, 0, 0);

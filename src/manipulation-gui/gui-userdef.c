@@ -17,9 +17,10 @@ static GimpParamDef get_param_info(gchar*, gint);
 
 GtkWidget *frame_scroll, *frame_params;
 GtkWidget *button_openbrowser;
+GtkWidget *proc_browser;
 
 userdef_settings temp_settings;
-GtkWidget **param_widget;
+GtkWidget **param_widget; /* array of showable widgets for customizing the selected procedure */
 
 GtkWidget* bimp_userdef_gui_new(userdef_settings settings, GtkWidget* parent)
 {
@@ -27,6 +28,8 @@ GtkWidget* bimp_userdef_gui_new(userdef_settings settings, GtkWidget* parent)
 	GtkWidget *label_help;
 	
 	gui = gtk_vbox_new(FALSE, 5);
+	
+	proc_browser = NULL;
 	
 	label_help = gtk_label_new(NULL);
 	gtk_widget_set_size_request (label_help, LABEL_HELP_W, LABEL_HELP_H);
@@ -49,20 +52,17 @@ GtkWidget* bimp_userdef_gui_new(userdef_settings settings, GtkWidget* parent)
 	
 	if (settings->procedure != NULL) {
 		/* copy user setting into temp_settings */
-		temp_settings = (userdef_settings)malloc(sizeof(struct manip_userdef_set));
+		temp_settings = (userdef_settings)g_malloc(sizeof(struct manip_userdef_set));
 		
-		temp_settings->procedure = (gchar*)malloc((strlen(settings->procedure) + 1) * sizeof(gchar));
-		strcpy(temp_settings->procedure, settings->procedure);
-		
+		temp_settings->procedure = g_strdup(settings->procedure);
 		temp_settings->num_params = settings->num_params;
 		
-		temp_settings->params = (GimpParam*)malloc(sizeof(GimpParam) * settings->num_params);
-		temp_settings->params_names = (gchar**)malloc(sizeof(gchar*) * settings->num_params);
+		temp_settings->params = g_new(GimpParam, settings->num_params);
+		temp_settings->params_names = (gchar**)g_malloc(sizeof(gchar*) * settings->num_params);
 		
 		int param_i;
 		for (param_i = 0; param_i < temp_settings->num_params; param_i++) {
-			temp_settings->params_names[param_i] = (gchar*)malloc(strlen((settings->params_names[param_i]) + 1) * sizeof(gchar));
-			strcpy(temp_settings->params_names[param_i], settings->params_names[param_i]);
+			temp_settings->params_names[param_i] = g_strdup(settings->params_names[param_i]);
 			
 			temp_settings->params[param_i].type = settings->params[param_i].type;
 			temp_settings->params[param_i].data = settings->params[param_i].data;
@@ -75,30 +75,25 @@ GtkWidget* bimp_userdef_gui_new(userdef_settings settings, GtkWidget* parent)
 	return gui;
 }
 
+/* Reads given settings and prepares the input widgets to show on the frame */
 static void show_proc_params(userdef_settings settings, GtkWidget* parent) 
 {
-	g_print("SHOW_PROC_PARAMS()\n");
 	if (settings->procedure == NULL) {
-		g_print("PROC IS NULL\n");
 		set_unselected(parent);
 	} else {
-		g_print("PROC EXISTS\n");
 		GtkWidget *vbox_params, *hbox_paramrow, *label_widget_desc;
 		GimpParamDef param_info;
 		GdkColor usercolor;
 		gboolean show, supported = TRUE;
 
-		free(param_widget);
-		g_print("BULD PARAM ARRAY\n");
-		param_widget = (GtkWidget**)malloc(sizeof(GtkWidget*) * settings->num_params);
-		
+		g_free(param_widget);
+		param_widget = g_new(GtkWidget*, settings->num_params);
 		vbox_params = gtk_vbox_new(FALSE, 5);
         
 		int param_i, show_count = 0;
 		for (param_i = 0; param_i < settings->num_params && supported; param_i++) {
 			param_info = get_param_info(settings->procedure, param_i);
 			show = TRUE;
-			g_print("BUILD PARAM %s\n", param_info.name);
 			switch(param_info.type) {
 				/* case: this param is a number, prepare a gtk_spin_button */
 				case GIMP_PDB_INT32:
@@ -106,7 +101,7 @@ static void show_proc_params(userdef_settings settings, GtkWidget* parent)
 						show = FALSE;
 					}
 					else {
-						if (strcmp(param_info.name, "toggle") == 0) {
+						if (strcmp(param_info.name, "toggle") == 0) { /* TODO: search "true/false" in description? */
 							/* but if it's named 'toggle' pretend to be a boolean value */
 							param_widget[param_i] = gtk_combo_box_new_text();
 							gtk_combo_box_append_text (GTK_COMBO_BOX(param_widget[param_i]), "NO / FALSE / 0");
@@ -114,33 +109,29 @@ static void show_proc_params(userdef_settings settings, GtkWidget* parent)
 							gtk_combo_box_set_active(GTK_COMBO_BOX(param_widget[param_i]), (settings->params[param_i]).data.d_int32);
 						} else {
 							param_widget[param_i] = gtk_spin_button_new (NULL, 1, 0);
-							gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new (0, -G_MAXINT32, G_MAXINT32, 1, 1, 0)), 0, 0);
-							gtk_spin_button_set_value (GTK_SPIN_BUTTON(param_widget[param_i]), (settings->params[param_i]).data.d_int32);
+							gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new ((settings->params[param_i]).data.d_int32, -10000, 10000, 1, 1, 0)), 0, 0);
 						}	
 					}
 					break;
 					
 				case GIMP_PDB_INT16:
 					param_widget[param_i] = gtk_spin_button_new (NULL, 1, 0);
-					gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new (0, -G_MAXINT16, G_MAXINT16, 1, 1, 0)), 0, 0);
-					gtk_spin_button_set_value (GTK_SPIN_BUTTON(param_widget[param_i]), (settings->params[param_i]).data.d_int16);
+					gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new ((settings->params[param_i]).data.d_int16, -10000, 10000, 1, 1, 0)), 0, 0);
 					break;
 					
 				case GIMP_PDB_INT8:
 					param_widget[param_i] = gtk_spin_button_new (NULL, 1, 0);
-					gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new (0, 0, G_MAXUINT8, 1, 1, 0)), 0, 0);
-					gtk_spin_button_set_value (GTK_SPIN_BUTTON(param_widget[param_i]), (settings->params[param_i]).data.d_int8);
+					gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new ((settings->params[param_i]).data.d_int8, 0, 255, 1, 1, 0)), 0, 0);
 					break;
 					
 				case GIMP_PDB_FLOAT: 
 					param_widget[param_i] = gtk_spin_button_new (NULL, 1, 1);
 					if (strcmp(param_info.name, "opacity") == 0) {
 						/* if the param is an opacity, its range goes from 0.0 to 100.0 */
-						gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new (100.0, 0.0, 100.0, 0.1, 1, 0)), 0, 1);
+						gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new ((float)((settings->params[param_i]).data.d_float), 0.0, 100.0, 0.1, 1, 0)), 0, 1);
 					} else {
-						gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new (0.0, -G_MAXDOUBLE, G_MAXDOUBLE, 0.1, 1, 0)), 0, 1);
+						gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new ((float)((settings->params[param_i]).data.d_float), -10000.0, 10000.0, 0.1, 1, 0)), 0, 1);
 					}
-					gtk_spin_button_set_value (GTK_SPIN_BUTTON(param_widget[param_i]), (float)((settings->params[param_i]).data.d_float));
 					break;
 					
 				/* case: this param is a string, prepare a gtk_entry */
@@ -152,9 +143,10 @@ static void show_proc_params(userdef_settings settings, GtkWidget* parent)
 						supported = FALSE;
 						show = FALSE;
 					}
+					else if (strcmp(param_info.name, "font") == 0){
+						param_widget[param_i] = gtk_font_button_new_with_font((settings->params[param_i]).data.d_string);
+					}
 					else {
-						/* FONT?? */
-						
 						param_widget[param_i] = gtk_entry_new();
 						gtk_entry_set_text (GTK_ENTRY(param_widget[param_i]), (settings->params[param_i]).data.d_string);
 					}
@@ -181,13 +173,11 @@ static void show_proc_params(userdef_settings settings, GtkWidget* parent)
 			}
 			
 			if (show) {
-				g_print("SHOW\n");
 				gtk_widget_set_size_request (param_widget[param_i], PARAM_WIDGET_W, PARAM_WIDGET_H);
 				label_widget_desc = gtk_label_new(param_info.description);
 				gtk_widget_set_tooltip_text (label_widget_desc, param_info.name);
 				gtk_misc_set_alignment(GTK_MISC(label_widget_desc), 0, 0.5);
 				
-				g_print("TABLE ATTACH\n");
 				hbox_paramrow = gtk_hbox_new(FALSE, 5);
 				gtk_box_pack_start(GTK_BOX(hbox_paramrow), param_widget[param_i], FALSE, FALSE, 0);
 				gtk_box_pack_start(GTK_BOX(hbox_paramrow), label_widget_desc, FALSE, FALSE, 0);
@@ -195,8 +185,7 @@ static void show_proc_params(userdef_settings settings, GtkWidget* parent)
 				
 				show_count++;
 			} else {
-				g_print("SET NULL WIDGET\n");
-				param_widget[param_i] = NULL;
+				param_widget[param_i] = NULL; /* this param is not editable, so there is no visualizable widget for him */
 			}
 		}
 		
@@ -205,7 +194,7 @@ static void show_proc_params(userdef_settings settings, GtkWidget* parent)
 			gtk_dialog_set_response_sensitive (GTK_DIALOG(parent), GTK_RESPONSE_ACCEPT, TRUE);
 			
 			if (show_count > 0) {
-				fill_frame(vbox_params);
+				fill_frame(vbox_params); /* send all the widgets to the filling function */
 			}
 			else {
 				GtkWidget* label_noparams;
@@ -213,13 +202,16 @@ static void show_proc_params(userdef_settings settings, GtkWidget* parent)
 				fill_frame(label_noparams);
 			}
 		} else {
+			/* if a unsupported param has been found, the loop ends and a message is displayed */
 			bimp_show_error_dialog("Selected procedure contains unsupported parameters", NULL);
 			set_unselected(parent);
 		}
 	}
 }
 
-static void set_unselected(GtkWidget* parent) {
+/* set the dialog in "no selected procedure" view */
+static void set_unselected(GtkWidget* parent) 
+{
 	GtkWidget* label_noproc;
 	gtk_button_set_label(GTK_BUTTON(button_openbrowser), "Choose procedure");
 	label_noproc = gtk_label_new("Can't save because\nno procedure has been selected");
@@ -228,32 +220,28 @@ static void set_unselected(GtkWidget* parent) {
 	fill_frame(label_noproc);
 }
 
+/* fills the frame with a GtkScrolledWindow containing the given widgets */
 static void fill_frame(GtkWidget* widget) 
-{
-	g_print("FILL_FRAME()\n");
-	
-	if (frame_scroll != NULL) {
-		gtk_widget_destroy(GTK_WIDGET(frame_scroll));
+{	
+	if (gtk_bin_get_child(GTK_BIN(frame_params)) != NULL) {
+		gtk_widget_destroy(GTK_WIDGET(gtk_bin_get_child(GTK_BIN(frame_params))));
 	}
 	
 	frame_scroll = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(frame_scroll), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	
 	if (widget != NULL) {
-		g_print("WIDGET_ADD\n");
 		gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(frame_scroll), widget);
-		g_print("WIDGET_SHADOW\n");
 		gtk_viewport_set_shadow_type(GTK_VIEWPORT(gtk_bin_get_child(GTK_BIN(frame_scroll))), GTK_SHADOW_NONE);
-		g_print("WIDGET_SHOW_ALL\n");
 	}
 	
 	gtk_container_add(GTK_CONTAINER(frame_params), frame_scroll);
 	gtk_widget_show_all(frame_scroll);
 }
 
+/* build a temporary userdef_settings struct from a given procedure and filling it with default values */
 static void build_temp_settings(gchar* procedure) 
 {
-	g_print("BULD_TEMP_SETTINGS() FOR %s\n", procedure);
 	gchar* proc_blurb;
 	gchar* proc_help;
 	gchar* proc_author;
@@ -279,25 +267,21 @@ static void build_temp_settings(gchar* procedure)
 		&return_vals
 	);
 	
-	free(temp_settings);
+	g_free(temp_settings);
 	temp_settings = (userdef_settings)malloc(sizeof(struct manip_userdef_set));
 	
-	temp_settings->procedure = (gchar*)malloc((strlen(procedure) + 1) * sizeof(gchar));
-	strcpy(temp_settings->procedure, procedure);
-	
+	temp_settings->procedure = g_strdup(procedure);
 	temp_settings->num_params = num_params;
 	
-	temp_settings->params = (GimpParam*)malloc(sizeof(GimpParam) * num_params);
+	temp_settings->params = g_new(GimpParam, num_params);
 	temp_settings->params_names = (gchar**)malloc(sizeof(gchar*) * num_params);
 	
 	GimpRGB tempcolor;
 	gimp_rgb_set(&tempcolor, 0.0, 0.0, 0.0);
 	
-	g_print("FILL TEMP DEFAULT VALUES\n");
 	int param_i;
 	for(param_i = 0; param_i < temp_settings->num_params; param_i++) {
-		temp_settings->params_names[param_i] = (gchar*)malloc(strlen((params[param_i].name) + 1) * sizeof(gchar));
-		strcpy(temp_settings->params_names[param_i], params[param_i].name);
+		temp_settings->params_names[param_i] = g_strdup(params[param_i].name);
 		
 		temp_settings->params[param_i].type = params[param_i].type;
 		
@@ -317,7 +301,11 @@ static void build_temp_settings(gchar* procedure)
 				}
 				break;
 			case GIMP_PDB_STRING: 
-				temp_settings->params[param_i].data.d_string = "";
+				if (strcmp(temp_settings->params_names[param_i], "font") == 0) {
+					temp_settings->params[param_i].data.d_string = "Sans 16px";
+				} else {
+					temp_settings->params[param_i].data.d_string = "";
+				}
 				break;
 			case GIMP_PDB_COLOR:
 				temp_settings->params[param_i].data.d_color = tempcolor;
@@ -329,30 +317,32 @@ static void build_temp_settings(gchar* procedure)
 	}
 }
 
+/* open the GIMP procedure browser and */
 static void open_proc_browser(GtkButton *button, gpointer parent)
 {
-	GtkWidget *browser;
 	gint result;
 	gchar* browser_selection;
 	
-	browser = gimp_proc_browser_dialog_new (
-		"Procedure Browser",
-		PLUG_IN_BINARY,
-		gimp_standard_help_func, 
-		PLUG_IN_PROC,
-		GTK_STOCK_OK, GTK_RESPONSE_OK,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CLOSE, NULL
-	);
-
-	result = gtk_dialog_run (GTK_DIALOG (browser));
-	if (result == GTK_RESPONSE_OK) { 
-		browser_selection = gimp_proc_browser_dialog_get_selected((GimpProcBrowserDialog*)browser);	
+	if (proc_browser == NULL) { /* set the procedure browser for the first time */
+		proc_browser = gimp_proc_browser_dialog_new (
+			"Procedure Browser",
+			PLUG_IN_BINARY,
+			gimp_standard_help_func, 
+			PLUG_IN_PROC,
+			GTK_STOCK_OK, GTK_RESPONSE_OK,
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CLOSE, NULL
+		);
+	}
+	
+	if (gtk_dialog_run (GTK_DIALOG (proc_browser)) == GTK_RESPONSE_OK) {
+		browser_selection = gimp_proc_browser_dialog_get_selected((GimpProcBrowserDialog*)proc_browser);	
 		if (
+			/* check if the selected procedure can be used */
 			strstr(browser_selection, PLUG_IN_PROC) != NULL ||
 			strstr(browser_selection, "-help") != NULL ||
 			strstr(browser_selection, "-load") != NULL ||
 			strstr(browser_selection, "-help") != NULL ||
-			strstr(browser_selection, "-get-") != NULL ||
+			strstr(browser_selection, "-get-") != NULL || /* it might be excessive... */
 			strstr(browser_selection, "-set-") != NULL ||
 			strstr(browser_selection, "gimp-buffer") != NULL ||
 			strstr(browser_selection, "gimp-online") != NULL ||
@@ -373,43 +363,51 @@ static void open_proc_browser(GtkButton *button, gpointer parent)
 			}
 		}
 	}
-	gtk_widget_destroy (browser);
+	
+	gtk_widget_hide (proc_browser); /* simply hide the browser so next time the cursor is in the latest position */
 }
 
+/* calls gimp_procedural_db_proc_arg to retrieve parameter's informations */
 static GimpParamDef get_param_info(gchar* proc_name, gint arg_num) 
 {
-	g_print("GET_PARAM_INFO() FOR %s #%d\n", proc_name, arg_num);
 	GimpParamDef param_info;
+	GimpPDBArgType type;
+	gchar *name;
+	gchar *desc;
+	
 	gboolean success;
 	
 	success = gimp_procedural_db_proc_arg (
 		proc_name,
 		arg_num,
-		&(param_info.type),
-		&(param_info.name),
-		&(param_info.description)
+		&type,
+		&name,
+		&desc
 	);
+	
+	param_info.type = type;
+	param_info.name = g_strdup(name);
+	param_info.description = g_strdup(desc);
 	
 	return param_info;
 }
 
+/* store all the data from temp settings into the user settings */
 void bimp_userdef_save(userdef_settings orig_settings) 
 {
-	free(orig_settings->procedure);
-	orig_settings->procedure = (gchar*)malloc((strlen(temp_settings->procedure) + 1) * sizeof(gchar));
-	strcpy(orig_settings->procedure, temp_settings->procedure);
+	g_free(orig_settings->procedure);
 	
+	orig_settings->procedure = g_strdup(temp_settings->procedure);
 	orig_settings->num_params = temp_settings->num_params;
 	
-	free(orig_settings->params);
-	free(orig_settings->params_names);
-	orig_settings->params = (GimpParam*)malloc(sizeof(GimpParam) * orig_settings->num_params);
+	g_free(orig_settings->params);
+	g_free(orig_settings->params_names);
+	orig_settings->params = g_new(GimpParam, orig_settings->num_params);
 	orig_settings->params_names = (gchar**)malloc(sizeof(gchar*) * orig_settings->num_params);
 	
 	int param_i;
 	for (param_i = 0; param_i < temp_settings->num_params; param_i++) {
-		orig_settings->params_names[param_i] = (gchar*)malloc(strlen((temp_settings->params_names[param_i]) + 1) * sizeof(gchar));
-		strcpy(orig_settings->params_names[param_i], temp_settings->params_names[param_i]);
+		orig_settings->params_names[param_i] = g_strdup(temp_settings->params_names[param_i]);
 		
 		orig_settings->params[param_i].type = temp_settings->params[param_i].type;
 		
@@ -440,8 +438,11 @@ void bimp_userdef_save(userdef_settings orig_settings)
 				break;
 				
 			case GIMP_PDB_STRING: 
-				(orig_settings->params[param_i]).data.d_string = (gchar*)malloc(sizeof(gtk_entry_get_text(GTK_ENTRY(param_widget[param_i]))));
-				strcpy((orig_settings->params[param_i]).data.d_string, gtk_entry_get_text(GTK_ENTRY(param_widget[param_i])));
+				if (strcmp(temp_settings->params_names[param_i], "font") == 0) {
+					(orig_settings->params[param_i]).data.d_string = g_strdup(gtk_font_button_get_font_name(GTK_FONT_BUTTON(param_widget[param_i])));
+				} else {
+					(orig_settings->params[param_i]).data.d_string = g_strdup(gtk_entry_get_text(GTK_ENTRY(param_widget[param_i])));
+				}
 				break;
 			
 			case GIMP_PDB_COLOR: 
@@ -453,4 +454,6 @@ void bimp_userdef_save(userdef_settings orig_settings)
 			default: break;
 		}
 	}
+	
+	g_free(temp_settings);
 }

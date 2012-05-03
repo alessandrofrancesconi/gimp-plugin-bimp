@@ -3,13 +3,16 @@
 #include "../bimp-manipulations.h"
 #include "../bimp-manipulations-gui.h"
 	
+void toggle_group(GtkToggleButton*, gpointer);
+	
+GtkWidget *vbox_ratio, *vbox_manual;
 GtkWidget *radio_stratio, *radio_manual;
 GtkWidget *combo_ratio;
 GtkWidget *spin_width, *spin_height;
 	
 GtkWidget* bimp_crop_gui_new(crop_settings settings)
 {
-	GtkWidget *gui, *vbox_ratio, *vbox_manual, *hbox_manual_width, *hbox_manual_height;
+	GtkWidget *gui, *hbox_manual_width, *hbox_manual_height;
 	GtkWidget *label_manual_width, *label_manual_height;
 	GtkWidget *align_radio_stratio, *align_radio_manual;
 	
@@ -61,7 +64,16 @@ GtkWidget* bimp_crop_gui_new(crop_settings settings)
 	gtk_container_add(GTK_CONTAINER(align_radio_manual), vbox_manual);
 	gtk_box_pack_start(GTK_BOX(gui), align_radio_manual, FALSE, FALSE, 0);
 	
+	toggle_group(NULL, NULL);
+	g_signal_connect(G_OBJECT(radio_stratio), "toggled", G_CALLBACK(toggle_group), NULL);
+	
 	return gui;
+}
+
+void toggle_group(GtkToggleButton *togglebutton, gpointer user_data)
+{
+	gtk_widget_set_sensitive(GTK_WIDGET(vbox_ratio), gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_stratio)));
+	gtk_widget_set_sensitive(GTK_WIDGET(vbox_manual), !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_stratio)));
 }
 
 void bimp_crop_save(crop_settings orig_settings) 

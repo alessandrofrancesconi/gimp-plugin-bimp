@@ -26,7 +26,7 @@ void bimp_open_editwindow(manipulation man, gboolean first_time)
 	GtkWidget* gui;
 	gint result;
 	
-	void (*save)(manipulation_settings) = NULL; /* Pointer to the correct setting saving function */
+	void (*save)(manipulation_settings) = NULL; /* Pointer to the proper setting saving function */
 	
 	window = gtk_dialog_new_with_buttons(
 		manipulation_type_string[man->type],

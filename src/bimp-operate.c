@@ -49,7 +49,7 @@ gboolean bimp_start_batch(GtkWidget* parent)
 	g_print("\nBIMP - Batch Manipulation Plugin\nStart batch processing...\n");
 	bimp_progress_bar_set(0.0, "");
 	
-	current_datetime = get_datetime();
+	current_datetime = get_datetime(); /* used by apply_rename */
 	filecount = 0;
 	totalfilecount = g_slist_length(bimp_input_filenames);
 	g_slist_foreach(bimp_input_filenames, (GFunc)process_image, parent);
@@ -70,10 +70,8 @@ static void process_image(char* file, gpointer parent)
 	
 	imageout = (image_output)malloc(sizeof(struct imageout_str));
 	
-	orig_basename = (char *)malloc((strlen(comp_get_filename(file))+1) * sizeof(char));
-	strcpy(orig_basename, comp_get_filename(file)); /* store original filename */
-	orig_file_ext = (char *)malloc((strlen(strrchr(orig_basename, '.'))+1) * sizeof(char));
-	strcpy(orig_file_ext, strrchr(orig_basename, '.')); /* store original extension */
+	orig_basename = g_strdup(comp_get_filename(file)); /* store original filename */
+	orig_file_ext = g_strdup(strrchr(orig_basename, '.')); /* store original extension */
 	
 	/* load the file and assign ids */
 	bimp_progress_bar_set((float)filecount/totalfilecount, g_strconcat("Working on file ", orig_basename, "...", NULL));
@@ -534,11 +532,9 @@ static gboolean apply_userdef(userdef_settings settings, image_output out)
 
 static gboolean apply_rename(rename_settings settings, image_output out, char* orig_basename) 
 {
-	char *orig_filename = (char*)malloc((strlen(orig_basename)+1) * sizeof(char));
+	char *orig_filename = g_strdup(orig_basename);
 	
-	out->filename = (char*)malloc((strlen(settings->pattern)+1) * sizeof(char));
-	strcpy(out->filename, settings->pattern);
-	strcpy(orig_filename, orig_basename);
+	out->filename = g_strdup(settings->pattern);
 	
 	/* search for 'RENAME_KEY_ORIG' occurrences and replace the final filename */
 	if(strstr(out->filename, RENAME_KEY_ORIG) != NULL) {
@@ -557,7 +553,8 @@ static gboolean apply_rename(rename_settings settings, image_output out, char* o
 		out->filename = str_replace(out->filename, RENAME_KEY_DATETIME, current_datetime);
 	}
 	
-	free(orig_filename);
+	g_free(orig_filename);
+	g_free(orig_filename);
 	return TRUE;
 }
 
@@ -745,21 +742,19 @@ static gboolean image_save_tiff(image_output out, int compression)
 static gboolean ask_overwrite(char* path, GtkWidget* parent) {
 	gboolean can_overwrite = TRUE;
 	
-	if (bimp_alertoverwrite) {
-		if (access(path, W_OK) != -1) {
-			GtkWidget *dialog;
-			dialog = gtk_message_dialog_new(
-				GTK_WINDOW(parent),
-				GTK_DIALOG_DESTROY_WITH_PARENT,
-				GTK_MESSAGE_QUESTION,
-				GTK_BUTTONS_YES_NO,
-				"File %s already exists,\noverwrite it?", comp_get_filename(path));
-			  gtk_window_set_title(GTK_WINDOW(dialog), "Overwrite?");
-			  gint result = gtk_dialog_run(GTK_DIALOG(dialog));
-			  gtk_widget_destroy(dialog);
-			  
-			  can_overwrite = (result == GTK_RESPONSE_YES);
-		}
+	if (bimp_alertoverwrite && access(path, F_OK) == 0) {
+		GtkWidget *dialog;
+		dialog = gtk_message_dialog_new(
+			GTK_WINDOW(parent),
+			GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_MESSAGE_QUESTION,
+			GTK_BUTTONS_YES_NO,
+			"File %s already exists,\noverwrite it?", comp_get_filename(path));
+		  gtk_window_set_title(GTK_WINDOW(dialog), "Overwrite?");
+		  gint result = gtk_dialog_run(GTK_DIALOG(dialog));
+		  gtk_widget_destroy(dialog);
+		  
+		  can_overwrite = (result == GTK_RESPONSE_YES);
 	}
 	
 	return can_overwrite;
@@ -831,7 +826,8 @@ static char* comp_get_filename(char* path)
     return pfile;
 }
 
-/* gets the current date and time in format "%Y-%m-%d_%H-%M" */
+/* gets the current date and time in format "%Y-%m-%d_%H-%M".
+ * used by RENAME manipulation */
 static char* get_datetime() {
 	time_t rawtime;
 	struct tm * timeinfo;

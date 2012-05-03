@@ -30,7 +30,7 @@ static const char* manipulation_type_string[] = {
 	"Apply a watermark text or image",	/* MANIP_WATERMARK */
 	"Change format and quality",		/* MANIP_CHANGEFORMAT */
 	"Rename with a pattern",			/* MANIP_RENAME */
-	"Custom GIMP procedure"				/* MANIP_USERDEF */
+	"Other GIMP procedure..."			/* MANIP_USERDEF */
 };
 
 typedef enum resize_mode {
