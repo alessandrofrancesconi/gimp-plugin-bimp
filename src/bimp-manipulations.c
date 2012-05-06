@@ -2,7 +2,6 @@
  * Functions to initialize and manage manipulations
  */
 
-#include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
 #include "bimp-manipulations.h"
@@ -13,7 +12,7 @@ static manipulation manipulation_resize_new(void);
 static manipulation manipulation_crop_new(void);
 static manipulation manipulation_fliprotate_new(void);
 static manipulation manipulation_color_new(void);
-static manipulation manipulation_sharp_new(void);
+static manipulation manipulation_sharpblur_new(void);
 static manipulation manipulation_watermark_new(void); 
 static manipulation manipulation_changeformat_new(void); 
 static manipulation manipulation_rename_new(void); 
@@ -23,7 +22,7 @@ static manipulation manipulation_userdef_new(void);
 /* Appends a default manipulation to the step list */
 manipulation bimp_append_manipulation(manipulation_type type)
 {
-	manipulation newman; /* newman, paul newman. */
+	manipulation newman = NULL; /* newman, paul newman. */
 	
 	if (type != MANIP_USERDEF && bimp_list_contains_manip(type)) {
 		return NULL;
@@ -41,8 +40,8 @@ manipulation bimp_append_manipulation(manipulation_type type)
 		else if (type == MANIP_COLOR) {
 			newman = manipulation_color_new();
 		}
-		else if (type == MANIP_SHARPEN) {
-			newman = manipulation_sharp_new();
+		else if (type == MANIP_SHARPBLUR) {
+			newman = manipulation_sharpblur_new();
 		}
 		else if (type == MANIP_WATERMARK) {
 			newman = manipulation_watermark_new();
@@ -56,7 +55,7 @@ manipulation bimp_append_manipulation(manipulation_type type)
 		else if (type == MANIP_USERDEF) {
 			newman = manipulation_userdef_new();
 		}
-		
+				
 		bimp_selected_manipulations = g_slist_append(bimp_selected_manipulations, newman);
 		
 		return newman;
@@ -104,10 +103,10 @@ manipulation bimp_list_get_manip(manipulation_type search)
 static manipulation manipulation_resize_new() 
 {
 	manipulation resize;
-	resize = (manipulation) malloc(sizeof(struct manip_str));
+	resize = (manipulation) g_malloc(sizeof(struct manip_str));
 	resize->type = MANIP_RESIZE;
 	resize->icon = &pixdata_resize;
-	resize->settings = (resize_settings) malloc(sizeof(struct manip_resize_set));
+	resize->settings = (resize_settings) g_malloc(sizeof(struct manip_resize_set));
 	((resize_settings)resize->settings)->newWpc = 100.0;
 	((resize_settings)resize->settings)->newHpc = 100.0;
 	((resize_settings)resize->settings)->newWpx = 640;
@@ -122,10 +121,10 @@ static manipulation manipulation_resize_new()
 static manipulation manipulation_crop_new() 
 {
 	manipulation crop;
-	crop = (manipulation) malloc(sizeof(struct manip_str));
+	crop = (manipulation) g_malloc(sizeof(struct manip_str));
 	crop->type = MANIP_CROP;
 	crop->icon = &pixdata_crop;
-	crop->settings = (crop_settings) malloc(sizeof(struct manip_crop_set));
+	crop->settings = (crop_settings) g_malloc(sizeof(struct manip_crop_set));
 	((crop_settings)crop->settings)->newW = 640;
 	((crop_settings)crop->settings)->newH = 480;
 	((crop_settings)crop->settings)->manual = FALSE;
@@ -137,10 +136,10 @@ static manipulation manipulation_crop_new()
 static manipulation manipulation_fliprotate_new() 
 {
 	manipulation fliprotate;
-	fliprotate = (manipulation) malloc(sizeof(struct manip_str));
+	fliprotate = (manipulation) g_malloc(sizeof(struct manip_str));
 	fliprotate->type = MANIP_FLIPROTATE;
 	fliprotate->icon = &pixdata_rotate;
-	fliprotate->settings = (fliprotate_settings) malloc(sizeof(struct manip_fliprotate_set));
+	fliprotate->settings = (fliprotate_settings) g_malloc(sizeof(struct manip_fliprotate_set));
 	((fliprotate_settings)fliprotate->settings)->flipH = FALSE;
 	((fliprotate_settings)fliprotate->settings)->flipV = FALSE;
 	((fliprotate_settings)fliprotate->settings)->rotate = FALSE;
@@ -152,10 +151,10 @@ static manipulation manipulation_fliprotate_new()
 static manipulation manipulation_color_new() 
 {
 	manipulation color;
-	color = (manipulation) malloc(sizeof(struct manip_str));
+	color = (manipulation) g_malloc(sizeof(struct manip_str));
 	color->type = MANIP_COLOR;
 	color->icon = &pixdata_color;
-	color->settings = (color_settings) malloc(sizeof(struct manip_color_set));
+	color->settings = (color_settings) g_malloc(sizeof(struct manip_color_set));
 	((color_settings)color->settings)->brightness = 0;
 	((color_settings)color->settings)->contrast = 0;
 	((color_settings)color->settings)->grayscale = FALSE;
@@ -164,28 +163,27 @@ static manipulation manipulation_color_new()
 	return color;
 }
 
-static manipulation manipulation_sharp_new() 
+static manipulation manipulation_sharpblur_new() 
 {
-	manipulation sharp;
-	sharp = (manipulation) malloc(sizeof(struct manip_str));
-	sharp->type = MANIP_SHARPEN;
-	sharp->icon = &pixdata_sharp;
-	sharp->settings = (sharp_settings) malloc(sizeof(struct manip_sharp_set));
-	((sharp_settings)sharp->settings)->amount = 0;
+	manipulation sharpblur;
+	sharpblur = (manipulation) g_malloc(sizeof(struct manip_str));
+	sharpblur->type = MANIP_SHARPBLUR;
+	sharpblur->icon = &pixdata_sharp;
+	sharpblur->settings = (sharpblur_settings) g_malloc(sizeof(struct manip_sharpblur_set));
+	((sharpblur_settings)sharpblur->settings)->amount = 0;
 	
-	return sharp;
+	return sharpblur;
 }
 
 static manipulation manipulation_watermark_new() 
 {
 	manipulation watermark;
-	watermark = (manipulation) malloc(sizeof(struct manip_str));
+	watermark = (manipulation) g_malloc(sizeof(struct manip_str));
 	watermark->type = MANIP_WATERMARK;
 	watermark->icon = &pixdata_watermark;
-	watermark->settings = (watermark_settings) malloc(sizeof(struct manip_watermark_set));
+	watermark->settings = (watermark_settings) g_malloc(sizeof(struct manip_watermark_set));
 	((watermark_settings)watermark->settings)->textmode = TRUE;
-	((watermark_settings)watermark->settings)->text = (gchar*)malloc(sizeof(gchar[51]));
-	((watermark_settings)watermark->settings)->text[0] = 0;
+	((watermark_settings)watermark->settings)->text = "";
 	((watermark_settings)watermark->settings)->font = pango_font_description_copy(pango_font_description_from_string("Sans 16px"));
 	gdk_color_parse("black", &(((watermark_settings)watermark->settings)->color));
 	gdk_colormap_alloc_color(gdk_colormap_get_system(), &(((watermark_settings)watermark->settings)->color), TRUE, TRUE);
@@ -199,14 +197,22 @@ static manipulation manipulation_watermark_new()
 static manipulation manipulation_changeformat_new() 
 {
 	manipulation changeformat;
-	changeformat = (manipulation) malloc(sizeof(struct manip_str));
+	changeformat = (manipulation) g_malloc(sizeof(struct manip_str));
 	changeformat->type = MANIP_CHANGEFORMAT;
 	changeformat->icon = &pixdata_changeformat;
-	changeformat->settings = (changeformat_settings) malloc(sizeof(struct manip_changeformat_set));
+	changeformat->settings = (changeformat_settings) g_malloc(sizeof(struct manip_changeformat_set));
 	((changeformat_settings)changeformat->settings)->format = FORMAT_JPEG;
 	((changeformat_settings)changeformat->settings)->params = NULL;
-	((changeformat_settings)changeformat->settings)->params = (format_params_jpeg) malloc(sizeof(struct changeformat_params_jpeg));
+	((changeformat_settings)changeformat->settings)->params = (format_params_jpeg) g_malloc(sizeof(struct changeformat_params_jpeg));
 	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->quality = 85.0;
+	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->smoothing = 0.0;
+	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->entropy = TRUE;
+	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->progressive = TRUE;
+	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->comment = "";
+	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->subsampling = 3;
+	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->baseline = TRUE;
+	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->markers = 0;
+	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->dct = 1;
 	
 	return changeformat;
 }
@@ -214,10 +220,10 @@ static manipulation manipulation_changeformat_new()
 static manipulation manipulation_rename_new() 
 {
 	manipulation rename;
-	rename = (manipulation) malloc(sizeof(struct manip_str));
+	rename = (manipulation) g_malloc(sizeof(struct manip_str));
 	rename->type = MANIP_RENAME;
 	rename->icon = &pixdata_rename;
-	rename->settings = (rename_settings) malloc(sizeof(struct manip_rename_set));
+	rename->settings = (rename_settings) g_malloc(sizeof(struct manip_rename_set));
 	((rename_settings)rename->settings)->pattern = RENAME_KEY_ORIG;
 	
 	return rename;
@@ -226,10 +232,10 @@ static manipulation manipulation_rename_new()
 static manipulation manipulation_userdef_new() 
 {
 	manipulation userdef;
-	userdef = (manipulation) malloc(sizeof(struct manip_str));
+	userdef = (manipulation) g_malloc(sizeof(struct manip_str));
 	userdef->type = MANIP_USERDEF;
 	userdef->icon = &pixdata_userdef;
-	userdef->settings = (userdef_settings) malloc(sizeof(struct manip_userdef_set));
+	userdef->settings = (userdef_settings) g_malloc(sizeof(struct manip_userdef_set));
 	((userdef_settings)userdef->settings)->procedure = NULL;
 	((userdef_settings)userdef->settings)->num_params = 0;
 	((userdef_settings)userdef->settings)->params = NULL;

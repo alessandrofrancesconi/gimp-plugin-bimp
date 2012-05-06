@@ -20,14 +20,14 @@ static gboolean apply_resize(resize_settings, image_output);
 static gboolean apply_crop(crop_settings, image_output);
 static gboolean apply_fliprotate(fliprotate_settings, image_output);
 static gboolean apply_color(color_settings, image_output);
-static gboolean apply_sharp(sharp_settings, image_output);
+static gboolean apply_sharpblur(sharpblur_settings, image_output);
 static gboolean apply_watermark(watermark_settings, image_output);
 static gboolean apply_userdef(userdef_settings, image_output);
 static gboolean apply_rename(rename_settings, image_output, char*);
 static gboolean image_save_bmp(image_output);
-static gboolean image_save_gif(image_output);
+static gboolean image_save_gif(image_output, gboolean);
 static gboolean image_save_icon(image_output);
-static gboolean image_save_jpeg(image_output, float);
+static gboolean image_save_jpeg(image_output, float, float, gboolean, gboolean, gchar*, int, gboolean, int, int);
 static gboolean image_save_png(image_output, gboolean, int);
 static gboolean image_save_raw(image_output);
 static gboolean image_save_tga(image_output, gboolean);
@@ -38,6 +38,7 @@ static gboolean ask_overwrite(char*, GtkWidget*);
 static char* str_replace(char*, char*, char*);
 static char* comp_get_filename(char*);
 static char* get_datetime();
+static float min(float, float);
 
 int filecount, totalfilecount;
 char* current_datetime;
@@ -68,7 +69,7 @@ static void process_image(char* file, gpointer parent)
 	char* orig_basename;
 	char* orig_file_ext;
 	
-	imageout = (image_output)malloc(sizeof(struct imageout_str));
+	imageout = (image_output)g_malloc(sizeof(struct imageout_str));
 	
 	orig_basename = g_strdup(comp_get_filename(file)); /* store original filename */
 	orig_file_ext = g_strdup(strrchr(orig_basename, '.')); /* store original extension */
@@ -132,13 +133,23 @@ static void process_image(char* file, gpointer parent)
 				image_save_bmp(imageout);
 			}
 			else if(type == FORMAT_GIF) {
-				image_save_gif(imageout);
+				image_save_gif(imageout, ((format_params_gif)params)->interlace);
 			}
 			else if(type == FORMAT_ICON) {
 				image_save_icon(imageout);
 			}
 			else if(type == FORMAT_JPEG) {
-				image_save_jpeg(imageout, ((format_params_jpeg)params)->quality);
+				image_save_jpeg(
+					imageout, 
+					((format_params_jpeg)params)->quality, 
+					((format_params_jpeg)params)->smoothing, 
+					((format_params_jpeg)params)->entropy, 
+					((format_params_jpeg)params)->progressive,
+					((format_params_jpeg)params)->comment,
+					((format_params_jpeg)params)->subsampling,
+					((format_params_jpeg)params)->baseline,
+					((format_params_jpeg)params)->markers,
+					((format_params_jpeg)params)->dct);
 			}
 			else if(type == FORMAT_PNG) {
 				image_save_png(imageout, ((format_params_png)params)->interlace, ((format_params_png)params)->compression);
@@ -178,9 +189,9 @@ static void process_image(char* file, gpointer parent)
 	}
 	
 	gimp_image_delete(imageout->image_id); /* is it useful? */
-	free(orig_basename);
-	free(orig_file_ext);
-	free(imageout);
+	g_free(orig_basename);
+	g_free(orig_file_ext);
+	g_free(imageout);
 		
 	filecount ++;
 	bimp_progress_bar_set((double)filecount/totalfilecount, NULL);
@@ -198,9 +209,9 @@ static void apply_drawing_manipulation(manipulation man, image_output out)
 		g_print("Applying COLOR CORRECTION...\n");
 		success = apply_color((color_settings)(man->settings), out);
 	}
-	else if (man->type == MANIP_SHARPEN) {
-		g_print("Applying SHARPEN...\n");
-		success = apply_sharp((sharp_settings)(man->settings), out);
+	else if (man->type == MANIP_SHARPBLUR) {
+		g_print("Applying SHARPBLUR...\n");
+		success = apply_sharpblur((sharpblur_settings)(man->settings), out);
 	}
 	else if (man->type == MANIP_USERDEF) {
 		g_print("Applying %s...\n", ((userdef_settings)(man->settings))->procedure);
@@ -219,12 +230,7 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 	}
 	else {
 		/* user typed exact pixel size */
-		if (settings->sizemode == RESIZE_PIXEL_BOTH) {
-			/* both dimensions are defined */
-			finalW = settings->newWpx;
-			finalH = settings->newHpx;
-		}
-		else if (settings->sizemode == RESIZE_PIXEL_WIDTH) {
+		if (settings->sizemode == RESIZE_PIXEL_WIDTH) {
 			/* width only */
 			finalW = settings->newWpx;
 			if (settings->aspect_ratio) {
@@ -245,6 +251,11 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 			else {
 				finalW = gimp_image_width(out->image_id);
 			}
+		}
+		else {
+			/* both dimensions are defined */
+			finalW = settings->newWpx;
+			finalH = settings->newHpx;
 		}
 	}
 	
@@ -357,20 +368,35 @@ static gboolean apply_color(color_settings settings, image_output out)
 	return success;
 }
 
-static gboolean apply_sharp(sharp_settings settings, image_output out) 
+static gboolean apply_sharpblur(sharpblur_settings settings, image_output out) 
 {
 	gboolean success = TRUE;
+	gint nreturn_vals;
 	
-	if (settings->amount > 0) {
-		/* do sharpen */
-		gint nreturn_vals;
+	if (settings->amount < 0) {
+		/* do sharp */
 		GimpParam *return_vals = gimp_run_procedure(
-			"plug_in_sharpen",
+			"plug_in_sharpen", /* could use plug_in_unsharp_mask, but there's a datatype bug in 2.6.x version */
 			&nreturn_vals,
 			GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
 			GIMP_PDB_IMAGE, out->image_id,
 			GIMP_PDB_DRAWABLE, out->drawable_id,
-			GIMP_PDB_INT32, settings->amount,
+			GIMP_PDB_INT32, -(settings->amount),
+			GIMP_PDB_END
+		);
+	} else if (settings->amount > 0){
+		/* do blur */
+		float minsize = min(gimp_image_width(out->image_id)/4, gimp_image_height(out->image_id)/4) ;
+		float radius = (minsize / 100) * settings->amount;
+		GimpParam *return_vals = gimp_run_procedure(
+			"plug_in_gauss",
+			&nreturn_vals,
+			GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
+			GIMP_PDB_IMAGE, out->image_id,
+			GIMP_PDB_DRAWABLE, out->drawable_id,
+			GIMP_PDB_FLOAT, radius,
+			GIMP_PDB_FLOAT, radius,
+			GIMP_PDB_INT32, 0,
 			GIMP_PDB_END
 		);
 	}
@@ -415,10 +441,6 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 			posX = gimp_image_width(out->image_id) - wmwidth - 10;
 			posY = 5;
 		}
-		else if (settings->position == WM_POS_CC){
-			posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);
-			posY = (gimp_image_height(out->image_id) / 2) - (wmheight / 2);
-		}
 		else if (settings->position == WM_POS_BL) {
 			posX = 10;
 			posY = gimp_image_height(out->image_id) - wmheight - 5;
@@ -426,6 +448,10 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 		else if (settings->position == WM_POS_BR) {
 			posX = gimp_image_width(out->image_id) - wmwidth - 10;
 			posY = gimp_image_height(out->image_id) - wmheight - 5;
+		}
+		else {
+			posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);
+			posY = (gimp_image_height(out->image_id) / 2) - (wmheight / 2);
 		}
         
 		layerId = gimp_text_fontname(
@@ -473,10 +499,6 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 			posX = gimp_image_width(out->image_id) - wmwidth - 10;
 			posY = 10;
 		}
-		else if (settings->position == WM_POS_CC){
-			posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);
-			posY = (gimp_image_height(out->image_id) / 2) - (wmheight / 2);
-		}
 		else if (settings->position == WM_POS_BL) {
 			posX = 10;
 			posY = gimp_image_height(out->image_id) - wmheight - 10;
@@ -484,6 +506,10 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 		else if (settings->position == WM_POS_BR) {
 			posX = gimp_image_width(out->image_id) - wmwidth - 10;
 			posY = gimp_image_height(out->image_id) - wmheight - 10;
+		}
+		else {
+			posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);
+			posY = (gimp_image_height(out->image_id) / 2) - (wmheight / 2);
 		}
         
         gimp_layer_set_offsets(
@@ -577,7 +603,7 @@ static gboolean image_save_bmp(image_output out)
 	return TRUE;
 }
 
-static gboolean image_save_gif(image_output out) 
+static gboolean image_save_gif(image_output out, gboolean interlace) 
 {
 	gint nreturn_vals;
 	
@@ -600,10 +626,10 @@ static gboolean image_save_gif(image_output out)
 			GIMP_PDB_DRAWABLE, out->drawable_id,
 			GIMP_PDB_STRING, out->filepath,
 			GIMP_PDB_STRING, out->filename,
-			GIMP_PDB_INT32, 1,	/* Try to save as interlaced */
-			GIMP_PDB_INT32, 1,	/* (animated gif) loop infinitely */
-			GIMP_PDB_INT32, 0,	/* (animated gif) Default delay between framese in milliseconds */
-			GIMP_PDB_INT32, 0,	/* (animated gif) Default disposal type (0=don't care, 1=combine, 2=replace) */
+			GIMP_PDB_INT32, interlace ? 1 : 0,	/* Try to save as interlaced */
+			GIMP_PDB_INT32, 1,					/* (animated gif) loop infinitely */
+			GIMP_PDB_INT32, 0,					/* (animated gif) Default delay between framese in milliseconds */
+			GIMP_PDB_INT32, 0,					/* (animated gif) Default disposal type (0=don't care, 1=combine, 2=replace) */
 			GIMP_PDB_END
 		);
 		
@@ -627,7 +653,7 @@ static gboolean image_save_icon(image_output out)
 	return TRUE;
 }
 
-static gboolean image_save_jpeg(image_output out, float quality) 
+static gboolean image_save_jpeg(image_output out, float quality, float smoothing, gboolean entropy, gboolean progressive, gchar* comment, int subsampling, gboolean baseline, int markers, int dct) 
 {
 	gint nreturn_vals;
 	
@@ -645,14 +671,14 @@ static gboolean image_save_jpeg(image_output out, float quality)
 			GIMP_PDB_STRING, out->filepath,
 			GIMP_PDB_STRING, out->filename,
 			GIMP_PDB_FLOAT, quality >= 3 ? quality/100 : 0.03,	/* Quality of saved image (0 <= quality <= 1) + small fix because final image doesn't change when quality < 3 */
-			GIMP_PDB_FLOAT, 0.,		/* Smoothing factor for saved image (0 <= smoothing <= 1) */
-			GIMP_PDB_INT32, 1,		/* Optimization of entropy encoding parameters (0/1) */
-			GIMP_PDB_INT32, 1,		/* Enable progressive jpeg image loading - ignored if not compiled with HAVE_PROGRESSIVE_JPEG (0/1) */
-			GIMP_PDB_STRING, "",	/* Image comment */
-			GIMP_PDB_INT32, 3,		/* The subsampling option number */
-			GIMP_PDB_INT32, 1,		/* Force creation of a baseline JPEG (non-baseline JPEGs can't be read by all decoders) (0/1) */
-			GIMP_PDB_INT32, 0,		/* Frequency of restart markers (in rows, 0 = no restart markers) */
-			GIMP_PDB_INT32, 1,		/* DCT algorithm to use (speed/quality tradeoff) */
+			GIMP_PDB_FLOAT, smoothing/100,				/* Smoothing factor for saved image (0 <= smoothing <= 1) */
+			GIMP_PDB_INT32, entropy ? 1 : 0,		/* Optimization of entropy encoding parameters (0/1) */
+			GIMP_PDB_INT32, progressive ? 1 : 0,	/* Enable progressive jpeg image loading - ignored if not compiled with HAVE_PROGRESSIVE_JPEG (0/1) */
+			GIMP_PDB_STRING, comment,				/* Image comment */
+			GIMP_PDB_INT32, subsampling,			/* The subsampling option number */
+			GIMP_PDB_INT32, baseline ? 1 : 0,		/* Force creation of a baseline JPEG (non-baseline JPEGs can't be read by all decoders) (0/1) */
+			GIMP_PDB_INT32, markers,				/* Frequency of restart markers (in rows, 0 = no restart markers) */
+			GIMP_PDB_INT32, dct,					/* DCT algorithm to use (speed/quality tradeoff) */
 			GIMP_PDB_END
 		);
 	
@@ -840,4 +866,11 @@ static char* get_datetime() {
 	strftime (format, 18, "%Y-%m-%d_%H-%M", timeinfo);
 
 	return format;
+}
+
+static float min(float a, float b) {
+	if (a < b)
+		return a;
+	else
+		return b;
 }

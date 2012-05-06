@@ -163,10 +163,8 @@ void bimp_watermark_save(watermark_settings orig_settings)
 {	
 	orig_settings->textmode = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_text));
 	
-	if (gtk_entry_get_text_length(GTK_ENTRY(entry_text)) > 0) {
-		strcpy(orig_settings->text, gtk_entry_get_text(GTK_ENTRY(entry_text)));
-	}
-	
+	orig_settings->text = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry_text)));
+		
 	char* filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(chooser_image));
 	if (filename != NULL) {
 		orig_settings->imagefile = g_strdup(filename);

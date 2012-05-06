@@ -39,8 +39,23 @@ GtkWidget* bimp_changeformat_gui_new(changeformat_settings settings)
 static void update_frame_params(GtkComboBox *widget, changeformat_settings settings) 
 {
 	format_type selected_format = (format_type)gtk_combo_box_get_active(widget);
+	
+	if (selected_format == FORMAT_GIF) {		
+		inner_widget = gtk_vbox_new(FALSE, 5);
+		gtk_container_set_border_width(GTK_CONTAINER(inner_widget), 8);
+		check_interlace = gtk_check_button_new_with_label("Interlaced");
 		
-	if (selected_format == FORMAT_JPEG) {
+		if (selected_format == settings->format) {
+			format_params_gif settings_gif = (format_params_gif)(settings->params);
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_interlace), settings_gif->interlace);
+		}
+		else {
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_interlace), FALSE);
+		}
+		
+		gtk_box_pack_start(GTK_BOX(inner_widget), check_interlace, FALSE, FALSE, 0);
+	} 
+	else if (selected_format == FORMAT_JPEG) {
 		GtkWidget *hbox_quality, *label_quality;
 		
 		inner_widget = gtk_vbox_new(FALSE, 5);
@@ -152,21 +167,25 @@ void bimp_changeformat_save(changeformat_settings orig_settings)
 	orig_settings->format = gtk_combo_box_get_active(GTK_COMBO_BOX(combo_format));
 	free(orig_settings->params);
 	
-	if (orig_settings->format == FORMAT_JPEG) {
-		orig_settings->params = (format_params_jpeg) malloc(sizeof(struct changeformat_params_jpeg));
+	if (orig_settings->format == FORMAT_GIF) {
+		orig_settings->params = (format_params_gif) g_malloc(sizeof(struct changeformat_params_gif));
+		((format_params_gif)orig_settings->params)->interlace = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_interlace));
+	}
+	else if (orig_settings->format == FORMAT_JPEG) {
+		orig_settings->params = (format_params_jpeg) g_malloc(sizeof(struct changeformat_params_jpeg));
 		((format_params_jpeg)orig_settings->params)->quality = gtk_range_get_value(GTK_RANGE(scale_quality));
 	}
 	else if (orig_settings->format == FORMAT_PNG) {
-		orig_settings->params = (format_params_png) malloc(sizeof(struct changeformat_params_png));
+		orig_settings->params = (format_params_png) g_malloc(sizeof(struct changeformat_params_png));
 		((format_params_png)orig_settings->params)->interlace = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_interlace));
 		((format_params_png)orig_settings->params)->compression = gtk_range_get_value(GTK_RANGE(scale_compression));
 	}
 	else if (orig_settings->format == FORMAT_TGA) {
-		orig_settings->params = (format_params_tga) malloc(sizeof(struct changeformat_params_tga));
+		orig_settings->params = (format_params_tga) g_malloc(sizeof(struct changeformat_params_tga));
 		((format_params_tga)orig_settings->params)->rle = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_rle));
 	}
 	else if (orig_settings->format == FORMAT_TIFF) {
-		orig_settings->params = (format_params_png) malloc(sizeof(struct changeformat_params_png));
+		orig_settings->params = (format_params_png) g_malloc(sizeof(struct changeformat_params_png));
 		((format_params_tiff)orig_settings->params)->compression = gtk_combo_box_get_active(GTK_COMBO_BOX(combo_compression));
 	}
 	else {

@@ -14,7 +14,7 @@ typedef enum manipulation_type {
 	MANIP_CROP,
 	MANIP_FLIPROTATE,
 	MANIP_COLOR,
-	MANIP_SHARPEN,
+	MANIP_SHARPBLUR,
 	MANIP_WATERMARK,
 	MANIP_CHANGEFORMAT,
 	MANIP_RENAME,
@@ -26,7 +26,7 @@ static const char* manipulation_type_string[] = {
 	"Crop",								/* MANIP_CROP */
 	"Flip or Rotate",					/* MANIP_FLIPROTATE */
 	"Color correction",					/* MANIP_COLOR */
-	"Sharpen",							/* MANIP_SHARPEN */
+	"Sharpen or blurred",				/* MANIP_SHARPEN */
 	"Apply a watermark text or image",	/* MANIP_WATERMARK */
 	"Change format and quality",		/* MANIP_CHANGEFORMAT */
 	"Rename with a pattern",			/* MANIP_RENAME */
@@ -155,9 +155,9 @@ typedef struct manip_color_set {
 	gboolean grayscale;
 } *color_settings;
 
-typedef struct manip_sharp_set { 
+typedef struct manip_sharpblur_set { 
 	int amount;
-} *sharp_settings;
+} *sharpblur_settings;
 
 typedef struct manip_watermark_set {
 	gboolean textmode; /* TRUE = text mode; FALSE = image mode */
@@ -174,8 +174,21 @@ typedef struct manip_changeformat_set {
 	format_params params; /* Pointer to one of the format params structs */
 } *changeformat_settings;
 
+typedef struct changeformat_params_gif {
+	gboolean interlace;
+} *format_params_gif;
+
+
 typedef struct changeformat_params_jpeg {
 	float quality;
+	float smoothing;
+	gboolean entropy;
+	gboolean progressive;
+	gchar* comment;
+	int subsampling;
+	gboolean baseline;
+	int markers;
+	int dct;
 } *format_params_jpeg;
 
 typedef struct changeformat_params_png {

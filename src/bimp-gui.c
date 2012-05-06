@@ -83,6 +83,7 @@ void bimp_show_gui()
 	gimp_window_set_transient (GTK_WINDOW(bimp_window_main));
 	gtk_widget_set_size_request (bimp_window_main, MAIN_WINDOW_W, MAIN_WINDOW_H);
 	gtk_window_set_resizable (GTK_WINDOW(bimp_window_main), FALSE);
+	gtk_window_set_position(GTK_WINDOW(bimp_window_main), GTK_WIN_POS_CENTER);
 	gtk_container_set_border_width(GTK_CONTAINER(bimp_window_main), 5);
 	
 	vbox_main = gtk_vbox_new(FALSE, 10);
@@ -468,7 +469,7 @@ static void open_popup_menu(GtkWidget *widget, gpointer data)
 		gtk_menu_popup(GTK_MENU(popmenu_add), NULL, NULL, NULL, NULL, 0, 0);
 	}
 	else {
-		gchar* item_label;
+		const gchar* item_label;
 		
 		clicked_man = (manipulation)data;
 		if (clicked_man->type == MANIP_USERDEF) {

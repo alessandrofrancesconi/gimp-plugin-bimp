@@ -13,7 +13,7 @@
 #include "manipulation-gui/gui-crop.h"
 #include "manipulation-gui/gui-fliprotate.h"
 #include "manipulation-gui/gui-color.h"
-#include "manipulation-gui/gui-sharp.h"
+#include "manipulation-gui/gui-sharpblur.h"
 #include "manipulation-gui/gui-changeformat.h"
 #include "manipulation-gui/gui-watermark.h"
 #include "manipulation-gui/gui-rename.h"
@@ -67,10 +67,10 @@ void bimp_open_editwindow(manipulation man, gboolean first_time)
 		gui = bimp_color_gui_new((color_settings)(man->settings));
 		save = &bimp_color_save;
 	}
-	else if (man->type == MANIP_SHARPEN) {
-		gtk_widget_set_size_request (window, SHARP_WINDOW_W, SHARP_WINDOW_H);
-		gui = bimp_sharp_gui_new((sharp_settings)(man->settings));
-		save = &bimp_sharp_save;
+	else if (man->type == MANIP_SHARPBLUR) {
+		gtk_widget_set_size_request (window, SHARPBLUR_WINDOW_W, SHARPBLUR_WINDOW_H);
+		gui = bimp_sharpblur_gui_new((sharpblur_settings)(man->settings));
+		save = &bimp_sharpblur_save;
 	}
 	else if (man->type == MANIP_CHANGEFORMAT) {
 		gtk_widget_set_size_request (window, CHANGEFORMAT_WINDOW_W, CHANGEFORMAT_WINDOW_H);
