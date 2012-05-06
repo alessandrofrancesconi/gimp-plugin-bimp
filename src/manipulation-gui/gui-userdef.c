@@ -103,10 +103,8 @@ static void show_proc_params(userdef_settings settings, GtkWidget* parent)
 					else {
 						if (strcmp(param_info.name, "toggle") == 0) { /* TODO: search "true/false" in description? */
 							/* but if it's named 'toggle' pretend to be a boolean value */
-							param_widget[param_i] = gtk_combo_box_new_text();
-							gtk_combo_box_append_text (GTK_COMBO_BOX(param_widget[param_i]), "NO / FALSE / 0");
-							gtk_combo_box_append_text (GTK_COMBO_BOX(param_widget[param_i]), "YES / TRUE / 1");
-							gtk_combo_box_set_active(GTK_COMBO_BOX(param_widget[param_i]), (settings->params[param_i]).data.d_int32);
+							param_widget[param_i] = gtk_check_button_new();
+							gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(param_widget[param_i]), (settings->params[param_i]).data.d_int32 == 1 ? TRUE : FALSE);
 						} else {
 							param_widget[param_i] = gtk_spin_button_new (NULL, 1, 0);
 							gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new ((settings->params[param_i]).data.d_int32, -10000, 10000, 1, 1, 0)), 0, 0);
@@ -418,7 +416,7 @@ void bimp_userdef_save(userdef_settings orig_settings)
 				if (strcmp(temp_settings->params_names[param_i], "run-mode") == 0) {
 					(orig_settings->params[param_i]).data.d_int32 = (gint32)GIMP_RUN_NONINTERACTIVE;
 				} else if (strcmp(temp_settings->params_names[param_i], "toggle") == 0) {
-					(orig_settings->params[param_i]).data.d_int32 = (gint32)gtk_combo_box_get_active(GTK_COMBO_BOX(param_widget[param_i]));
+					(orig_settings->params[param_i]).data.d_int32 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(param_widget[param_i])) ? 1 : 0;
 				}
 				else {
 					(orig_settings->params[param_i]).data.d_int32 = (gint32)gtk_spin_button_get_value(GTK_SPIN_BUTTON(param_widget[param_i]));
