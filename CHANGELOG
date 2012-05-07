@@ -1,0 +1,22 @@
+BIMP. Batch Image Manipulation Plugin for GIMP.
+http://www.alessandrofrancesconi.it/projects/bimp
+------------------------------------------------
+
+Changelog:
+
+0.3:
+ - Added "Change Resolution" in Resize manipulation
+ - In "Other GIMP procedure" dialog, 'toggle' values are now represented by a GtkToggleButton
+ - More customizations in the "Change Format" dialog
+ - Code and memory allocation optimizations
+
+0.2:
+ - Fixed "Other GIMP procedure" dialog crashes under Win32
+ - Improved "Other GIMP procedure" dialog funcionalities (support to Font and Opacity params)
+ - Nicer "Add Watermark" gui
+ - Added files preview box
+ - Added some documentation comments in source code
+ - Few graphical fixes around
+
+0.1:
+ - It all started from here...

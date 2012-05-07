@@ -114,6 +114,9 @@ static manipulation manipulation_resize_new()
 	((resize_settings)resize->settings)->sizemode = RESIZE_PERCENT;
 	((resize_settings)resize->settings)->aspect_ratio = TRUE;
 	((resize_settings)resize->settings)->interpolation = GIMP_INTERPOLATION_CUBIC;
+	((resize_settings)resize->settings)->change_res = FALSE;
+	((resize_settings)resize->settings)->newResX = 72.000;
+	((resize_settings)resize->settings)->newResY = 72.000;
 	
 	return resize;
 }
@@ -207,7 +210,7 @@ static manipulation manipulation_changeformat_new()
 	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->quality = 85.0;
 	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->smoothing = 0.0;
 	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->entropy = TRUE;
-	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->progressive = TRUE;
+	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->progressive = FALSE;
 	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->comment = "";
 	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->subsampling = 3;
 	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->baseline = TRUE;

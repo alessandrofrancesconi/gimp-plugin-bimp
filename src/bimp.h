@@ -8,7 +8,7 @@
 #define PLUG_IN_BINARY "bimp"
 #define PLUG_IN_PROC "plug-in-bimp"
 #define PLUG_IN_VERSION_MAJ 0
-#define PLUG_IN_VERSION_MIN 2
+#define PLUG_IN_VERSION_MIN 3
 
 GSList *bimp_input_filenames;
 char *bimp_output_folder;

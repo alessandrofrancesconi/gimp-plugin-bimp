@@ -2,7 +2,6 @@
  * Functions called when the users clicks on 'APPLY'
  */
 
-#include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <time.h>
@@ -223,6 +222,26 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 {
 	gboolean success = FALSE;
 	gint finalW, finalH;
+	gdouble origResX, origResY;
+	
+	if (settings->change_res) {
+		success = gimp_image_get_resolution(
+			out->image_id,
+			&origResX,
+			&origResY
+		);
+		
+		if ((settings->newResX != origResX) || (settings->newResY != origResY)) {
+			/* change resolution */
+			success = gimp_image_set_resolution(
+				out->image_id,
+				settings->newResX,
+				settings->newResY
+			);
+		}
+	}
+	
+	
 	if (settings->sizemode == RESIZE_PERCENT) {
 		/* user selected a percentage of the original size */
 		finalW = round((gimp_image_width(out->image_id) * settings->newWpc) / 100.0);
@@ -671,7 +690,7 @@ static gboolean image_save_jpeg(image_output out, float quality, float smoothing
 			GIMP_PDB_STRING, out->filepath,
 			GIMP_PDB_STRING, out->filename,
 			GIMP_PDB_FLOAT, quality >= 3 ? quality/100 : 0.03,	/* Quality of saved image (0 <= quality <= 1) + small fix because final image doesn't change when quality < 3 */
-			GIMP_PDB_FLOAT, smoothing/100,				/* Smoothing factor for saved image (0 <= smoothing <= 1) */
+			GIMP_PDB_FLOAT, smoothing,				/* Smoothing factor for saved image (0 <= smoothing <= 1) */
 			GIMP_PDB_INT32, entropy ? 1 : 0,		/* Optimization of entropy encoding parameters (0/1) */
 			GIMP_PDB_INT32, progressive ? 1 : 0,	/* Enable progressive jpeg image loading - ignored if not compiled with HAVE_PROGRESSIVE_JPEG (0/1) */
 			GIMP_PDB_STRING, comment,				/* Image comment */
@@ -698,9 +717,9 @@ static gboolean image_save_png(image_output out, gboolean interlace, int compres
 			GIMP_PDB_STRING, out->filename,
 			GIMP_PDB_INT32, interlace? 1 : 0,	/* Use Adam7 interlacing? */
 			GIMP_PDB_INT32, compression,		/* Deflate Compression factor (0--9) */
-			GIMP_PDB_INT32, 1,					/* Write bKGD chunk? */
-			GIMP_PDB_INT32, 1,					/* Write gAMA chunk? */
-			GIMP_PDB_INT32, 1,					/* Write oFFs chunk? */
+			GIMP_PDB_INT32, 0,					/* Write bKGD chunk? */
+			GIMP_PDB_INT32, 0,					/* Write gAMA chunk? */
+			GIMP_PDB_INT32, 0,					/* Write oFFs chunk? */
 			GIMP_PDB_INT32, 1,					/* Write tIME chunk? */
 			GIMP_PDB_INT32, 1,					/* Write pHYs chunk? */
 			GIMP_PDB_END

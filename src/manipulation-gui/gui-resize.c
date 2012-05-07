@@ -7,11 +7,12 @@
 /* ok... it works.... BUT IT'S PROBABLY THE WORST CODE I'VE EVER WROTE .-. */
 
 static void toggle_units_group(GtkToggleButton*, gpointer);
+static void toggle_resolution(GtkToggleButton*, gpointer);
 
-GtkWidget *vbox_px;
+GtkWidget *vbox_px, *hbox_res;
 GtkWidget *radio_percent, *radio_px, *radio_px_both, *radio_px_width, *radio_px_height;
-GtkWidget *spin_width, *spin_height;
-GtkWidget *check_aspect;
+GtkWidget *spin_width, *spin_height, *spin_resX, *spin_resY;
+GtkWidget *check_aspect, *check_resolution;
 GtkWidget *label_unit;
 GtkWidget *combo_quality;
 
@@ -25,8 +26,8 @@ gboolean previous_was_percent;
 GtkWidget* bimp_resize_gui_new(resize_settings settings)
 {
 	GtkWidget *gui, *hbox_values, *hbox_quality;
-	GtkWidget *label_width, *label_height, *label_quality;
-	GtkWidget *align_radio, *align_values;
+	GtkWidget *label_width, *label_height, *label_quality, *label_resX, *label_resY, *label_dpi;
+	GtkWidget *align_radio, *align_values, *align_res;
 	
 	last_percent_w_value = settings->newWpc;
 	last_percent_h_value = settings->newHpc;
@@ -66,6 +67,19 @@ GtkWidget* bimp_resize_gui_new(resize_settings settings)
 	spin_height = gtk_spin_button_new(NULL, 1, 0);
 	label_unit = gtk_label_new("<unit>");
 	
+	check_resolution = gtk_check_button_new_with_label("Change resolution");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_resolution), settings->change_res);
+	align_res = gtk_alignment_new(0.5, 0, 0, 0);
+	gtk_alignment_set_padding(GTK_ALIGNMENT(align_res), 5, 5, 0, 0);
+	hbox_res = gtk_hbox_new(FALSE, 5);
+	label_resX = gtk_label_new("X axis:");
+	spin_resX = gtk_spin_button_new(NULL, 1, 0);
+	gtk_spin_button_configure (GTK_SPIN_BUTTON(spin_resX), GTK_ADJUSTMENT(gtk_adjustment_new (settings->newResX, 0.005, 65536.000, 1.000, 1, 0)), 0, 3);
+	label_resY = gtk_label_new("Y axis:");
+	spin_resY = gtk_spin_button_new(NULL, 1, 0);
+	gtk_spin_button_configure (GTK_SPIN_BUTTON(spin_resY), GTK_ADJUSTMENT(gtk_adjustment_new (settings->newResY, 0.005, 65536.000, 1.000, 1, 0)), 0, 3);
+	label_dpi = gtk_label_new("dpi");
+	
 	gtk_box_pack_start(GTK_BOX(vbox_px), radio_px_both, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox_px), radio_px_width, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox_px), radio_px_height, FALSE, FALSE, 0);
@@ -81,21 +95,34 @@ GtkWidget* bimp_resize_gui_new(resize_settings settings)
 	gtk_box_pack_start(GTK_BOX(hbox_values), label_unit, FALSE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(align_values), hbox_values);
 	
+	gtk_box_pack_start(GTK_BOX(hbox_res), label_resX, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox_res), spin_resX, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox_res), label_resY, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox_res), spin_resY, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox_res), label_dpi, FALSE, FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(align_res), hbox_res);
+	
 	gtk_box_pack_start(GTK_BOX(gui), radio_percent, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(gui), radio_px, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(gui), align_radio, FALSE, FALSE, 0);
+	
 	gtk_box_pack_start(GTK_BOX(gui), check_aspect, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(gui), hbox_quality, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(gui), align_values, FALSE, FALSE, 0);
 	
+	gtk_box_pack_start(GTK_BOX(gui), check_resolution, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(gui), align_res, FALSE, FALSE, 0);
+	
 	previous_was_percent = FALSE;
 	toggle_units_group(NULL, NULL);
+	toggle_resolution(NULL, NULL);
 	
 	g_signal_connect(G_OBJECT(radio_percent), "toggled", G_CALLBACK(toggle_units_group), NULL);
 	g_signal_connect(G_OBJECT(radio_px_both), "toggled", G_CALLBACK(toggle_units_group), NULL);
 	g_signal_connect(G_OBJECT(radio_px_width), "toggled", G_CALLBACK(toggle_units_group), NULL);
 	g_signal_connect(G_OBJECT(radio_px_height), "toggled", G_CALLBACK(toggle_units_group), NULL);
 	g_signal_connect(G_OBJECT(check_aspect), "toggled", G_CALLBACK(toggle_units_group), NULL);
+	g_signal_connect(G_OBJECT(check_resolution), "toggled", G_CALLBACK(toggle_resolution), NULL);
 	
 	return gui;
 }
@@ -150,9 +177,22 @@ void toggle_units_group(GtkToggleButton *togglebutton, gpointer user_data)
 		previous_was_percent = FALSE;
 	}
 	
+	/* adjustements for resolution spinners */
+	if (aspect_active) {
+		gtk_spin_button_configure (GTK_SPIN_BUTTON(spin_resY), gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(spin_resX)), 0, 3);
+	}
+	else {
+		gtk_spin_button_configure (GTK_SPIN_BUTTON(spin_resY), GTK_ADJUSTMENT(gtk_adjustment_new (gtk_spin_button_get_value (GTK_SPIN_BUTTON(spin_resY)), 0.005, 65536.000, 1.000, 1, 0)), 0, 3);
+	}
+	
 	gtk_widget_set_sensitive(GTK_WIDGET(check_aspect), (percent_active || !both_active));
 	gtk_widget_set_sensitive(GTK_WIDGET(spin_width), (percent_active || both_active || width_active));
 	gtk_widget_set_sensitive(GTK_WIDGET(spin_height), (percent_active || both_active || height_active));	
+}
+
+void toggle_resolution(GtkToggleButton *togglebutton, gpointer user_data) 
+{
+	gtk_widget_set_sensitive(GTK_WIDGET(hbox_res), gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_resolution)));
 }
 
 void bimp_resize_save(resize_settings orig_settings) 
@@ -195,5 +235,9 @@ void bimp_resize_save(resize_settings orig_settings)
 	else {
 		orig_settings->interpolation = GIMP_INTERPOLATION_NONE;
 	}
+	
+	orig_settings->change_res = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_resolution));
+	orig_settings->newResX = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_resX));
+	orig_settings->newResY = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_resY));
 }
 

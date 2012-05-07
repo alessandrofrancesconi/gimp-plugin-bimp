@@ -74,7 +74,7 @@ void bimp_open_editwindow(manipulation man, gboolean first_time)
 	}
 	else if (man->type == MANIP_CHANGEFORMAT) {
 		gtk_widget_set_size_request (window, CHANGEFORMAT_WINDOW_W, CHANGEFORMAT_WINDOW_H);
-		gui = bimp_changeformat_gui_new((changeformat_settings)(man->settings));
+		gui = bimp_changeformat_gui_new((changeformat_settings)(man->settings), window);
 		save = &bimp_changeformat_save;
 	}
 	else if (man->type == MANIP_WATERMARK) {

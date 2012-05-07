@@ -2,7 +2,6 @@
  * Functions used to build and return the main BIMP user interface
  */
 
-#include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
 #include <libgimp/gimp.h>

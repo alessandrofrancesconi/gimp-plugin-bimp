@@ -26,7 +26,7 @@ static const char* manipulation_type_string[] = {
 	"Crop",								/* MANIP_CROP */
 	"Flip or Rotate",					/* MANIP_FLIPROTATE */
 	"Color correction",					/* MANIP_COLOR */
-	"Sharpen or blurred",				/* MANIP_SHARPEN */
+	"Sharp or blur",					/* MANIP_SHARPBLUR */
 	"Apply a watermark text or image",	/* MANIP_WATERMARK */
 	"Change format and quality",		/* MANIP_CHANGEFORMAT */
 	"Rename with a pattern",			/* MANIP_RENAME */
@@ -132,6 +132,9 @@ typedef struct manip_resize_set {
 	resize_mode sizemode;
 	gboolean aspect_ratio;
 	GimpInterpolationType interpolation;
+	gboolean change_res;
+	gdouble newResX;
+	gdouble newResY;
 } *resize_settings;
 
 typedef struct manip_crop_set {
@@ -177,7 +180,6 @@ typedef struct manip_changeformat_set {
 typedef struct changeformat_params_gif {
 	gboolean interlace;
 } *format_params_gif;
-
 
 typedef struct changeformat_params_jpeg {
 	float quality;

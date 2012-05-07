@@ -6,13 +6,15 @@ Documentation @ http://www.alessandrofrancesconi.it/projects/bimp
 
 
 - COMPILING AND INSTALLING UNDER LINUX:
-Usually, you just need to install gimp-dev package (this name is on Debian 
+Usually, you just need to install libgimp2.0-dev package (this name is on Debian 
 and other distros) to have the full set of libraries and dependences for compiling BIMP.
 Then:
 
  make && make install
 
-(don't mind the warnings...)
+NOTE:
+1) don't type 'sudo' before 'make install', otherwise "normal" users won't see the installed plugin
+2) don't mind the warnings...
 
 
 - INSTALLING UNDER WINDOWS:
