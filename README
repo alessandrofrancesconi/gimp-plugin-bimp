@@ -6,7 +6,7 @@ Documentation @ http://www.alessandrofrancesconi.it/projects/bimp
 
 
 - COMPILING AND INSTALLING UNDER LINUX:
-Usually, you just need to install gimp-dev package (this name is on Debian 
+Usually, you just need to install libgimp2.0-dev package (this name is on Debian 
 and other distros) to have the full set of libraries and dependences for compiling BIMP.
 Then:
 
