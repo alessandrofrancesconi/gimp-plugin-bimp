@@ -717,9 +717,9 @@ static gboolean image_save_png(image_output out, gboolean interlace, int compres
 			GIMP_PDB_STRING, out->filename,
 			GIMP_PDB_INT32, interlace? 1 : 0,	/* Use Adam7 interlacing? */
 			GIMP_PDB_INT32, compression,		/* Deflate Compression factor (0--9) */
-			GIMP_PDB_INT32, 0,					/* Write bKGD chunk? */
-			GIMP_PDB_INT32, 0,					/* Write gAMA chunk? */
-			GIMP_PDB_INT32, 0,					/* Write oFFs chunk? */
+			GIMP_PDB_INT32, 1,					/* Write bKGD chunk? */
+			GIMP_PDB_INT32, 1,					/* Write gAMA chunk? */
+			GIMP_PDB_INT32, 1,					/* Write oFFs chunk? */
 			GIMP_PDB_INT32, 1,					/* Write tIME chunk? */
 			GIMP_PDB_INT32, 1,					/* Write pHYs chunk? */
 			GIMP_PDB_END

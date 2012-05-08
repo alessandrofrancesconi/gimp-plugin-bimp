@@ -6,7 +6,7 @@ Changelog:
 
 0.3:
  - Added "Change Resolution" in Resize manipulation
- - Replaced "Sharpen" with "Sharpen or blurred"
+ - Replaced "Sharpen" with "Sharp or blur"
  - More customizations in the "Change Format" dialog
  - In "Other GIMP procedure" dialog, 'toggle' values are now represented by a GtkToggleButton
  - Code and memory allocation optimizations
