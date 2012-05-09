@@ -4,6 +4,9 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+0.4:
+ - Fixed a regression that causes RENAME procedure to crash.
+
 0.3:
  - Added "Change Resolution" in Resize manipulation
  - Replaced "Sharpen" with "Sharp or blur"
