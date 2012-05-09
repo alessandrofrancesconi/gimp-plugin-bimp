@@ -599,7 +599,6 @@ static gboolean apply_rename(rename_settings settings, image_output out, char* o
 	}
 	
 	g_free(orig_filename);
-	g_free(orig_filename);
 	return TRUE;
 }
 
