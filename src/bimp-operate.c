@@ -3,8 +3,6 @@
  */
 
 #include <string.h>
-#include <math.h>
-#include <time.h>
 #include <unistd.h>
 #include <gtk/gtk.h>
 #include <libgimp/gimp.h>
@@ -12,6 +10,7 @@
 #include "bimp.h"
 #include "bimp-manipulations.h"
 #include "bimp-gui.h"
+#include "bimp-utils.h"
 
 static void process_image(char*, gpointer);
 static void apply_drawing_manipulation(manipulation, image_output);
@@ -27,17 +26,10 @@ static gboolean image_save_bmp(image_output);
 static gboolean image_save_gif(image_output, gboolean);
 static gboolean image_save_icon(image_output);
 static gboolean image_save_jpeg(image_output, float, float, gboolean, gboolean, gchar*, int, gboolean, int, int);
-static gboolean image_save_png(image_output, gboolean, int);
-static gboolean image_save_raw(image_output);
-static gboolean image_save_tga(image_output, gboolean);
+static gboolean image_save_png(image_output, gboolean, int, gboolean, gboolean, gboolean, gboolean, gboolean, gboolean, gboolean);
+static gboolean image_save_tga(image_output, gboolean, int);
 static gboolean image_save_tiff(image_output, int);
 static gboolean ask_overwrite(char*, GtkWidget*);
-
-/* utils */
-static char* str_replace(char*, char*, char*);
-static char* comp_get_filename(char*);
-static char* get_datetime();
-static float min(float, float);
 
 int filecount, totalfilecount;
 char* current_datetime;
@@ -49,7 +41,7 @@ gboolean bimp_start_batch(GtkWidget* parent)
 	g_print("\nBIMP - Batch Manipulation Plugin\nStart batch processing...\n");
 	bimp_progress_bar_set(0.0, "");
 	
-	current_datetime = get_datetime(); /* used by apply_rename */
+	current_datetime = bimp_get_datetime(); /* used by apply_rename */
 	filecount = 0;
 	totalfilecount = g_slist_length(bimp_input_filenames);
 	g_slist_foreach(bimp_input_filenames, (GFunc)process_image, parent);
@@ -70,7 +62,7 @@ static void process_image(char* file, gpointer parent)
 	
 	imageout = (image_output)g_malloc(sizeof(struct imageout_str));
 	
-	orig_basename = g_strdup(comp_get_filename(file)); /* store original filename */
+	orig_basename = g_strdup(bimp_comp_get_filename(file)); /* store original filename */
 	orig_file_ext = g_strdup(strrchr(orig_basename, '.')); /* store original extension */
 	
 	/* load the file and assign ids */
@@ -148,16 +140,24 @@ static void process_image(char* file, gpointer parent)
 					((format_params_jpeg)params)->subsampling,
 					((format_params_jpeg)params)->baseline,
 					((format_params_jpeg)params)->markers,
-					((format_params_jpeg)params)->dct);
+					((format_params_jpeg)params)->dct
+				);
 			}
 			else if(type == FORMAT_PNG) {
-				image_save_png(imageout, ((format_params_png)params)->interlace, ((format_params_png)params)->compression);
+				image_save_png(imageout, 
+					((format_params_png)params)->interlace, 
+					((format_params_png)params)->compression,
+					((format_params_png)params)->savebgc,
+					((format_params_png)params)->savegamma,
+					((format_params_png)params)->saveoff,
+					((format_params_png)params)->savephys,
+					((format_params_png)params)->savetime,
+					((format_params_png)params)->savecomm,
+					((format_params_png)params)->savetrans
+				);
 			}
-			/*else if(type == FORMAT_RAW) {
-				image_save_raw(imageout);
-			}*/
 			else if(type == FORMAT_TGA) {
-				image_save_tga(imageout, ((format_params_tga)params)->rle);
+				image_save_tga(imageout, ((format_params_tga)params)->rle, ((format_params_tga)params)->origin);
 			}
 			else if(type == FORMAT_TIFF) {
 				image_save_tiff(imageout, ((format_params_tiff)params)->compression);
@@ -405,7 +405,7 @@ static gboolean apply_sharpblur(sharpblur_settings settings, image_output out)
 		);
 	} else if (settings->amount > 0){
 		/* do blur */
-		float minsize = min(gimp_image_width(out->image_id)/4, gimp_image_height(out->image_id)/4) ;
+		float minsize = bimp_min(gimp_image_width(out->image_id)/4, gimp_image_height(out->image_id)/4) ;
 		float radius = (minsize / 100) * settings->amount;
 		GimpParam *return_vals = gimp_run_procedure(
 			"plug_in_gauss",
@@ -583,7 +583,7 @@ static gboolean apply_rename(rename_settings settings, image_output out, char* o
 	
 	/* search for 'RENAME_KEY_ORIG' occurrences and replace the final filename */
 	if(strstr(out->filename, RENAME_KEY_ORIG) != NULL) {
-		out->filename = str_replace(out->filename, RENAME_KEY_ORIG, orig_filename);
+		out->filename = bimp_str_replace(out->filename, RENAME_KEY_ORIG, orig_filename);
 	}
 	
 	/* same thing for count and datetime */
@@ -591,11 +591,11 @@ static gboolean apply_rename(rename_settings settings, image_output out, char* o
 	if(strstr(out->filename, RENAME_KEY_COUNT) != NULL)	{
 		char strcount[5];
 		sprintf(strcount, "%i", filecount + 1);
-		out->filename = str_replace(out->filename, RENAME_KEY_COUNT, strcount);
+		out->filename = bimp_str_replace(out->filename, RENAME_KEY_COUNT, strcount);
 	}
 	
 	if(strstr(out->filename, RENAME_KEY_DATETIME) != NULL)	{
-		out->filename = str_replace(out->filename, RENAME_KEY_DATETIME, current_datetime);
+		out->filename = bimp_str_replace(out->filename, RENAME_KEY_DATETIME, current_datetime);
 	}
 	
 	g_free(orig_filename);
@@ -703,11 +703,11 @@ static gboolean image_save_jpeg(image_output out, float quality, float smoothing
 	return TRUE;
 }
 
-static gboolean image_save_png(image_output out, gboolean interlace, int compression) 
+static gboolean image_save_png(image_output out, gboolean interlace, int compression, gboolean savebgc, gboolean savegamma, gboolean saveoff, gboolean savephys, gboolean savetime, gboolean savecomm, gboolean savetrans) 
 {	
 	gint nreturn_vals;
 	GimpParam *return_vals = gimp_run_procedure(
-			"file_png_save",
+			"file_png_save2",
 			&nreturn_vals,
 			GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
 			GIMP_PDB_IMAGE, out->image_id,
@@ -715,37 +715,21 @@ static gboolean image_save_png(image_output out, gboolean interlace, int compres
 			GIMP_PDB_STRING, out->filepath,
 			GIMP_PDB_STRING, out->filename,
 			GIMP_PDB_INT32, interlace? 1 : 0,	/* Use Adam7 interlacing? */
-			GIMP_PDB_INT32, compression,		/* Deflate Compression factor (0--9) */
-			GIMP_PDB_INT32, 1,					/* Write bKGD chunk? */
-			GIMP_PDB_INT32, 1,					/* Write gAMA chunk? */
-			GIMP_PDB_INT32, 1,					/* Write oFFs chunk? */
-			GIMP_PDB_INT32, 1,					/* Write tIME chunk? */
-			GIMP_PDB_INT32, 1,					/* Write pHYs chunk? */
+			GIMP_PDB_INT32, compression,		/* Deflate Compression factor (0-9) */
+			GIMP_PDB_INT32, savebgc? 1 : 0,		/* Write bKGD chunk? */
+			GIMP_PDB_INT32, savegamma? 1 : 0,	/* Write gAMA chunk? */
+			GIMP_PDB_INT32, saveoff? 1 : 0,		/* Write oFFs chunk? */
+			GIMP_PDB_INT32, savephys? 1 : 0,	/* Write phys chunk? */
+			GIMP_PDB_INT32, savetime? 1 : 0,	/* Write tIME chunk? */
+			GIMP_PDB_INT32, savecomm? 1 : 0,	/* Write comments chunk? */
+			GIMP_PDB_INT32, savetrans? 1 : 0,	/* Write trans chunk? */
 			GIMP_PDB_END
 		);
 		
 	return TRUE;
 }
 
-/* NEED FIX! */
-static gboolean image_save_raw(image_output out) 
-{
-	gint nreturn_vals;
-	GimpParam *return_vals = gimp_run_procedure(
-			"file_raw_save",
-			&nreturn_vals,
-			GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
-			GIMP_PDB_IMAGE, out->image_id,
-			GIMP_PDB_DRAWABLE, out->drawable_id,
-			GIMP_PDB_STRING, out->filepath,
-			GIMP_PDB_STRING, out->filename,
-			GIMP_PDB_END
-		);
-		
-	return TRUE;
-}
-
-static gboolean image_save_tga(image_output out, gboolean rle) 
+static gboolean image_save_tga(image_output out, gboolean rle, int origin) 
 {
 	gint nreturn_vals;
 	GimpParam *return_vals = gimp_run_procedure(
@@ -757,6 +741,7 @@ static gboolean image_save_tga(image_output out, gboolean rle)
 			GIMP_PDB_STRING, out->filepath,
 			GIMP_PDB_STRING, out->filename,
 			GIMP_PDB_INT32, rle? 1 : 0,	/* Use RLE compression */
+			GIMP_PDB_INT32, origin,		/* Image origin */
 			GIMP_PDB_END
 		);
 		
@@ -793,7 +778,7 @@ static gboolean ask_overwrite(char* path, GtkWidget* parent) {
 			GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_MESSAGE_QUESTION,
 			GTK_BUTTONS_YES_NO,
-			"File %s already exists,\noverwrite it?", comp_get_filename(path));
+			"File %s already exists,\noverwrite it?", bimp_comp_get_filename(path));
 		  gtk_window_set_title(GTK_WINDOW(dialog), "Overwrite?");
 		  gint result = gtk_dialog_run(GTK_DIALOG(dialog));
 		  gtk_widget_destroy(dialog);
@@ -802,93 +787,4 @@ static gboolean ask_overwrite(char* path, GtkWidget* parent) {
 	}
 	
 	return can_overwrite;
-}
-
-/* replace all the occurrences of 'rep' into 'orig' with text 'with' */
-static char *str_replace(char *orig, char *rep, char *with) 
-{
-    char *result;
-    char *ins;
-    char *tmp;
-    int len_rep;
-    int len_with;
-    int len_front;
-    int count;
-
-    if (!orig) {
-        return NULL;
-	}
-    if (!rep || !(len_rep = strlen(rep))) {
-        return NULL;
-	}
-    if (!(ins = strstr(orig, rep))) {
-        return NULL;
-	}
-	
-    if (!with) {
-        with = "";
-    }
-    
-    len_with = strlen(with);
-
-    for (count = 0; tmp = strstr(ins, rep); ++count) {
-        ins = tmp + len_rep;
-    }
-
-    tmp = result = malloc(strlen(orig) + (len_with - len_rep) * count + 1);
-
-    if (!result) {
-        return NULL;
-	}
-	
-    while (count--) {
-        ins = strstr(orig, rep);
-        len_front = ins - orig;
-        tmp = strncpy(tmp, orig, len_front) + len_front;
-        tmp = strcpy(tmp, with) + len_with;
-        orig += len_front + len_rep;
-    }
-    strcpy(tmp, orig);
-    return result;
-}
-
-/* gets the filename from the given path (compatible with unix and win) */
-static char* comp_get_filename(char* path) 
-{
-	char *pfile;
-	
-	pfile = path + strlen(path);
-    for (; pfile > path; pfile--)
-    {
-        if ((*pfile == '\\') || (*pfile == '/'))
-        {
-            pfile++;
-            break;
-        }
-    }
-    
-    return pfile;
-}
-
-/* gets the current date and time in format "%Y-%m-%d_%H-%M".
- * used by RENAME manipulation */
-static char* get_datetime() {
-	time_t rawtime;
-	struct tm * timeinfo;
-	char* format;
-
-	format = (char*)malloc(sizeof(char)*18);
-	time ( &rawtime );
-	timeinfo = localtime ( &rawtime );
-
-	strftime (format, 18, "%Y-%m-%d_%H-%M", timeinfo);
-
-	return format;
-}
-
-static float min(float a, float b) {
-	if (a < b)
-		return a;
-	else
-		return b;
 }

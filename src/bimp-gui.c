@@ -134,7 +134,7 @@ static GtkWidget* sequence_panel_new()
 {
 	GtkWidget *panel;
 	
-	panel = gtk_frame_new("Manipulation steps");
+	panel = gtk_frame_new("Manipulation set");
 	gtk_widget_set_size_request (panel, SEQ_PANEL_W, SEQ_PANEL_H);
 	
 	scroll_sequence = gtk_scrolled_window_new(NULL, NULL);

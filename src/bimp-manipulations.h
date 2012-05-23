@@ -48,8 +48,8 @@ typedef enum crop_preset {
 	CROP_PRESET_169,
 	CROP_PRESET_1610,
 	CROP_PRESET_EUPORT,
-	CROP_PRESET_IPHONE,
-	CROP_PRESET_IPAD,
+	CROP_PRESET_PHONE,
+	CROP_PRESET_TABLET,
 	CROP_PRESET_END
 } crop_preset;
 static const char* crop_preset_string[] = {
@@ -59,8 +59,8 @@ static const char* crop_preset_string[] = {
 	"Widescreen (16:9)",				/* CROP_PRESET_169 */
 	"Widescreen extended (16:10)",		/* CROP_PRESET_1610 */
 	"EU Passport portrait (7:9)",		/* CROP_PRESET_EUPORT */
-	"Standard smartphone screen (2:3)",	/* CROP_PRESET_IPHONE */
-	"Standard tablet screen (3:4)"		/* CROP_PRESET_IPAD */
+	"Standard smartphone screen (2:3)",	/* CROP_PRESET_PHONE */
+	"Standard tablet screen (3:4)"		/* CROP_PRESET_TABLET */
 };
 static const short int crop_preset_ratio[][2] = {
 	{1,1},		/* CROP_PRESET_11 */
@@ -69,8 +69,8 @@ static const short int crop_preset_ratio[][2] = {
 	{16,9},		/* CROP_PRESET_169 */
 	{16,10},	/* CROP_PRESET_1610 */
 	{7,9},		/* CROP_PRESET_EUPORT */
-	{2,3},		/* CROP_PRESET_IPHONE */
-	{3,4}		/* CROP_PRESET_IPAD */
+	{2,3},		/* CROP_PRESET_PHONE */
+	{3,4}		/* CROP_PRESET_TABLET */
 };
 
 typedef enum format_type {
@@ -79,10 +79,8 @@ typedef enum format_type {
 	FORMAT_ICON,
 	FORMAT_JPEG,
 	FORMAT_PNG,
-	//FORMAT_RAW, // TODO
 	FORMAT_TGA,
 	FORMAT_TIFF,
-	// XCF // TODO
 	FORMAT_END
 } format_type;
 static const char* format_type_string[][2] = {
@@ -91,7 +89,6 @@ static const char* format_type_string[][2] = {
 	{"ico", "Icon (.ico)"},								/* FORMAT_ICON */
 	{"jpg", "Jpeg (.jpeg)"},							/* FORMAT_JPEG */
 	{"png", "Portable Network Graphics (.png)"},		/* FORMAT_PNG */
-	//{"raw", "Raw image data (.raw)"},					/* FORMAT_RAW */
 	{"tga", "Targa (.tga)"},							/* FORMAT_TGA */
 	{"tiff", "Tagged Image File Format (.tiff)"}		/* FORMAT_TIFF */
 };
@@ -196,10 +193,18 @@ typedef struct changeformat_params_jpeg {
 typedef struct changeformat_params_png {
 	gboolean interlace;
 	int compression;
+	gboolean savebgc;
+	gboolean savegamma;
+	gboolean saveoff;
+	gboolean savephys;
+	gboolean savetime;
+	gboolean savecomm;
+	gboolean savetrans;
 } *format_params_png;
 
 typedef struct changeformat_params_tga {
 	gboolean rle;
+	int origin;
 } *format_params_tga;
 
 typedef struct changeformat_params_tiff {
@@ -214,7 +219,6 @@ typedef struct manip_userdef_set {
 	gchar* procedure;
 	gint num_params;
 	GimpParam* params; /* array of procedure params (GimpParamDef structs) */
-	gchar** params_names; /* array of param names (mapped to GimpParam* params) */
 } *userdef_settings;
 
 manipulation bimp_append_manipulation(manipulation_type);

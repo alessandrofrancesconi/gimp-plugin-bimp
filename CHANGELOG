@@ -4,6 +4,12 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+0.5:
+ - Rewritten the "Other GIMP procedure..." dialog and made some stability fixes
+ - More format customizations in "Change Format and Quality"
+ - Fixed a bug that didn't permit to save images in TGA format
+ - Few graphical fixes around
+
 0.4:
  - Fixed a regression that causes RENAME procedure to crash.
 
@@ -24,3 +30,7 @@ Changelog:
 
 0.1:
  - It all started from here...
+
+
+
+

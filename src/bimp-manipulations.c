@@ -242,7 +242,6 @@ static manipulation manipulation_userdef_new()
 	((userdef_settings)userdef->settings)->procedure = NULL;
 	((userdef_settings)userdef->settings)->num_params = 0;
 	((userdef_settings)userdef->settings)->params = NULL;
-	((userdef_settings)userdef->settings)->params_names = NULL;
 	
 	return userdef;
 }
