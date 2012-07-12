@@ -19,7 +19,7 @@
 #define PROCPARAM_W USERDEF_WINDOW_W - PROCLIST_W - 30
 #define PROCPARAM_H PROCLIST_H + SEARCH_H
 
-#define PARAM_WIDGET_W 80
+#define PARAM_WIDGET_W 90
 #define PARAM_WIDGET_H 25
 
 GtkWidget* bimp_userdef_gui_new(userdef_settings, GtkWidget*);

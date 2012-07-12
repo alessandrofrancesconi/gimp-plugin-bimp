@@ -2,16 +2,17 @@
  * Functions used to build and return the main BIMP user interface
  */
 
-#include <string.h>
 #include <gtk/gtk.h>
 #include <libgimp/gimp.h>
 #include <libgimp/gimpui.h>
+#include <string.h>
 #include "bimp.h"
 #include "bimp-manipulations.h"
 #include "bimp-gui.h"
 #include "bimp-manipulations-gui.h"
 #include "bimp-operate.h"
 #include "bimp-icons.h"
+#include "bimp-utils.h"
 
 static GtkWidget* sequence_panel_new(void);
 static GtkWidget* option_panel_new(void);
@@ -32,6 +33,10 @@ static void add_manipulation_from_id(GtkMenuItem*, gpointer);
 static void edit_clicked_manipulation(GtkMenuItem*, gpointer);
 static void remove_clicked_manipulation(GtkMenuItem*, gpointer);
 static void add_manipulation_button(manipulation);
+
+static void save_set(GtkMenuItem*, gpointer);
+static void load_set(GtkMenuItem*, gpointer);
+
 static void open_about();
 static const gchar* progressbar_init_hidden (void);
 static void progressbar_start_hidden(const gchar*, gboolean, gpointer);
@@ -75,8 +80,9 @@ void bimp_show_gui()
 		NULL,
 		NULL,
 		GTK_STOCK_ABOUT, GTK_RESPONSE_HELP,
-		GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
-        GTK_STOCK_APPLY, GTK_RESPONSE_APPLY, NULL
+		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+        GTK_STOCK_APPLY, GTK_RESPONSE_APPLY, 
+        GTK_STOCK_STOP, GTK_RESPONSE_CANCEL, NULL
 	);
 	
 	gimp_window_set_transient (GTK_WINDOW(bimp_window_main));
@@ -100,11 +106,14 @@ void bimp_show_gui()
 	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(bimp_window_main)->vbox), vbox_main);
 	gtk_widget_show_all(bimp_window_main);
 	
+	bimp_set_busy(FALSE);
+	
 	while(TRUE) {
+		g_print("STEEEEPPPP!!!!\n");
 		gint run = gimp_dialog_run (GIMP_DIALOG(bimp_window_main));
 		if (run == GTK_RESPONSE_APPLY) {
 			if (g_slist_length(bimp_selected_manipulations) == 0) {
-				char* error_message = g_strconcat("Manipulations list is empty!", NULL);
+				char* error_message = g_strconcat("Manipulations set is empty!", NULL);
 				bimp_show_error_dialog(error_message, bimp_window_main);
 				g_free (error_message);
 			} else {
@@ -121,6 +130,10 @@ void bimp_show_gui()
 		else if (run == GTK_RESPONSE_HELP) {
 			open_about();
 		}
+		else if (run == GTK_RESPONSE_CANCEL) {
+			g_print("stop!\n");
+			bimp_stop_operations();
+		}
 		else {
 			gimp_progress_uninstall(progressbar_data);
 			gtk_widget_destroy (bimp_window_main);
@@ -134,7 +147,7 @@ static GtkWidget* sequence_panel_new()
 {
 	GtkWidget *panel;
 	
-	panel = gtk_frame_new("Manipulation set");
+	panel = gtk_frame_new("Manipulations set");
 	gtk_widget_set_size_request (panel, SEQ_PANEL_W, SEQ_PANEL_H);
 	
 	scroll_sequence = gtk_scrolled_window_new(NULL, NULL);
@@ -291,7 +304,7 @@ static void select_filename (GtkTreeView *tree_view, gpointer selection)
 	}
 }
 
-/* updates the preview widget loading (and scaling) a new image */
+/* updates the preview widget by loading (and scaling) a new image */
 static void update_preview (gchar* filename) 
 {
 	GdkPixbuf *pixbuf_prev;         
@@ -367,7 +380,7 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
 			"Select images", 
 			NULL, 
 			GTK_FILE_CHOOSER_ACTION_OPEN, 
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, 
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CLOSE, 
 			GTK_STOCK_ADD, GTK_RESPONSE_ACCEPT, NULL
 		);
 		gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(file_chooser), TRUE);
@@ -443,6 +456,21 @@ static void popmenus_init()
 		g_signal_connect(menuitem, "activate", G_CALLBACK(add_manipulation_from_id), GINT_TO_POINTER(man_id));
 		gtk_menu_shell_append(GTK_MENU_SHELL(popmenu_add), menuitem);
 	}
+	
+	
+	/* TODO: Last items for saving and loading a manipulations set 
+	
+	menuitem = gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(popmenu_add), menuitem);
+	
+	menuitem = gtk_menu_item_new_with_label("Save this set...");
+	g_signal_connect(menuitem, "activate", G_CALLBACK(save_set), NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(popmenu_add), menuitem);
+	
+	menuitem = gtk_menu_item_new_with_label("Load set...");
+	g_signal_connect(menuitem, "activate", G_CALLBACK(load_set), NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(popmenu_add), menuitem);
+	*/
 	
 	/* Menu for editing a manipulation */
 	popmenu_edit = gtk_menu_new();
@@ -549,6 +577,85 @@ static void add_manipulation_button(manipulation man)
 	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(open_popup_menu), man);
 }
 
+/* TODO */
+static void save_set(GtkMenuItem *menuitem, gpointer user_data)
+{
+	if (g_slist_length(bimp_selected_manipulations) == 0) {
+		char* error_message = g_strconcat("Manipulations set is empty!", NULL);
+		bimp_show_error_dialog(error_message, bimp_window_main);
+		g_free (error_message);
+	} else {
+		FILE *fp;
+		
+		gchar* output_file;
+		GtkWidget* file_saver = gtk_file_chooser_dialog_new(
+			"Save manipulations set", 
+			NULL, 
+			GTK_FILE_CHOOSER_ACTION_SAVE, 
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, 
+			GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL
+		);
+		
+		GtkFileFilter *filter_bimp = gtk_file_filter_new();
+		gtk_file_filter_set_name(filter_bimp,"BIMP manipulations set (*.bimp)");
+		gtk_file_filter_add_pattern (filter_bimp, "*.bimp");
+		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_saver), filter_bimp);
+		
+		if (gtk_dialog_run (GTK_DIALOG(file_saver)) == GTK_RESPONSE_ACCEPT) {
+			output_file = g_strdup(g_slist_nth (gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(file_saver)), 0)->data);
+			
+		}
+		
+		gtk_widget_destroy (file_saver);
+		
+	}
+}
+
+/* TODO */
+static void load_set(GtkMenuItem *menuitem, gpointer user_data)
+{
+	gboolean can_continue = TRUE;
+	
+	if (g_slist_length(bimp_selected_manipulations) > 0) {
+		GtkWidget *dialog;
+		dialog = gtk_message_dialog_new(
+			GTK_WINDOW(bimp_window_main),
+			GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_MESSAGE_QUESTION,
+			GTK_BUTTONS_YES_NO,
+			"This will overwrite current manipulations set.\nContinue?"
+		);
+		gtk_window_set_title(GTK_WINDOW(dialog), "Continue?");
+		gint result = gtk_dialog_run(GTK_DIALOG(dialog));
+		gtk_widget_destroy(dialog);
+		 
+		can_continue = (result == GTK_RESPONSE_YES);
+	}
+	
+	if (can_continue) {
+		gchar* input_file;
+		GtkWidget* file_loader = gtk_file_chooser_dialog_new(
+			"Load manipulations set", 
+			NULL, 
+			GTK_FILE_CHOOSER_ACTION_OPEN, 
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, 
+			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL
+		);
+		
+		GtkFileFilter *filter_bimp = gtk_file_filter_new();
+		gtk_file_filter_set_name(filter_bimp,"BIMP manipulations set (*.bimp)");
+		gtk_file_filter_add_pattern (filter_bimp, "*.bimp");
+		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_loader), filter_bimp);
+		
+		if (gtk_dialog_run (GTK_DIALOG(file_loader)) == GTK_RESPONSE_ACCEPT) {
+			input_file = g_strdup(g_slist_nth (gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(file_loader)), 0)->data);
+		}
+		
+		gtk_widget_destroy (file_loader);
+		
+	}
+}
+
 static void open_about() 
 {
 	GtkWidget *about;
@@ -556,8 +663,10 @@ static void open_about()
 	about = gtk_about_dialog_new();
 	gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(about), PLUG_IN_FULLNAME);
 	gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(about), PLUG_IN_DESCRIPTION);
+	
 	char version_number[6];
 	sprintf(version_number, "%d.%d", PLUG_IN_VERSION_MAJ, PLUG_IN_VERSION_MIN);
+	
 	gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(about), version_number);
 	gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(about), "(C) 2012 - Alessandro Francesconi");
 	gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(about), "http://www.alessandrofrancesconi.it/projects/bimp");
@@ -567,7 +676,8 @@ static void open_about()
 }
 
 /* shows an error dialog with a custom message */
-void bimp_show_error_dialog(char* message, GtkWidget* parent) {
+void bimp_show_error_dialog(char* message, GtkWidget* parent) 
+{
 	GtkWidget* dialog = gtk_message_dialog_new (
 		GTK_WINDOW(parent),
 		GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -607,8 +717,14 @@ void bimp_progress_bar_set(double fraction, char* text) {
 
 void bimp_set_busy(gboolean busy) {
 	while (g_main_context_iteration(NULL, FALSE));
-	gtk_dialog_set_response_sensitive (GTK_DIALOG(bimp_window_main), GTK_RESPONSE_CANCEL, !busy);
-	gtk_dialog_set_response_sensitive (GTK_DIALOG(bimp_window_main), GTK_RESPONSE_APPLY, !busy);
+	
+	bimp_is_busy = busy;
+	
+	gtk_dialog_set_response_sensitive (GTK_DIALOG(bimp_window_main), GTK_RESPONSE_CLOSE, !busy);
+	
+	gtk_widget_set_visible (gtk_dialog_get_widget_for_response (GTK_DIALOG(bimp_window_main), GTK_RESPONSE_APPLY), !busy);
+	gtk_widget_set_visible (gtk_dialog_get_widget_for_response (GTK_DIALOG(bimp_window_main), GTK_RESPONSE_CANCEL), busy);
+	
 	gtk_widget_set_sensitive(panel_sequence, !busy);
 	gtk_widget_set_sensitive(panel_options, !busy);
 }

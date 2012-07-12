@@ -245,4 +245,3 @@ static manipulation manipulation_userdef_new()
 	
 	return userdef;
 }
-

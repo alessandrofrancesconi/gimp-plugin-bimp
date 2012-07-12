@@ -22,12 +22,18 @@
  */
 
 
+#include <gtk/gtk.h>
 #include <libgimp/gimp.h>
+#include <stdlib.h>
+#include <string.h>
 #include "bimp.h"
 #include "bimp-manipulations.h"
 #include "bimp-gui.h"
+#include "bimp-utils.h"
 
 static void query (void);
+static GSList* get_supported_procedures(void);
+static gboolean proc_has_compatible_params (gchar*);
 
 static void run (
 	const gchar *name,
@@ -94,6 +100,8 @@ static void run (
 	switch (run_mode) {
 		case GIMP_RUN_INTERACTIVE:
 		case GIMP_RUN_WITH_LAST_VALS:
+			bimp_supported_procedures = get_supported_procedures();
+			g_print("ok");
 			bimp_show_gui();
 			break;
 
@@ -104,3 +112,132 @@ static void run (
 			break;
 	}
 }
+
+/*
+ * Used by userdef gui, filters the full list of GIMP procedures:
+ *  - by ignoring system's procedures 
+ *  - by ignoring procedures that contains non-compatible parameters datatypes (like FLOATARRAY, PATH, ...). */
+static GSList* get_supported_procedures()
+{
+	gint proc_count;
+	gchar** results;
+	GSList* compatible_list = NULL;
+	
+	gimp_procedural_db_query (
+		"^(?!.*(?:"
+			"plug-in-bimp|"
+			"extension-|"
+			"-get-|"
+			"-set-|"
+			"-is-|"
+			"-has-|"
+			"-get-|"
+			"-load|"
+			"-save|"
+			"-free|"
+			"-help|"
+			"-temp|"
+			"-undo|"
+			"-channel|"
+			"-buffer|"
+			"-register|"
+			"-metadata|"
+			"-layer|"
+			"-selection|"
+			"-brush|"
+			"-gradient|"
+			"-guide|"
+			"-parasite|"
+			"gimp-online|"
+			"gimp-progress|"
+			"gimp-procedural|"
+			"gimp-display|"
+			"gimp-context|"
+			"gimp-edit|"
+			"gimp-fonts|"
+			"gimp-palette|"
+			"gimp-path|"
+			"gimp-pattern|"
+			"gimp-vectors|"
+			"gimp-quit|"
+			"gimp-plugins|"
+			"gimp-gimprc|"
+			"temp-procedure"
+		")).*",
+		".*",
+		".*",
+		".*",
+		".*",
+		".*",
+		".*",
+		&proc_count,
+		&results
+	);
+	
+	qsort(results, proc_count, sizeof(char*), cstring_cmp); /* sort alphabetically */
+	
+	int i;
+	for (i = 0; i < proc_count; i++) {
+		/* check each parameter for compatibility */
+		if (proc_has_compatible_params(results[i])) {
+			compatible_list = g_slist_append(compatible_list, results[i]);
+		}
+	}
+	
+	free (results);
+	
+	return compatible_list;
+}
+
+static gboolean proc_has_compatible_params(gchar* proc_name) 
+{
+	gchar* proc_blurb;
+	gchar* proc_help;
+	gchar* proc_author;
+	gchar* proc_copyright;
+	gchar* proc_date;
+	GimpPDBProcType proc_type;
+	gint num_params;
+    gint num_values;
+    GimpParamDef *params;
+    GimpParamDef *return_vals;
+	
+	gimp_procedural_db_proc_info (
+		proc_name,
+		&proc_blurb,
+		&proc_help,
+		&proc_author,
+		&proc_copyright,
+		&proc_date,
+		&proc_type,
+		&num_params,
+		&num_values,
+		&params,
+		&return_vals
+	);
+	
+	int i;
+	GimpParamDef param;
+	gboolean compatible = TRUE;
+	for (i = 0; (i < num_params) && compatible; i++) {
+		param = bimp_get_param_info(proc_name, i);
+		
+		if (
+			param.type == GIMP_PDB_INT32 ||
+			param.type == GIMP_PDB_INT16 ||
+			param.type == GIMP_PDB_INT8 ||
+			param.type == GIMP_PDB_FLOAT ||
+			(param.type == GIMP_PDB_STRING && strstr(param.name, "filename") == NULL) ||
+			param.type == GIMP_PDB_COLOR ||
+			param.type == GIMP_PDB_DRAWABLE ||
+			param.type == GIMP_PDB_IMAGE
+			) {
+			compatible = TRUE;
+		} else {
+			compatible = FALSE;
+		}
+	}
+	
+	return (compatible && num_params > 0);
+}
+

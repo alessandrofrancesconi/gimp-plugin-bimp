@@ -4,6 +4,7 @@
 #include <gtk/gtk.h>
 
 gboolean bimp_start_batch(GtkWidget*);
+void bimp_stop_operations(void);
 
 typedef struct imageout_str {
 	gint32 image_id;

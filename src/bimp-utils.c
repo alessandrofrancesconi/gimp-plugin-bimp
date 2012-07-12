@@ -6,6 +6,7 @@
 #include <time.h>
 #include <gtk/gtk.h>
 #include <glib.h>
+#include <libgimp/gimp.h>
 #include "bimp-utils.h"
 
 /* replace all the occurrences of 'rep' into 'orig' with text 'with' */
@@ -116,3 +117,31 @@ int cstring_cmp(const void *a, const void *b)
     const char **ib = (const char **)b;
     return strcmp(*ia, *ib);
 } 
+
+void bimp_write_manipulation(manipulation man, gpointer file) 
+{
+	fwrite(man, sizeof(struct manip_str), 1, file);
+	fflush(file);
+}
+
+GimpParamDef bimp_get_param_info(gchar* proc_name, gint arg_num) 
+{
+	GimpParamDef param_info;
+	GimpPDBArgType type;
+	gchar *name;
+	gchar *desc;
+		
+	gimp_procedural_db_proc_arg (
+		proc_name,
+		arg_num,
+		&type,
+		&name,
+		&desc
+	);
+	
+	param_info.type = type;
+	param_info.name = g_strdup(name);
+	param_info.description = g_strdup(desc);
+	
+	return param_info;
+}

@@ -1,5 +1,5 @@
 /*
- * Functions called when the users clicks on 'APPLY'
+ * Functions called when the user clicks on 'APPLY'
  */
 
 #include <string.h>
@@ -33,11 +33,13 @@ static gboolean ask_overwrite(char*, GtkWidget*);
 
 int filecount, totalfilecount;
 char* current_datetime;
+gboolean can_proceed;
 
 gboolean bimp_start_batch(GtkWidget* parent) 
 {
 	bimp_set_busy(TRUE);
-	
+	can_proceed = TRUE;
+		
 	g_print("\nBIMP - Batch Manipulation Plugin\nStart batch processing...\n");
 	bimp_progress_bar_set(0.0, "");
 	
@@ -46,10 +48,16 @@ gboolean bimp_start_batch(GtkWidget* parent)
 	totalfilecount = g_slist_length(bimp_input_filenames);
 	g_slist_foreach(bimp_input_filenames, (GFunc)process_image, parent);
 	
-	bimp_progress_bar_set(100.0, "End, all files processed");
-	g_print("\nEnd, %d files processed.\n", filecount);
-	
-	bimp_set_busy(FALSE);
+	if (can_proceed) {
+		bimp_progress_bar_set(100.0, "End, all files processed");
+		g_print("\nEnd, %d files processed.\n", filecount);
+		bimp_set_busy(FALSE);
+	}
+	else {
+		bimp_progress_bar_set(0.0, "Operations stopped");
+		g_print("\nStopped, %d files processed.\n", filecount);
+	}
+	can_proceed = TRUE;
 	
 	return TRUE;
 }
@@ -59,6 +67,8 @@ static void process_image(char* file, gpointer parent)
 	image_output imageout;
 	char* orig_basename;
 	char* orig_file_ext;
+	
+	if (!can_proceed) return;
 	
 	imageout = (image_output)g_malloc(sizeof(struct imageout_str));
 	
@@ -279,12 +289,33 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 	}
 	
 	/* do resize */
+	#if (GIMP_MAJOR_VERSION == 2) && (GIMP_MINOR_VERSION <= 6)
+	
 	success = gimp_image_scale_full (
 		out->image_id, 
 		finalW, 
 		finalH, 
 		settings->interpolation
 	);
+	
+	#else
+	/* starting from 2.8, gimp_image_scale_full is deprecated. 
+     * use gimp_image_scale instead */
+    
+    GimpInterpolationType oldInterpolation;
+	oldInterpolation = gimp_context_get_interpolation();
+	
+	success = gimp_context_set_interpolation (settings->interpolation);
+	
+	success = gimp_image_scale (
+		out->image_id, 
+		finalW, 
+		finalH
+	);
+	
+	success = gimp_context_set_interpolation (oldInterpolation);
+	
+	#endif
 	
 	return success;
 }
@@ -504,11 +535,26 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 		wmwidth = gimp_drawable_width(layerId);
 		wmheight = gimp_drawable_height(layerId);
 		
+		#if (GIMP_MAJOR_VERSION == 2) && (GIMP_MINOR_VERSION <= 6)
+		
 		gimp_image_add_layer(
 			out->image_id,
 			layerId,
             0
         );
+        
+        #else
+        /* starting from 2.8, gimp_image_add_layer is deprecated. 
+         * use gimp_image_insert_layer instead */
+         
+        gimp_image_insert_layer(
+			out->image_id,
+			layerId,
+			0,
+            0
+        );
+        
+        #endif
         
         if (settings->position == WM_POS_TL) {
 			posX = 10;
@@ -778,13 +824,19 @@ static gboolean ask_overwrite(char* path, GtkWidget* parent) {
 			GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_MESSAGE_QUESTION,
 			GTK_BUTTONS_YES_NO,
-			"File %s already exists,\noverwrite it?", bimp_comp_get_filename(path));
-		  gtk_window_set_title(GTK_WINDOW(dialog), "Overwrite?");
-		  gint result = gtk_dialog_run(GTK_DIALOG(dialog));
-		  gtk_widget_destroy(dialog);
-		  
-		  can_overwrite = (result == GTK_RESPONSE_YES);
+			"File %s already exists,\noverwrite it?", bimp_comp_get_filename(path)
+		);
+		gtk_window_set_title(GTK_WINDOW(dialog), "Overwrite?");
+		gint result = gtk_dialog_run(GTK_DIALOG(dialog));
+		gtk_widget_destroy(dialog);
+		 
+		can_overwrite = (result == GTK_RESPONSE_YES);
 	}
 	
 	return can_overwrite;
+}
+
+void bimp_stop_operations() 
+{
+	can_proceed = FALSE;
 }

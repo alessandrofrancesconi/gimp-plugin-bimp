@@ -1,6 +1,8 @@
+#include <gtk/gtk.h>
+#include <libgimp/gimp.h>
 #include <stdlib.h>
 #include <string.h>
-#include <gtk/gtk.h>
+#include <pcre.h>
 #include "gui-userdef.h"
 #include "../bimp.h"
 #include "../bimp-gui.h"
@@ -9,9 +11,7 @@
 
 static void init_procedure_list(void);
 static int fill_procedure_list(char*, char*);
-static gboolean proc_has_compatible_params(gchar*); 
 static void search_procedure (GtkEditable*, gpointer);
-static GimpParamDef get_param_info(gchar*, gint);
 static gboolean select_procedure (GtkTreeSelection*, GtkTreeModel*, GtkTreePath*, gboolean, gpointer);
 static void update_selected_procedure(gchar*);
 static void update_procedure_box(userdef_settings);
@@ -137,10 +137,7 @@ static void init_procedure_list()
 }
 
 /* fills the treeview with only those procedures that can be used for a batch operation.
- * the filtering is made in two steps: 
- *  - by ignoring system's procedures 
- *  - by ignoring procedures that contains non-compatible parameters datatypes (like FLOATARRAY, PATH, ...).
- * the functions supports also a secondary filter for user searches */
+ * the functions supports a filter for user searches */
 static int fill_procedure_list(char* search, char* selection) 
 {
 	gint proc_count;
@@ -149,67 +146,8 @@ static int fill_procedure_list(char* search, char* selection)
 	GtkListStore *store;
 	GtkTreeModel *model;
 	GtkTreeIter treeiter;
-	
-	if (search != NULL && strlen(search) > 0) {
-		search = g_strconcat(".*", search, NULL);
-	} else {
-		search = ".*";
-	}
-	
-	gimp_procedural_db_query (
-		g_strconcat(
-		"^(?!.*(?:"
-			"plug-in-bimp|"
-			"extension-|"
-			"-get-|"
-			"-set-|"
-			"-is-|"
-			"-has-|"
-			"-get-|"
-			"-load|"
-			"-save|"
-			"-free|"
-			"-help|"
-			"-temp|"
-			"-undo|"
-			"-channel|"
-			"-buffer|"
-			"-register|"
-			"-metadata|"
-			"-layer|"
-			"-selection|"
-			"-brush|"
-			"-gradient|"
-			"-guide|"
-			"-parasite|"
-			"gimp-online|"
-			"gimp-progress|"
-			"gimp-procedural|"
-			"gimp-display|"
-			"gimp-context|"
-			"gimp-edit|"
-			"gimp-fonts|"
-			"gimp-palette|"
-			"gimp-path|"
-			"gimp-pattern|"
-			"gimp-vectors|"
-			"gimp-quit|"
-			"gimp-plugins|"
-			"gimp-gimprc|"
-			"temp-procedure"
-		"))", search, NULL), // adds search filter if any
-		".*",
-		".*",
-		".*",
-		".*",
-		".*",
-		".*",
-		&proc_count,
-		&results
-	);
-	
-	qsort(results, proc_count, sizeof(char*), cstring_cmp); /* sort alphabetically */
-	
+	GSList* iter;
+		
 	store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW (treeview_procedures)));
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (treeview_procedures));
 	
@@ -218,15 +156,15 @@ static int fill_procedure_list(char* search, char* selection)
 		gtk_list_store_clear(store);
 	}
 	
-	int i, finalcount = 0, selected_i = -1;
-	for (i = 0; i < proc_count; i++) {
-		/* check each parameter for compatibility */
-		if (proc_has_compatible_params(results[i])) {
+	int finalcount = 0, selected_i = -1;
+	for(iter = bimp_supported_procedures; iter; iter = iter->next) {
+		gchar** procedure_name = iter->data;
+		if (search == NULL || (search != NULL && bimp_str_contains_cins((char*)procedure_name, search))) {
 			store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(treeview_procedures)));
 			gtk_list_store_append(store, &treeiter);
-			gtk_list_store_set(store, &treeiter, LIST_ITEM, results[i], -1);
+			gtk_list_store_set(store, &treeiter, LIST_ITEM, procedure_name, -1);
 			
-			if (selected_i != finalcount && selection != NULL && strcmp(results[i], selection) == 0) {
+			if (selected_i != finalcount && selection != NULL && strcmp((char*)procedure_name, selection) == 0) {
 				selected_i = finalcount;
 			}
 			
@@ -237,83 +175,8 @@ static int fill_procedure_list(char* search, char* selection)
 	return selected_i;
 }
 
-static gboolean proc_has_compatible_params(gchar* proc_name) 
-{
-	gboolean compatible = TRUE;
-	
-	gchar* proc_blurb;
-	gchar* proc_help;
-	gchar* proc_author;
-	gchar* proc_copyright;
-	gchar* proc_date;
-	GimpPDBProcType proc_type;
-	gint num_params;
-    gint num_values;
-    GimpParamDef *params;
-    GimpParamDef *return_vals;
-	
-	gimp_procedural_db_proc_info (
-		proc_name,
-		&proc_blurb,
-		&proc_help,
-		&proc_author,
-		&proc_copyright,
-		&proc_date,
-		&proc_type,
-		&num_params,
-		&num_values,
-		&params,
-		&return_vals
-	);
-	
-	int i;
-	GimpParamDef param;
-	for (i = 0; i < num_params && compatible; i++) {
-		param = get_param_info(proc_name, i);
-		
-		if (
-			param.type == GIMP_PDB_INT32 ||
-			param.type == GIMP_PDB_INT16 ||
-			param.type == GIMP_PDB_INT8 ||
-			param.type == GIMP_PDB_FLOAT ||
-			(param.type == GIMP_PDB_STRING && strstr(param.name, "filename") == NULL) ||
-			param.type == GIMP_PDB_COLOR ||
-			param.type == GIMP_PDB_DRAWABLE ||
-			param.type == GIMP_PDB_IMAGE
-			) {
-			compatible = TRUE;
-		} else {
-			compatible = FALSE;
-		}
-	}
-	
-	return (compatible && num_params > 0);
-}
-
 static void search_procedure (GtkEditable *editable, gpointer data)  {
-	fill_procedure_list((char*)g_strdup(gtk_entry_get_text(GTK_ENTRY(editable))), NULL);
-}
-
-static GimpParamDef get_param_info(gchar* proc_name, gint arg_num) 
-{
-	GimpParamDef param_info;
-	GimpPDBArgType type;
-	gchar *name;
-	gchar *desc;
-		
-	gimp_procedural_db_proc_arg (
-		proc_name,
-		arg_num,
-		&type,
-		&name,
-		&desc
-	);
-	
-	param_info.type = type;
-	param_info.name = g_strdup(name);
-	param_info.description = g_strdup(desc);
-	
-	return param_info;
+	fill_procedure_list((char*)gtk_entry_get_text(GTK_ENTRY(editable)), NULL);
 }
 
 /* called when a row is going to be selected or unselected 
@@ -321,7 +184,7 @@ static GimpParamDef get_param_info(gchar* proc_name, gint arg_num)
 static gboolean select_procedure (GtkTreeSelection *selection, GtkTreeModel *model, GtkTreePath *path, gboolean path_currently_selected, gpointer data) 
 {
 	GtkTreeIter iter;
-	gchar *selected;   
+	gchar *selected;
 	
 	if (gtk_tree_model_get_iter(model, &iter, path)) {
 		gtk_tree_model_get(model, &iter, LIST_ITEM, &selected,  -1);
@@ -499,8 +362,17 @@ static void update_procedure_box(userdef_settings settings)
 		gboolean editable;
 		GtkWidget *label_widget_desc, *hbox_paramrow;
 		
+		
+		const char *error;
+		int   erroffset;
+		pcre* reg_comp_combobox =  pcre_compile("([A-Z\\d-]+)\\s\\(\\d+\\)", PCRE_DOTALL, &error, &erroffset, 0);
+		/* TODO */ //pcre* reg_comp_minmax =  pcre_compile("(-?\\d+)\\s?([<|=|>]{2})\\s?\\S*\\s?([<|=|>]{2})\\s?(-?\\d+)", PCRE_DOTALL, &error, &erroffset, 0);
+		int ovector[186];
+		unsigned int offset = 0;
+		unsigned int desclen = 0;
+		
 		for (param_i = 0; param_i < num_params; param_i++) {
-			param_info = get_param_info(settings->procedure, param_i);
+			param_info = bimp_get_param_info(settings->procedure, param_i);
 			editable = TRUE;
 			
 			switch(param_info.type) {
@@ -514,8 +386,42 @@ static void update_procedure_box(userdef_settings settings)
 							param_widget[param_i] = gtk_check_button_new();
 							gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(param_widget[param_i]), (settings->params[param_i]).data.d_int32 == 1 ? TRUE : FALSE);
 						} else {
-							param_widget[param_i] = gtk_spin_button_new (NULL, 1, 0);
-							gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new ((settings->params[param_i]).data.d_int32, -10000, 10000, 1, 1, 0)), 0, 0);
+							offset = 0;
+							desclen = strlen(param_info.description);
+							int i = 1, rc = pcre_exec(reg_comp_combobox, 0, param_info.description, desclen, offset, 0, ovector, 186);
+							if (rc >= 0) {
+								param_widget[param_i] = gtk_combo_box_new_text();
+								do {
+									gtk_combo_box_append_text(GTK_COMBO_BOX(param_widget[param_i]), g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]));
+									offset = ovector[1];
+								}
+								while (offset < desclen && (rc = pcre_exec(reg_comp_combobox, 0, param_info.description, desclen, offset, 0, ovector, 186)) >= 0);
+								gtk_combo_box_set_active(GTK_COMBO_BOX(param_widget[param_i]), ((settings->params[param_i]).data.d_int32));
+							}							
+							else {
+								param_widget[param_i] = gtk_spin_button_new (NULL, 1, 0);
+								/*int min, max;
+								offset = 0;
+								rc = pcre_exec(reg_comp_minmax, 0, param_info.description, desclen, offset, 0, ovector, 186);
+								if (rc >= 0) {
+									do {
+										i = 1;
+										g_print("%.*s  ", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+										i = 2;
+										g_print("%.*s  ", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+										i = 3;
+										g_print("%.*s\n", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+										offset = ovector[1];
+									}
+									while (offset < desclen && (rc = pcre_exec(reg_comp_minmax, 0, param_info.description, desclen, offset, 0, ovector, 186)) >= 0);
+								}
+								else {
+									min = -10000;
+									max = 10000;
+								}*/
+								
+								gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new ((settings->params[param_i]).data.d_int32, -10000, 10000, 1, 1, 0)), 0, 0);
+							}
 						}
 					}
 					break;
@@ -532,12 +438,21 @@ static void update_procedure_box(userdef_settings settings)
 					
 				case GIMP_PDB_FLOAT: 
 					param_widget[param_i] = gtk_spin_button_new (NULL, 1, 1);
-					if (strcmp(param_info.name, "opacity") == 0) {
-						/* if the param is an opacity, its range goes from 0.0 to 100.0 */
-						gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new ((float)((settings->params[param_i]).data.d_float), 0.0, 100.0, 0.1, 1, 0)), 0, 1);
-					} else {
-						gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new ((float)((settings->params[param_i]).data.d_float), -10000.0, 10000.0, 0.1, 1, 0)), 0, 1);
+					float min, max;
+					if (
+						strcmp(param_info.name, "opacity") == 0 || 
+						bimp_str_contains_cins(param_info.description, "%") || 
+						bimp_str_contains_cins(param_info.description, "percent")
+						) {
+						/* if the param is an opacity or percent value, its range goes from 0.0 to 100.0 */
+						min = 0.0;
+						max = 100.0;
 					}
+					else {
+						min = -10000.0;
+						max = 10000.0;
+					}
+					gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new ((float)((settings->params[param_i]).data.d_float), min, max, 0.1, 1, 0)), 0, 1);
 					break;
 					
 				/* case: this param is a string, prepare a gtk_entry */
@@ -559,11 +474,6 @@ static void update_procedure_box(userdef_settings settings)
 					param_widget[param_i] = gtk_color_button_new_with_color(&usercolor);
 					break;
 					
-				case GIMP_PDB_DRAWABLE:
-				case GIMP_PDB_IMAGE:
-					editable = FALSE; 
-					break;
-				
 				default: 
 					editable = FALSE; 
 					break;
@@ -618,13 +528,16 @@ void bimp_userdef_save(userdef_settings orig_settings)
 	GdkColor usercolor;
 	GimpRGB rgbdata;
 	for (param_i = 0; param_i < orig_settings->num_params; param_i++) {
-		param_info = get_param_info(orig_settings->procedure, param_i);
+		param_info = bimp_get_param_info(orig_settings->procedure, param_i);
 		
 		orig_settings->params[param_i].type = temp_settings->params[param_i].type;
 		
 		switch(orig_settings->params[param_i].type) {
 			case GIMP_PDB_INT32:
-				if (strcmp(param_info.name, "run-mode") == 0) {
+				if (param_widget[param_i] != NULL && strcmp(g_type_name(G_OBJECT_TYPE(param_widget[param_i])), "GtkComboBox") == 0) {
+					(orig_settings->params[param_i]).data.d_int32 = (gint32)gtk_combo_box_get_active(GTK_COMBO_BOX(param_widget[param_i]));
+				}
+				else if (strcmp(param_info.name, "run-mode") == 0) {
 					(orig_settings->params[param_i]).data.d_int32 = (gint32)GIMP_RUN_NONINTERACTIVE;
 				} else if (strcmp(param_info.name, "toggle") == 0 || (bimp_str_contains_cins(param_info.description, "true") && bimp_str_contains_cins(param_info.description, "false"))) {
 					(orig_settings->params[param_i]).data.d_int32 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(param_widget[param_i])) ? 1 : 0;
@@ -663,5 +576,7 @@ void bimp_userdef_save(userdef_settings orig_settings)
 			default: break;
 		}
 	}
+	
+	//g_free(temp_settings);
 }
 

@@ -56,6 +56,43 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 	vbox_image = gtk_vbox_new(FALSE, 5);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_image), !settings->textmode);
 	chooser_image = gtk_file_chooser_button_new("Select image", GTK_FILE_CHOOSER_ACTION_OPEN);
+	
+	/* set image chooser's filters */
+	GtkFileFilter *filter_all, *supported[5];	
+	filter_all = gtk_file_filter_new();
+	gtk_file_filter_set_name(filter_all,"All supported images");
+	
+	supported[0] = gtk_file_filter_new();
+	gtk_file_filter_set_name(supported[0],"BMP");
+	gtk_file_filter_add_mime_type(supported[0],"image/bmp");
+	gtk_file_filter_add_mime_type(filter_all,"image/bmp");
+	
+	supported[1] = gtk_file_filter_new();
+	gtk_file_filter_set_name(supported[1],"JPEG");
+	gtk_file_filter_add_mime_type(supported[1],"image/jpeg");
+	gtk_file_filter_add_mime_type(filter_all,"image/jpeg");
+	
+	supported[2] = gtk_file_filter_new();
+	gtk_file_filter_set_name(supported[2],"GIF");
+	gtk_file_filter_add_mime_type(supported[2],"image/gif");
+	gtk_file_filter_add_mime_type(filter_all,"image/gif");
+	
+	supported[3] = gtk_file_filter_new();
+	gtk_file_filter_set_name(supported[3],"PNG");
+	gtk_file_filter_add_mime_type(supported[3],"image/png");
+	gtk_file_filter_add_mime_type(filter_all,"image/png");
+	
+	supported[4] = gtk_file_filter_new();
+	gtk_file_filter_set_name(supported[4],"TIFF");
+	gtk_file_filter_add_mime_type(supported[4],"image/tiff");
+	gtk_file_filter_add_mime_type(filter_all,"image/tiff");
+	
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(chooser_image), filter_all);
+	int i;
+	for(i = 0; i < 5; i++) {
+		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(chooser_image), supported[i]);
+	}
+	
 	if (settings->imagefile != NULL) {
 		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(chooser_image), settings->imagefile);
 	}
