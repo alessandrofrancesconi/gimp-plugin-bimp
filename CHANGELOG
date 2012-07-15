@@ -8,7 +8,11 @@ Changelog:
  - Added STOP button to abort the batch process
  - List of options and modes in "Other GIMP procedure..." are now represented by a GtkComboBox
  - Code and speed optimizations on "Other GIMP procedure..." dialog
+ - Added "Yes, don't ask again" option in "Overwrite?" dialog
  - Various little fixes around
+ - BIMP now depends on the presence of pcre library (http://www.pcre.org/)
+	-- Linux/Mac users: just install libpcre3-dev (or equivalent)
+	-- Windows users: make sure you copy pcre3.dll library in the same directory of bimp.exe!
 
 0.5:
  - Rewritten the "Other GIMP procedure..." dialog and made some stability fixes
