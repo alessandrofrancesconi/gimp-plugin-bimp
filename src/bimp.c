@@ -1,6 +1,6 @@
 /*
  * BIMP - Batch Image Manipulation Plugin for GIMP
- * Version 0.1
+ * 
  * (C)2012 - Alessandro Francesconi
  * http://www.alessandrofrancesconi.it/projects/bimp
  *  
@@ -101,7 +101,6 @@ static void run (
 		case GIMP_RUN_INTERACTIVE:
 		case GIMP_RUN_WITH_LAST_VALS:
 			bimp_supported_procedures = get_supported_procedures();
-			g_print("ok");
 			bimp_show_gui();
 			break;
 

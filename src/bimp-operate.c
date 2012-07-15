@@ -12,7 +12,7 @@
 #include "bimp-gui.h"
 #include "bimp-utils.h"
 
-static void process_image(char*, gpointer);
+static gboolean process_image(gpointer);
 static void apply_drawing_manipulation(manipulation, image_output);
 static gboolean apply_resize(resize_settings, image_output);
 static gboolean apply_crop(crop_settings, image_output);
@@ -30,56 +30,43 @@ static gboolean image_save_png(image_output, gboolean, int, gboolean, gboolean, 
 static gboolean image_save_tga(image_output, gboolean, int);
 static gboolean image_save_tiff(image_output, int);
 static gboolean ask_overwrite(char*, GtkWidget*);
+static char* get_datetime(void);
 
-int filecount, totalfilecount;
 char* current_datetime;
-gboolean can_proceed;
+int processed_count;
 
-gboolean bimp_start_batch(GtkWidget* parent) 
+void bimp_start_batch(gpointer parent_dialog)
 {
 	bimp_set_busy(TRUE);
-	can_proceed = TRUE;
-		
+	
 	g_print("\nBIMP - Batch Manipulation Plugin\nStart batch processing...\n");
+	processed_count = 0;
 	bimp_progress_bar_set(0.0, "");
 	
-	current_datetime = bimp_get_datetime(); /* used by apply_rename */
-	filecount = 0;
-	totalfilecount = g_slist_length(bimp_input_filenames);
-	g_slist_foreach(bimp_input_filenames, (GFunc)process_image, parent);
+	current_datetime = get_datetime();
 	
-	if (can_proceed) {
-		bimp_progress_bar_set(100.0, "End, all files processed");
-		g_print("\nEnd, %d files processed.\n", filecount);
-		bimp_set_busy(FALSE);
-	}
-	else {
-		bimp_progress_bar_set(0.0, "Operations stopped");
-		g_print("\nStopped, %d files processed.\n", filecount);
-	}
-	can_proceed = TRUE;
-	
-	return TRUE;
+	guint batch_idle_tag = g_idle_add((GSourceFunc) process_image, parent_dialog);
 }
 
-static void process_image(char* file, gpointer parent) 
+static gboolean process_image(gpointer parent)
 {
-	image_output imageout;
-	char* orig_basename;
-	char* orig_file_ext;
+	image_output imageout = (image_output)g_malloc(sizeof(struct imageout_str));
+	char* orig_filename = NULL;
+	char* orig_basename = NULL;
+	char* orig_file_ext = NULL;
 	
-	if (!can_proceed) return;
-	
-	imageout = (image_output)g_malloc(sizeof(struct imageout_str));
-	
-	orig_basename = g_strdup(bimp_comp_get_filename(file)); /* store original filename */
-	orig_file_ext = g_strdup(strrchr(orig_basename, '.')); /* store original extension */
+	int total_images = g_slist_length(bimp_input_filenames);
 	
 	/* load the file and assign ids */
-	bimp_progress_bar_set((float)filecount/totalfilecount, g_strconcat("Working on file ", orig_basename, "...", NULL));
-	g_print("\nLoading file #%d: %s (%s)\n", filecount+1, orig_basename, file);
+	orig_filename = g_slist_nth (bimp_input_filenames, processed_count)->data;
 	
-	imageout->image_id = gimp_file_load(GIMP_RUN_NONINTERACTIVE, (gchar*)file, (gchar*)orig_basename); /* load file and get image id */
+	orig_basename = g_strdup(bimp_comp_get_filename(orig_filename)); /* store original filename */
+	orig_file_ext = g_strdup(strrchr(orig_basename, '.')); /* store original extension */
+	
+	g_print("\nWorking on file #%d: %s (%s)\n", processed_count+1, orig_basename, orig_filename);
+	bimp_progress_bar_set(((double)processed_count)/total_images, g_strconcat("Working on file ", orig_filename, "...", NULL));
+	
+	imageout->image_id = gimp_file_load(GIMP_RUN_NONINTERACTIVE, (gchar*)orig_filename, (gchar*)orig_basename); /* load file and get image id */
 	g_print("Image ID is %d\n", imageout->image_id);
 	
 	imageout->drawable_id = gimp_image_merge_visible_layers(imageout->image_id, GIMP_CLIP_TO_IMAGE); /* merge levels and get drawable id */
@@ -127,7 +114,6 @@ static void process_image(char* file, gpointer parent)
 		imageout->filename = g_strconcat(imageout->filename, ".", format_type_string[type][0], NULL); /* append new file extension */
 		imageout->filepath = g_strconcat(bimp_output_folder, "/", imageout->filename, NULL); /* build new path */
 		g_print("Saving file %s in %s\n", imageout->filename, imageout->filepath);
-		
 		
 		if (ask_overwrite(imageout->filepath, parent)) {
 			if (type == FORMAT_BMP) {
@@ -201,9 +187,28 @@ static void process_image(char* file, gpointer parent)
 	g_free(orig_basename);
 	g_free(orig_file_ext);
 	g_free(imageout);
-		
-	filecount ++;
-	bimp_progress_bar_set((double)filecount/totalfilecount, NULL);
+	
+	processed_count++;
+	
+	/* TODO: errors check here */
+	if (!bimp_is_busy) {
+		bimp_progress_bar_set(0.0, "Operations stopped");
+		g_print("\nStopped, %d files processed.\n", processed_count);
+		return FALSE;
+	}
+	else {
+		if (processed_count == total_images) {
+			bimp_progress_bar_set(1.0, "End, all files processed");
+			g_print("\nEnd, all %d files processed.\n", processed_count);
+			
+			bimp_set_busy(FALSE);
+			
+			return FALSE;
+		}
+		else {
+			return TRUE;
+		}
+	}
 }
 
 static void apply_drawing_manipulation(manipulation man, image_output out) 
@@ -436,7 +441,7 @@ static gboolean apply_sharpblur(sharpblur_settings settings, image_output out)
 		);
 	} else if (settings->amount > 0){
 		/* do blur */
-		float minsize = bimp_min(gimp_image_width(out->image_id)/4, gimp_image_height(out->image_id)/4) ;
+		float minsize = bimp_min(gimp_image_width(out->image_id)/4, gimp_image_height(out->image_id)/4);
 		float radius = (minsize / 100) * settings->amount;
 		GimpParam *return_vals = gimp_run_procedure(
 			"plug_in_gauss",
@@ -636,7 +641,7 @@ static gboolean apply_rename(rename_settings settings, image_output out, char* o
 	
 	if(strstr(out->filename, RENAME_KEY_COUNT) != NULL)	{
 		char strcount[5];
-		sprintf(strcount, "%i", filecount + 1);
+		sprintf(strcount, "%i", processed_count + 1);
 		out->filename = bimp_str_replace(out->filename, RENAME_KEY_COUNT, strcount);
 	}
 	
@@ -823,20 +828,45 @@ static gboolean ask_overwrite(char* path, GtkWidget* parent) {
 			GTK_WINDOW(parent),
 			GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_MESSAGE_QUESTION,
-			GTK_BUTTONS_YES_NO,
+			GTK_BUTTONS_NONE,
 			"File %s already exists,\noverwrite it?", bimp_comp_get_filename(path)
 		);
+		
+		gtk_dialog_add_buttons (
+			GTK_DIALOG(dialog),
+			GTK_STOCK_YES, GTK_RESPONSE_YES,
+			"Yes, don't ask again", GTK_RESPONSE_APPLY,
+			GTK_STOCK_NO, GTK_RESPONSE_NO, NULL
+		);
+		
 		gtk_window_set_title(GTK_WINDOW(dialog), "Overwrite?");
 		gint result = gtk_dialog_run(GTK_DIALOG(dialog));
 		gtk_widget_destroy(dialog);
-		 
-		can_overwrite = (result == GTK_RESPONSE_YES);
+		
+		if (result == GTK_RESPONSE_APPLY) {
+			bimp_alertoverwrite = FALSE;
+			can_overwrite = TRUE;
+		} else if (result == GTK_RESPONSE_YES) {
+			can_overwrite = TRUE;
+		} else {
+			can_overwrite = FALSE;
+		}
 	}
 	
 	return can_overwrite;
 }
 
-void bimp_stop_operations() 
-{
-	can_proceed = FALSE;
+/* gets the current date and time in "%Y-%m-%d_%H-%M" format */
+static char* get_datetime() {
+	time_t rawtime;
+	struct tm * timeinfo;
+	char* format;
+
+	format = (char*)malloc(sizeof(char)*18);
+	time ( &rawtime );
+	timeinfo = localtime ( &rawtime );
+
+	strftime (format, 18, "%Y-%m-%d_%H-%M", timeinfo);
+
+	return format;
 }

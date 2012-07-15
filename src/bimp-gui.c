@@ -3,6 +3,7 @@
  */
 
 #include <gtk/gtk.h>
+#include <glib.h>
 #include <libgimp/gimp.h>
 #include <libgimp/gimpui.h>
 #include <string.h>
@@ -34,6 +35,7 @@ static void edit_clicked_manipulation(GtkMenuItem*, gpointer);
 static void remove_clicked_manipulation(GtkMenuItem*, gpointer);
 static void add_manipulation_button(manipulation);
 
+/* TODO! */
 static void save_set(GtkMenuItem*, gpointer);
 static void load_set(GtkMenuItem*, gpointer);
 
@@ -109,7 +111,6 @@ void bimp_show_gui()
 	bimp_set_busy(FALSE);
 	
 	while(TRUE) {
-		g_print("STEEEEPPPP!!!!\n");
 		gint run = gimp_dialog_run (GIMP_DIALOG(bimp_window_main));
 		if (run == GTK_RESPONSE_APPLY) {
 			if (g_slist_length(bimp_selected_manipulations) == 0) {
@@ -123,7 +124,8 @@ void bimp_show_gui()
 					g_free (error_message);
 				}
 				else {
-					gboolean success = bimp_start_batch(bimp_window_main);
+					bimp_alertoverwrite = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_alertoverwrite));
+					bimp_start_batch(bimp_window_main);
 				}
 			}
 		}
@@ -131,8 +133,7 @@ void bimp_show_gui()
 			open_about();
 		}
 		else if (run == GTK_RESPONSE_CANCEL) {
-			g_print("stop!\n");
-			bimp_stop_operations();
+			bimp_set_busy(FALSE);
 		}
 		else {
 			gimp_progress_uninstall(progressbar_data);
@@ -668,8 +669,8 @@ static void open_about()
 	sprintf(version_number, "%d.%d", PLUG_IN_VERSION_MAJ, PLUG_IN_VERSION_MIN);
 	
 	gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(about), version_number);
-	gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(about), "(C) 2012 - Alessandro Francesconi");
-	gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(about), "http://www.alessandrofrancesconi.it/projects/bimp");
+	gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(about), PLUG_IN_COPYRIGHT);
+	gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(about), PLUG_IN_WEBSITE);
 	gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(about), gdk_pixbuf_from_pixdata(&pixdata_bimpicon, FALSE, NULL));
 	gtk_dialog_run(GTK_DIALOG(about));
 	gtk_widget_destroy(about);
@@ -707,23 +708,51 @@ static void progressbar_settext_hidden (const gchar *message, gpointer user_data
 static void progressbar_setvalue_hidden (double percent, gpointer user_data) { }
 
 void bimp_progress_bar_set(double fraction, char* text) {
-	while (g_main_context_iteration(NULL, FALSE));
 	if (fraction > 1.0) fraction = 1.0;
+	
 	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressbar_visible), fraction);
 	if (text != NULL) {
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbar_visible), text);
 	}
 }
 
+
 void bimp_set_busy(gboolean busy) {
-	while (g_main_context_iteration(NULL, FALSE));
+	GList *actions_children, *tmp_child;
+	struct _ResponseData { gint response_id; };
 	
 	bimp_is_busy = busy;
 	
 	gtk_dialog_set_response_sensitive (GTK_DIALOG(bimp_window_main), GTK_RESPONSE_CLOSE, !busy);
+	gtk_dialog_set_response_sensitive (GTK_DIALOG(bimp_window_main), GTK_RESPONSE_HELP, !busy);
 	
-	gtk_widget_set_visible (gtk_dialog_get_widget_for_response (GTK_DIALOG(bimp_window_main), GTK_RESPONSE_APPLY), !busy);
-	gtk_widget_set_visible (gtk_dialog_get_widget_for_response (GTK_DIALOG(bimp_window_main), GTK_RESPONSE_CANCEL), busy);
+	/* procedure that hides and shows some widgets in the dialog's action area. Compatible with GTK+ 2.16 */
+	GtkWidget* actions = gtk_dialog_get_action_area (GTK_DIALOG(bimp_window_main));
+	actions_children = gtk_container_get_children (GTK_CONTAINER (actions));
+	tmp_child = actions_children;
+	while (tmp_child != NULL)
+	{
+		GtkWidget *widget = tmp_child->data;
+		struct _ResponseData *rd = g_object_get_data (G_OBJECT (widget), "gtk-dialog-response-data");
+
+		if (rd && rd->response_id == GTK_RESPONSE_APPLY) {
+			if (busy) {
+				gtk_widget_hide (widget);
+			} else {
+				gtk_widget_show (widget);
+			}
+		}
+		else if (rd && rd->response_id == GTK_RESPONSE_CANCEL) {
+			if (!busy) {
+				gtk_widget_hide (widget);
+			} else {
+				gtk_widget_show (widget);
+			}
+		}
+
+		tmp_child = g_list_next (tmp_child);
+	}
+	g_list_free (actions_children);
 	
 	gtk_widget_set_sensitive(panel_sequence, !busy);
 	gtk_widget_set_sensitive(panel_options, !busy);

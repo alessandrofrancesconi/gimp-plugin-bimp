@@ -1,4 +1,4 @@
-/* some utility functions */
+/* shared utility functions */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -74,21 +74,6 @@ char* bimp_comp_get_filename(char* path)
     }
     
     return pfile;
-}
-
-/* gets the current date and time in "%Y-%m-%d_%H-%M" format */
-char* bimp_get_datetime() {
-	time_t rawtime;
-	struct tm * timeinfo;
-	char* format;
-
-	format = (char*)malloc(sizeof(char)*18);
-	time ( &rawtime );
-	timeinfo = localtime ( &rawtime );
-
-	strftime (format, 18, "%Y-%m-%d_%H-%M", timeinfo);
-
-	return format;
 }
 
 /* simply the min function */

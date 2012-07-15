@@ -6,7 +6,7 @@ Documentation @ http://www.alessandrofrancesconi.it/projects/bimp
 
 
 - COMPILING AND INSTALLING UNDER LINUX:
-Usually, you just need to install libgimp2.0-dev and libpcre3-dev packages 
+You need to install libgimp2.0-dev and libpcre3-dev packages 
 to have the full set of libraries and dependences for compiling BIMP.
 Then:
 
@@ -19,7 +19,7 @@ NOTE:
 
 - INSTALLING UNDER WINDOWS:
 BIMP plugin for Windows is already compiled and it's saved in bin/win32 directory.
-Just copy bimp.exe into the default GIMP-plugins folder:
+Just copy bimp.exe and pcre3.dll files into the default GIMP-plugins folder:
 <Programs-dir>\<GIMP-folder>\lib\gimp\<version>\plug-ins
 
 

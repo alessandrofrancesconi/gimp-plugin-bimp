@@ -4,6 +4,12 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+0.6:
+ - Added STOP button to abort the batch process
+ - List of options and modes in "Other GIMP procedure..." are now represented by a GtkComboBox
+ - Code and speed optimizations on "Other GIMP procedure..." dialog
+ - Various little fixes around
+
 0.5:
  - Rewritten the "Other GIMP procedure..." dialog and made some stability fixes
  - More format customizations in "Change Format and Quality"
