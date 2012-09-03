@@ -10,7 +10,7 @@
 #define PLUG_IN_BINARY "bimp"
 #define PLUG_IN_PROC "plug-in-bimp"
 #define PLUG_IN_VERSION_MAJ 0
-#define PLUG_IN_VERSION_MIN 6
+#define PLUG_IN_VERSION_MIN 7
 
 #define BIMP_RESULT_OK 1
 #define BIMP_RESULT_WARNING 0

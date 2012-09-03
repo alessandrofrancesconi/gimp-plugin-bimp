@@ -4,6 +4,9 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+0.7:
+ - Added "Add folders" button for adding entire folders content in the input list
+
 0.6:
  - Added STOP button to abort the batch process
  - List of options and modes in "Other GIMP procedure..." are now represented by a GtkComboBox
