@@ -133,6 +133,7 @@ static GSList* get_supported_procedures()
 			"-get-|"
 			"-load|"
 			"-save|"
+			"-select|"
 			"-free|"
 			"-help|"
 			"-temp|"
@@ -239,4 +240,3 @@ static gboolean proc_has_compatible_params(gchar* proc_name)
 	
 	return (compatible && num_params > 0);
 }
-

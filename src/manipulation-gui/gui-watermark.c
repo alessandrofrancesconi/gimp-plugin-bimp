@@ -228,11 +228,3 @@ void bimp_watermark_save(watermark_settings orig_settings)
 		orig_settings->position = WM_POS_BL;
 	}
 }
-
-
-
-
-
-
-
-

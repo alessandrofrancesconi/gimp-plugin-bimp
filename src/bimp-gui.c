@@ -7,6 +7,7 @@
 #include <libgimp/gimp.h>
 #include <libgimp/gimpui.h>
 #include <string.h>
+#include <dirent.h>
 #include "bimp.h"
 #include "bimp-manipulations.h"
 #include "bimp-gui.h"
@@ -21,13 +22,14 @@ static void init_fileview(void);
 static void add_to_fileview(char*);
 static void refresh_fileview(void);
 static void open_file_chooser(GtkWidget*, gpointer);
+static void open_folder_chooser(GtkWidget*, gpointer);
 static void add_input_file(char*);
+static void add_input_folder(char*);
 static void remove_input_file(GtkWidget*, GtkTreeSelection*);
 static void remove_all_input_files(GtkWidget*, gpointer);
 static void select_filename (GtkTreeView*, gpointer);
 static void update_preview(char*);
 static void set_output_folder(GtkWidget*, gpointer);
-static void toggle_alteroverwrite(GtkWidget*, gpointer);
 static void popmenus_init(void);
 static void open_popup_menu(GtkWidget*, gpointer);
 static void add_manipulation_from_id(GtkMenuItem*, gpointer);
@@ -54,7 +56,7 @@ GtkWidget *popmenu_add;
 GtkWidget *popmenu_edit;
 GtkWidget *check_alertoverwrite;
 GtkWidget *treeview_files;
-GtkWidget *file_chooser;
+GtkWidget *file_chooser, *folder_chooser;
 GtkWidget *file_preview;
 
 GtkWidget* progressbar_visible;
@@ -170,10 +172,10 @@ static GtkWidget* sequence_panel_new()
 static GtkWidget* option_panel_new()
 {
 	GtkWidget *panel, *hbox;
-	GtkWidget *hbox_buttons;
+	GtkWidget *hbox_buttons_top, *hbox_buttons_bottom, *vbox_buttons;
 	GtkWidget *vbox_input;
 	GtkWidget *scroll_input;
-	GtkWidget *button_add, *button_remove, *button_removeall;
+	GtkWidget *button_add, *button_addfolder, *button_remove, *button_removeall;
 	
 	GtkTreeSelection *treesel_file;
 	
@@ -199,11 +201,19 @@ static GtkWidget* option_panel_new()
 	treesel_file = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview_files));
 	
 	/* Sub-sub-panel for input file buttons */
-	hbox_buttons = gtk_hbox_new(FALSE, 1);
-	gtk_widget_set_size_request(hbox_buttons, FILE_LIST_BUTTONS_PANEL_W, FILE_LIST_BUTTONS_PANEL_H);
+	vbox_buttons = gtk_vbox_new(FALSE, 1);
+	
+	hbox_buttons_top = gtk_hbox_new(FALSE, 1);
+	gtk_widget_set_size_request(hbox_buttons_top, FILE_LIST_BUTTONS_PANEL_W, FILE_LIST_BUTTONS_PANEL_H);
 	
 	button_add = gtk_button_new_with_label("Add image files");
 	gtk_widget_set_size_request(button_add, FILE_LIST_BUTTON_W, FILE_LIST_BUTTON_H);
+	button_addfolder = gtk_button_new_with_label("Add folders");
+	gtk_widget_set_size_request(button_addfolder, FILE_LIST_BUTTON_W, FILE_LIST_BUTTON_H);
+	
+	hbox_buttons_bottom = gtk_hbox_new(FALSE, 1);
+	gtk_widget_set_size_request(hbox_buttons_top, FILE_LIST_BUTTONS_PANEL_W, FILE_LIST_BUTTONS_PANEL_H);
+	
 	button_remove = gtk_button_new_with_label("Remove selected");
 	gtk_widget_set_size_request(button_remove, FILE_LIST_BUTTON_W, FILE_LIST_BUTTON_H);
 	button_removeall = gtk_button_new_with_label("Remove all");
@@ -227,14 +237,18 @@ static GtkWidget* option_panel_new()
 	gtk_widget_set_size_request(file_preview, FILE_PREVIEW_W, FILE_PREVIEW_H);
 	
 	/* All together */
-	gtk_box_pack_start(GTK_BOX(hbox_buttons), button_add, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox_buttons), button_remove, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox_buttons), button_removeall, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox_buttons_top), button_add, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox_buttons_top), button_addfolder, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox_buttons_bottom), button_remove, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox_buttons_bottom), button_removeall, FALSE, FALSE, 0);
+	
+	gtk_box_pack_start(GTK_BOX(vbox_buttons), hbox_buttons_top, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox_buttons), hbox_buttons_bottom, FALSE, FALSE, 0);
 	
 	gtk_container_add (GTK_CONTAINER(scroll_input), treeview_files);
 		
 	gtk_box_pack_start(GTK_BOX(vbox_input), scroll_input, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox_input), hbox_buttons, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox_input), vbox_buttons, FALSE, FALSE, 0);
 	
 	gtk_box_pack_start(GTK_BOX(hbox_outfolder), label_chooser, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox_outfolder), button_outfolder, FALSE, FALSE, 0);
@@ -249,16 +263,16 @@ static GtkWidget* option_panel_new()
 	gtk_container_add(GTK_CONTAINER(panel), hbox);
 
 	g_signal_connect(G_OBJECT(button_add), "clicked", G_CALLBACK(open_file_chooser), NULL);
+	g_signal_connect(G_OBJECT(button_addfolder), "clicked", G_CALLBACK(open_folder_chooser), NULL);
 	g_signal_connect(G_OBJECT(button_remove), "clicked", G_CALLBACK(remove_input_file), treesel_file);
 	g_signal_connect(G_OBJECT(button_removeall), "clicked", G_CALLBACK(remove_all_input_files), NULL);
 	g_signal_connect(G_OBJECT(button_outfolder), "selection-changed", G_CALLBACK(set_output_folder), NULL);
-	g_signal_connect(G_OBJECT(check_alertoverwrite), "toggled", G_CALLBACK(toggle_alteroverwrite), NULL);
 	g_signal_connect(G_OBJECT(treeview_files), "cursor-changed", G_CALLBACK(select_filename), treesel_file);
 	
 	return panel;
 }
 
-/* following: functions that modify the file list widget (add/remove/removeall)  */
+/* following: functions that modify the file list widget (addfile/addfolder/remove/removeall)  */
 
 static void add_input_file(char* filename) 
 {
@@ -266,6 +280,44 @@ static void add_input_file(char* filename)
 		bimp_input_filenames = g_slist_append(bimp_input_filenames, filename);
 		refresh_fileview();
 	}
+}
+
+static void add_input_folder(char* folder) 
+{
+	DIR *dp;
+	struct dirent *ep;     
+	dp = opendir (folder);
+	g_print("%s\n", folder);
+	if (dp != NULL) {
+		while (ep = readdir (dp)) {
+			char* filename = g_strconcat(folder, "/", ep->d_name, NULL);
+			const char *content_type;
+			char* mimetype;
+			GError *error;
+			GFileInfo *file_info = g_file_query_info (g_file_new_for_path(filename), "standard::*", 0, NULL, &error);
+			content_type = g_file_info_get_content_type (file_info);
+			mimetype = g_content_type_get_mime_type (content_type);
+			
+			if ((
+				strcmp(mimetype, "image/bmp") == 0 ||
+				strcmp(mimetype, "image/jpeg") == 0 ||
+				strcmp(mimetype, "image/gif") == 0 ||
+				strcmp(mimetype, "image/png") == 0 ||
+				strcmp(mimetype, "image/tiff") == 0 ) && 
+				g_slist_find_custom(bimp_input_filenames, filename, (GCompareFunc)strcmp) == NULL)
+			{
+				bimp_input_filenames = g_slist_append(bimp_input_filenames, filename);
+			}
+		}
+		(void) closedir (dp);
+	}
+	else {
+		char* error_message = g_strconcat("Couldn't read into\n\"", folder, "\" directory.", NULL);
+		bimp_show_error_dialog(error_message, bimp_window_main);
+		g_free(error_message);
+	}
+	
+	refresh_fileview();
 }
 
 static void remove_input_file(GtkWidget *widget, GtkTreeSelection* selection) 
@@ -431,14 +483,33 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
 	gtk_widget_hide (file_chooser);
 }
 
+static void open_folder_chooser(GtkWidget *widget, gpointer data) 
+{
+	GSList *selection;
+	if (folder_chooser == NULL) { /* set the file chooser for the first time */
+		folder_chooser = gtk_file_chooser_dialog_new(
+			"Select images", 
+			NULL, 
+			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, 
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CLOSE, 
+			GTK_STOCK_ADD, GTK_RESPONSE_ACCEPT, NULL
+		);
+		gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(folder_chooser), TRUE);
+	}
+	
+	/* show dialog */
+	if (gtk_dialog_run (GTK_DIALOG(folder_chooser)) == GTK_RESPONSE_ACCEPT) {
+		selection = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(folder_chooser));
+		g_slist_foreach(selection, (GFunc)add_input_folder, NULL);
+	}
+	
+	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(folder_chooser));
+	gtk_widget_hide (folder_chooser);
+}
+
 static void set_output_folder(GtkWidget *widget, gpointer data) 
 {
 	bimp_output_folder = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
-}
-
-static void toggle_alteroverwrite(GtkWidget *widget, gpointer data) 
-{
-	bimp_alertoverwrite = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_alertoverwrite));
 }
 
 /* initializes the two menus that appears when the user clicks on the "add new" button 
@@ -715,7 +786,6 @@ void bimp_progress_bar_set(double fraction, char* text) {
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbar_visible), text);
 	}
 }
-
 
 void bimp_set_busy(gboolean busy) {
 	GList *actions_children, *tmp_child;
