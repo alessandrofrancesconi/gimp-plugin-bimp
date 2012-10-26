@@ -7,6 +7,9 @@
 #define CROP_WINDOW_W 300
 #define CROP_WINDOW_H 260
 
+#define LABEL_CROP_W 85
+#define LABEL_CROP_H 25
+
 GtkWidget* bimp_crop_gui_new(crop_settings);
 void bimp_crop_save(crop_settings);
 

@@ -5,8 +5,10 @@
 #include "../bimp-manipulations.h"
 #include "../bimp-manipulations-gui.h"
 #include "../bimp-icons.h"
+#include "../plugin-intl.h"
 
 static void toggle_group(GtkToggleButton*, gpointer);
+static char* watermark_pos_get_string(watermark_position);
 
 GtkWidget *vbox_text, *vbox_image;
 GtkWidget *radio_text, *radio_image;
@@ -25,11 +27,11 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 	
 	align_radio_text = gtk_alignment_new(0, 0, 0, 0);
 	gtk_alignment_set_padding(GTK_ALIGNMENT(align_radio_text), 0, 5, 10, 0);
-	radio_text = gtk_radio_button_new_with_label(NULL, "Text watermark");
+	radio_text = gtk_radio_button_new_with_label(NULL, _("Text watermark"));
 	
 	vbox_text = gtk_vbox_new(FALSE, 5);
 	hbox_text_entry = gtk_hbox_new(FALSE, 5);
-	label_text = gtk_label_new("Text:");
+	label_text = gtk_label_new(g_strconcat(_("Text"), ":", NULL));
 	gtk_widget_set_size_request (label_text, LABEL_W, LABEL_H);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_text), settings->textmode);
 	entry_text = gtk_entry_new();
@@ -38,54 +40,82 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 	gtk_widget_set_size_request (entry_text, INPUT_W, INPUT_H);
 	
 	hbox_text_font = gtk_hbox_new(FALSE, 5);
-	label_font = gtk_label_new("Font:");
+	label_font = gtk_label_new(g_strconcat(_("Font"), ":", NULL));
 	gtk_widget_set_size_request (label_font, LABEL_W, LABEL_H);
 	chooser_font = gtk_font_button_new_with_font(pango_font_description_to_string(settings->font));
 	gtk_widget_set_size_request (chooser_font, INPUT_W, INPUT_H);
 	
 	hbox_text_color = gtk_hbox_new(FALSE, 5);
-	label_color = gtk_label_new("Color:");
+	label_color = gtk_label_new(g_strconcat(_("Color"), ":", NULL));
 	gtk_widget_set_size_request (label_color, LABEL_W, LABEL_H);
 	chooser_color = gtk_color_button_new_with_color(&(settings->color));
 	gtk_widget_set_size_request (chooser_color, INPUT_W, INPUT_H);
 	
 	align_radio_image = gtk_alignment_new(0, 0, 0, 0);
 	gtk_alignment_set_padding(GTK_ALIGNMENT(align_radio_image), 0, 5, 10, 0);
-	radio_image = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON(radio_text), "Image watermark");
+	radio_image = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON(radio_text), _("Image watermark"));
 	
 	vbox_image = gtk_vbox_new(FALSE, 5);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_image), !settings->textmode);
-	chooser_image = gtk_file_chooser_button_new("Select image", GTK_FILE_CHOOSER_ACTION_OPEN);
+	chooser_image = gtk_file_chooser_button_new(_("Select image"), GTK_FILE_CHOOSER_ACTION_OPEN);
 	
 	/* set image chooser's filters */
 	GtkFileFilter *filter_all, *supported[5];	
 	filter_all = gtk_file_filter_new();
-	gtk_file_filter_set_name(filter_all,"All supported images");
+	gtk_file_filter_set_name(filter_all, _("All supported types"));
 	
 	supported[0] = gtk_file_filter_new();
 	gtk_file_filter_set_name(supported[0],"BMP");
-	gtk_file_filter_add_mime_type(supported[0],"image/bmp");
-	gtk_file_filter_add_mime_type(filter_all,"image/bmp");
+	#ifdef __APPLE__
+		/* Workaround for Mac OSX, that seems to have a bug on GTK file selectors */
+		gtk_file_filter_add_pattern (supported[0], "*.[bB][mM][pP]");
+		gtk_file_filter_add_pattern (filter_all, "*.[bB][mM][pP]");
+	#else
+		gtk_file_filter_add_mime_type(supported[0],"image/bmp");
+		gtk_file_filter_add_mime_type(filter_all,"image/bmp");
+	#endif
 	
-	supported[1] = gtk_file_filter_new();
-	gtk_file_filter_set_name(supported[1],"JPEG");
-	gtk_file_filter_add_mime_type(supported[1],"image/jpeg");
-	gtk_file_filter_add_mime_type(filter_all,"image/jpeg");
+		supported[1] = gtk_file_filter_new();
+		gtk_file_filter_set_name(supported[1],"JPEG");
+	#ifdef __APPLE__
+		gtk_file_filter_add_pattern (supported[1], "*.[jJ][pP][gG]");
+		gtk_file_filter_add_pattern (supported[1], "*.[jJ][pP][eE][gG]");
+		gtk_file_filter_add_pattern (filter_all, "*.[jJ][pP][gG]");
+		gtk_file_filter_add_pattern (filter_all, "*.[jJ][pP][eE][gG]");
+	#else
+		gtk_file_filter_add_mime_type(supported[1],"image/jpeg");
+		gtk_file_filter_add_mime_type(filter_all,"image/jpeg");
+	#endif
 	
-	supported[2] = gtk_file_filter_new();
-	gtk_file_filter_set_name(supported[2],"GIF");
-	gtk_file_filter_add_mime_type(supported[2],"image/gif");
-	gtk_file_filter_add_mime_type(filter_all,"image/gif");
+		supported[2] = gtk_file_filter_new();
+		gtk_file_filter_set_name(supported[2],"GIF");
+	#ifdef __APPLE__
+		gtk_file_filter_add_pattern (supported[2], "*.[gG][iI][fF]");
+		gtk_file_filter_add_pattern (filter_all, "*.[gG][iI][fF]");
+	#else
+		gtk_file_filter_add_mime_type(supported[2],"image/gif");
+		gtk_file_filter_add_mime_type(filter_all,"image/gif");
+	#endif
 	
-	supported[3] = gtk_file_filter_new();
-	gtk_file_filter_set_name(supported[3],"PNG");
-	gtk_file_filter_add_mime_type(supported[3],"image/png");
-	gtk_file_filter_add_mime_type(filter_all,"image/png");
+		supported[3] = gtk_file_filter_new();
+		gtk_file_filter_set_name(supported[3],"PNG");
+	#ifdef __APPLE__
+		gtk_file_filter_add_pattern (supported[3], "*.[pP][nN][gG]");
+		gtk_file_filter_add_pattern (filter_all, "*.[pP][nN][gG]");
+	#else
+		gtk_file_filter_add_mime_type(supported[3],"image/png");
+		gtk_file_filter_add_mime_type(filter_all,"image/png");
+	#endif
 	
-	supported[4] = gtk_file_filter_new();
-	gtk_file_filter_set_name(supported[4],"TIFF");
-	gtk_file_filter_add_mime_type(supported[4],"image/tiff");
-	gtk_file_filter_add_mime_type(filter_all,"image/tiff");
+		supported[4] = gtk_file_filter_new();
+		gtk_file_filter_set_name(supported[4],"TIFF");
+	#ifdef __APPLE__
+		gtk_file_filter_add_pattern (supported[4], "*.[tT][iI][fF][fF]");
+		gtk_file_filter_add_pattern (filter_all, "*.[tT][iI][fF][fF]");
+	#else
+		gtk_file_filter_add_mime_type(supported[4],"image/tiff");
+		gtk_file_filter_add_mime_type(filter_all,"image/tiff");
+	#endif
 	
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(chooser_image), filter_all);
 	int i;
@@ -99,7 +129,7 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 	gtk_widget_set_size_request (chooser_image, INPUT_W, INPUT_H);
 	
 	hbox_opacity = gtk_hbox_new(FALSE, 5);
-	label_opacity = gtk_label_new("Opacity:");
+	label_opacity = gtk_label_new(g_strconcat(_("Opacity"), ":", NULL));
 	gtk_widget_set_size_request (label_opacity, LABEL_TRANSP_W, LABEL_TRANSP_H);
 	gtk_misc_set_alignment(GTK_MISC(label_opacity), 0.5, 0.8);
 	scale_opacity = gtk_hscale_new_with_range(1, 100, 1);
@@ -109,13 +139,13 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 	gtk_widget_set_size_request (label_percent, LABEL_PERCENT_W, LABEL_PERCENT_H);
 	gtk_misc_set_alignment(GTK_MISC(label_percent), 0.5, 0.8);
 	
-	frame_position = gtk_frame_new("Position on the image:");
+	frame_position = gtk_frame_new(g_strconcat(_("Position on the image"), ":", NULL));
 	gtk_widget_set_size_request (frame_position, FRAME_POSITION_W, FRAME_POSITION_H);
 	table_position = gtk_table_new(3, 3, TRUE);
 	
 	button_tl = gtk_radio_button_new (NULL);
 	gtk_button_set_image(GTK_BUTTON(button_tl), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_postl, TRUE, NULL)));
-	gtk_widget_set_tooltip_text (button_tl, watermark_position_string[WM_POS_TL]);
+	gtk_widget_set_tooltip_text (button_tl, watermark_pos_get_string(WM_POS_TL));
 	gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_tl), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_tl), settings->position == WM_POS_TL);
 	gtk_widget_set_size_request (button_tl, BUTTON_POSITION_W, BUTTON_POSITION_H);
@@ -123,7 +153,7 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 	
 	button_tr = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
 	gtk_button_set_image(GTK_BUTTON(button_tr), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_postr, TRUE, NULL)));
-	gtk_widget_set_tooltip_text (button_tr, watermark_position_string[WM_POS_TR]);
+	gtk_widget_set_tooltip_text (button_tr, watermark_pos_get_string(WM_POS_TR));
 	gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_tr), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_tr), settings->position == WM_POS_TR);
 	gtk_widget_set_size_request (button_tr, BUTTON_POSITION_W, BUTTON_POSITION_H);
@@ -131,7 +161,7 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 	
 	button_cc = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
 	gtk_button_set_image(GTK_BUTTON(button_cc), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_poscc, TRUE, NULL)));
-	gtk_widget_set_tooltip_text (button_cc, watermark_position_string[WM_POS_CC]);
+	gtk_widget_set_tooltip_text (button_cc, watermark_pos_get_string(WM_POS_CC));
 	gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_cc), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_cc), settings->position == WM_POS_CC);
 	gtk_widget_set_size_request (button_cc, BUTTON_POSITION_W, BUTTON_POSITION_H);
@@ -139,7 +169,7 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 	
 	button_bl = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
 	gtk_button_set_image(GTK_BUTTON(button_bl), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_posbl, TRUE, NULL)));
-	gtk_widget_set_tooltip_text (button_bl, watermark_position_string[WM_POS_BL]);
+	gtk_widget_set_tooltip_text (button_bl, watermark_pos_get_string(WM_POS_BL));
 	gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_bl), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_bl), settings->position == WM_POS_BL);
 	gtk_widget_set_size_request (button_bl, BUTTON_POSITION_W, BUTTON_POSITION_H);
@@ -147,7 +177,7 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 	
 	button_br = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
 	gtk_button_set_image(GTK_BUTTON(button_br), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_posbr, TRUE, NULL)));
-	gtk_widget_set_tooltip_text (button_br, watermark_position_string[WM_POS_BR]);
+	gtk_widget_set_tooltip_text (button_br, watermark_pos_get_string(WM_POS_BR));
 	gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_br), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_br), settings->position == WM_POS_BR);
 	gtk_widget_set_size_request (button_br, BUTTON_POSITION_W, BUTTON_POSITION_H);
@@ -190,10 +220,32 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 	return gui;
 }
 
-void toggle_group(GtkToggleButton *togglebutton, gpointer user_data)
+static void toggle_group(GtkToggleButton *togglebutton, gpointer user_data)
 {
 	gtk_widget_set_sensitive(GTK_WIDGET(vbox_text), gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_text)));
 	gtk_widget_set_sensitive(GTK_WIDGET(vbox_image), !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_text)));
+}
+
+static char* watermark_pos_get_string(watermark_position wp) {
+	char* pos_string = "";
+	
+	if (wp == WM_POS_TL) {
+		pos_string = _("Top-left");
+	}
+	else if (wp == WM_POS_TR) {
+		pos_string = _("Top-right");
+	}
+	else if (wp == WM_POS_CC) {
+		pos_string = _("Center");
+	}
+	else if (wp == WM_POS_BL) {
+		pos_string = _("Bottom-left");
+	}
+	else if (wp == WM_POS_BR) {
+		pos_string = _("Bottom-right");
+	}
+	
+	return pos_string;
 }
 
 void bimp_watermark_save(watermark_settings orig_settings) 

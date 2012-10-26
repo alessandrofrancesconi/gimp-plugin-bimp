@@ -1,0 +1,622 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: gimp-plugin-bimp\n"
+"POT-Creation-Date: 2012-10-25 20:01+0100\n"
+"PO-Revision-Date: 2012-10-25 20:02+0100\n"
+"Last-Translator: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
+"Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-Basepath: ..\\..\\..\\..\\..\\src\\\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: .\\manipulation-gui\n"
+
+#: bimp-gui.c:127 bimp-gui.c:783
+msgid "The manipulations set is empty!"
+msgstr "L'insieme delle modifiche è vuoto!"
+
+#: bimp-gui.c:130
+msgid "The file list is empty!"
+msgstr "La lista dei file origine è vuota!"
+
+#: bimp-gui.c:158
+msgid "Manipulation set"
+msgstr "Insieme delle modifiche"
+
+#: bimp-gui.c:190
+msgid "Input files and options"
+msgstr "File di origine ed opzioni"
+
+#: bimp-gui.c:214
+msgid "Add images"
+msgstr "Aggiungi immagini"
+
+#: bimp-gui.c:216
+msgid "Add folders"
+msgstr "Aggiungi cartelle"
+
+#: bimp-gui.c:222
+msgid "Remove selected"
+msgstr "Rimuovi selezionati"
+
+#: bimp-gui.c:224
+msgid "Remove all"
+msgstr "Rimuovi tutti"
+
+#: bimp-gui.c:232
+msgid "Output folder"
+msgstr "Salva in"
+
+#: bimp-gui.c:238
+msgid "Alert when overwriting existing files"
+msgstr "Avvisa se si sovrascrivono file esistenti"
+
+#: bimp-gui.c:242
+msgid "Delete original file when done"
+msgstr "Cancella i file originali quando ho finito"
+
+#: bimp-gui.c:248
+msgid "Click for preview"
+msgstr "Clicca per un'anteprima"
+
+#: bimp-gui.c:331
+#, c-format
+msgid "Couldn't read into \"%s\" directory."
+msgstr "Impossibile leggere dalla cartella \"%s\""
+
+#: bimp-gui.c:382
+msgid "Can't show a preview because the manipulations set is empty"
+msgstr ""
+"Impossibile visualizzare un'anteprima\n"
+"poichè l'insieme delle modifche è vuoto"
+
+#: bimp-gui.c:405
+msgid "Preview"
+msgstr "Anteprima"
+
+#: bimp-gui.c:417
+msgid "This is how the selected image will look like after the batch process"
+msgstr "Ecco come apparirà l'immagine selezionata dopo il processo di modifica"
+
+#: bimp-gui.c:520
+msgid "Select images"
+msgstr "Scegli immagine"
+
+#: bimp-gui.c:529 manipulation-gui/gui-watermark.c:65
+#: .\manipulation-gui/gui-watermark.c:65
+msgid "All supported types"
+msgstr "Tutti i formati supportati"
+
+#: bimp-gui.c:620
+msgid "Select folders containing images"
+msgstr "Seleziona delle cartelle contenenti immagini"
+
+#: bimp-gui.c:683
+msgid "Edit properties..."
+msgstr "Cambia proprietà..."
+
+#: bimp-gui.c:686
+msgid "Remove this manipulation"
+msgstr "Rimuovi questa modifica"
+
+#: bimp-gui.c:718
+msgid "Can't add another manipulation of this kind. Only one is permitted!"
+msgstr ""
+"Impossibile aggiungere un'altra modifica di questo tipo. Una sola è permessa!"
+
+#: bimp-gui.c:789
+msgid "Save this set"
+msgstr "Salva questo set"
+
+#: bimp-gui.c:823
+msgid "This will overwrite current manipulations set. Continue?"
+msgstr "Questo sovrascriverà l'insieme delle modifiche corrente. Continuare?"
+
+#: bimp-gui.c:835
+msgid "Load set"
+msgstr "Carica set"
+
+#: bimp-gui.c:877 bimp.c:77
+msgid "Applies GIMP manipulations on groups of images"
+msgstr "Applica modifiche GIMP a gruppi di immagini"
+
+#: bimp-gui.c:884
+msgid "translator-name <translator-email>"
+msgstr ""
+"Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
+"Cristiano Bergoglio <cristiano.bergoglio@gmail.com>"
+
+#: bimp-manipulations.c:255
+msgid "Resize"
+msgstr "Ridimensiona"
+
+#: bimp-manipulations.c:258
+msgid "Crop"
+msgstr "Ritaglia"
+
+#: bimp-manipulations.c:261
+msgid "Flip or Rotate"
+msgstr "Rifletti o ruota"
+
+#: bimp-manipulations.c:264
+msgid "Color correction"
+msgstr "Correzione colore"
+
+#: bimp-manipulations.c:267
+msgid "Sharp or Blur"
+msgstr "Rendi nitido o sfuoca"
+
+#: bimp-manipulations.c:270
+msgid "Add a Watermark"
+msgstr "Aggiungi un watermark"
+
+#: bimp-manipulations.c:273
+msgid "Change format and compression"
+msgstr "Cambia formato e compressione"
+
+#: bimp-manipulations.c:276
+msgid "Rename with a pattern"
+msgstr "Rinomina con un pattern"
+
+#: bimp-manipulations.c:279
+msgid "Other GIMP procedure..."
+msgstr "Altra procedura di GIMP..."
+
+#: bimp-operate.c:72
+#, c-format
+msgid "Working on file %s..."
+msgstr "Lavorando sul file %s"
+
+#: bimp-operate.c:147
+msgid "Operations stopped"
+msgstr "Operazione fermata"
+
+#: bimp-operate.c:153
+msgid "End, all files have been processed"
+msgstr "Fine, tutti i file sono stati processati"
+
+#: bimp-operate.c:886
+#, c-format
+msgid "File %s already exists, overwrite it?"
+msgstr "Il file %s esiste già, sovrascriverlo?"
+
+#: bimp-operate.c:892
+msgid "Yes, don't ask again"
+msgstr "Si, non chiedermelo più"
+
+#: bimp-operate.c:896
+msgid "Overwrite?"
+msgstr "Sovrascrivere?"
+
+#: manipulation-gui/gui-changeformat.c:37
+#: .\manipulation-gui/gui-changeformat.c:37
+msgid "Format settings"
+msgstr "Impostazioni formato"
+
+#: manipulation-gui/gui-changeformat.c:58
+#: .\manipulation-gui/gui-changeformat.c:58
+msgid "Interlaced"
+msgstr "Interlacciato"
+
+#: manipulation-gui/gui-changeformat.c:78
+#: manipulation-gui/gui-changeformat.c:116
+#: .\manipulation-gui/gui-changeformat.c:78
+#: .\manipulation-gui/gui-changeformat.c:116
+msgid "Quality"
+msgstr "Qualità"
+
+#: manipulation-gui/gui-changeformat.c:84
+#: manipulation-gui/gui-changeformat.c:212
+#: .\manipulation-gui/gui-changeformat.c:84
+#: .\manipulation-gui/gui-changeformat.c:212
+msgid "Advanced params"
+msgstr "Parametri avanzati"
+
+#: manipulation-gui/gui-changeformat.c:88
+#: .\manipulation-gui/gui-changeformat.c:88
+msgid "Smoothing"
+msgstr "Smussamento"
+
+#: manipulation-gui/gui-changeformat.c:95
+#: .\manipulation-gui/gui-changeformat.c:95
+msgid "Optimize"
+msgstr "Ottimizza"
+
+#: manipulation-gui/gui-changeformat.c:96
+#: .\manipulation-gui/gui-changeformat.c:96
+msgid "Progressive"
+msgstr "Progressiva"
+
+#: manipulation-gui/gui-changeformat.c:97
+#: .\manipulation-gui/gui-changeformat.c:97
+msgid "Save baseline"
+msgstr "Salva miniatura"
+
+#: manipulation-gui/gui-changeformat.c:100
+#: .\manipulation-gui/gui-changeformat.c:100
+msgid "Comment"
+msgstr "Commento"
+
+#: manipulation-gui/gui-changeformat.c:107
+#: .\manipulation-gui/gui-changeformat.c:107
+msgid "Markers rows"
+msgstr "Righe marcatori"
+
+#: manipulation-gui/gui-changeformat.c:112
+#: .\manipulation-gui/gui-changeformat.c:112
+msgid "Subsampling"
+msgstr "Sottocampionatura"
+
+#: manipulation-gui/gui-changeformat.c:119
+#: .\manipulation-gui/gui-changeformat.c:119
+msgid "Small size"
+msgstr "Cromatica ridotta"
+
+#: manipulation-gui/gui-changeformat.c:122
+#: .\manipulation-gui/gui-changeformat.c:122
+msgid "DCT algorithm"
+msgstr "Algoritmo DCT"
+
+#: manipulation-gui/gui-changeformat.c:126
+#: .\manipulation-gui/gui-changeformat.c:126
+msgid "Fast integer"
+msgstr "Interi veloci"
+
+#: manipulation-gui/gui-changeformat.c:127
+#: .\manipulation-gui/gui-changeformat.c:127
+msgid "Integer"
+msgstr "Interi"
+
+#: manipulation-gui/gui-changeformat.c:128
+#: .\manipulation-gui/gui-changeformat.c:128
+msgid "Float"
+msgstr "Virgola mobile"
+
+#: manipulation-gui/gui-changeformat.c:204
+#: .\manipulation-gui/gui-changeformat.c:204
+msgid "Interlace (Adam7)"
+msgstr "Interlacciamento (Adam7)"
+
+#: manipulation-gui/gui-changeformat.c:206
+#: manipulation-gui/gui-changeformat.c:302
+#: .\manipulation-gui/gui-changeformat.c:206
+#: .\manipulation-gui/gui-changeformat.c:302
+msgid "Compression"
+msgstr "Compressione"
+
+#: manipulation-gui/gui-changeformat.c:215
+#: .\manipulation-gui/gui-changeformat.c:215
+msgid "Save background color"
+msgstr "Salva colore di sfondo"
+
+#: manipulation-gui/gui-changeformat.c:216
+#: .\manipulation-gui/gui-changeformat.c:216
+msgid "Save gamma"
+msgstr "Salva gamma"
+
+#: manipulation-gui/gui-changeformat.c:217
+#: .\manipulation-gui/gui-changeformat.c:217
+msgid "Save layer offset"
+msgstr "Salva spostamento livello"
+
+#: manipulation-gui/gui-changeformat.c:218
+#: .\manipulation-gui/gui-changeformat.c:218
+msgid "Save resolution"
+msgstr "Salva la risoluzione"
+
+#: manipulation-gui/gui-changeformat.c:219
+#: .\manipulation-gui/gui-changeformat.c:219
+msgid "Save creation date"
+msgstr "Salva data di creazione"
+
+#: manipulation-gui/gui-changeformat.c:220
+#: .\manipulation-gui/gui-changeformat.c:220
+msgid "Save comments"
+msgstr "Salva commento"
+
+#: manipulation-gui/gui-changeformat.c:221
+#: .\manipulation-gui/gui-changeformat.c:221
+msgid "Save color from transparent pixels"
+msgstr "Salva valori colore dai pixel trasparenti"
+
+#: manipulation-gui/gui-changeformat.c:269
+#: .\manipulation-gui/gui-changeformat.c:269
+msgid "RLE compression"
+msgstr "Compressione RLE"
+
+#: manipulation-gui/gui-changeformat.c:272
+#: .\manipulation-gui/gui-changeformat.c:272
+msgid "Image origin"
+msgstr "Origine immagine"
+
+#: manipulation-gui/gui-changeformat.c:277
+#: manipulation-gui/gui-watermark.c:233
+#: .\manipulation-gui/gui-changeformat.c:277
+#: .\manipulation-gui/gui-watermark.c:233
+msgid "Top-left"
+msgstr "Sopra a sinistra"
+
+#: manipulation-gui/gui-changeformat.c:278
+#: manipulation-gui/gui-watermark.c:242
+#: .\manipulation-gui/gui-changeformat.c:278
+#: .\manipulation-gui/gui-watermark.c:242
+msgid "Bottom-left"
+msgstr "In basso a sinistra"
+
+#: manipulation-gui/gui-changeformat.c:307
+#: manipulation-gui/gui-fliprotate.c:40
+#: .\manipulation-gui/gui-changeformat.c:307
+#: .\manipulation-gui/gui-fliprotate.c:40
+msgid "None"
+msgstr "Nessuna"
+
+#: manipulation-gui/gui-changeformat.c:308
+#: .\manipulation-gui/gui-changeformat.c:308
+msgid "LZW"
+msgstr "LZW"
+
+#: manipulation-gui/gui-changeformat.c:309
+#: .\manipulation-gui/gui-changeformat.c:309
+msgid "Pack bits"
+msgstr "Pack bits"
+
+#: manipulation-gui/gui-changeformat.c:310
+#: .\manipulation-gui/gui-changeformat.c:310
+msgid "Deflate"
+msgstr "Deflate"
+
+#: manipulation-gui/gui-changeformat.c:311
+#: .\manipulation-gui/gui-changeformat.c:311
+msgid "JPEG"
+msgstr "JPEG"
+
+#: manipulation-gui/gui-changeformat.c:312
+#: .\manipulation-gui/gui-changeformat.c:312
+msgid "CCITT G3 Fax"
+msgstr "CCITT G3 Fax"
+
+#: manipulation-gui/gui-changeformat.c:313
+#: .\manipulation-gui/gui-changeformat.c:313
+msgid "CCITT G4 Fax"
+msgstr "CCITT G4 Fax"
+
+#: manipulation-gui/gui-changeformat.c:328
+#: .\manipulation-gui/gui-changeformat.c:328
+msgid "This format has no params"
+msgstr ""
+"Questa procedura non richiede\n"
+"parametri editabili"
+
+#: manipulation-gui/gui-color.c:19 .\manipulation-gui/gui-color.c:19
+msgid "Brightness"
+msgstr "Luminosità"
+
+#: manipulation-gui/gui-color.c:27 .\manipulation-gui/gui-color.c:27
+msgid "Contrast"
+msgstr "Contrasto"
+
+#: manipulation-gui/gui-color.c:34 .\manipulation-gui/gui-color.c:34
+msgid "Convert to grayscale"
+msgstr "Converti in scala di grigi"
+
+#: manipulation-gui/gui-color.c:36 .\manipulation-gui/gui-color.c:36
+msgid "Automatic color levels correction"
+msgstr "Correggi automaticamenti i livelli di colore"
+
+#: manipulation-gui/gui-crop.c:26 .\manipulation-gui/gui-crop.c:26
+msgid "Crop to a standard aspect ratio"
+msgstr "Ritaglia a un rapporto standard"
+
+#: manipulation-gui/gui-crop.c:40 .\manipulation-gui/gui-crop.c:40
+msgid "Manual crop (pixel values)"
+msgstr "Ritaglia manualmente (valori in pixel)"
+
+#: manipulation-gui/gui-crop.c:45 manipulation-gui/gui-resize.c:63
+#: .\manipulation-gui/gui-crop.c:45 .\manipulation-gui/gui-resize.c:63
+msgid "Width"
+msgstr "Larghezza"
+
+#: manipulation-gui/gui-crop.c:49 manipulation-gui/gui-resize.c:65
+#: .\manipulation-gui/gui-crop.c:49 .\manipulation-gui/gui-resize.c:65
+msgid "Height"
+msgstr "Altezza"
+
+#: manipulation-gui/gui-crop.c:87 .\manipulation-gui/gui-crop.c:87
+msgid "One-to-one"
+msgstr "Uno a uno"
+
+#: manipulation-gui/gui-crop.c:90 .\manipulation-gui/gui-crop.c:90
+msgid "Classic 35 mm film"
+msgstr "Pellicola 35 mm classica"
+
+#: manipulation-gui/gui-crop.c:93 .\manipulation-gui/gui-crop.c:93
+msgid "Standard VGA monitor"
+msgstr "Monitor VGA standard"
+
+#: manipulation-gui/gui-crop.c:96 .\manipulation-gui/gui-crop.c:96
+msgid "Widescreen"
+msgstr "Widescreen"
+
+#: manipulation-gui/gui-crop.c:99 .\manipulation-gui/gui-crop.c:99
+msgid "Widescreen extended"
+msgstr "Widescreen esteso"
+
+#: manipulation-gui/gui-crop.c:102 .\manipulation-gui/gui-crop.c:102
+msgid "EU Passport portrait"
+msgstr "Fototessera per passaporto EU"
+
+#: manipulation-gui/gui-crop.c:105 .\manipulation-gui/gui-crop.c:105
+msgid "Classic smartphone screen"
+msgstr "Schermo smartphone classico"
+
+#: manipulation-gui/gui-crop.c:108 .\manipulation-gui/gui-crop.c:108
+msgid "Classic tablet screen"
+msgstr "Schermo tablet classico"
+
+#: manipulation-gui/gui-fliprotate.c:19 .\manipulation-gui/gui-fliprotate.c:19
+msgid "Flip"
+msgstr "Rifletti"
+
+#: manipulation-gui/gui-fliprotate.c:23 .\manipulation-gui/gui-fliprotate.c:23
+msgid "Horizontally"
+msgstr "Orizzontalmente"
+
+#: manipulation-gui/gui-fliprotate.c:29 .\manipulation-gui/gui-fliprotate.c:29
+msgid "Vertically"
+msgstr "Verticalmente"
+
+#: manipulation-gui/gui-fliprotate.c:37 .\manipulation-gui/gui-fliprotate.c:37
+msgid "Rotation"
+msgstr "Rotazione"
+
+#: manipulation-gui/gui-rename.c:25 .\manipulation-gui/gui-rename.c:25
+msgid "Keywords"
+msgstr "Keyword"
+
+#: manipulation-gui/gui-rename.c:29 .\manipulation-gui/gui-rename.c:29
+msgid "Original filename (without extension)"
+msgstr "Nome file originale (senza estensione)"
+
+#: manipulation-gui/gui-rename.c:30 .\manipulation-gui/gui-rename.c:30
+msgid "Incremental number"
+msgstr "Numero incrementale"
+
+#: manipulation-gui/gui-rename.c:31 .\manipulation-gui/gui-rename.c:31
+msgid "Date and time (YYYY-MM-DD_hh-mm)"
+msgstr "Data e ora (AAAA-MM-GG_hh-mm)"
+
+#: manipulation-gui/gui-rename.c:51 .\manipulation-gui/gui-rename.c:51
+#, c-format
+msgid "Can't save! '%s' or '%s' symbol must be present."
+msgstr "Impossibile salvare! Deve esserci un simbolo '%s' o '%s'."
+
+#: manipulation-gui/gui-rename.c:63 .\manipulation-gui/gui-rename.c:63
+msgid "Can't save! Pattern contains invalid characters."
+msgstr "Impossibile salvare! Ci sono caratteri non ammessi"
+
+#: manipulation-gui/gui-resize.c:37 .\manipulation-gui/gui-resize.c:37
+msgid "Set to a percentage of the original"
+msgstr "Imposta a una percentuale dell'originale"
+
+#: manipulation-gui/gui-resize.c:39 .\manipulation-gui/gui-resize.c:39
+msgid "Set exact size in pixel"
+msgstr "Imposta la dimensione esatta in pixel"
+
+#: manipulation-gui/gui-resize.c:45 .\manipulation-gui/gui-resize.c:45
+msgid "For both dimensions"
+msgstr "Per entrambe le dimensioni"
+
+#: manipulation-gui/gui-resize.c:47 .\manipulation-gui/gui-resize.c:47
+msgid "Set width only"
+msgstr "Imposta solo la larghezza"
+
+#: manipulation-gui/gui-resize.c:49 .\manipulation-gui/gui-resize.c:49
+msgid "Set height only"
+msgstr "Imposta solo l'altezza"
+
+#: manipulation-gui/gui-resize.c:52 .\manipulation-gui/gui-resize.c:52
+msgid "Preserve aspect ratio"
+msgstr "Mantieni il rapporto delle dimensioni"
+
+#: manipulation-gui/gui-resize.c:56 .\manipulation-gui/gui-resize.c:56
+msgid "Interpolation quality"
+msgstr "Qualità di interpolazione"
+
+#: manipulation-gui/gui-resize.c:69 .\manipulation-gui/gui-resize.c:69
+msgid "Change resolution"
+msgstr "Cambia la risoluzione"
+
+#: manipulation-gui/gui-resize.c:74 .\manipulation-gui/gui-resize.c:74
+msgid "X axis"
+msgstr "Asse X"
+
+#: manipulation-gui/gui-resize.c:77 .\manipulation-gui/gui-resize.c:77
+msgid "Y axis"
+msgstr "Asse Y"
+
+#: manipulation-gui/gui-sharpblur.c:17 .\manipulation-gui/gui-sharpblur.c:17
+msgid "More sharpen"
+msgstr "Più nitido"
+
+#: manipulation-gui/gui-sharpblur.c:23 .\manipulation-gui/gui-sharpblur.c:23
+msgid "More blurred"
+msgstr "Più sfuocato"
+
+#: manipulation-gui/gui-userdef.c:49 .\manipulation-gui/gui-userdef.c:49
+msgid ""
+"Choose a supported GIMP procedure from the list on the left\n"
+"and define its parameters on the right."
+msgstr ""
+"Scegli una delle procedure di GIMP supportate dalla lista a sinistra\n"
+"e definiscine i parametri a destra"
+
+#: manipulation-gui/gui-userdef.c:61 .\manipulation-gui/gui-userdef.c:61
+msgid "Search"
+msgstr "Cerca"
+
+#: manipulation-gui/gui-userdef.c:300 .\manipulation-gui/gui-userdef.c:300
+msgid ""
+"Can't save because\n"
+"no procedure has been selected"
+msgstr ""
+"Impossibile salvare perchè\n"
+"non è stata selezionata alcuna procedura"
+
+#: manipulation-gui/gui-userdef.c:346 .\manipulation-gui/gui-userdef.c:346
+msgid "Author"
+msgstr "Autore"
+
+#: manipulation-gui/gui-userdef.c:562 .\manipulation-gui/gui-userdef.c:562
+msgid "This procedure takes no editable params"
+msgstr ""
+"Questa procedura non richiede\n"
+"parametri editabili"
+
+#: manipulation-gui/gui-watermark.c:30 .\manipulation-gui/gui-watermark.c:30
+msgid "Text watermark"
+msgstr "Watermark a testo"
+
+#: manipulation-gui/gui-watermark.c:34 .\manipulation-gui/gui-watermark.c:34
+msgid "Text"
+msgstr "Testo"
+
+#: manipulation-gui/gui-watermark.c:43 .\manipulation-gui/gui-watermark.c:43
+msgid "Font"
+msgstr "Carattere"
+
+#: manipulation-gui/gui-watermark.c:49 .\manipulation-gui/gui-watermark.c:49
+msgid "Color"
+msgstr "Colore"
+
+#: manipulation-gui/gui-watermark.c:56 .\manipulation-gui/gui-watermark.c:56
+msgid "Image watermark"
+msgstr "Watermark a immagine"
+
+#: manipulation-gui/gui-watermark.c:60 .\manipulation-gui/gui-watermark.c:60
+msgid "Select image"
+msgstr "Scegli immagine"
+
+#: manipulation-gui/gui-watermark.c:132 .\manipulation-gui/gui-watermark.c:132
+msgid "Opacity"
+msgstr "Opacità"
+
+#: manipulation-gui/gui-watermark.c:142 .\manipulation-gui/gui-watermark.c:142
+msgid "Position on the image"
+msgstr "Posizione nell'immagine"
+
+#: manipulation-gui/gui-watermark.c:236 .\manipulation-gui/gui-watermark.c:236
+msgid "Top-right"
+msgstr "Sopra a destra"
+
+#: manipulation-gui/gui-watermark.c:239 .\manipulation-gui/gui-watermark.c:239
+msgid "Center"
+msgstr "Al centro"
+
+#: manipulation-gui/gui-watermark.c:245 .\manipulation-gui/gui-watermark.c:245
+msgid "Bottom-right"
+msgstr "In basso a destra"

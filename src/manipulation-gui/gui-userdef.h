@@ -7,7 +7,7 @@
 #define USERDEF_WINDOW_W 550
 #define USERDEF_WINDOW_H 400
 
-#define SEARCH_W 100
+#define SEARCH_W 120
 #define SEARCH_H 25
 
 #define LABEL_HELP_W USERDEF_WINDOW_W - 20

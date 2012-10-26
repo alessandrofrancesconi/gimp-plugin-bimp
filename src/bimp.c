@@ -30,10 +30,20 @@
 #include "bimp-manipulations.h"
 #include "bimp-gui.h"
 #include "bimp-utils.h"
+#include "plugin-intl.h"
+
+#ifdef __unix__
+	#include <unistd.h>
+#elif defined _WIN32
+	#include <windows.h>
+#elif defined __APPLE__
+	#include <mach-o/dyld.h>
+#endif
 
 static void query (void);
 static GSList* get_supported_procedures(void);
 static gboolean proc_has_compatible_params (gchar*);
+static char* get_bimp_localedir(void);
 
 static void run (
 	const gchar *name,
@@ -59,10 +69,12 @@ static void query (void)
 		{ GIMP_PDB_INT32, "run-mode", "Run mode" }
 	};
 	
+	gimp_plugin_domain_register (GETTEXT_PACKAGE, get_bimp_localedir());
+
 	gimp_install_procedure (
 		PLUG_IN_PROC,
 		PLUG_IN_FULLNAME,
-		PLUG_IN_DESCRIPTION,
+		_("Applies GIMP manipulations on groups of images"),
 		"Alessandro Francesconi <alessandrofrancesconi@live.it>",
 		"Copyright (C) Alessandro Francesconi\n"
 		"http://www.alessandrofrancesconi.it/projects/bimp",
@@ -89,14 +101,19 @@ static void run (
 	static GimpParam  values[1];
 	GimpPDBStatusType status = GIMP_PDB_SUCCESS;
 	GimpRunMode run_mode;
-
+	
 	*nreturn_vals = 1;
 	*return_vals  = values;
 
+	bindtextdomain (GETTEXT_PACKAGE, get_bimp_localedir());
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+	textdomain (GETTEXT_PACKAGE);
+  
 	values[0].type = GIMP_PDB_STATUS;
 	values[0].data.d_status = status;
-
+	
 	run_mode = param[0].data.d_int32;
+	
 	switch (run_mode) {
 		case GIMP_RUN_INTERACTIVE:
 		case GIMP_RUN_WITH_LAST_VALS:
@@ -131,6 +148,9 @@ static GSList* get_supported_procedures()
 			"-is-|"
 			"-has-|"
 			"-get-|"
+			"-print-|"
+			"file-glob|"
+			"twain-acquire|"
 			"-load|"
 			"-save|"
 			"-select|"
@@ -239,4 +259,28 @@ static gboolean proc_has_compatible_params(gchar* proc_name)
 	}
 	
 	return (compatible && num_params > 0);
+}
+
+static char* get_bimp_localedir() 
+{
+	char path[1024];
+	int bufsize = sizeof(path);
+	char div[2];
+	
+	// different methods for getting the plugin's absolute path, for different systems
+#ifdef __unix__
+	readlink("/proc/self/exe", path, bufsize);
+	div[0] = '/';
+#elif defined _WIN32
+	GetModuleFileName(GetModuleHandle(NULL), path, bufsize);
+	div[0] = '\\';
+#elif defined __APPLE__
+	_NSGetExecutablePath(path, &bufsize);
+	div[0] = '/';
+#endif
+	
+	div[1] = '\0';
+	memset(g_strrstr(path, div), '\0', 1); // truncate at the last path divisor (eliminates "bimp.exe")
+	
+	return g_strconcat(path, div, "bimp-locale", NULL); // returns truncated path, plus "/bimp-locale" directory
 }

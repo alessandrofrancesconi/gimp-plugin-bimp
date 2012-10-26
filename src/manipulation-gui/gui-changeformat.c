@@ -2,6 +2,7 @@
 #include <libgimp/gimp.h>
 #include "gui-changeformat.h"
 #include "../bimp-manipulations.h"
+#include "../plugin-intl.h"
 
 static void update_frame_params(GtkComboBox*, changeformat_settings);
 static void adv_expanded (GtkExpander *, gpointer);
@@ -33,7 +34,7 @@ GtkWidget* bimp_changeformat_gui_new(changeformat_settings settings, GtkWidget* 
 	}
 	gtk_combo_box_set_active(GTK_COMBO_BOX(combo_format), settings->format);
 	
-	frame_params = gtk_frame_new("Format settings:");
+	frame_params = gtk_frame_new(_("Format settings"));
 	gtk_widget_set_size_request (frame_params, FRAME_PARAMS_W, FRAME_PARAMS_H);
 	
 	gtk_box_pack_start(GTK_BOX(gui), combo_format, FALSE, FALSE, 0);
@@ -54,7 +55,7 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
 	if (selected_format == FORMAT_GIF) {
 		inner_widget = gtk_vbox_new(FALSE, 5);
 		gtk_container_set_border_width(GTK_CONTAINER(inner_widget), 8);
-		check_interlace = gtk_check_button_new_with_label("Interlaced");
+		check_interlace = gtk_check_button_new_with_label(_("Interlaced"));
 		
 		if (selected_format == settings->format) {
 			format_params_gif settings_gif = (format_params_gif)(settings->params);
@@ -74,57 +75,57 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
 		gtk_container_set_border_width(GTK_CONTAINER(inner_widget), 8);
 		
 		hbox_quality = gtk_hbox_new(FALSE, 5);
-		label_quality = gtk_label_new("Quality");
+		label_quality = gtk_label_new(_("Quality"));
 		gtk_widget_set_size_request (label_quality, 100, LABEL_H);
 		gtk_misc_set_alignment(GTK_MISC(label_quality), 0.5, 0.8);
 		scale_quality = gtk_hscale_new_with_range(0, 100, 1);
 		gtk_widget_set_size_request (scale_quality, 160, SCALE_H);
 		
-		expander_advanced = gtk_expander_new("Advanced params");
+		expander_advanced = gtk_expander_new(_("Advanced params"));
 		vbox_advanced = gtk_vbox_new(FALSE, 5);
 		
 		hbox_smoothing = gtk_hbox_new(FALSE, 5);
-		label_smoothing = gtk_label_new("Smoothing");
+		label_smoothing = gtk_label_new(_("Smoothing"));
 		gtk_widget_set_size_request (label_smoothing, 100, LABEL_H);
 		gtk_misc_set_alignment(GTK_MISC(label_smoothing), 0.5, 0.8);
 		scale_smoothing = gtk_hscale_new_with_range(0, 1, 0.01);
 		gtk_widget_set_size_request (scale_smoothing, 160, SCALE_H);
 		
 		hbox_checks = gtk_hbox_new(FALSE, 5);
-		check_entrophy = gtk_check_button_new_with_label("Optimize");
-		check_progressive = gtk_check_button_new_with_label("Progressive");
-		check_baseline = gtk_check_button_new_with_label("Save baseline");
+		check_entrophy = gtk_check_button_new_with_label(_("Optimize"));
+		check_progressive = gtk_check_button_new_with_label(_("Progressive"));
+		check_baseline = gtk_check_button_new_with_label(_("Save baseline"));
 		
 		hbox_comment = gtk_hbox_new(FALSE, 5);
-		label_comment = gtk_label_new("Comment:");
+		label_comment = gtk_label_new(g_strconcat(_("Comment"), ": ", NULL));
 		gtk_widget_set_size_request (label_comment, 100, LABEL_H);
 		text_comment =  gtk_text_view_new();
 		buffer_comment = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_comment));
 		gtk_widget_set_size_request (text_comment, 160, TEXT_H);
 		
 		hbox_markers = gtk_hbox_new(FALSE, 5);
-		label_markers = gtk_label_new("Markers rows:");
+		label_markers = gtk_label_new(g_strconcat(_("Markers rows"), ": ", NULL));
 		gtk_widget_set_size_request (label_markers, 100, LABEL_H);
 		spin_markers = gtk_spin_button_new(NULL, 1, 0);
 		
 		hbox_subsampling = gtk_hbox_new(FALSE, 5);
-		label_subsampling = gtk_label_new("Subsampling:");
+		label_subsampling = gtk_label_new(g_strconcat(_("Subsampling"), ": ", NULL));
 		gtk_widget_set_size_request (label_subsampling, 100, LABEL_H);
 		combo_subsampling = gtk_combo_box_new_text();
 		gtk_widget_set_size_request (combo_subsampling, 180, COMBO_H);
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_subsampling), "1x1, 1x1, 1x1 (quality)");
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_subsampling), g_strconcat("1x1, 1x1, 1x1 (", _("Quality"), ")", NULL));
 		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_subsampling), "2x1, 1x1, 1x1 (4:2:2)");
 		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_subsampling), "1x2, 1x1, 1x1");
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_subsampling), "2x2, 1x1, 1x1 (small size)");
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_subsampling), g_strconcat("2x2, 1x1, 1x1 (", _("Small size"), ")", NULL));
 		
 		hbox_dct = gtk_hbox_new(FALSE, 5);
-		label_dct = gtk_label_new("DCT algorithm:");
+		label_dct = gtk_label_new(g_strconcat(_("DCT algorithm"), ": ", NULL));
 		gtk_widget_set_size_request (label_dct, 100, LABEL_H);
 		combo_dct = gtk_combo_box_new_text();
 		gtk_widget_set_size_request (combo_dct, 150, COMBO_H);
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_dct), "Fast integer");
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_dct), "Integer");
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_dct), "Float");
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_dct), _("Fast integer"));
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_dct), _("Integer"));
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_dct), _("Float"));
 		
 		if (selected_format == settings->format) {
 			format_params_jpeg settings_jpeg = (format_params_jpeg)(settings->params);
@@ -200,24 +201,24 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
 		
 		inner_widget = gtk_vbox_new(FALSE, 5);
 		gtk_container_set_border_width(GTK_CONTAINER(inner_widget), 8);
-		check_interlace = gtk_check_button_new_with_label("Interlace (Adam7)");
+		check_interlace = gtk_check_button_new_with_label(_("Interlace (Adam7)"));
 		hbox_compression = gtk_hbox_new(FALSE, 5);
-		label_compression = gtk_label_new("Compression");
+		label_compression = gtk_label_new(_("Compression"));
 		gtk_widget_set_size_request (label_compression, 100, LABEL_H);
 		gtk_misc_set_alignment(GTK_MISC(label_compression), 0.5, 0.8);
 		scale_compression = gtk_hscale_new_with_range(0, 9, 1);
 		gtk_widget_set_size_request (scale_compression, 100, SCALE_H);
 		
-		expander_advanced = gtk_expander_new("Advanced params");
+		expander_advanced = gtk_expander_new(_("Advanced params"));
 		vbox_advanced = gtk_vbox_new(FALSE, 5);
 		
-		check_savebgc = gtk_check_button_new_with_label("Save background color");
-		check_savegamma = gtk_check_button_new_with_label("Save gamma");
-		check_saveoff = gtk_check_button_new_with_label("Save layer offset");
-		check_savephys = gtk_check_button_new_with_label("Save resolution");
-		check_savetime = gtk_check_button_new_with_label("Save creation date");
-		check_savecomm = gtk_check_button_new_with_label("Save comments");
-		check_savetrans = gtk_check_button_new_with_label("Save color from transparent pixels");
+		check_savebgc = gtk_check_button_new_with_label(_("Save background color"));
+		check_savegamma = gtk_check_button_new_with_label(_("Save gamma"));
+		check_saveoff = gtk_check_button_new_with_label(_("Save layer offset"));
+		check_savephys = gtk_check_button_new_with_label(_("Save resolution"));
+		check_savetime = gtk_check_button_new_with_label(_("Save creation date"));
+		check_savecomm = gtk_check_button_new_with_label(_("Save comments"));
+		check_savetrans = gtk_check_button_new_with_label(_("Save color from transparent pixels"));
 		
 		if (selected_format == settings->format) {
 			format_params_png settings_png = (format_params_png)(settings->params);
@@ -265,16 +266,16 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
 			
 		inner_widget = gtk_vbox_new(FALSE, 5);
 		gtk_container_set_border_width(GTK_CONTAINER(inner_widget), 8);
-		check_rle = gtk_check_button_new_with_label("RLE compression");
+		check_rle = gtk_check_button_new_with_label(_("RLE compression"));
 		
 		hbox_origin = gtk_hbox_new(FALSE, 5);
-		label_origin = gtk_label_new("Image origin:");
+		label_origin = gtk_label_new(g_strconcat(_("Image origin"), ": ", NULL));
 		gtk_widget_set_size_request (label_origin, 100, LABEL_H);
 		
 		combo_origin = gtk_combo_box_new_text();
 		gtk_widget_set_size_request (combo_origin, 100, COMBO_H);
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_origin), "Top-left");
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_origin), "Bottom-left");
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_origin), _("Top-left"));
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_origin), _("Bottom-left"));
 		
 		if (selected_format == settings->format) {
 			format_params_tga settings_tga = (format_params_tga)(settings->params);
@@ -298,18 +299,18 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
 		inner_widget = gtk_vbox_new(FALSE, 5);
 		gtk_container_set_border_width(GTK_CONTAINER(inner_widget), 8);
 		hbox_compression = gtk_hbox_new(FALSE, 5);
-		label_compression = gtk_label_new("Compression");
+		label_compression = gtk_label_new(_("Compression"));
 		gtk_widget_set_size_request (label_compression, 80, LABEL_H);
 		gtk_misc_set_alignment(GTK_MISC(label_compression), 0.5, 0.5);
 		combo_compression = gtk_combo_box_new_text();
 		gtk_widget_set_size_request (combo_compression, 130, COMBO_H);
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_compression), "None");
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_compression), "LZW");
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_compression), "Pack bits");
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_compression), "Deflate");
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_compression), "JPEG");
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_compression), "CCITT G3 Fax");
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_compression), "CCITT G4 Fax");
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_compression), _("None"));
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_compression), _("LZW"));
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_compression), _("Pack bits"));
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_compression), _("Deflate"));
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_compression), _("JPEG"));
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_compression), _("CCITT G3 Fax"));
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_compression), _("CCITT G4 Fax"));
 		
 		if (selected_format == settings->format) {
 			format_params_tiff settings_tiff = (format_params_tiff)(settings->params);
@@ -324,7 +325,7 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
 		gtk_box_pack_start(GTK_BOX(inner_widget), hbox_compression, FALSE, FALSE, 0);
 	}
 	else {
-		inner_widget = gtk_label_new("This format has no params");
+		inner_widget = gtk_label_new(_("This format has no params"));
 	}
 	
 	if (gtk_bin_get_child(GTK_BIN(frame_params)) != NULL) {

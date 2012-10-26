@@ -4,6 +4,7 @@
 #include "../bimp-manipulations.h"
 #include "../bimp-manipulations-gui.h"
 #include "../bimp-icons.h"
+#include "../plugin-intl.h"
 	
 GtkWidget *button_flipH, *button_flipV, *combo_rotate;
 
@@ -15,17 +16,17 @@ GtkWidget* bimp_fliprotate_gui_new(fliprotate_settings settings)
 	
 	gui = gtk_vbox_new(FALSE, 5);
 	
-	label_flip = gtk_label_new("Flip:");
+	label_flip = gtk_label_new(g_strconcat(_("Flip"), ":", NULL));
 	hbox_flip = gtk_hbox_new(FALSE, 5);
 	align_flip = gtk_alignment_new(0.5, 0, 0, 0);
 	
-	button_flipH = gtk_toggle_button_new_with_label("Horizontally");
+	button_flipH = gtk_toggle_button_new_with_label(_("Horizontally"));
 	gtk_widget_set_size_request (button_flipH, BUTTON_FLIP_W, BUTTON_FLIP_H);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_flipH), settings->flipH);
 	gtk_button_set_image(GTK_BUTTON(button_flipH), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_flipH, FALSE, NULL)));
 	gtk_button_set_image_position(GTK_BUTTON(button_flipH), GTK_POS_TOP);
 	
-	button_flipV = gtk_toggle_button_new_with_label("Vertically");
+	button_flipV = gtk_toggle_button_new_with_label(_("Vertically"));
 	gtk_widget_set_size_request (button_flipV, BUTTON_FLIP_W, BUTTON_FLIP_H);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_flipV), settings->flipV);
 	gtk_button_set_image(GTK_BUTTON(button_flipV), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_flipV, FALSE, NULL)));
@@ -33,10 +34,10 @@ GtkWidget* bimp_fliprotate_gui_new(fliprotate_settings settings)
 	
 	hbox_rotate = gtk_hbox_new(FALSE, 5);
 	align_rotate = gtk_alignment_new(0.5, 0, 0, 0);
-	label_rotate = gtk_label_new("Rotation:");
+	label_rotate = gtk_label_new(g_strconcat(_("Rotation"), ":", NULL));
 	combo_rotate = gtk_combo_box_new_text();
 	gtk_widget_set_size_request (combo_rotate, COMBO_ROTATE_W, COMBO_ROTATE_H);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(combo_rotate), "None");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(combo_rotate), _("None"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(combo_rotate), "90°");
 	gtk_combo_box_append_text(GTK_COMBO_BOX(combo_rotate), "180°");
 	gtk_combo_box_append_text(GTK_COMBO_BOX(combo_rotate), "270°");

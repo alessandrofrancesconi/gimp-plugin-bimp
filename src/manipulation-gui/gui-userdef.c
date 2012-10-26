@@ -8,6 +8,7 @@
 #include "../bimp-gui.h"
 #include "../bimp-manipulations.h"
 #include "../bimp-utils.h"
+#include "../plugin-intl.h"
 
 static void init_procedure_list(void);
 static int fill_procedure_list(char*, char*);
@@ -45,8 +46,7 @@ GtkWidget* bimp_userdef_gui_new(userdef_settings settings, GtkWidget *parent)
 	label_help = gtk_label_new(NULL);
 	gtk_widget_set_size_request (label_help, LABEL_HELP_W, LABEL_HELP_H);
 	gtk_label_set_markup (GTK_LABEL(label_help), 
-		"Choose a supported GIMP procedure from the list on the left\n"
-		"and define its parameters on the right."
+		_("Choose a supported GIMP procedure from the list on the left\nand define its parameters on the right.")
 	);
 	gtk_label_set_justify(GTK_LABEL(label_help), GTK_JUSTIFY_CENTER);
 	
@@ -58,7 +58,7 @@ GtkWidget* bimp_userdef_gui_new(userdef_settings settings, GtkWidget *parent)
 	gtk_widget_set_size_request (scroll_procedures, PROCLIST_W, PROCLIST_H);
 	
 	hbox_search = gtk_hbox_new(FALSE, 5);
-	label_search = gtk_label_new("Search: ");
+	label_search = gtk_label_new(g_strconcat(_("Search"), ": ", NULL));
 	entry_search = gtk_entry_new();
 	gtk_widget_set_size_request (entry_search, SEARCH_W, SEARCH_H);
 	
@@ -297,7 +297,7 @@ static void update_procedure_box(userdef_settings settings)
 	if (settings->procedure == NULL) {
 		GtkWidget *label_noproc;
 		
-		label_noproc = gtk_label_new("Can't save because\nno procedure has been selected");
+		label_noproc = gtk_label_new(_("Can't save because\nno procedure has been selected"));
 		gtk_widget_set_size_request (label_noproc, PROCLIST_W, PROCLIST_H);
 		gtk_label_set_justify(GTK_LABEL(label_noproc), GTK_JUSTIFY_CENTER);
 		
@@ -343,7 +343,7 @@ static void update_procedure_box(userdef_settings settings)
 		
 		label_procauthor = gtk_label_new(NULL);
 		if (proc_author != NULL) {
-			gtk_label_set_markup (GTK_LABEL(label_procauthor), g_strconcat("Author: ", g_markup_escape_text(proc_author, -1), NULL));
+			gtk_label_set_markup (GTK_LABEL(label_procauthor), g_strconcat(_("Author"), ": ", g_markup_escape_text(proc_author, -1), NULL));
 			gtk_misc_set_alignment(GTK_MISC(label_procauthor), 0, 0);
 		}
 		
@@ -366,7 +366,7 @@ static void update_procedure_box(userdef_settings settings)
 		const char *error;
 		int   erroffset;
 		pcre* reg_comp_combobox =  pcre_compile("([A-Z\\d-]+)\\s\\(\\d+\\)", PCRE_DOTALL, &error, &erroffset, 0);
-		/* TODO */ //pcre* reg_comp_minmax =  pcre_compile("(-?\\d+)\\s?([<|=|>]{2})\\s?\\S*\\s?([<|=|>]{2})\\s?(-?\\d+)", PCRE_DOTALL, &error, &erroffset, 0);
+		pcre* reg_comp_minmax =  pcre_compile("(?:(-?\\d+)\\s([<|>|=]{1,2})\\s)?([\\w|-]+)\\s([<|>|=]{1,2})\\s(-?\\d+)", PCRE_DOTALL, &error, &erroffset, 0);
 		int ovector[186];
 		unsigned int offset = 0;
 		unsigned int desclen = 0;
@@ -397,30 +397,56 @@ static void update_procedure_box(userdef_settings settings)
 								}
 								while (offset < desclen && (rc = pcre_exec(reg_comp_combobox, 0, param_info.description, desclen, offset, 0, ovector, 186)) >= 0);
 								gtk_combo_box_set_active(GTK_COMBO_BOX(param_widget[param_i]), ((settings->params[param_i]).data.d_int32));
-							}							
+							}
 							else {
 								param_widget[param_i] = gtk_spin_button_new (NULL, 1, 0);
-								/*int min, max;
+								int min = G_MININT, max = G_MAXINT;
 								offset = 0;
-								rc = pcre_exec(reg_comp_minmax, 0, param_info.description, desclen, offset, 0, ovector, 186);
+								desclen = strlen(param_info.description);
+								int i = 1, rc = pcre_exec(reg_comp_minmax, 0, param_info.description, desclen, offset, 0, ovector, 186);
 								if (rc >= 0) {
+									/* intercept regular expressions for forms like:
+									 *  -127 <= brightness <= 127
+									 * or
+									 *  opacity > 0
+									 * and so on...
+									 */
 									do {
 										i = 1;
-										g_print("%.*s  ", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+										gchar* l_value = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+										if (strlen(l_value) > 0) {
+											min = atoi(l_value);
+										}
+										
 										i = 2;
-										g_print("%.*s  ", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+										gchar* l_symbol = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+										if (strlen(l_symbol) > 0) {
+											if (strcmp(l_symbol, "<") == 0) min++;
+										}
+										
 										i = 3;
-										g_print("%.*s\n", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+										gchar* name = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+										
+										i = 4;
+										gchar* r_symbol = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+										
+										i = 5;
+										gchar* r_value = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+										if (r_symbol[0] == '>') {
+											min = atoi(r_value);
+											if (strcmp(r_symbol, ">=") != 0) min++;
+										}
+										else {
+											max = atoi(r_value);
+											if (strcmp(r_symbol, "<=") != 0) max--;
+										}
+										
 										offset = ovector[1];
 									}
 									while (offset < desclen && (rc = pcre_exec(reg_comp_minmax, 0, param_info.description, desclen, offset, 0, ovector, 186)) >= 0);
 								}
-								else {
-									min = -10000;
-									max = 10000;
-								}*/
 								
-								gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new ((settings->params[param_i]).data.d_int32, -10000, 10000, 1, 1, 0)), 0, 0);
+								gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new ((settings->params[param_i]).data.d_int32, min, max, 1, 1, 0)), 0, 0);
 							}
 						}
 					}
@@ -438,8 +464,46 @@ static void update_procedure_box(userdef_settings settings)
 					
 				case GIMP_PDB_FLOAT: 
 					param_widget[param_i] = gtk_spin_button_new (NULL, 1, 1);
-					float min, max;
-					if (
+					float min = -G_MAXFLOAT, max = G_MAXFLOAT;
+					offset = 0;
+					desclen = strlen(param_info.description);
+					int i = 1, rc = pcre_exec(reg_comp_minmax, 0, param_info.description, desclen, offset, 0, ovector, 186);
+					if (rc >= 0) {
+						do {
+							i = 1;
+							gchar* l_value = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+							if (strlen(l_value) > 0) {
+								min = (float)atof(l_value);
+							}
+
+							i = 2;
+							gchar* l_symbol = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+							if (strlen(l_symbol) > 0) {
+								if (strcmp(l_symbol, "<") == 0) min++;
+							}
+
+							i = 3;
+							gchar* name = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+
+							i = 4;
+							gchar* r_symbol = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+
+							i = 5;
+							gchar* r_value = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+							if (r_symbol[0] == '>') {
+								min = (float)atof(r_value);
+								if (strcmp(r_symbol, ">=") != 0) min++;
+							}
+							else {
+								max = (float)atof(r_value);
+								if (strcmp(r_symbol, "<=") != 0) max--;
+							}
+
+							offset = ovector[1];
+						}
+						while (offset < desclen && (rc = pcre_exec(reg_comp_minmax, 0, param_info.description, desclen, offset, 0, ovector, 186)) >= 0);
+					}
+					else if (
 						strcmp(param_info.name, "opacity") == 0 || 
 						bimp_str_contains_cins(param_info.description, "%") || 
 						bimp_str_contains_cins(param_info.description, "percent")
@@ -448,10 +512,7 @@ static void update_procedure_box(userdef_settings settings)
 						min = 0.0;
 						max = 100.0;
 					}
-					else {
-						min = -10000.0;
-						max = 10000.0;
-					}
+					
 					gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new ((float)((settings->params[param_i]).data.d_float), min, max, 0.1, 1, 0)), 0, 1);
 					break;
 					
@@ -498,7 +559,7 @@ static void update_procedure_box(userdef_settings settings)
 		
 		if (show_count == 0) {
 			GtkWidget* label_noparams;
-			label_noparams = gtk_label_new("This procedure takes no editable params");
+			label_noparams = gtk_label_new(_("This procedure takes no editable params"));
 			gtk_widget_set_size_request (label_noparams, PROCPARAM_W, 50);
 			
 			gtk_box_pack_start(GTK_BOX(vbox_procparam), label_noparams, FALSE, FALSE, 0);
@@ -576,7 +637,5 @@ void bimp_userdef_save(userdef_settings orig_settings)
 			default: break;
 		}
 	}
-	
-	//g_free(temp_settings);
 }
 

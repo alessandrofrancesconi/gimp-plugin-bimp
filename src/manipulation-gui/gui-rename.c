@@ -5,6 +5,7 @@
 #include "gui-rename.h"
 #include "../bimp-manipulations.h"
 #include "../bimp-gui.h"
+#include "../plugin-intl.h"
 
 static void check_entrytext (GtkEditable*, gpointer);
 GtkWidget *entry_pattern, *label_preview;
@@ -21,13 +22,13 @@ GtkWidget* bimp_rename_gui_new(rename_settings settings, GtkWidget* parent)
 	gtk_widget_set_size_request (entry_pattern, ENTRY_W, ENTRY_H);
 	gtk_entry_set_text(GTK_ENTRY(entry_pattern), settings->pattern);
 	
-	frame_help = gtk_frame_new("Keywords");
+	frame_help = gtk_frame_new(_("Keywords"));
 	gtk_widget_set_size_request (frame_help, FRAME_HELP_W, FRAME_HELP_H);
 	
 	label_help = gtk_label_new(g_strconcat(
-		RENAME_KEY_ORIG, " = Original filename (without extension)\n", 
-		RENAME_KEY_COUNT, " = Incremental number\n", 
-		RENAME_KEY_DATETIME, " = Date and time (YYYY-MM-DD_hh-mm)", NULL));
+		RENAME_KEY_ORIG, " = ", _("Original filename (without extension)"), "\n", 
+		RENAME_KEY_COUNT, " = ", _("Incremental number"), "\n", 
+		RENAME_KEY_DATETIME, " = ", _("Date and time (YYYY-MM-DD_hh-mm)"), NULL));
 	gtk_container_add(GTK_CONTAINER(frame_help), label_help);
 	
 	label_preview = gtk_label_new("");
@@ -47,7 +48,7 @@ void check_entrytext (GtkEditable *editable, gpointer parent)
 	const char* entrytext = gtk_entry_get_text(GTK_ENTRY(entry_pattern));
 	if (strstr(entrytext, RENAME_KEY_ORIG) == NULL && strstr(entrytext, RENAME_KEY_COUNT) == NULL) {
 		/* check for the presence of mandatory keywords (otherwise it will write on the same filename) */
-		gtk_label_set_text(GTK_LABEL(label_preview), g_strconcat("Can't save! '", RENAME_KEY_ORIG, "' or '", RENAME_KEY_COUNT, "' symbol must be present.", NULL));
+		gtk_label_set_text(GTK_LABEL(label_preview), g_strdup_printf(_("Can't save! '%s' or '%s' symbol must be present."), RENAME_KEY_ORIG, RENAME_KEY_COUNT));
 		gtk_dialog_set_response_sensitive (GTK_DIALOG(parent), GTK_RESPONSE_ACCEPT, FALSE);
 	} else if (
 		/* check for invalid characters (for Windows systems) */
@@ -59,7 +60,7 @@ void check_entrytext (GtkEditable *editable, gpointer parent)
 		strstr(entrytext, "|") != NULL ||
 		strstr(entrytext, ">") != NULL ||
 		strstr(entrytext, "<") != NULL) {
-		gtk_label_set_text(GTK_LABEL(label_preview), "Can't save! Pattern contains invalid characters.");
+		gtk_label_set_text(GTK_LABEL(label_preview), _("Can't save! Pattern contains invalid characters."));
 		gtk_dialog_set_response_sensitive (GTK_DIALOG(parent), GTK_RESPONSE_ACCEPT, FALSE);
 	}
 	else {

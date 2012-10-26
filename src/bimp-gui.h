@@ -30,7 +30,7 @@
 #define USEROPTIONS_CHOOSER_H 30
 
 #define FILE_PREVIEW_W 150
-#define FILE_PREVIEW_H 140
+#define FILE_PREVIEW_H 130
 
 #define FILE_LIST_PANEL_W INPUT_PANEL_W
 #define FILE_LIST_PANEL_H 170
@@ -41,8 +41,15 @@
 #define FILE_LIST_BUTTON_W FILE_LIST_BUTTONS_PANEL_W / 2
 #define FILE_LIST_BUTTON_H FILE_LIST_BUTTONS_PANEL_H
 
+#define PREVIEW_WINDOW_W 600
+#define PREVIEW_WINDOW_H 320
+
+#define PREVIEW_IMG_W (PREVIEW_WINDOW_W / 2) - 30
+#define PREVIEW_IMG_H 220
+
 void bimp_show_gui(void);
 void bimp_refresh_sequence_panel(void);
+void bimp_refresh_fileview(void);
 void bimp_progress_bar_set(double, char*);
 void bimp_show_error_dialog(char*, GtkWidget*);
 void bimp_set_busy(gboolean);

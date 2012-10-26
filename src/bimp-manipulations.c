@@ -7,6 +7,7 @@
 #include "bimp-manipulations.h"
 #include "bimp-manipulations-gui.h"
 #include "bimp-icons.h"
+#include "plugin-intl.h"
 
 static manipulation manipulation_resize_new(void);
 static manipulation manipulation_crop_new(void);
@@ -244,4 +245,39 @@ static manipulation manipulation_userdef_new()
 	((userdef_settings)userdef->settings)->params = NULL;
 	
 	return userdef;
+}
+
+char* bimp_manip_get_string (manipulation_type type) 
+{
+	char* man_string = "";
+	
+	if (type == MANIP_RESIZE) {
+		man_string = _("Resize");
+	}
+	else if (type == MANIP_CROP) {
+		man_string = _("Crop");
+	}
+	else if (type == MANIP_FLIPROTATE) {
+		man_string = _("Flip or Rotate");
+	}
+	else if (type == MANIP_COLOR) {
+		man_string = _("Color correction");
+	}
+	else if (type == MANIP_SHARPBLUR) {
+		man_string = _("Sharp or Blur");
+	}
+	else if (type == MANIP_WATERMARK) {
+		man_string = _("Add a Watermark");
+	}
+	else if (type == MANIP_CHANGEFORMAT) {
+		man_string = _("Change format and compression");
+	}
+	else if (type == MANIP_RENAME) {
+		man_string = _("Rename with a pattern");
+	}
+	else if (type == MANIP_USERDEF) {
+		man_string = _("Other GIMP procedure...");
+	}
+	
+	return man_string;
 }

@@ -1,28 +1,36 @@
 BIMP. Batch Image Manipulation Plugin for GIMP.
-------------------------------------------------
+===============================================
 
 With BIMP you can apply a set of GIMP manipulations on groups of images.
 Documentation @ http://www.alessandrofrancesconi.it/projects/bimp
 
 
-- COMPILING AND INSTALLING UNDER LINUX:
-You need to install libgimp2.0-dev and libpcre3-dev packages 
-to have the full set of libraries and dependences for compiling BIMP.
+Compiling and installing under Linux/Unix
+-----------------------------------------
+
+You must install libgimp2.0-dev and libpcre3-dev packages in order to have 
+the full set of libraries and dependences for compiling BIMP.
 Then:
 
- make && make install
+	make && make install
 
-NOTE:
-1) don't type 'sudo' before 'make install', otherwise "normal" users won't see the installed plugin
-2) don't mind the warnings...
+1.	Make sure that the "bimp-locale" folder is copied in the plug-in directory too! If not, you can do it manually by copying it from ./bin/win32.
+2.	Don't type 'sudo' before 'make install', otherwise "normal" users won't see the installed plugin
+3.	Don't mind the warnings...
 
 
-- INSTALLING UNDER WINDOWS:
+Installing under Windows
+-------------------------
+
 BIMP plugin for Windows is already compiled and it's saved in bin/win32 directory.
-Just copy bimp.exe and pcre3.dll files into the default GIMP-plugins folder:
+Just copy bimp.exe, pcre3.dll and bimp-locale into the default GIMP-plugins folder:
 <Programs-dir>\<GIMP-folder>\lib\gimp\<version>\plug-ins
+or
+<User-dir>\.gimp<version>\plug-ins
 
 
-- SUPPORT THIS PROJECT
+Support this project
+--------------------
+
 Visit http://github.com/alessandrofrancesconi/gimp-plugin-bimp/issues
 for posting bugs and enhancements. Make it better!

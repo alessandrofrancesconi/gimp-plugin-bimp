@@ -21,17 +21,6 @@ typedef enum manipulation_type {
 	MANIP_USERDEF,
 	MANIP_END
 } manipulation_type;
-static const char* manipulation_type_string[] = {
-	"Resize",							/* MANIP_RESIZE */
-	"Crop",								/* MANIP_CROP */
-	"Flip or Rotate",					/* MANIP_FLIPROTATE */
-	"Color correction",					/* MANIP_COLOR */
-	"Sharp or blur",					/* MANIP_SHARPBLUR */
-	"Apply a watermark text or image",	/* MANIP_WATERMARK */
-	"Change format and quality",		/* MANIP_CHANGEFORMAT */
-	"Rename with a pattern",			/* MANIP_RENAME */
-	"Other GIMP procedure..."			/* MANIP_USERDEF */
-};
 
 typedef enum resize_mode {
 	RESIZE_PERCENT = 0,
@@ -52,16 +41,6 @@ typedef enum crop_preset {
 	CROP_PRESET_TABLET,
 	CROP_PRESET_END
 } crop_preset;
-static const char* crop_preset_string[] = {
-	"One-to-one (1:1)",					/* CROP_PRESET_11 */
-	"Classic 35 mm film (3:2)",			/* CROP_PRESET_32 */
-	"Standard VGA monitor (4:3)",		/* CROP_PRESET_43 */
-	"Widescreen (16:9)",				/* CROP_PRESET_169 */
-	"Widescreen extended (16:10)",		/* CROP_PRESET_1610 */
-	"EU Passport portrait (7:9)",		/* CROP_PRESET_EUPORT */
-	"Standard smartphone screen (2:3)",	/* CROP_PRESET_PHONE */
-	"Standard tablet screen (3:4)"		/* CROP_PRESET_TABLET */
-};
 static const short int crop_preset_ratio[][2] = {
 	{1,1},		/* CROP_PRESET_11 */
 	{3,2},		/* CROP_PRESET_32 */
@@ -101,13 +80,6 @@ typedef enum watermark_position {
 	WM_POS_BR,
 	WM_POS_END
 } watermark_position;
-static const char* watermark_position_string[] = {
-	"Top-left",		/* WM_POS_TL */
-	"Top-right",	/* WM_POS_TR */
-	"Center",		/* WM_POS_CC */
-	"Bottom-left",	/* WM_POS_BL */
-	"Bottom-right"	/* WM_POS_BR */
-};
 
 typedef void *manipulation_settings;
 typedef void *format_params;
@@ -225,6 +197,7 @@ manipulation bimp_append_manipulation(manipulation_type);
 void bimp_remove_manipulation(manipulation);
 gboolean bimp_list_contains_manip(manipulation_type);
 manipulation bimp_list_get_manip(manipulation_type);
+char* bimp_manip_get_string(manipulation_type);
 
 GSList* bimp_selected_manipulations; /* Manipulations selected by user */
 

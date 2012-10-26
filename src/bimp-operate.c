@@ -6,14 +6,17 @@
 #include <unistd.h>
 #include <gtk/gtk.h>
 #include <libgimp/gimp.h>
+#include <glib.h>
+#include <glib/gstdio.h>
 #include "bimp-operate.h"
 #include "bimp.h"
 #include "bimp-manipulations.h"
 #include "bimp-gui.h"
 #include "bimp-utils.h"
+#include "plugin-intl.h"
 
 static gboolean process_image(gpointer);
-static void apply_drawing_manipulation(manipulation, image_output);
+static gboolean apply_manipulation(manipulation, image_output);
 static gboolean apply_resize(resize_settings, image_output);
 static gboolean apply_crop(crop_settings, image_output);
 static gboolean apply_fliprotate(fliprotate_settings, image_output);
@@ -22,6 +25,7 @@ static gboolean apply_sharpblur(sharpblur_settings, image_output);
 static gboolean apply_watermark(watermark_settings, image_output);
 static gboolean apply_userdef(userdef_settings, image_output);
 static gboolean apply_rename(rename_settings, image_output, char*);
+static gboolean image_save(format_type, image_output, format_params);
 static gboolean image_save_bmp(image_output);
 static gboolean image_save_gif(image_output, gboolean);
 static gboolean image_save_icon(image_output);
@@ -29,11 +33,12 @@ static gboolean image_save_jpeg(image_output, float, float, gboolean, gboolean, 
 static gboolean image_save_png(image_output, gboolean, int, gboolean, gboolean, gboolean, gboolean, gboolean, gboolean, gboolean);
 static gboolean image_save_tga(image_output, gboolean, int);
 static gboolean image_save_tiff(image_output, int);
-static gboolean ask_overwrite(char*, GtkWidget*);
+static int overwrite_result(char*, GtkWidget*);
 static char* get_datetime(void);
 
 char* current_datetime;
 int processed_count;
+int total_images;
 
 void bimp_start_batch(gpointer parent_dialog)
 {
@@ -41,6 +46,8 @@ void bimp_start_batch(gpointer parent_dialog)
 	
 	g_print("\nBIMP - Batch Manipulation Plugin\nStart batch processing...\n");
 	processed_count = 0;
+	total_images = g_slist_length(bimp_input_filenames);
+	
 	bimp_progress_bar_set(0.0, "");
 	
 	current_datetime = get_datetime();
@@ -55,8 +62,6 @@ static gboolean process_image(gpointer parent)
 	char* orig_basename = NULL;
 	char* orig_file_ext = NULL;
 	
-	int total_images = g_slist_length(bimp_input_filenames);
-	
 	/* load the file and assign ids */
 	orig_filename = g_slist_nth (bimp_input_filenames, processed_count)->data;
 	
@@ -64,35 +69,11 @@ static gboolean process_image(gpointer parent)
 	orig_file_ext = g_strdup(strrchr(orig_basename, '.')); /* store original extension */
 	
 	g_print("\nWorking on file #%d: %s (%s)\n", processed_count+1, orig_basename, orig_filename);
-	bimp_progress_bar_set(((double)processed_count)/total_images, g_strconcat("Working on file ", orig_filename, "...", NULL));
+	bimp_progress_bar_set(((double)processed_count)/total_images, g_strdup_printf(_("Working on file %s..."), orig_filename));
 	
-	imageout->image_id = gimp_file_load(GIMP_RUN_NONINTERACTIVE, (gchar*)orig_filename, (gchar*)orig_basename); /* load file and get image id */
-	g_print("Image ID is %d\n", imageout->image_id);
-	
-	imageout->drawable_id = gimp_image_merge_visible_layers(imageout->image_id, GIMP_CLIP_TO_IMAGE); /* merge levels and get drawable id */
-	gimp_layer_add_alpha (imageout->drawable_id);
-	g_print("Drawable ID is %d\n", imageout->drawable_id);
-	
-	/* start manipulations sequence, cropping and scaling start first */
-	if (bimp_list_contains_manip(MANIP_CROP)) {
-		g_print("Applying CROP...\n");
-		apply_crop((crop_settings)(bimp_list_get_manip(MANIP_CROP))->settings, imageout);
-	}
-	
-	if (bimp_list_contains_manip(MANIP_RESIZE)) {
-		g_print("Applying RESIZE...\n");
-		apply_resize((resize_settings)(bimp_list_get_manip(MANIP_RESIZE))->settings, imageout);
-	}
-	
-	/* apply all the intermediate manipulations */
-	g_slist_foreach(bimp_selected_manipulations, (GFunc)apply_drawing_manipulation, imageout);
-	
-	/*  watermark at last */
-	if(bimp_list_contains_manip(MANIP_WATERMARK)) {
-		g_print("Applying WATERMARK...\n");
-		apply_watermark((watermark_settings)(bimp_list_get_manip(MANIP_WATERMARK))->settings, imageout);
-	}
-	
+	bimp_apply_drawable_manipulations(imageout, (gchar*)orig_filename, (gchar*)orig_basename); 
+
+	/* rename and save process... */
 	orig_basename[strlen(orig_basename) - strlen(orig_file_ext)] = '\0'; /* remove extension from basename */
 	
 	/* check if a rename pattern is defined */
@@ -115,49 +96,17 @@ static gboolean process_image(gpointer parent)
 		imageout->filepath = g_strconcat(bimp_output_folder, "/", imageout->filename, NULL); /* build new path */
 		g_print("Saving file %s in %s\n", imageout->filename, imageout->filepath);
 		
-		if (ask_overwrite(imageout->filepath, parent)) {
-			if (type == FORMAT_BMP) {
-				image_save_bmp(imageout);
-			}
-			else if(type == FORMAT_GIF) {
-				image_save_gif(imageout, ((format_params_gif)params)->interlace);
-			}
-			else if(type == FORMAT_ICON) {
-				image_save_icon(imageout);
-			}
-			else if(type == FORMAT_JPEG) {
-				image_save_jpeg(
-					imageout, 
-					((format_params_jpeg)params)->quality, 
-					((format_params_jpeg)params)->smoothing, 
-					((format_params_jpeg)params)->entropy, 
-					((format_params_jpeg)params)->progressive,
-					((format_params_jpeg)params)->comment,
-					((format_params_jpeg)params)->subsampling,
-					((format_params_jpeg)params)->baseline,
-					((format_params_jpeg)params)->markers,
-					((format_params_jpeg)params)->dct
-				);
-			}
-			else if(type == FORMAT_PNG) {
-				image_save_png(imageout, 
-					((format_params_png)params)->interlace, 
-					((format_params_png)params)->compression,
-					((format_params_png)params)->savebgc,
-					((format_params_png)params)->savegamma,
-					((format_params_png)params)->saveoff,
-					((format_params_png)params)->savephys,
-					((format_params_png)params)->savetime,
-					((format_params_png)params)->savecomm,
-					((format_params_png)params)->savetrans
-				);
-			}
-			else if(type == FORMAT_TGA) {
-				image_save_tga(imageout, ((format_params_tga)params)->rle, ((format_params_tga)params)->origin);
-			}
-			else if(type == FORMAT_TIFF) {
-				image_save_tiff(imageout, ((format_params_tiff)params)->compression);
-			}
+		int ow_res = overwrite_result(imageout->filepath, parent);
+		if (ow_res > 0) {
+			image_save(type, imageout, params);
+			
+			/* TODO?
+			if (ow_res == 2 && bimp_deleteondone) {
+				if (g_remove (orig_filename) < 0) 
+					g_print("Error, Can't remove old file!\n");
+				}
+				else obsolete_file[processed_count] = TRUE;
+			}*/
 		}
 		else {
 			g_print("File has not been overwritten!\n");
@@ -168,39 +117,48 @@ static gboolean process_image(gpointer parent)
 		imageout->filename = g_strconcat(imageout->filename, orig_file_ext, NULL); /* append old file extension */
 		imageout->filepath = g_strconcat(bimp_output_folder, "/", imageout->filename, NULL); /* build new path */
 		
-		if (ask_overwrite(imageout->filepath, parent)) {
+		int ow_res = overwrite_result(imageout->filepath, parent);
+		if (ow_res > 0) {
 			g_print("Saving file %s in %s\n", imageout->filename, imageout->filepath);
-			gimp_file_save(
-				GIMP_RUN_NONINTERACTIVE, 
-				imageout->image_id, 
-				imageout->drawable_id, 
-				imageout->filepath, 
-				imageout->filename
-			);
+			image_save(-1, imageout, NULL);
+			
+			/*
+			if (ow_res == 2 && bimp_deleteondone) {
+				if (g_remove (orig_filename) < 0) 
+					g_print("Error, Can't remove old file!\n");
+				}
+				else obsolete_file[processed_count] = TRUE;
+			}*/
 		}
 		else {
 			g_print("File has not been overwritten!\n");
 		}
 	}
-	
+
 	gimp_image_delete(imageout->image_id); /* is it useful? */
 	g_free(orig_basename);
 	g_free(orig_file_ext);
 	g_free(imageout);
-	
+
 	processed_count++;
 	
 	/* TODO: errors check here */
 	if (!bimp_is_busy) {
-		bimp_progress_bar_set(0.0, "Operations stopped");
+		bimp_progress_bar_set(0.0, _("Operations stopped"));
 		g_print("\nStopped, %d files processed.\n", processed_count);
 		return FALSE;
 	}
 	else {
 		if (processed_count == total_images) {
-			bimp_progress_bar_set(1.0, "End, all files processed");
-			g_print("\nEnd, all %d files processed.\n", processed_count);
+			bimp_progress_bar_set(1.0, _("End, all files have been processed"));
+			g_print("\nEnd, all %d files have been processed.\n", processed_count);
 			
+			/*int i;
+			for (i = 0; i < total_images; i++) {
+				if (obsolete_file[i]) bimp_input_filenames = g_slist_delete_link(bimp_input_filenames, g_slist_nth (bimp_input_filenames, i));
+			}
+			bimp_refresh_fileview();
+			*/
 			bimp_set_busy(FALSE);
 			
 			return FALSE;
@@ -211,7 +169,38 @@ static gboolean process_image(gpointer parent)
 	}
 }
 
-static void apply_drawing_manipulation(manipulation man, image_output out) 
+void bimp_apply_drawable_manipulations(image_output imageout, gchar* orig_filename, gchar* orig_basename)
+{
+	imageout->image_id = gimp_file_load(GIMP_RUN_NONINTERACTIVE, orig_filename, orig_basename); /* load file and get image id */
+	/* LOAD ERROR CHECK HERE */
+	g_print("Image ID is %d\n", imageout->image_id);
+	
+	imageout->drawable_id = gimp_image_merge_visible_layers(imageout->image_id, GIMP_CLIP_TO_IMAGE); /* merge levels and get drawable id */
+	gimp_layer_add_alpha (imageout->drawable_id);
+	g_print("Drawable ID is %d\n", imageout->drawable_id);
+	
+	/* start manipulations sequence, cropping and scaling start first */
+	if (bimp_list_contains_manip(MANIP_CROP)) {
+		g_print("Applying CROP...\n");
+		apply_crop((crop_settings)(bimp_list_get_manip(MANIP_CROP))->settings, imageout);
+	}
+	
+	if (bimp_list_contains_manip(MANIP_RESIZE)) {
+		g_print("Applying RESIZE...\n");
+		apply_resize((resize_settings)(bimp_list_get_manip(MANIP_RESIZE))->settings, imageout);
+	}
+	
+	/* apply all the intermediate manipulations */
+	g_slist_foreach(bimp_selected_manipulations, (GFunc)apply_manipulation, imageout);
+	
+	/*  watermark at last */
+	if(bimp_list_contains_manip(MANIP_WATERMARK)) {
+		g_print("Applying WATERMARK...\n");
+		apply_watermark((watermark_settings)(bimp_list_get_manip(MANIP_WATERMARK))->settings, imageout);
+	}	
+}
+
+static gboolean apply_manipulation(manipulation man, image_output out) 
 {
 	gboolean success = TRUE;
 	
@@ -231,6 +220,8 @@ static void apply_drawing_manipulation(manipulation man, image_output out)
 		g_print("Applying %s...\n", ((userdef_settings)(man->settings))->procedure);
 		success = apply_userdef((userdef_settings)(man->settings), out);
 	}
+	
+	return success;
 }
 
 static gboolean apply_resize(resize_settings settings, image_output out) 
@@ -628,13 +619,13 @@ static gboolean apply_userdef(userdef_settings settings, image_output out)
 
 static gboolean apply_rename(rename_settings settings, image_output out, char* orig_basename) 
 {
-	char *orig_filename = g_strdup(orig_basename);
+	char *orig_name = g_strdup(orig_basename);
 	
 	out->filename = g_strdup(settings->pattern);
 	
 	/* search for 'RENAME_KEY_ORIG' occurrences and replace the final filename */
 	if(strstr(out->filename, RENAME_KEY_ORIG) != NULL) {
-		out->filename = bimp_str_replace(out->filename, RENAME_KEY_ORIG, orig_filename);
+		out->filename = bimp_str_replace(out->filename, RENAME_KEY_ORIG, orig_name);
 	}
 	
 	/* same thing for count and datetime */
@@ -649,11 +640,71 @@ static gboolean apply_rename(rename_settings settings, image_output out, char* o
 		out->filename = bimp_str_replace(out->filename, RENAME_KEY_DATETIME, current_datetime);
 	}
 	
-	g_free(orig_filename);
+	g_free(orig_name);
+	
 	return TRUE;
 }
 
 /* following: set of functions that saves the image file in various formats */
+
+static gboolean image_save(format_type type, image_output imageout, format_params params) 
+{
+	gboolean result;
+	
+	if (type == FORMAT_BMP) {
+		result = image_save_bmp(imageout);
+	}
+	else if(type == FORMAT_GIF) {
+		result = image_save_gif(imageout, ((format_params_gif)params)->interlace);
+	}
+	else if(type == FORMAT_ICON) {
+		result = image_save_icon(imageout);
+	}
+	else if(type == FORMAT_JPEG) {
+		result = image_save_jpeg(
+			imageout, 
+			((format_params_jpeg)params)->quality, 
+			((format_params_jpeg)params)->smoothing, 
+			((format_params_jpeg)params)->entropy, 
+			((format_params_jpeg)params)->progressive,
+			((format_params_jpeg)params)->comment,
+			((format_params_jpeg)params)->subsampling,
+			((format_params_jpeg)params)->baseline,
+			((format_params_jpeg)params)->markers,
+			((format_params_jpeg)params)->dct
+		);
+	}
+	else if(type == FORMAT_PNG) {
+		result = image_save_png(imageout, 
+			((format_params_png)params)->interlace, 
+			((format_params_png)params)->compression,
+			((format_params_png)params)->savebgc,
+			((format_params_png)params)->savegamma,
+			((format_params_png)params)->saveoff,
+			((format_params_png)params)->savephys,
+			((format_params_png)params)->savetime,
+			((format_params_png)params)->savecomm,
+			((format_params_png)params)->savetrans
+		);
+	}
+	else if(type == FORMAT_TGA) {
+		result = image_save_tga(imageout, ((format_params_tga)params)->rle, ((format_params_tga)params)->origin);
+	}
+	else if(type == FORMAT_TIFF) {
+		result = image_save_tiff(imageout, ((format_params_tiff)params)->compression);
+	}
+	else {
+		result = gimp_file_save(
+			GIMP_RUN_NONINTERACTIVE, 
+			imageout->image_id, 
+			imageout->drawable_id, 
+			imageout->filepath, 
+			imageout->filename
+		);
+	}
+	
+	return result;
+}
 
 static gboolean image_save_bmp(image_output out) 
 {
@@ -817,43 +868,47 @@ static gboolean image_save_tiff(image_output out, int compression)
 	return TRUE;
 }
 
-/* if global var 'bimp_alertoverwrite' is TRUE and the file at 'path' exists, 
- * asks for overwrite it with a dialog */
-static gboolean ask_overwrite(char* path, GtkWidget* parent) {
-	gboolean can_overwrite = TRUE;
+/* returns a result code following this schema:
+ * 0 = user responses "don't overwite" to a confirm dialog
+ * 1 = old file was the same as the new one and user response "yes, overwite"
+ * 2 = old file wasn't the same (implicit overwrite)
+ */
+static int overwrite_result(char* path, GtkWidget* parent) {
+	gboolean oldfile_access = (access(path, F_OK) == 0);
 	
-	if (bimp_alertoverwrite && access(path, F_OK) == 0) {
+	if (bimp_alertoverwrite && oldfile_access) {
 		GtkWidget *dialog;
 		dialog = gtk_message_dialog_new(
 			GTK_WINDOW(parent),
 			GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_MESSAGE_QUESTION,
 			GTK_BUTTONS_NONE,
-			"File %s already exists,\noverwrite it?", bimp_comp_get_filename(path)
+			_("File %s already exists, overwrite it?"), bimp_comp_get_filename(path)
 		);
 		
 		gtk_dialog_add_buttons (
 			GTK_DIALOG(dialog),
 			GTK_STOCK_YES, GTK_RESPONSE_YES,
-			"Yes, don't ask again", GTK_RESPONSE_APPLY,
+			_("Yes, don't ask again"), GTK_RESPONSE_APPLY,
 			GTK_STOCK_NO, GTK_RESPONSE_NO, NULL
 		);
 		
-		gtk_window_set_title(GTK_WINDOW(dialog), "Overwrite?");
+		gtk_window_set_title(GTK_WINDOW(dialog), _("Overwrite?"));
 		gint result = gtk_dialog_run(GTK_DIALOG(dialog));
 		gtk_widget_destroy(dialog);
 		
 		if (result == GTK_RESPONSE_APPLY) {
 			bimp_alertoverwrite = FALSE;
-			can_overwrite = TRUE;
+			return 1;
 		} else if (result == GTK_RESPONSE_YES) {
-			can_overwrite = TRUE;
+			return 1;
 		} else {
-			can_overwrite = FALSE;
+			return 0;
 		}
 	}
-	
-	return can_overwrite;
+	else {
+		return (oldfile_access ? 1 : 2);
+	}
 }
 
 /* gets the current date and time in "%Y-%m-%d_%H-%M" format */

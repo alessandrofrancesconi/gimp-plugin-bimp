@@ -3,8 +3,7 @@
 #include <libgimpwidgets/gimpwidgets.h>
 #include "gui-resize.h"
 #include "../bimp-manipulations.h"
-
-/* ok... it works.... BUT IT'S PROBABLY THE WORST CODE I'VE EVER WROTE .-. */
+#include "../plugin-intl.h"
 
 static void toggle_units_group(GtkToggleButton*, gpointer);
 static void toggle_resolution(GtkToggleButton*, gpointer);
@@ -35,47 +34,47 @@ GtkWidget* bimp_resize_gui_new(resize_settings settings)
 	last_pixel_h_value = settings->newHpx;
 	
 	gui = gtk_vbox_new(FALSE, 5);
-	radio_percent = gtk_radio_button_new_with_label (NULL, "Set to a percentage of the original");
+	radio_percent = gtk_radio_button_new_with_label (NULL, _("Set to a percentage of the original"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_percent), (settings->sizemode == RESIZE_PERCENT));
-	radio_px = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_percent), "Set exact size in pixel");
+	radio_px = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_percent), _("Set exact size in pixel"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_px), (settings->sizemode != RESIZE_PERCENT));
 	
 	align_radio = gtk_alignment_new(0, 0, 0, 0);
 	gtk_alignment_set_padding(GTK_ALIGNMENT(align_radio), 0, 5, 10, 0);
 	vbox_px = gtk_vbox_new(FALSE, 5);
-	radio_px_both = gtk_radio_button_new_with_label (NULL, "For both dimensions");
+	radio_px_both = gtk_radio_button_new_with_label (NULL, _("For both dimensions"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_px_both), (settings->sizemode == RESIZE_PIXEL_BOTH));
-	radio_px_width = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_px_both), "Set width only");
+	radio_px_width = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_px_both), _("Set width only"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_px_width), (settings->sizemode == RESIZE_PIXEL_WIDTH));
-	radio_px_height = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_px_both), "Set height only");
+	radio_px_height = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_px_both), _("Set height only"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_px_height), (settings->sizemode == RESIZE_PIXEL_HEIGHT));
 	
-	check_aspect = gtk_check_button_new_with_label("Preserve aspect ratio");
+	check_aspect = gtk_check_button_new_with_label(_("Preserve aspect ratio"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_aspect), (settings->aspect_ratio));
 	
 	hbox_quality = gtk_hbox_new(FALSE, 5);
-	label_quality = gtk_label_new("Interpolation quality");
+	label_quality = gtk_label_new(_("Interpolation quality"));
 	combo_quality = gimp_enum_combo_box_new((GType)GIMP_TYPE_INTERPOLATION_TYPE);
 	gimp_int_combo_box_set_active((GimpIntComboBox*)combo_quality, settings->interpolation);
 		
 	align_values = gtk_alignment_new(0.5, 0, 0, 0);
 	gtk_alignment_set_padding(GTK_ALIGNMENT(align_values), 5, 5, 0, 0);
 	hbox_values = gtk_hbox_new(FALSE, 5);
-	label_width = gtk_label_new("Width:");
+	label_width = gtk_label_new(g_strconcat(_("Width"), ":", NULL));
 	spin_width = gtk_spin_button_new(NULL, 1, 0);
-	label_height = gtk_label_new("Height:");
+	label_height = gtk_label_new(g_strconcat(_("Height"), ":", NULL));
 	spin_height = gtk_spin_button_new(NULL, 1, 0);
 	label_unit = gtk_label_new("<unit>");
 	
-	check_resolution = gtk_check_button_new_with_label("Change resolution");
+	check_resolution = gtk_check_button_new_with_label(_("Change resolution"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_resolution), settings->change_res);
 	align_res = gtk_alignment_new(0.5, 0, 0, 0);
 	gtk_alignment_set_padding(GTK_ALIGNMENT(align_res), 5, 5, 0, 0);
 	hbox_res = gtk_hbox_new(FALSE, 5);
-	label_resX = gtk_label_new("X axis:");
+	label_resX = gtk_label_new(g_strconcat(_("X axis"), ":", NULL));
 	spin_resX = gtk_spin_button_new(NULL, 1, 0);
 	gtk_spin_button_configure (GTK_SPIN_BUTTON(spin_resX), GTK_ADJUSTMENT(gtk_adjustment_new (settings->newResX, 0.005, 65536.000, 1.000, 1, 0)), 0, 3);
-	label_resY = gtk_label_new("Y axis:");
+	label_resY = gtk_label_new(g_strconcat(_("Y axis"), ":", NULL));
 	spin_resY = gtk_spin_button_new(NULL, 1, 0);
 	gtk_spin_button_configure (GTK_SPIN_BUTTON(spin_resY), GTK_ADJUSTMENT(gtk_adjustment_new (settings->newResY, 0.005, 65536.000, 1.000, 1, 0)), 0, 3);
 	label_dpi = gtk_label_new("dpi");
@@ -169,7 +168,7 @@ void toggle_units_group(GtkToggleButton *togglebutton, gpointer user_data)
 		}
 		
 		gtk_widget_set_sensitive(GTK_WIDGET(vbox_px), TRUE);
-		gtk_label_set_text(GTK_LABEL(label_unit), "Px");
+		gtk_label_set_text(GTK_LABEL(label_unit), "px");
 		
 		gtk_spin_button_configure (GTK_SPIN_BUTTON(spin_width), GTK_ADJUSTMENT(gtk_adjustment_new (last_pixel_w_value, 1, 262144, 1, 10, 0)), 0, 0);
 		gtk_spin_button_configure (GTK_SPIN_BUTTON(spin_height), GTK_ADJUSTMENT(gtk_adjustment_new (last_pixel_h_value, 1, 262144, 1, 10, 0)), 0, 0);

@@ -29,7 +29,7 @@ void bimp_open_editwindow(manipulation man, gboolean first_time)
 	void (*save)(manipulation_settings) = NULL; /* Pointer to the proper setting saving function */
 	
 	window = gtk_dialog_new_with_buttons(
-		manipulation_type_string[man->type],
+		bimp_manip_get_string(man->type),
 		GTK_WINDOW(bimp_window_main),
 		GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_STOCK_OK,
@@ -43,7 +43,7 @@ void bimp_open_editwindow(manipulation man, gboolean first_time)
 	
 	vbox = gtk_vbox_new(FALSE, 10);
 	label_title = gtk_label_new(NULL);
-	gchar* titletext = g_strconcat("<big><b>", manipulation_type_string[man->type], "</b></big>", NULL); /* dialog title */
+	gchar* titletext = g_strconcat("<big><b>", bimp_manip_get_string(man->type), "</b></big>", NULL); /* dialog title */
 	gtk_label_set_markup (GTK_LABEL (label_title), titletext);
 	gtk_box_pack_start(GTK_BOX(vbox), label_title, FALSE, FALSE, 0);
 	
@@ -103,7 +103,7 @@ void bimp_open_editwindow(manipulation man, gboolean first_time)
 	gtk_widget_show_all(window);
 	result = gtk_dialog_run (GTK_DIALOG (window));
 	/* if the users clicks on 'OK', the proper saving function for this manipulation is called.
-	 * but if the users clicks 'CANCEL' and it was the first time the users selected this manipulation, it's removed from the list */
+	 * but if the users clicks 'CANCEL' and it was the first time the users selected this manipulation, it will be removed from the list */
 	if (result == GTK_RESPONSE_ACCEPT) {
 		save(man->settings);
 	}

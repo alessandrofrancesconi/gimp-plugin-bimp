@@ -15,12 +15,13 @@
 #include "bimp-operate.h"
 #include "bimp-icons.h"
 #include "bimp-utils.h"
+#include "plugin-intl.h"
 
 static GtkWidget* sequence_panel_new(void);
 static GtkWidget* option_panel_new(void);
 static void init_fileview(void);
 static void add_to_fileview(char*);
-static void refresh_fileview(void);
+static char* get_treeview_selection(gpointer);
 static void open_file_chooser(GtkWidget*, gpointer);
 static void open_folder_chooser(GtkWidget*, gpointer);
 static void add_input_file(char*);
@@ -29,6 +30,7 @@ static void remove_input_file(GtkWidget*, GtkTreeSelection*);
 static void remove_all_input_files(GtkWidget*, gpointer);
 static void select_filename (GtkTreeView*, gpointer);
 static void update_preview(char*);
+static void show_preview(GtkTreeView*, gpointer);
 static void set_output_folder(GtkWidget*, gpointer);
 static void popmenus_init(void);
 static void open_popup_menu(GtkWidget*, gpointer);
@@ -55,9 +57,10 @@ GtkWidget *scroll_sequence;
 GtkWidget *popmenu_add;
 GtkWidget *popmenu_edit;
 GtkWidget *check_alertoverwrite;
+GtkWidget *check_deleteondone;
 GtkWidget *treeview_files;
 GtkWidget *file_chooser, *folder_chooser;
-GtkWidget *file_preview;
+GtkWidget *button_preview;
 
 GtkWidget* progressbar_visible;
 const gchar* progressbar_data;
@@ -95,6 +98,10 @@ void bimp_show_gui()
 	gtk_window_set_position(GTK_WINDOW(bimp_window_main), GTK_WIN_POS_CENTER);
 	gtk_container_set_border_width(GTK_CONTAINER(bimp_window_main), 5);
 	
+	// Forces the visualization of label AND images on buttons (especially for Windows)
+	GtkSettings *default_settings = gtk_settings_get_default();
+	g_object_set(default_settings, "gtk-button-images", TRUE, NULL);
+	
 	vbox_main = gtk_vbox_new(FALSE, 10);
 	panel_sequence = sequence_panel_new();
 	panel_options = option_panel_new();
@@ -109,6 +116,7 @@ void bimp_show_gui()
 
 	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(bimp_window_main)->vbox), vbox_main);
 	gtk_widget_show_all(bimp_window_main);
+	gtk_widget_hide(button_preview);
 	
 	bimp_set_busy(FALSE);
 	
@@ -116,17 +124,14 @@ void bimp_show_gui()
 		gint run = gimp_dialog_run (GIMP_DIALOG(bimp_window_main));
 		if (run == GTK_RESPONSE_APPLY) {
 			if (g_slist_length(bimp_selected_manipulations) == 0) {
-				char* error_message = g_strconcat("Manipulations set is empty!", NULL);
-				bimp_show_error_dialog(error_message, bimp_window_main);
-				g_free (error_message);
+				bimp_show_error_dialog(_("The manipulations set is empty!"), bimp_window_main);
 			} else {
 				if (g_slist_length(bimp_input_filenames) == 0) {
-					char* error_message = g_strconcat("Input files list is empty!", NULL);
-					bimp_show_error_dialog(error_message, bimp_window_main);
-					g_free (error_message);
+					bimp_show_error_dialog(_("The file list is empty!"), bimp_window_main);
 				}
 				else {
 					bimp_alertoverwrite = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_alertoverwrite));
+					bimp_deleteondone = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_deleteondone));
 					bimp_start_batch(bimp_window_main);
 				}
 			}
@@ -150,7 +155,7 @@ static GtkWidget* sequence_panel_new()
 {
 	GtkWidget *panel;
 	
-	panel = gtk_frame_new("Manipulations set");
+	panel = gtk_frame_new(_("Manipulation set"));
 	gtk_widget_set_size_request (panel, SEQ_PANEL_W, SEQ_PANEL_H);
 	
 	scroll_sequence = gtk_scrolled_window_new(NULL, NULL);
@@ -182,7 +187,7 @@ static GtkWidget* option_panel_new()
 	GtkWidget *vbox_useroptions, *hbox_outfolder;
 	GtkWidget *label_chooser, *button_outfolder;
 	
-	panel = gtk_frame_new("Input files and options");
+	panel = gtk_frame_new(_("Input files and options"));
 	gtk_widget_set_size_request (panel, OPTION_PANEL_W, OPTION_PANEL_H);
 	hbox = gtk_hbox_new(FALSE, 5);
 	
@@ -197,7 +202,7 @@ static GtkWidget* option_panel_new()
 	treeview_files = gtk_tree_view_new();
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(treeview_files), FALSE);
 	init_fileview();
-	refresh_fileview();
+	bimp_refresh_fileview();
 	treesel_file = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview_files));
 	
 	/* Sub-sub-panel for input file buttons */
@@ -206,17 +211,17 @@ static GtkWidget* option_panel_new()
 	hbox_buttons_top = gtk_hbox_new(FALSE, 1);
 	gtk_widget_set_size_request(hbox_buttons_top, FILE_LIST_BUTTONS_PANEL_W, FILE_LIST_BUTTONS_PANEL_H);
 	
-	button_add = gtk_button_new_with_label("Add image files");
+	button_add = gtk_button_new_with_label(_("Add images"));
 	gtk_widget_set_size_request(button_add, FILE_LIST_BUTTON_W, FILE_LIST_BUTTON_H);
-	button_addfolder = gtk_button_new_with_label("Add folders");
+	button_addfolder = gtk_button_new_with_label(_("Add folders"));
 	gtk_widget_set_size_request(button_addfolder, FILE_LIST_BUTTON_W, FILE_LIST_BUTTON_H);
 	
 	hbox_buttons_bottom = gtk_hbox_new(FALSE, 1);
 	gtk_widget_set_size_request(hbox_buttons_top, FILE_LIST_BUTTONS_PANEL_W, FILE_LIST_BUTTONS_PANEL_H);
 	
-	button_remove = gtk_button_new_with_label("Remove selected");
+	button_remove = gtk_button_new_with_label(_("Remove selected"));
 	gtk_widget_set_size_request(button_remove, FILE_LIST_BUTTON_W, FILE_LIST_BUTTON_H);
-	button_removeall = gtk_button_new_with_label("Remove all");
+	button_removeall = gtk_button_new_with_label(_("Remove all"));
 	gtk_widget_set_size_request(button_removeall, FILE_LIST_BUTTON_W, FILE_LIST_BUTTON_H);
 	
 	/* Sub-panel for options */
@@ -224,17 +229,23 @@ static GtkWidget* option_panel_new()
 	gtk_widget_set_size_request(vbox_useroptions, USEROPTIONS_PANEL_W, USEROPTIONS_PANEL_H);
 	
 	hbox_outfolder = gtk_hbox_new(FALSE, 3);
-	label_chooser = gtk_label_new("Output folder:");
+	label_chooser = gtk_label_new(_("Output folder"));
 	button_outfolder = gtk_file_chooser_button_new("Select output folder", GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 	bimp_output_folder = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(button_outfolder));
 	gtk_widget_set_size_request(button_outfolder, 170, 30);
 	
 	bimp_alertoverwrite = TRUE;
-	check_alertoverwrite = gtk_check_button_new_with_label("Alert when overwriting existing files");
+	check_alertoverwrite = gtk_check_button_new_with_label(_("Alert when overwriting existing files"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_alertoverwrite), bimp_alertoverwrite);
 	
-	file_preview = gtk_image_new_from_image(NULL, NULL);
-	gtk_widget_set_size_request(file_preview, FILE_PREVIEW_W, FILE_PREVIEW_H);
+	bimp_deleteondone = FALSE;
+	check_deleteondone = gtk_check_button_new_with_label(_("Delete original file when done"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_deleteondone), bimp_deleteondone);
+	
+	button_preview = gtk_button_new();
+	gtk_widget_set_size_request(button_preview, FILE_PREVIEW_W, FILE_PREVIEW_H);
+	gtk_button_set_image_position (GTK_BUTTON(button_preview), GTK_POS_TOP);
+	gtk_button_set_label(GTK_BUTTON(button_preview), _("Click for preview"));
 	
 	/* All together */
 	gtk_box_pack_start(GTK_BOX(hbox_buttons_top), button_add, FALSE, FALSE, 0);
@@ -255,7 +266,8 @@ static GtkWidget* option_panel_new()
 	
 	gtk_box_pack_start(GTK_BOX(vbox_useroptions), hbox_outfolder, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_alertoverwrite, FALSE, FALSE, 5);
-	gtk_box_pack_start(GTK_BOX(vbox_useroptions), file_preview, FALSE, FALSE, 5);
+	/* TODO: delete on done? gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_deleteondone, FALSE, FALSE, 0); */
+	gtk_box_pack_start(GTK_BOX(vbox_useroptions), button_preview, FALSE, FALSE, 5);
 	
 	gtk_box_pack_start(GTK_BOX(hbox), vbox_input, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), vbox_useroptions, FALSE, FALSE, 10);
@@ -268,6 +280,7 @@ static GtkWidget* option_panel_new()
 	g_signal_connect(G_OBJECT(button_removeall), "clicked", G_CALLBACK(remove_all_input_files), NULL);
 	g_signal_connect(G_OBJECT(button_outfolder), "selection-changed", G_CALLBACK(set_output_folder), NULL);
 	g_signal_connect(G_OBJECT(treeview_files), "cursor-changed", G_CALLBACK(select_filename), treesel_file);
+	g_signal_connect(G_OBJECT(button_preview), "clicked", G_CALLBACK(show_preview), treesel_file);
 	
 	return panel;
 }
@@ -278,7 +291,7 @@ static void add_input_file(char* filename)
 {
 	if (g_slist_find_custom(bimp_input_filenames, filename, (GCompareFunc)strcmp) == NULL) {
 		bimp_input_filenames = g_slist_append(bimp_input_filenames, filename);
-		refresh_fileview();
+		bimp_refresh_fileview();
 	}
 }
 
@@ -303,7 +316,10 @@ static void add_input_folder(char* folder)
 				strcmp(mimetype, "image/jpeg") == 0 ||
 				strcmp(mimetype, "image/gif") == 0 ||
 				strcmp(mimetype, "image/png") == 0 ||
-				strcmp(mimetype, "image/tiff") == 0 ) && 
+				strcmp(mimetype, "image/tiff") == 0 ||
+				strcmp(mimetype, "image/x-xcf") == 0 ||
+				strcmp(mimetype, "image/x-compressed-xcf") == 0||
+				strcmp(mimetype, "application/x-ext-xcf") == 0) && 
 				g_slist_find_custom(bimp_input_filenames, filename, (GCompareFunc)strcmp) == NULL)
 			{
 				bimp_input_filenames = g_slist_append(bimp_input_filenames, filename);
@@ -312,61 +328,117 @@ static void add_input_folder(char* folder)
 		(void) closedir (dp);
 	}
 	else {
-		char* error_message = g_strconcat("Couldn't read into\n\"", folder, "\" directory.", NULL);
-		bimp_show_error_dialog(error_message, bimp_window_main);
-		g_free(error_message);
+		bimp_show_error_dialog(g_strdup_printf(_("Couldn't read into \"%s\" directory."), folder), bimp_window_main);
 	}
 	
-	refresh_fileview();
+	bimp_refresh_fileview();
 }
 
 static void remove_input_file(GtkWidget *widget, GtkTreeSelection* selection) 
 {
-	GtkTreeIter iter;
-	GtkTreeModel *model;
-	char *selected;
-	
-	if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter)) {
-		gtk_tree_model_get(model, &iter, LIST_ITEM, &selected,  -1);
+	char *selected = get_treeview_selection(selection);
+	if (selected != NULL) {
 		bimp_input_filenames = g_slist_delete_link(bimp_input_filenames, g_slist_find_custom(bimp_input_filenames, selected, (GCompareFunc)strcmp));
-		refresh_fileview();
+		bimp_refresh_fileview();
 		update_preview(NULL); /* clear the preview widget */
 		g_free(selected);
-	}
+	}	
 }
 
 static void remove_all_input_files(GtkWidget *widget, gpointer selection) 
 {
 	g_slist_free(bimp_input_filenames);
 	bimp_input_filenames = NULL;
-	refresh_fileview();
+	bimp_refresh_fileview();
 	update_preview(NULL);
 }
 
 /* called when the user clicks on a filename row to update the preview widget */
 static void select_filename (GtkTreeView *tree_view, gpointer selection) 
 {
-	GtkTreeIter iter;
-	GtkTreeModel *model;
-	char *selected;
-	GdkPixbuf *pixbuf_prev;         
-	
-	if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter)) {
-		gtk_tree_model_get(model, &iter, LIST_ITEM, &selected,  -1);
+	char* selected = get_treeview_selection(selection);
+	if (selected != NULL) {
 		update_preview(selected);
 	}
 }
 
 /* updates the preview widget by loading (and scaling) a new image */
 static void update_preview (gchar* filename) 
-{
-	GdkPixbuf *pixbuf_prev;         
-	
+{	
 	if (filename != NULL) {
-		pixbuf_prev = gdk_pixbuf_new_from_file_at_scale(filename, FILE_PREVIEW_W, FILE_PREVIEW_H, TRUE, NULL);
-		gtk_image_set_from_pixbuf(GTK_IMAGE(file_preview), pixbuf_prev);
+		GdkPixbuf *pixbuf_prev = gdk_pixbuf_new_from_file_at_scale(filename, FILE_PREVIEW_W - 20, FILE_PREVIEW_H - 30, TRUE, NULL);
+		gtk_button_set_image(GTK_BUTTON(button_preview), gtk_image_new_from_pixbuf (pixbuf_prev));
+		gtk_widget_show(button_preview);
 	} else {
-		gtk_image_set_from_pixbuf(GTK_IMAGE(file_preview), NULL); /* if filename is NULL, shows an "empty image" */
+		gtk_button_set_image(GTK_BUTTON(button_preview), NULL);
+		gtk_widget_hide(button_preview);
+	}
+}
+
+/* opens a dialog containing two panels: the original selected image on the left and the result of the selected manipulations on the right */
+static void show_preview (GtkTreeView *tree_view, gpointer selection) 
+{
+	if (g_slist_length(bimp_selected_manipulations) == 0) {
+		bimp_show_error_dialog(_("Can't show a preview because the manipulations set is empty"), bimp_window_main);
+	} else {
+		GtkWidget *dialog_preview;
+		GtkWidget *vbox, *hbox;
+		GtkWidget *label_descr;
+		GdkPixbuf *pixbuf_orig, *pixbuf_final; 
+		GtkWidget *image_orig, *image_final;
+		GtkWidget *image_forward;
+		
+		image_output imageout_orig = (image_output)g_malloc(sizeof(struct imageout_str));
+		image_output imageout_final = (image_output)g_malloc(sizeof(struct imageout_str));
+		
+		char* selected = get_treeview_selection(selection);
+		
+		imageout_orig->image_id = gimp_file_load(GIMP_RUN_NONINTERACTIVE, (gchar*)selected, (gchar*)selected);
+		imageout_orig->drawable_id = gimp_image_merge_visible_layers(imageout_orig->image_id, GIMP_CLIP_TO_IMAGE); 
+		
+		bimp_apply_drawable_manipulations(imageout_final, (gchar*)selected, (gchar*)selected);
+		
+		pixbuf_orig = gimp_drawable_get_thumbnail(imageout_orig->drawable_id, PREVIEW_IMG_W, PREVIEW_IMG_H, GIMP_PIXBUF_KEEP_ALPHA);
+		pixbuf_final = gimp_drawable_get_thumbnail(imageout_final->drawable_id, PREVIEW_IMG_W, PREVIEW_IMG_H, GIMP_PIXBUF_KEEP_ALPHA);
+		
+		dialog_preview = gtk_dialog_new_with_buttons (
+			_("Preview"),
+			GTK_WINDOW(bimp_window_main),
+			GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_STOCK_CLOSE,
+			GTK_RESPONSE_CLOSE, NULL
+		);
+		gtk_widget_set_size_request (dialog_preview, PREVIEW_WINDOW_W, PREVIEW_WINDOW_H);
+		gtk_window_set_resizable (GTK_WINDOW(dialog_preview), FALSE);
+		gtk_window_set_position(GTK_WINDOW(dialog_preview), GTK_WIN_POS_CENTER);
+		gtk_container_set_border_width(GTK_CONTAINER(dialog_preview), 5);
+		
+		vbox = gtk_vbox_new(FALSE, 10);
+		label_descr = gtk_label_new(_("This is how the selected image will look like after the batch process"));
+		
+		hbox = gtk_hbox_new(FALSE, 10);
+		image_orig = gtk_image_new_from_pixbuf(pixbuf_orig);
+		image_forward = gtk_image_new_from_stock(GTK_STOCK_GO_FORWARD, 15);
+		image_final = gtk_image_new_from_pixbuf(pixbuf_final);
+		
+		gtk_box_pack_start(GTK_BOX(hbox), image_orig, FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(hbox), image_forward, FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(hbox), image_final, FALSE, FALSE, 0);
+		
+		gtk_box_pack_start(GTK_BOX(vbox), label_descr, FALSE, FALSE, 7);
+		gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
+		
+		gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog_preview)->vbox), vbox);
+		gtk_widget_show_all(dialog_preview);
+		
+		if (gtk_dialog_run (GTK_DIALOG(dialog_preview)) == GTK_RESPONSE_CLOSE) {
+			gtk_widget_destroy (dialog_preview);
+			gimp_image_delete(imageout_orig->image_id);
+			gimp_image_delete(imageout_final->image_id);
+			g_free(imageout_orig);
+			g_free(imageout_final);
+		}
+		
 	}
 }
 
@@ -402,7 +474,7 @@ static void add_to_fileview(char *str)
 }
 
 /* update the visual of filename list */
-static void refresh_fileview() 
+void bimp_refresh_fileview() 
 {	
 	GtkListStore *store;
 	GtkTreeModel *model;
@@ -422,15 +494,30 @@ static void refresh_fileview()
     }
 }
 
+/* returns the current selected filename (NULL of none) */
+static char* get_treeview_selection(gpointer selection) 
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model;
+	char *selected = NULL;
+	GdkPixbuf *pixbuf_prev;         
+	
+	if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter)) {
+		gtk_tree_model_get(model, &iter, LIST_ITEM, &selected,  -1);
+	}
+	
+	return selected;
+}
+
 static void open_file_chooser(GtkWidget *widget, gpointer data) 
 {
 	GSList *selection;
 	
 	if (file_chooser == NULL) { /* set the file chooser for the first time */
-		GtkFileFilter *filter_all, *supported[5];
+		GtkFileFilter *filter_all, *supported[6];
 
 		file_chooser = gtk_file_chooser_dialog_new(
-			"Select images", 
+			_("Select images"), 
 			NULL, 
 			GTK_FILE_CHOOSER_ACTION_OPEN, 
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CLOSE, 
@@ -439,36 +526,78 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
 		gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(file_chooser), TRUE);
 		
 		filter_all = gtk_file_filter_new();
-		gtk_file_filter_set_name(filter_all,"All supported images");
+		gtk_file_filter_set_name(filter_all,_("All supported types"));
 		
 		supported[0] = gtk_file_filter_new();
 		gtk_file_filter_set_name(supported[0],"BMP");
+	#ifdef __APPLE__
+		/* Workaround for Mac OSX, that seems to have a bug on GTK file selectors */
+		gtk_file_filter_add_pattern (supported[0], "*.[bB][mM][pP]");
+		gtk_file_filter_add_pattern (filter_all, "*.[bB][mM][pP]");
+	#else
 		gtk_file_filter_add_mime_type(supported[0],"image/bmp");
 		gtk_file_filter_add_mime_type(filter_all,"image/bmp");
-		
+	#endif
+	
 		supported[1] = gtk_file_filter_new();
 		gtk_file_filter_set_name(supported[1],"JPEG");
+	#ifdef __APPLE__
+		gtk_file_filter_add_pattern (supported[1], "*.[jJ][pP][gG]");
+		gtk_file_filter_add_pattern (supported[1], "*.[jJ][pP][eE][gG]");
+		gtk_file_filter_add_pattern (filter_all, "*.[jJ][pP][gG]");
+		gtk_file_filter_add_pattern (filter_all, "*.[jJ][pP][eE][gG]");
+	#else
 		gtk_file_filter_add_mime_type(supported[1],"image/jpeg");
 		gtk_file_filter_add_mime_type(filter_all,"image/jpeg");
-		
+	#endif
+	
 		supported[2] = gtk_file_filter_new();
 		gtk_file_filter_set_name(supported[2],"GIF");
+	#ifdef __APPLE__
+		gtk_file_filter_add_pattern (supported[2], "*.[gG][iI][fF]");
+		gtk_file_filter_add_pattern (filter_all, "*.[gG][iI][fF]");
+	#else
 		gtk_file_filter_add_mime_type(supported[2],"image/gif");
 		gtk_file_filter_add_mime_type(filter_all,"image/gif");
-		
+	#endif
+	
 		supported[3] = gtk_file_filter_new();
 		gtk_file_filter_set_name(supported[3],"PNG");
+	#ifdef __APPLE__
+		gtk_file_filter_add_pattern (supported[3], "*.[pP][nN][gG]");
+		gtk_file_filter_add_pattern (filter_all, "*.[pP][nN][gG]");
+	#else
 		gtk_file_filter_add_mime_type(supported[3],"image/png");
 		gtk_file_filter_add_mime_type(filter_all,"image/png");
-		
+	#endif
+	
 		supported[4] = gtk_file_filter_new();
 		gtk_file_filter_set_name(supported[4],"TIFF");
+	#ifdef __APPLE__
+		gtk_file_filter_add_pattern (supported[4], "*.[tT][iI][fF][fF]");
+		gtk_file_filter_add_pattern (filter_all, "*.[tT][iI][fF][fF]");
+	#else
 		gtk_file_filter_add_mime_type(supported[4],"image/tiff");
 		gtk_file_filter_add_mime_type(filter_all,"image/tiff");
-		
+	#endif
+	
+		supported[5] = gtk_file_filter_new();
+		gtk_file_filter_set_name(supported[5],"XCF");
+	#ifdef __APPLE__
+		gtk_file_filter_add_pattern (supported[5], "*.[xX][cC][fF]");
+		gtk_file_filter_add_pattern (filter_all, "*.[xX][cC][fF]");
+	#else
+		gtk_file_filter_add_mime_type(supported[5],"image/x-xcf");
+		gtk_file_filter_add_mime_type(supported[5],"image/x-compressed-xcf");
+		gtk_file_filter_add_mime_type(supported[5],"application/x-ext-xcf");
+		gtk_file_filter_add_mime_type(filter_all,"image/x-xcf");
+		gtk_file_filter_add_mime_type(filter_all,"image/x-compressed-xcf");
+		gtk_file_filter_add_mime_type(filter_all,"application/x-ext-xcf");
+	#endif
+	
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_chooser), filter_all);
 		int i;
-		for(i = 0; i < 5; i++) {
+		for(i = 0; i < 6; i++) {
 			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_chooser), supported[i]);
 		}
 	}
@@ -488,7 +617,7 @@ static void open_folder_chooser(GtkWidget *widget, gpointer data)
 	GSList *selection;
 	if (folder_chooser == NULL) { /* set the file chooser for the first time */
 		folder_chooser = gtk_file_chooser_dialog_new(
-			"Select images", 
+			_("Select folders containing images"), 
 			NULL, 
 			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, 
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CLOSE, 
@@ -524,7 +653,7 @@ static void popmenus_init()
 	int man_id;
 	for (man_id = 0; man_id < MANIP_END; man_id++)
 	{
-		menuitem = gtk_menu_item_new_with_label(manipulation_type_string[man_id]);
+		menuitem = gtk_menu_item_new_with_label(bimp_manip_get_string(man_id));
 		g_signal_connect(menuitem, "activate", G_CALLBACK(add_manipulation_from_id), GINT_TO_POINTER(man_id));
 		gtk_menu_shell_append(GTK_MENU_SHELL(popmenu_add), menuitem);
 	}
@@ -551,10 +680,10 @@ static void popmenus_init()
 	gtk_widget_set_sensitive(menuitem, FALSE); /* and it's non-selectable */
 	
 	gtk_menu_shell_append(GTK_MENU_SHELL(popmenu_edit), menuitem);
-	menuitem = gtk_menu_item_new_with_label("Edit properties");
+	menuitem = gtk_menu_item_new_with_label(_("Edit properties..."));
 	g_signal_connect(menuitem, "activate", G_CALLBACK(edit_clicked_manipulation), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(popmenu_edit), menuitem);
-	menuitem = gtk_menu_item_new_with_label("Remove manipulation");
+	menuitem = gtk_menu_item_new_with_label(_("Remove this manipulation"));
 	g_signal_connect(menuitem, "activate", G_CALLBACK(remove_clicked_manipulation), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(popmenu_edit), menuitem);
 	
@@ -574,7 +703,7 @@ static void open_popup_menu(GtkWidget *widget, gpointer data)
 		if (clicked_man->type == MANIP_USERDEF) {
 			item_label = ((userdef_settings)(clicked_man->settings))->procedure;
 		} else {
-			item_label = manipulation_type_string[clicked_man->type];
+			item_label = bimp_manip_get_string(clicked_man->type);
 		}
 		gtk_menu_item_set_label(g_list_first(gtk_container_get_children(GTK_CONTAINER(popmenu_edit)))->data, item_label);
 		gtk_menu_popup(GTK_MENU(popmenu_edit), NULL, NULL, NULL, NULL, 0, 0);
@@ -586,9 +715,7 @@ static void add_manipulation_from_id(GtkMenuItem *menuitem, gpointer id)
 	int man_id = GPOINTER_TO_INT(id);
 	manipulation newman = bimp_append_manipulation((manipulation_type)man_id);
 	if (newman == NULL) {
-		char* error_message = g_strconcat("Can't add another \"", manipulation_type_string[man_id], "\" step. \nOnly one is permitted!", NULL);
-		bimp_show_error_dialog(error_message, bimp_window_main);
-		g_free(error_message);
+		bimp_show_error_dialog(_("Can't add another manipulation of this kind. Only one is permitted!"), bimp_window_main);
 	}
 	else {
 		bimp_refresh_sequence_panel();
@@ -653,15 +780,13 @@ static void add_manipulation_button(manipulation man)
 static void save_set(GtkMenuItem *menuitem, gpointer user_data)
 {
 	if (g_slist_length(bimp_selected_manipulations) == 0) {
-		char* error_message = g_strconcat("Manipulations set is empty!", NULL);
-		bimp_show_error_dialog(error_message, bimp_window_main);
-		g_free (error_message);
+		bimp_show_error_dialog(_("The manipulations set is empty!"), bimp_window_main);
 	} else {
 		FILE *fp;
 		
 		gchar* output_file;
 		GtkWidget* file_saver = gtk_file_chooser_dialog_new(
-			"Save manipulations set", 
+			_("Save this set"), 
 			NULL, 
 			GTK_FILE_CHOOSER_ACTION_SAVE, 
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, 
@@ -695,7 +820,7 @@ static void load_set(GtkMenuItem *menuitem, gpointer user_data)
 			GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_MESSAGE_QUESTION,
 			GTK_BUTTONS_YES_NO,
-			"This will overwrite current manipulations set.\nContinue?"
+			_("This will overwrite current manipulations set. Continue?")
 		);
 		gtk_window_set_title(GTK_WINDOW(dialog), "Continue?");
 		gint result = gtk_dialog_run(GTK_DIALOG(dialog));
@@ -707,7 +832,7 @@ static void load_set(GtkMenuItem *menuitem, gpointer user_data)
 	if (can_continue) {
 		gchar* input_file;
 		GtkWidget* file_loader = gtk_file_chooser_dialog_new(
-			"Load manipulations set", 
+			_("Load set"), 
 			NULL, 
 			GTK_FILE_CHOOSER_ACTION_OPEN, 
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, 
@@ -730,21 +855,35 @@ static void load_set(GtkMenuItem *menuitem, gpointer user_data)
 
 static void open_about() 
 {
-	GtkWidget *about;
-	
-	about = gtk_about_dialog_new();
-	gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(about), PLUG_IN_FULLNAME);
-	gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(about), PLUG_IN_DESCRIPTION);
-	
-	char version_number[6];
-	sprintf(version_number, "%d.%d", PLUG_IN_VERSION_MAJ, PLUG_IN_VERSION_MIN);
-	
-	gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(about), version_number);
-	gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(about), PLUG_IN_COPYRIGHT);
-	gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(about), PLUG_IN_WEBSITE);
-	gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(about), gdk_pixbuf_from_pixdata(&pixdata_bimpicon, FALSE, NULL));
-	gtk_dialog_run(GTK_DIALOG(about));
-	gtk_widget_destroy(about);
+	const gchar *auth[] = { "Alessandro Francesconi <alessandrofrancesconi@live.it>", NULL };
+	const gchar *license = 
+		"This program is free software; you can redistribute it and/or modify "
+		"it under the terms of the GNU General Public License as published by "
+		"the Free Software Foundation; either version 2 of the License, or "
+		"(at your option) any later version. \n\n"
+		"This program is distributed in the hope that it will be useful, "
+		"but WITHOUT ANY WARRANTY; without even the implied warranty of "
+		"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
+		"GNU General Public License for more details.\n\n"
+		"You should have received a copy of the GNU General Public License "
+		"along with this program; if not, write to the Free Software "
+		"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, "
+		"MA 02110-1301, USA. ";
+
+	gtk_show_about_dialog( 
+		GTK_WINDOW(bimp_window_main),
+		"program-name", PLUG_IN_FULLNAME,
+		"version", g_strdup_printf("%d.%d", PLUG_IN_VERSION_MAJ, PLUG_IN_VERSION_MIN),
+		"comments", _("Applies GIMP manipulations on groups of images"),
+		"logo", gdk_pixbuf_from_pixdata(&pixdata_bimpicon, FALSE, NULL),
+		"copyright", PLUG_IN_COPYRIGHT,
+		"license", license,
+		"wrap-license", TRUE,
+		"website", PLUG_IN_WEBSITE,
+		"authors", auth,
+		"translator-credits", _("translator-name <translator-email>"),
+		NULL 
+	);
 }
 
 /* shows an error dialog with a custom message */

@@ -2,6 +2,7 @@
 #include <libgimp/gimp.h>
 #include "gui-sharpblur.h"
 #include "../bimp-manipulations.h"
+#include "../plugin-intl.h"
 
 GtkWidget *scale_sharpblur;
 
@@ -13,13 +14,13 @@ GtkWidget* bimp_sharpblur_gui_new(sharpblur_settings settings)
 	gui = gtk_vbox_new(FALSE, 5);
 	
 	hbox_control = gtk_hbox_new(FALSE, 5);
-	label_sharp = gtk_label_new("More sharpen");
+	label_sharp = gtk_label_new(_("More sharpen"));
 	gtk_widget_set_size_request (label_sharp, LABEL_SCALE_W, LABEL_SCALE_H);
 	gtk_misc_set_alignment(GTK_MISC(label_sharp), 0.5, 0.7);
 	scale_sharpblur = gtk_hscale_new_with_range(-100, 100, 1);
 	gtk_range_set_value(GTK_RANGE(scale_sharpblur), settings->amount);
 	gtk_widget_set_size_request (scale_sharpblur, SCALE_AMOUNT_W, SCALE_AMOUNT_H);
-	label_blur = gtk_label_new("More blurred");
+	label_blur = gtk_label_new(_("More blurred"));
 	gtk_widget_set_size_request (label_blur, LABEL_SCALE_W, LABEL_SCALE_H);
 	gtk_misc_set_alignment(GTK_MISC(label_blur), 0.5, 0.7);
 	

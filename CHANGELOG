@@ -4,6 +4,14 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+0.8:
+ - Multilanguage support (available languages: English, Italian, French) (issue #6)
+ - Added Manipulation Preview window (issue #16)
+ - Limits for GTK Spin Buttons in "Other GIMP procedure..." are now well interpreted (this also fixes issue #22)
+ - Workaround for a bug that affects MacOS X users when selecting images (issue #23)
+ - Support XCF as input format (issue #19)
+ - Few graphical fixes around
+
 0.7:
  - Added "Add folders" button for adding entire folders content in the input list
 
@@ -43,7 +51,3 @@ Changelog:
 
 0.1:
  - It all started from here...
-
-
-
-
