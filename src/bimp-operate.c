@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <gtk/gtk.h>
 #include <libgimp/gimp.h>
+#include <libgimpbase/gimpbase.h>
 #include <glib.h>
 #include <glib/gstdio.h>
 #include "bimp-operate.h"
@@ -285,33 +286,30 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 	}
 	
 	/* do resize */
-	#if (GIMP_MAJOR_VERSION == 2) && (GIMP_MINOR_VERSION <= 6)
-	
-	success = gimp_image_scale_full (
-		out->image_id, 
-		finalW, 
-		finalH, 
-		settings->interpolation
-	);
-	
-	#else
+	if (GIMP_MAJOR_VERSION == 2 && GIMP_MINOR_VERSION <= 6) {
+		success = gimp_image_scale_full (
+			out->image_id, 
+			finalW, 
+			finalH, 
+			settings->interpolation
+		);
+	}
+	else {
 	/* starting from 2.8, gimp_image_scale_full is deprecated. 
      * use gimp_image_scale instead */
-    
-    GimpInterpolationType oldInterpolation;
-	oldInterpolation = gimp_context_get_interpolation();
-	
-	success = gimp_context_set_interpolation (settings->interpolation);
-	
-	success = gimp_image_scale (
-		out->image_id, 
-		finalW, 
-		finalH
-	);
-	
-	success = gimp_context_set_interpolation (oldInterpolation);
-	
-	#endif
+		GimpInterpolationType oldInterpolation;
+		oldInterpolation = gimp_context_get_interpolation();
+		
+		success = gimp_context_set_interpolation (settings->interpolation);
+		
+		success = gimp_image_scale (
+			out->image_id, 
+			finalW, 
+			finalH
+		);
+		
+		success = gimp_context_set_interpolation (oldInterpolation);
+	}
 	
 	return success;
 }
@@ -531,26 +529,26 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 		wmwidth = gimp_drawable_width(layerId);
 		wmheight = gimp_drawable_height(layerId);
 		
-		#if (GIMP_MAJOR_VERSION == 2) && (GIMP_MINOR_VERSION <= 6)
-		
-		gimp_image_add_layer(
-			out->image_id,
-			layerId,
-            0
-        );
-        
-        #else
+		if (GIMP_MAJOR_VERSION == 2 && GIMP_MINOR_VERSION <= 6) {
+		// #if (GIMP_MAJOR_VERSION == 2) && (GIMP_MINOR_VERSION <= 6)
+			gimp_image_add_layer(
+				out->image_id,
+				layerId,
+				0
+			);
+		}
+        else {
+        //#else
         /* starting from 2.8, gimp_image_add_layer is deprecated. 
          * use gimp_image_insert_layer instead */
-         
-        gimp_image_insert_layer(
-			out->image_id,
-			layerId,
-			0,
-            0
-        );
-        
-        #endif
+			gimp_image_insert_layer(
+				out->image_id,
+				layerId,
+				0,
+				0
+			);
+        }
+        //#endif
         
         if (settings->position == WM_POS_TL) {
 			posX = 10;
