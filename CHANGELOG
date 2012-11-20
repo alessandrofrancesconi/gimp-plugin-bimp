@@ -4,6 +4,11 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+0.9:
+ - Portuguese and German translations (thanks to Pedro Cunha and Vito Zaccaria)
+ - Updated French translation (thanks to Robert Brizard)
+ - Fixed regression that caused BIMP to fail start on GIMP 2.6
+
 0.8:
  - Multilanguage support (available languages: English, Italian, French) (issue #6)
  - Added Manipulation Preview window (issue #16)
