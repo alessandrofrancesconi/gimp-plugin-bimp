@@ -479,7 +479,7 @@ static void update_procedure_box(userdef_settings settings)
 							i = 2;
 							gchar* l_symbol = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
 							if (strlen(l_symbol) > 0) {
-								if (strcmp(l_symbol, "<") == 0) min++;
+								if (strcmp(l_symbol, "<") == 0) min = min + 0.1;
 							}
 
 							i = 3;
@@ -492,11 +492,11 @@ static void update_procedure_box(userdef_settings settings)
 							gchar* r_value = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
 							if (r_symbol[0] == '>') {
 								min = (float)atof(r_value);
-								if (strcmp(r_symbol, ">=") != 0) min++;
+								if (strcmp(r_symbol, ">=") != 0) min = min + 0.1;
 							}
 							else {
 								max = (float)atof(r_value);
-								if (strcmp(r_symbol, "<=") != 0) max--;
+								if (strcmp(r_symbol, "<=") != 0) max = max - 0.1;
 							}
 
 							offset = ovector[1];
