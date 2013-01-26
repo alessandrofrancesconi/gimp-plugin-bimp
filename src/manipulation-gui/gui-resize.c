@@ -28,26 +28,26 @@ GtkWidget* bimp_resize_gui_new(resize_settings settings)
 	GtkWidget *label_width, *label_height, *label_quality, *label_resX, *label_resY, *label_dpi;
 	GtkWidget *align_radio, *align_values, *align_res;
 	
-	last_percent_w_value = settings->newWpc;
-	last_percent_h_value = settings->newHpc;
-	last_pixel_w_value = settings->newWpx;
-	last_pixel_h_value = settings->newHpx;
+	last_percent_w_value = settings->new_w_pc;
+	last_percent_h_value = settings->new_h_pc;
+	last_pixel_w_value = settings->new_w_px;
+	last_pixel_h_value = settings->new_h_px;
 	
 	gui = gtk_vbox_new(FALSE, 5);
 	radio_percent = gtk_radio_button_new_with_label (NULL, _("Set to a percentage of the original"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_percent), (settings->sizemode == RESIZE_PERCENT));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_percent), (settings->resize_mode == RESIZE_PERCENT));
 	radio_px = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_percent), _("Set exact size in pixel"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_px), (settings->sizemode != RESIZE_PERCENT));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_px), (settings->resize_mode != RESIZE_PERCENT));
 	
 	align_radio = gtk_alignment_new(0, 0, 0, 0);
 	gtk_alignment_set_padding(GTK_ALIGNMENT(align_radio), 0, 5, 10, 0);
 	vbox_px = gtk_vbox_new(FALSE, 5);
 	radio_px_both = gtk_radio_button_new_with_label (NULL, _("For both dimensions"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_px_both), (settings->sizemode == RESIZE_PIXEL_BOTH));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_px_both), (settings->resize_mode == RESIZE_PIXEL_BOTH));
 	radio_px_width = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_px_both), _("Set width only"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_px_width), (settings->sizemode == RESIZE_PIXEL_WIDTH));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_px_width), (settings->resize_mode == RESIZE_PIXEL_WIDTH));
 	radio_px_height = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_px_both), _("Set height only"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_px_height), (settings->sizemode == RESIZE_PIXEL_HEIGHT));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_px_height), (settings->resize_mode == RESIZE_PIXEL_HEIGHT));
 	
 	check_aspect = gtk_check_button_new_with_label(_("Preserve aspect ratio"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_aspect), (settings->aspect_ratio));
@@ -73,10 +73,10 @@ GtkWidget* bimp_resize_gui_new(resize_settings settings)
 	hbox_res = gtk_hbox_new(FALSE, 5);
 	label_resX = gtk_label_new(g_strconcat(_("X axis"), ":", NULL));
 	spin_resX = gtk_spin_button_new(NULL, 1, 0);
-	gtk_spin_button_configure (GTK_SPIN_BUTTON(spin_resX), GTK_ADJUSTMENT(gtk_adjustment_new (settings->newResX, 0.005, 65536.000, 1.000, 1, 0)), 0, 3);
+	gtk_spin_button_configure (GTK_SPIN_BUTTON(spin_resX), GTK_ADJUSTMENT(gtk_adjustment_new (settings->new_res_x, 0.005, 65536.000, 1.000, 1, 0)), 0, 3);
 	label_resY = gtk_label_new(g_strconcat(_("Y axis"), ":", NULL));
 	spin_resY = gtk_spin_button_new(NULL, 1, 0);
-	gtk_spin_button_configure (GTK_SPIN_BUTTON(spin_resY), GTK_ADJUSTMENT(gtk_adjustment_new (settings->newResY, 0.005, 65536.000, 1.000, 1, 0)), 0, 3);
+	gtk_spin_button_configure (GTK_SPIN_BUTTON(spin_resY), GTK_ADJUSTMENT(gtk_adjustment_new (settings->new_res_y, 0.005, 65536.000, 1.000, 1, 0)), 0, 3);
 	label_dpi = gtk_label_new("dpi");
 	
 	gtk_box_pack_start(GTK_BOX(vbox_px), radio_px_both, FALSE, FALSE, 0);
@@ -197,26 +197,26 @@ void toggle_resolution(GtkToggleButton *togglebutton, gpointer user_data)
 void bimp_resize_save(resize_settings orig_settings) 
 {	
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_percent))) {
-		orig_settings->sizemode = RESIZE_PERCENT;
-		orig_settings->newWpc = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_width));
-		orig_settings->newHpc = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_height));
-		orig_settings->newWpx = last_pixel_w_value;
-		orig_settings->newHpx = last_pixel_h_value;
+		orig_settings->resize_mode = RESIZE_PERCENT;
+		orig_settings->new_w_pc = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_width));
+		orig_settings->new_h_pc = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_height));
+		orig_settings->new_w_px = last_pixel_w_value;
+		orig_settings->new_h_px = last_pixel_h_value;
 	}
 	else {
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_px_both))) {
-			orig_settings->sizemode = RESIZE_PIXEL_BOTH;
+			orig_settings->resize_mode = RESIZE_PIXEL_BOTH;
 		}
 		else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_px_width))) {
-			orig_settings->sizemode = RESIZE_PIXEL_WIDTH;
+			orig_settings->resize_mode = RESIZE_PIXEL_WIDTH;
 		}
 		else {
-			orig_settings->sizemode = RESIZE_PIXEL_HEIGHT;
+			orig_settings->resize_mode = RESIZE_PIXEL_HEIGHT;
 		}
-		orig_settings->newWpc = last_percent_w_value;
-		orig_settings->newHpc = last_percent_h_value;
-		orig_settings->newWpx = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_width));
-		orig_settings->newHpx = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_height));
+		orig_settings->new_w_pc = last_percent_w_value;
+		orig_settings->new_h_pc = last_percent_h_value;
+		orig_settings->new_w_px = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_width));
+		orig_settings->new_h_px = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_height));
 	}
 	
 	orig_settings->aspect_ratio = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_aspect));
@@ -236,7 +236,7 @@ void bimp_resize_save(resize_settings orig_settings)
 	}
 	
 	orig_settings->change_res = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_resolution));
-	orig_settings->newResX = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_resX));
-	orig_settings->newResY = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_resY));
+	orig_settings->new_res_x = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_resX));
+	orig_settings->new_res_y = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_resY));
 }
 

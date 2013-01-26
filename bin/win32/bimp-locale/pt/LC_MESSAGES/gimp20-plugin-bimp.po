@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gimp-plugin-bimp\n"
-"POT-Creation-Date: 2012-11-01 14:30+0100\n"
-"PO-Revision-Date: 2012-11-01 20:16-0000\n"
-"Last-Translator: Pedro Cunha <gimpextensions@gmail.com>\n"
+"POT-Creation-Date: 2013-01-26 17:52+0100\n"
+"PO-Revision-Date: 2013-01-26 18:09+0100\n"
+"Last-Translator: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
@@ -16,86 +16,94 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\\manipulation-gui\n"
 
-#: bimp-gui.c:127 bimp-gui.c:783
+#: bimp-gui.c:128 bimp-gui.c:782
 msgid "The manipulations set is empty!"
 msgstr "O conjunto de manipulações está vazio!"
 
-#: bimp-gui.c:130
+#: bimp-gui.c:131
 msgid "The file list is empty!"
 msgstr "A lista de ficheiros está vazia!"
 
-#: bimp-gui.c:158
+#: bimp-gui.c:159
 msgid "Manipulation set"
 msgstr "Conjunto de manipulação"
 
-#: bimp-gui.c:190
+#: bimp-gui.c:191
 msgid "Input files and options"
 msgstr "Ficheiros de entrada e opções"
 
-#: bimp-gui.c:214
+#: bimp-gui.c:215
 msgid "Add images"
 msgstr "Adicionar imagens"
 
-#: bimp-gui.c:216
+#: bimp-gui.c:217
 msgid "Add folders"
 msgstr "Adicionar pastas"
 
-#: bimp-gui.c:222
+#: bimp-gui.c:223
 msgid "Remove selected"
 msgstr "Remover seleccionado"
 
-#: bimp-gui.c:224
+#: bimp-gui.c:225
 msgid "Remove all"
 msgstr "Remover tudo"
 
-#: bimp-gui.c:232
+#: bimp-gui.c:233
 msgid "Output folder"
 msgstr "Pasta de destino"
 
-#: bimp-gui.c:238
+#: bimp-gui.c:239
 msgid "Alert when overwriting existing files"
 msgstr "Alertar ao substituir os ficheiros existentes"
 
-#: bimp-gui.c:242
+#: bimp-gui.c:243
 msgid "Delete original file when done"
 msgstr "Apagar o ficheiro original quando concluído"
 
-#: bimp-gui.c:248
+#: bimp-gui.c:249
 msgid "Click for preview"
 msgstr "Clique para pré-visualização"
 
-#: bimp-gui.c:331
+#: bimp-gui.c:332
 #, c-format
 msgid "Couldn't read into \"%s\" directory."
 msgstr "Não foi possível ler a pasta \"%s\""
 
-#: bimp-gui.c:382
+#: bimp-gui.c:383
 msgid "Can't show a preview because the manipulations set is empty"
 msgstr ""
 "Não é possível mostrar uma pré-visualização porque o conjunto de manipulação "
 "está vazio"
 
-#: bimp-gui.c:405
+#: bimp-gui.c:406
 msgid "Preview"
 msgstr "Pré-visualizar"
 
-#: bimp-gui.c:417
+#: bimp-gui.c:418
 msgid "This is how the selected image will look like after the batch process"
 msgstr ""
 "Isto é como a imagem seleccionada vai ficar depois do processamento em lote"
 
-#: bimp-gui.c:520
+#: bimp-gui.c:521
 msgid "Select images"
 msgstr "Seleccione as imagens"
 
-#: bimp-gui.c:529 manipulation-gui/gui-watermark.c:65
+#: bimp-gui.c:530 manipulation-gui/gui-watermark.c:65
 #: .\manipulation-gui/gui-watermark.c:65
 msgid "All supported types"
 msgstr "Todos os tipos suportados"
 
-#: bimp-gui.c:620
+#: bimp-gui.c:621
 msgid "Select folders containing images"
 msgstr "Seleccione pastas que contenham imagens"
+
+#: bimp-gui.c:668 bimp-gui.c:788
+msgid "Save this set..."
+msgstr "Guardar este conjunto..."
+
+#: bimp-gui.c:672 bimp-gui.c:840
+msgid "Load set..."
+msgstr "Carregar conjunto..."
 
 #: bimp-gui.c:683
 msgid "Edit properties..."
@@ -111,59 +119,55 @@ msgstr ""
 "Não é possível adicionar outra manipulação deste tipo. Apenas uma é "
 "permitida!"
 
-#: bimp-gui.c:789
-msgid "Save this set"
-msgstr "Guardar este conjunto"
+#: bimp-gui.c:805 bimp-gui.c:857
+msgid "An error occured when importing a saved batch file :("
+msgstr ""
 
-#: bimp-gui.c:823
+#: bimp-gui.c:828
 msgid "This will overwrite current manipulations set. Continue?"
 msgstr "Isto irá substituir o conjunto de manipulação actual. Continuar?"
 
-#: bimp-gui.c:835
-msgid "Load set"
-msgstr "Carregar conjunto"
-
-#: bimp-gui.c:877 bimp.c:77
+#: bimp-gui.c:891 bimp.c:77
 msgid "Applies GIMP manipulations on groups of images"
 msgstr "Aplica manipulações do GIMP a grupos de imagens"
 
-#: bimp-gui.c:884
+#: bimp-gui.c:898
 msgid "translator-name <translator-email>"
 msgstr "Pedro Cunha <gimpextensions@gmail.com>"
 
-#: bimp-manipulations.c:255
+#: bimp-manipulations.c:245
 msgid "Resize"
 msgstr "Redimensionar"
 
-#: bimp-manipulations.c:258
+#: bimp-manipulations.c:248
 msgid "Crop"
 msgstr "Cortar"
 
-#: bimp-manipulations.c:261
+#: bimp-manipulations.c:251
 msgid "Flip or Rotate"
 msgstr "Inverter ou Rodar"
 
-#: bimp-manipulations.c:264
+#: bimp-manipulations.c:254
 msgid "Color correction"
 msgstr "Correcção de cor"
 
-#: bimp-manipulations.c:267
+#: bimp-manipulations.c:257
 msgid "Sharp or Blur"
 msgstr "Aguçar ou Desfocar"
 
-#: bimp-manipulations.c:270
+#: bimp-manipulations.c:260
 msgid "Add a Watermark"
 msgstr "Adicionar marca de água"
 
-#: bimp-manipulations.c:273
+#: bimp-manipulations.c:263
 msgid "Change format and compression"
 msgstr "Alterar formato e compressão"
 
-#: bimp-manipulations.c:276
+#: bimp-manipulations.c:266
 msgid "Rename with a pattern"
 msgstr "Renomear com um padrão"
 
-#: bimp-manipulations.c:279
+#: bimp-manipulations.c:269
 msgid "Other GIMP procedure..."
 msgstr "Outro procedimento GIMP..."
 
@@ -180,16 +184,16 @@ msgstr "Operações paradas"
 msgid "End, all files have been processed"
 msgstr "Terminado, todos os ficheiros foram processados"
 
-#: bimp-operate.c:884
+#: bimp-operate.c:895
 #, c-format
 msgid "File %s already exists, overwrite it?"
 msgstr "O ficheiro %s já existe, substituir?"
 
-#: bimp-operate.c:890
+#: bimp-operate.c:901
 msgid "Yes, don't ask again"
 msgstr "Sim, não perguntar novamente"
 
-#: bimp-operate.c:894
+#: bimp-operate.c:905
 msgid "Overwrite?"
 msgstr "Substituir?"
 
@@ -406,55 +410,59 @@ msgstr "Converter para escala de cinza"
 msgid "Automatic color levels correction"
 msgstr "Correcção automática de níveis de cor"
 
-#: manipulation-gui/gui-crop.c:26 .\manipulation-gui/gui-crop.c:26
+#: manipulation-gui/gui-crop.c:27 .\manipulation-gui/gui-crop.c:27
 msgid "Crop to a standard aspect ratio"
 msgstr "Cortar para uma proporção padrão"
 
-#: manipulation-gui/gui-crop.c:40 .\manipulation-gui/gui-crop.c:40
+#: manipulation-gui/gui-crop.c:53 .\manipulation-gui/gui-crop.c:53
 msgid "Manual crop (pixel values)"
 msgstr "Corte manual (valores de pixeis)"
 
-#: manipulation-gui/gui-crop.c:45 manipulation-gui/gui-resize.c:63
-#: .\manipulation-gui/gui-crop.c:45 .\manipulation-gui/gui-resize.c:63
+#: manipulation-gui/gui-crop.c:58 manipulation-gui/gui-resize.c:63
+#: .\manipulation-gui/gui-crop.c:58 .\manipulation-gui/gui-resize.c:63
 msgid "Width"
 msgstr "Largura"
 
-#: manipulation-gui/gui-crop.c:49 manipulation-gui/gui-resize.c:65
-#: .\manipulation-gui/gui-crop.c:49 .\manipulation-gui/gui-resize.c:65
+#: manipulation-gui/gui-crop.c:62 manipulation-gui/gui-resize.c:65
+#: .\manipulation-gui/gui-crop.c:62 .\manipulation-gui/gui-resize.c:65
 msgid "Height"
 msgstr "Altura"
 
-#: manipulation-gui/gui-crop.c:87 .\manipulation-gui/gui-crop.c:87
+#: manipulation-gui/gui-crop.c:108 .\manipulation-gui/gui-crop.c:108
 msgid "One-to-one"
 msgstr "Um-para-um"
 
-#: manipulation-gui/gui-crop.c:90 .\manipulation-gui/gui-crop.c:90
+#: manipulation-gui/gui-crop.c:111 .\manipulation-gui/gui-crop.c:111
 msgid "Classic 35 mm film"
 msgstr "Filme clássico de 35 mm"
 
-#: manipulation-gui/gui-crop.c:93 .\manipulation-gui/gui-crop.c:93
+#: manipulation-gui/gui-crop.c:114 .\manipulation-gui/gui-crop.c:114
 msgid "Standard VGA monitor"
 msgstr "Monitor VGA padrão"
 
-#: manipulation-gui/gui-crop.c:96 .\manipulation-gui/gui-crop.c:96
+#: manipulation-gui/gui-crop.c:117 .\manipulation-gui/gui-crop.c:117
 msgid "Widescreen"
 msgstr "Ecrã panoramico"
 
-#: manipulation-gui/gui-crop.c:99 .\manipulation-gui/gui-crop.c:99
+#: manipulation-gui/gui-crop.c:120 .\manipulation-gui/gui-crop.c:120
 msgid "Widescreen extended"
 msgstr "Ecrã panoramico extendido"
 
-#: manipulation-gui/gui-crop.c:102 .\manipulation-gui/gui-crop.c:102
+#: manipulation-gui/gui-crop.c:123 .\manipulation-gui/gui-crop.c:123
 msgid "EU Passport portrait"
 msgstr "Retrato de passaporte da UE"
 
-#: manipulation-gui/gui-crop.c:105 .\manipulation-gui/gui-crop.c:105
+#: manipulation-gui/gui-crop.c:126 .\manipulation-gui/gui-crop.c:126
 msgid "Classic smartphone screen"
 msgstr "Ecrã clássico de smartphone"
 
-#: manipulation-gui/gui-crop.c:108 .\manipulation-gui/gui-crop.c:108
+#: manipulation-gui/gui-crop.c:129 .\manipulation-gui/gui-crop.c:129
 msgid "Classic tablet screen"
 msgstr "Ecrã clássico de tablet"
+
+#: manipulation-gui/gui-crop.c:132 .\manipulation-gui/gui-crop.c:132
+msgid "Custom ratio"
+msgstr "Proporção personalizado"
 
 #: manipulation-gui/gui-fliprotate.c:19 .\manipulation-gui/gui-fliprotate.c:19
 msgid "Flip"
@@ -490,12 +498,20 @@ msgstr "Data e hora (YYYY-MM-DD_hh-mm)"
 
 #: manipulation-gui/gui-rename.c:51 .\manipulation-gui/gui-rename.c:51
 #, c-format
-msgid "Can't save! '%s' or '%s' symbol must be present."
-msgstr "Não é possível guardar! O símbolo '%s' ou '%s' tem que estar presente."
+msgid ""
+"Can't save!\n"
+"'%s' or '%s' symbol must be present."
+msgstr ""
+"Não é possível guardar!\n"
+"O símbolo '%s' ou '%s' tem que estar presente."
 
 #: manipulation-gui/gui-rename.c:63 .\manipulation-gui/gui-rename.c:63
-msgid "Can't save! Pattern contains invalid characters."
-msgstr "Não é possivel gardar! Padrão contém caracteres inválidos."
+msgid ""
+"Can't save!\n"
+"Pattern contains invalid characters."
+msgstr ""
+"Não é possivel gardar!\n"
+"Padrão contém caracteres inválidos."
 
 #: manipulation-gui/gui-resize.c:37 .\manipulation-gui/gui-resize.c:37
 msgid "Set to a percentage of the original"
@@ -557,7 +573,7 @@ msgstr ""
 msgid "Search"
 msgstr "Procurar"
 
-#: manipulation-gui/gui-userdef.c:300 .\manipulation-gui/gui-userdef.c:300
+#: manipulation-gui/gui-userdef.c:303 .\manipulation-gui/gui-userdef.c:303
 msgid ""
 "Can't save because\n"
 "no procedure has been selected"
@@ -565,11 +581,11 @@ msgstr ""
 "Não é possível guardar porque\n"
 "nenhum procedimento foi seleccionado"
 
-#: manipulation-gui/gui-userdef.c:346 .\manipulation-gui/gui-userdef.c:346
+#: manipulation-gui/gui-userdef.c:349 .\manipulation-gui/gui-userdef.c:349
 msgid "Author"
 msgstr "Autor"
 
-#: manipulation-gui/gui-userdef.c:562 .\manipulation-gui/gui-userdef.c:562
+#: manipulation-gui/gui-userdef.c:565 .\manipulation-gui/gui-userdef.c:565
 msgid "This procedure takes no editable params"
 msgstr "Este procedimento leva parâmetros não editáveis"
 

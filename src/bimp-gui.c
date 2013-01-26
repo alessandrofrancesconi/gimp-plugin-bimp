@@ -13,6 +13,7 @@
 #include "bimp-gui.h"
 #include "bimp-manipulations-gui.h"
 #include "bimp-operate.h"
+#include "bimp-serialize.h"
 #include "bimp-icons.h"
 #include "bimp-utils.h"
 #include "plugin-intl.h"
@@ -659,19 +660,18 @@ static void popmenus_init()
 	}
 	
 	
-	/* TODO: Last items for saving and loading a manipulations set 
+	/* last items for saving and loading a manipulations set */
 	
 	menuitem = gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(popmenu_add), menuitem);
 	
-	menuitem = gtk_menu_item_new_with_label("Save this set...");
+	menuitem = gtk_menu_item_new_with_label(_("Save this set..."));
 	g_signal_connect(menuitem, "activate", G_CALLBACK(save_set), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(popmenu_add), menuitem);
 	
-	menuitem = gtk_menu_item_new_with_label("Load set...");
+	menuitem = gtk_menu_item_new_with_label(_("Load set..."));
 	g_signal_connect(menuitem, "activate", G_CALLBACK(load_set), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(popmenu_add), menuitem);
-	*/
 	
 	/* Menu for editing a manipulation */
 	popmenu_edit = gtk_menu_new();
@@ -776,17 +776,17 @@ static void add_manipulation_button(manipulation man)
 	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(open_popup_menu), man);
 }
 
-/* TODO */
 static void save_set(GtkMenuItem *menuitem, gpointer user_data)
 {
 	if (g_slist_length(bimp_selected_manipulations) == 0) {
 		bimp_show_error_dialog(_("The manipulations set is empty!"), bimp_window_main);
 	} else {
 		FILE *fp;
-		
 		gchar* output_file;
+		char* extension = ".bimp";
+		
 		GtkWidget* file_saver = gtk_file_chooser_dialog_new(
-			_("Save this set"), 
+			_("Save this set..."), 
 			NULL, 
 			GTK_FILE_CHOOSER_ACTION_SAVE, 
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, 
@@ -799,12 +799,22 @@ static void save_set(GtkMenuItem *menuitem, gpointer user_data)
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_saver), filter_bimp);
 		
 		if (gtk_dialog_run (GTK_DIALOG(file_saver)) == GTK_RESPONSE_ACCEPT) {
-			output_file = g_strdup(g_slist_nth (gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(file_saver)), 0)->data);
 			
+			output_file = g_strdup(g_slist_nth (gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(file_saver)), 0)->data);
+			if (!g_str_has_suffix(output_file, extension)) {
+				output_file = g_strconcat(output_file, extension, NULL);
+			}
+			gtk_widget_destroy (file_saver);
+			
+			if (!bimp_serialize_to_file(output_file)) {
+				bimp_show_error_dialog(_("An error occured when importing a saved batch file :("), bimp_window_main);
+			}
+			
+			return;
 		}
 		
 		gtk_widget_destroy (file_saver);
-		
+		return;
 	}
 }
 
@@ -832,7 +842,7 @@ static void load_set(GtkMenuItem *menuitem, gpointer user_data)
 	if (can_continue) {
 		gchar* input_file;
 		GtkWidget* file_loader = gtk_file_chooser_dialog_new(
-			_("Load set"), 
+			_("Load set..."), 
 			NULL, 
 			GTK_FILE_CHOOSER_ACTION_OPEN, 
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, 
@@ -840,16 +850,25 @@ static void load_set(GtkMenuItem *menuitem, gpointer user_data)
 		);
 		
 		GtkFileFilter *filter_bimp = gtk_file_filter_new();
-		gtk_file_filter_set_name(filter_bimp,"BIMP manipulations set (*.bimp)");
+		gtk_file_filter_set_name(filter_bimp, "BIMP manipulations set (*.bimp)");
 		gtk_file_filter_add_pattern (filter_bimp, "*.bimp");
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_loader), filter_bimp);
 		
 		if (gtk_dialog_run (GTK_DIALOG(file_loader)) == GTK_RESPONSE_ACCEPT) {
 			input_file = g_strdup(g_slist_nth (gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(file_loader)), 0)->data);
+			gtk_widget_destroy (file_loader);
+			
+			if (!bimp_deserialize_from_file(input_file)) {
+				bimp_show_error_dialog(_("An error occured when importing a saved batch file :("), bimp_window_main);
+			}
+			else {
+				bimp_refresh_sequence_panel();
+			}
+			return;
 		}
 		
 		gtk_widget_destroy (file_loader);
-		
+		return;
 	}
 }
 

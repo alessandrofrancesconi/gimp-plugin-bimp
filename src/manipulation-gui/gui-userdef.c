@@ -251,10 +251,13 @@ static void update_selected_procedure(gchar* procedure)
 		switch(temp_settings->params[param_i].type) {
 			case GIMP_PDB_INT32:
 				temp_settings->params[param_i].data.d_int32 = 0;
+				break;
 			case GIMP_PDB_INT16:
 				temp_settings->params[param_i].data.d_int16 = 0;
+				break;
 			case GIMP_PDB_INT8:
 				temp_settings->params[param_i].data.d_int8 = 0;
+				break;
 			case GIMP_PDB_FLOAT: 
 				if (strcmp(params[param_i].name, "opacity") == 0) {
 					temp_settings->params[param_i].data.d_float = 100.0;

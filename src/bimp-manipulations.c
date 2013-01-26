@@ -9,17 +9,6 @@
 #include "bimp-icons.h"
 #include "plugin-intl.h"
 
-static manipulation manipulation_resize_new(void);
-static manipulation manipulation_crop_new(void);
-static manipulation manipulation_fliprotate_new(void);
-static manipulation manipulation_color_new(void);
-static manipulation manipulation_sharpblur_new(void);
-static manipulation manipulation_watermark_new(void); 
-static manipulation manipulation_changeformat_new(void); 
-static manipulation manipulation_rename_new(void); 
-static manipulation manipulation_userdef_new(void); 
-
-
 /* Appends a default manipulation to the step list */
 manipulation bimp_append_manipulation(manipulation_type type)
 {
@@ -101,58 +90,60 @@ manipulation bimp_list_get_manip(manipulation_type search)
 
 /* set of constructors for each type of manipulation (with default values) */
 
-static manipulation manipulation_resize_new() 
+manipulation manipulation_resize_new() 
 {
 	manipulation resize;
 	resize = (manipulation) g_malloc(sizeof(struct manip_str));
 	resize->type = MANIP_RESIZE;
 	resize->icon = &pixdata_resize;
 	resize->settings = (resize_settings) g_malloc(sizeof(struct manip_resize_set));
-	((resize_settings)resize->settings)->newWpc = 100.0;
-	((resize_settings)resize->settings)->newHpc = 100.0;
-	((resize_settings)resize->settings)->newWpx = 640;
-	((resize_settings)resize->settings)->newHpx = 480;
-	((resize_settings)resize->settings)->sizemode = RESIZE_PERCENT;
+	((resize_settings)resize->settings)->new_w_pc = 100.0;
+	((resize_settings)resize->settings)->new_h_pc = 100.0;
+	((resize_settings)resize->settings)->new_w_px = 640;
+	((resize_settings)resize->settings)->new_h_px = 480;
+	((resize_settings)resize->settings)->resize_mode = RESIZE_PERCENT;
 	((resize_settings)resize->settings)->aspect_ratio = TRUE;
 	((resize_settings)resize->settings)->interpolation = GIMP_INTERPOLATION_CUBIC;
 	((resize_settings)resize->settings)->change_res = FALSE;
-	((resize_settings)resize->settings)->newResX = 72.000;
-	((resize_settings)resize->settings)->newResY = 72.000;
+	((resize_settings)resize->settings)->new_res_x = 72.000;
+	((resize_settings)resize->settings)->new_res_y = 72.000;
 	
 	return resize;
 }
 
-static manipulation manipulation_crop_new() 
+manipulation manipulation_crop_new() 
 {
 	manipulation crop;
 	crop = (manipulation) g_malloc(sizeof(struct manip_str));
 	crop->type = MANIP_CROP;
 	crop->icon = &pixdata_crop;
 	crop->settings = (crop_settings) g_malloc(sizeof(struct manip_crop_set));
-	((crop_settings)crop->settings)->newW = 640;
-	((crop_settings)crop->settings)->newH = 480;
+	((crop_settings)crop->settings)->new_w = 640;
+	((crop_settings)crop->settings)->new_h = 480;
 	((crop_settings)crop->settings)->manual = FALSE;
 	((crop_settings)crop->settings)->ratio = CROP_PRESET_11;
+	((crop_settings)crop->settings)->custom_ratio1 = 1.0;
+	((crop_settings)crop->settings)->custom_ratio2 = 1.0;
 	
 	return crop;
 }
 
-static manipulation manipulation_fliprotate_new() 
+manipulation manipulation_fliprotate_new() 
 {
 	manipulation fliprotate;
 	fliprotate = (manipulation) g_malloc(sizeof(struct manip_str));
 	fliprotate->type = MANIP_FLIPROTATE;
 	fliprotate->icon = &pixdata_rotate;
 	fliprotate->settings = (fliprotate_settings) g_malloc(sizeof(struct manip_fliprotate_set));
-	((fliprotate_settings)fliprotate->settings)->flipH = FALSE;
-	((fliprotate_settings)fliprotate->settings)->flipV = FALSE;
+	((fliprotate_settings)fliprotate->settings)->flip_h = FALSE;
+	((fliprotate_settings)fliprotate->settings)->flip_v = FALSE;
 	((fliprotate_settings)fliprotate->settings)->rotate = FALSE;
-	((fliprotate_settings)fliprotate->settings)->rotate_type = GIMP_ROTATE_90;
+	((fliprotate_settings)fliprotate->settings)->rotation_type = GIMP_ROTATE_90;
 	
 	return fliprotate;
 }
 
-static manipulation manipulation_color_new() 
+manipulation manipulation_color_new() 
 {
 	manipulation color;
 	color = (manipulation) g_malloc(sizeof(struct manip_str));
@@ -167,7 +158,7 @@ static manipulation manipulation_color_new()
 	return color;
 }
 
-static manipulation manipulation_sharpblur_new() 
+manipulation manipulation_sharpblur_new() 
 {
 	manipulation sharpblur;
 	sharpblur = (manipulation) g_malloc(sizeof(struct manip_str));
@@ -179,26 +170,26 @@ static manipulation manipulation_sharpblur_new()
 	return sharpblur;
 }
 
-static manipulation manipulation_watermark_new() 
+manipulation manipulation_watermark_new() 
 {
 	manipulation watermark;
 	watermark = (manipulation) g_malloc(sizeof(struct manip_str));
 	watermark->type = MANIP_WATERMARK;
 	watermark->icon = &pixdata_watermark;
 	watermark->settings = (watermark_settings) g_malloc(sizeof(struct manip_watermark_set));
-	((watermark_settings)watermark->settings)->textmode = TRUE;
+	((watermark_settings)watermark->settings)->mode = TRUE;
 	((watermark_settings)watermark->settings)->text = "";
 	((watermark_settings)watermark->settings)->font = pango_font_description_copy(pango_font_description_from_string("Sans 16px"));
 	gdk_color_parse("black", &(((watermark_settings)watermark->settings)->color));
 	gdk_colormap_alloc_color(gdk_colormap_get_system(), &(((watermark_settings)watermark->settings)->color), TRUE, TRUE);
-	((watermark_settings)watermark->settings)->imagefile = NULL;
+	((watermark_settings)watermark->settings)->image_file = NULL;
 	((watermark_settings)watermark->settings)->opacity = 100.0;
 	((watermark_settings)watermark->settings)->position = WM_POS_BR;
 	
 	return watermark;
 }
 
-static manipulation manipulation_changeformat_new() 
+manipulation manipulation_changeformat_new() 
 {
 	manipulation changeformat;
 	changeformat = (manipulation) g_malloc(sizeof(struct manip_str));
@@ -206,7 +197,6 @@ static manipulation manipulation_changeformat_new()
 	changeformat->icon = &pixdata_changeformat;
 	changeformat->settings = (changeformat_settings) g_malloc(sizeof(struct manip_changeformat_set));
 	((changeformat_settings)changeformat->settings)->format = FORMAT_JPEG;
-	((changeformat_settings)changeformat->settings)->params = NULL;
 	((changeformat_settings)changeformat->settings)->params = (format_params_jpeg) g_malloc(sizeof(struct changeformat_params_jpeg));
 	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->quality = 85.0;
 	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->smoothing = 0.0;
@@ -221,7 +211,7 @@ static manipulation manipulation_changeformat_new()
 	return changeformat;
 }
 
-static manipulation manipulation_rename_new() 
+manipulation manipulation_rename_new() 
 {
 	manipulation rename;
 	rename = (manipulation) g_malloc(sizeof(struct manip_str));
@@ -233,7 +223,7 @@ static manipulation manipulation_rename_new()
 	return rename;
 }
 
-static manipulation manipulation_userdef_new() 
+manipulation manipulation_userdef_new() 
 {
 	manipulation userdef;
 	userdef = (manipulation) g_malloc(sizeof(struct manip_str));

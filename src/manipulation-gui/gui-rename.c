@@ -48,7 +48,7 @@ void check_entrytext (GtkEditable *editable, gpointer parent)
 	const char* entrytext = gtk_entry_get_text(GTK_ENTRY(entry_pattern));
 	if (strstr(entrytext, RENAME_KEY_ORIG) == NULL && strstr(entrytext, RENAME_KEY_COUNT) == NULL) {
 		/* check for the presence of mandatory keywords (otherwise it will write on the same filename) */
-		gtk_label_set_text(GTK_LABEL(label_preview), g_strdup_printf(_("Can't save! '%s' or '%s' symbol must be present."), RENAME_KEY_ORIG, RENAME_KEY_COUNT));
+		gtk_label_set_text(GTK_LABEL(label_preview), g_strdup_printf(_("Can't save!\n'%s' or '%s' symbol must be present."), RENAME_KEY_ORIG, RENAME_KEY_COUNT));
 		gtk_dialog_set_response_sensitive (GTK_DIALOG(parent), GTK_RESPONSE_ACCEPT, FALSE);
 	} else if (
 		/* check for invalid characters (for Windows systems) */
@@ -60,7 +60,7 @@ void check_entrytext (GtkEditable *editable, gpointer parent)
 		strstr(entrytext, "|") != NULL ||
 		strstr(entrytext, ">") != NULL ||
 		strstr(entrytext, "<") != NULL) {
-		gtk_label_set_text(GTK_LABEL(label_preview), _("Can't save! Pattern contains invalid characters."));
+		gtk_label_set_text(GTK_LABEL(label_preview), _("Can't save!\nPattern contains invalid characters."));
 		gtk_dialog_set_response_sensitive (GTK_DIALOG(parent), GTK_RESPONSE_ACCEPT, FALSE);
 	}
 	else {

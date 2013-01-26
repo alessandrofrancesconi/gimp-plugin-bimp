@@ -4,7 +4,7 @@
 #include <gtk/gtk.h>
 #include "../bimp-manipulations.h"
 
-#define CROP_WINDOW_W 300
+#define CROP_WINDOW_W 430
 #define CROP_WINDOW_H 260
 
 #define LABEL_CROP_W 85

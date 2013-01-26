@@ -22,13 +22,13 @@ GtkWidget* bimp_fliprotate_gui_new(fliprotate_settings settings)
 	
 	button_flipH = gtk_toggle_button_new_with_label(_("Horizontally"));
 	gtk_widget_set_size_request (button_flipH, BUTTON_FLIP_W, BUTTON_FLIP_H);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_flipH), settings->flipH);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_flipH), settings->flip_h);
 	gtk_button_set_image(GTK_BUTTON(button_flipH), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_flipH, FALSE, NULL)));
 	gtk_button_set_image_position(GTK_BUTTON(button_flipH), GTK_POS_TOP);
 	
 	button_flipV = gtk_toggle_button_new_with_label(_("Vertically"));
 	gtk_widget_set_size_request (button_flipV, BUTTON_FLIP_W, BUTTON_FLIP_H);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_flipV), settings->flipV);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_flipV), settings->flip_v);
 	gtk_button_set_image(GTK_BUTTON(button_flipV), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_flipV, FALSE, NULL)));
 	gtk_button_set_image_position(GTK_BUTTON(button_flipV), GTK_POS_TOP);
 	
@@ -48,7 +48,7 @@ GtkWidget* bimp_fliprotate_gui_new(fliprotate_settings settings)
 		active_index = 0;
 	}
 	else {
-		switch(settings->rotate_type) {
+		switch(settings->rotation_type) {
 			case GIMP_ROTATE_90: active_index = 1; break;
 			case GIMP_ROTATE_180: active_index = 2; break;
 			case GIMP_ROTATE_270: active_index = 3; break;
@@ -74,20 +74,20 @@ GtkWidget* bimp_fliprotate_gui_new(fliprotate_settings settings)
 
 void bimp_fliprotate_save(fliprotate_settings orig_settings) 
 {
-	orig_settings->flipH = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button_flipH));
-	orig_settings->flipV = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button_flipV));
+	orig_settings->flip_h = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button_flipH));
+	orig_settings->flip_v = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button_flipV));
 	
 	int active_index = gtk_combo_box_get_active(GTK_COMBO_BOX(combo_rotate));
 	orig_settings->rotate = (active_index > 0);
 	if (active_index > 0) {
 		if (active_index == 1) {
-			orig_settings->rotate_type = GIMP_ROTATE_90;
+			orig_settings->rotation_type = GIMP_ROTATE_90;
 		}
 		else if (active_index == 2) {
-			orig_settings->rotate_type = GIMP_ROTATE_180;
+			orig_settings->rotation_type = GIMP_ROTATE_180;
 		}
 		else if (active_index == 3) {
-			orig_settings->rotate_type = GIMP_ROTATE_270;
+			orig_settings->rotation_type = GIMP_ROTATE_270;
 		}
 	}
 }

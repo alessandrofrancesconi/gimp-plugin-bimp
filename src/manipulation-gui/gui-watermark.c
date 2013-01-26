@@ -33,7 +33,7 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 	hbox_text_entry = gtk_hbox_new(FALSE, 5);
 	label_text = gtk_label_new(g_strconcat(_("Text"), ":", NULL));
 	gtk_widget_set_size_request (label_text, LABEL_W, LABEL_H);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_text), settings->textmode);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_text), settings->mode);
 	entry_text = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(entry_text), 50);
 	gtk_entry_set_text(GTK_ENTRY(entry_text), settings->text);
@@ -56,7 +56,7 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 	radio_image = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON(radio_text), _("Image watermark"));
 	
 	vbox_image = gtk_vbox_new(FALSE, 5);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_image), !settings->textmode);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_image), !settings->mode);
 	chooser_image = gtk_file_chooser_button_new(_("Select image"), GTK_FILE_CHOOSER_ACTION_OPEN);
 	
 	/* set image chooser's filters */
@@ -123,8 +123,8 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(chooser_image), supported[i]);
 	}
 	
-	if (settings->imagefile != NULL) {
-		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(chooser_image), settings->imagefile);
+	if (settings->image_file != NULL) {
+		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(chooser_image), settings->image_file);
 	}
 	gtk_widget_set_size_request (chooser_image, INPUT_W, INPUT_H);
 	
@@ -250,13 +250,13 @@ static char* watermark_pos_get_string(watermark_position wp) {
 
 void bimp_watermark_save(watermark_settings orig_settings) 
 {	
-	orig_settings->textmode = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_text));
+	orig_settings->mode = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_text));
 	
 	orig_settings->text = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry_text)));
 		
 	char* filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(chooser_image));
 	if (filename != NULL) {
-		orig_settings->imagefile = g_strdup(filename);
+		orig_settings->image_file = g_strdup(filename);
 		g_free(filename);
 	}
 	

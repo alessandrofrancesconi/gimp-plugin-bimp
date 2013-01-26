@@ -39,6 +39,7 @@ typedef enum crop_preset {
 	CROP_PRESET_EUPORT,
 	CROP_PRESET_PHONE,
 	CROP_PRESET_TABLET,
+	CROP_PRESET_CUSTOM,
 	CROP_PRESET_END
 } crop_preset;
 static const short int crop_preset_ratio[][2] = {
@@ -94,30 +95,32 @@ typedef struct manip_str {
 /* Settings structs */
 
 typedef struct manip_resize_set {
-	gdouble newWpc;
-	gdouble newHpc;
-	gint newWpx;
-	gint newHpx;
-	resize_mode sizemode;
+	gdouble new_w_pc;
+	gdouble new_h_pc;
+	gint new_w_px;
+	gint new_h_px;
+	resize_mode resize_mode;
 	gboolean aspect_ratio;
 	GimpInterpolationType interpolation;
 	gboolean change_res;
-	gdouble newResX;
-	gdouble newResY;
+	gdouble new_res_x;
+	gdouble new_res_y;
 } *resize_settings;
 
 typedef struct manip_crop_set {
-	gint newW;
-	gint newH;
+	gint new_w;
+	gint new_h;
 	gboolean manual;
 	crop_preset ratio;
+	float custom_ratio1;
+	float custom_ratio2;
 } *crop_settings;
 
 typedef struct manip_fliprotate_set {
-	gboolean flipH;
-	gboolean flipV;
+	gboolean flip_h;
+	gboolean flip_v;
 	gboolean rotate;
-	GimpRotationType rotate_type;
+	GimpRotationType rotation_type;
 } *fliprotate_settings;
 
 typedef struct manip_color_set {
@@ -132,11 +135,11 @@ typedef struct manip_sharpblur_set {
 } *sharpblur_settings;
 
 typedef struct manip_watermark_set {
-	gboolean textmode; /* TRUE = text mode; FALSE = image mode */
+	gboolean mode; /* TRUE = text mode; FALSE = image mode */
 	gchar* text;
 	PangoFontDescription* font;
 	GdkColor color;
-	char* imagefile;
+	char* image_file;
 	float opacity;
 	watermark_position position;
 } *watermark_settings;
@@ -198,6 +201,16 @@ void bimp_remove_manipulation(manipulation);
 gboolean bimp_list_contains_manip(manipulation_type);
 manipulation bimp_list_get_manip(manipulation_type);
 char* bimp_manip_get_string(manipulation_type);
+
+manipulation manipulation_sharpblur_new(void);
+manipulation manipulation_resize_new(void);
+manipulation manipulation_crop_new(void);
+manipulation manipulation_fliprotate_new(void);
+manipulation manipulation_color_new(void);
+manipulation manipulation_watermark_new(void); 
+manipulation manipulation_changeformat_new(void); 
+manipulation manipulation_rename_new(void); 
+manipulation manipulation_userdef_new(void); 
 
 GSList* bimp_selected_manipulations; /* Manipulations selected by user */
 

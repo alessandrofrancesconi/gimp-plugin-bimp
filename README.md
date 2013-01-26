@@ -24,9 +24,9 @@ Installing under Windows
 
 BIMP plugin for Windows is already compiled and it's saved in bin/win32 directory.
 Just copy bimp.exe, pcre3.dll and bimp-locale into the default GIMP-plugins folder:
-<Programs-dir>\<GIMP-folder>\lib\gimp\<version>\plug-ins
+`<Programs-dir>\<GIMP-folder>\lib\gimp\<version>\plug-ins`
 or
-<User-dir>\.gimp<version>\plug-ins
+`<User-dir>\.gimp<version>\plug-ins`
 
 
 Support this project

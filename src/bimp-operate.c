@@ -180,15 +180,15 @@ void bimp_apply_drawable_manipulations(image_output imageout, gchar* orig_filena
 	gimp_layer_add_alpha (imageout->drawable_id);
 	g_print("Drawable ID is %d\n", imageout->drawable_id);
 	
-	/* start manipulations sequence, cropping and scaling start first */
-	if (bimp_list_contains_manip(MANIP_CROP)) {
-		g_print("Applying CROP...\n");
-		apply_crop((crop_settings)(bimp_list_get_manip(MANIP_CROP))->settings, imageout);
-	}
-	
+	/* start manipulations sequence, resize and crop start first */
 	if (bimp_list_contains_manip(MANIP_RESIZE)) {
 		g_print("Applying RESIZE...\n");
 		apply_resize((resize_settings)(bimp_list_get_manip(MANIP_RESIZE))->settings, imageout);
+	}
+	
+	if (bimp_list_contains_manip(MANIP_CROP)) {
+		g_print("Applying CROP...\n");
+		apply_crop((crop_settings)(bimp_list_get_manip(MANIP_CROP))->settings, imageout);
 	}
 	
 	/* apply all the intermediate manipulations */
@@ -228,60 +228,60 @@ static gboolean apply_manipulation(manipulation man, image_output out)
 static gboolean apply_resize(resize_settings settings, image_output out) 
 {
 	gboolean success = FALSE;
-	gint finalW, finalH;
-	gdouble origResX, origResY;
+	gint final_w, final_h;
+	gdouble orig_res_x, orig_res_y;
 	
 	if (settings->change_res) {
 		success = gimp_image_get_resolution(
 			out->image_id,
-			&origResX,
-			&origResY
+			&orig_res_x,
+			&orig_res_y
 		);
 		
-		if ((settings->newResX != origResX) || (settings->newResY != origResY)) {
+		if ((settings->new_res_x != orig_res_x) || (settings->new_res_y != orig_res_y)) {
 			/* change resolution */
 			success = gimp_image_set_resolution(
 				out->image_id,
-				settings->newResX,
-				settings->newResY
+				settings->new_res_x,
+				settings->new_res_y
 			);
 		}
 	}
 	
 	
-	if (settings->sizemode == RESIZE_PERCENT) {
+	if (settings->resize_mode == RESIZE_PERCENT) {
 		/* user selected a percentage of the original size */
-		finalW = round((gimp_image_width(out->image_id) * settings->newWpc) / 100.0);
-		finalH = round((gimp_image_height(out->image_id) * settings->newHpc) / 100.0);
+		final_w = round((gimp_image_width(out->image_id) * settings->new_w_pc) / 100.0);
+		final_h = round((gimp_image_height(out->image_id) * settings->new_h_pc) / 100.0);
 	}
 	else {
 		/* user typed exact pixel size */
-		if (settings->sizemode == RESIZE_PIXEL_WIDTH) {
+		if (settings->resize_mode == RESIZE_PIXEL_WIDTH) {
 			/* width only */
-			finalW = settings->newWpx;
+			final_w = settings->new_w_px;
 			if (settings->aspect_ratio) {
 				/* and maintain aspect ratio */
-				finalH = round(((float)settings->newWpx * gimp_image_height(out->image_id)) / gimp_image_width(out->image_id));
+				final_h = round(((float)settings->new_w_px * gimp_image_height(out->image_id)) / gimp_image_width(out->image_id));
 			}
 			else {
-				finalH = gimp_image_height(out->image_id);
+				final_h = gimp_image_height(out->image_id);
 			}
 		}
-		else if (settings->sizemode == RESIZE_PIXEL_HEIGHT) {
+		else if (settings->resize_mode == RESIZE_PIXEL_HEIGHT) {
 			/* height only */
-			finalH = settings->newHpx;
+			final_h = settings->new_h_px;
 			if (settings->aspect_ratio) {
 				/* and maintain aspect ratio */
-				finalW = round(((float)settings->newHpx * gimp_image_width(out->image_id)) / gimp_image_height(out->image_id));
+				final_w = round(((float)settings->new_h_px * gimp_image_width(out->image_id)) / gimp_image_height(out->image_id));
 			}
 			else {
-				finalW = gimp_image_width(out->image_id);
+				final_w = gimp_image_width(out->image_id);
 			}
 		}
 		else {
 			/* both dimensions are defined */
-			finalW = settings->newWpx;
-			finalH = settings->newHpx;
+			final_w = settings->new_w_px;
+			final_h = settings->new_h_px;
 		}
 	}
 	
@@ -289,8 +289,8 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 	if (GIMP_MAJOR_VERSION == 2 && GIMP_MINOR_VERSION <= 6) {
 		success = gimp_image_scale_full (
 			out->image_id, 
-			finalW, 
-			finalH, 
+			final_w, 
+			final_h, 
 			settings->interpolation
 		);
 	}
@@ -304,8 +304,8 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 		
 		success = gimp_image_scale (
 			out->image_id, 
-			finalW, 
-			finalH
+			final_w, 
+			final_h
 		);
 		
 		success = gimp_context_set_interpolation (oldInterpolation);
@@ -323,22 +323,32 @@ static gboolean apply_crop(crop_settings settings, image_output out)
 	oldHeight = gimp_image_height(out->image_id);
 	
 	if (settings->manual) {
-		newWidth = settings->newW;
-		newHeight = settings->newH;
-		posX = 0;
-		posY = 0;
+		newWidth = settings->new_w;
+		newHeight = settings->new_h;
+		posX = (oldWidth - newWidth) / 2;
+		posY = (oldHeight - newHeight) / 2;
 	}
 	else {
-		if (( (float)oldWidth / oldHeight ) > ( (float)crop_preset_ratio[settings->ratio][0] / crop_preset_ratio[settings->ratio][1]) ) { 
+		float ratio1, ratio2;
+		if (settings->ratio == CROP_PRESET_CUSTOM) {
+			ratio1 = settings->custom_ratio1;
+			ratio2 = settings->custom_ratio2;
+		}
+		else {
+			ratio1 = (float)crop_preset_ratio[settings->ratio][0];
+			ratio2 = (float)crop_preset_ratio[settings->ratio][1];
+		}
+		
+		if (( (float)oldWidth / oldHeight ) > ( ratio1 / ratio2) ) { 
 			/* crop along the width */
 			newHeight = oldHeight;
-			newWidth = round(( crop_preset_ratio[settings->ratio][0] * (float)newHeight ) / crop_preset_ratio[settings->ratio][1]);
+			newWidth = round(( ratio1 * (float)newHeight ) / ratio2);
 			posX = (oldWidth - newWidth) / 2;
 			posY = 0;
 		} else { 
 			/* crop along the height */
 			newWidth = oldWidth;
-			newHeight = round(( crop_preset_ratio[settings->ratio][1] * (float)newWidth) / crop_preset_ratio[settings->ratio][0]);
+			newHeight = round(( ratio2 * (float)newWidth) / ratio1);
 			posX = 0;
 			posY = (oldHeight - newHeight) / 2;
 		}
@@ -359,7 +369,7 @@ static gboolean apply_fliprotate(fliprotate_settings settings, image_output out)
 {
 	gboolean success = TRUE;
 	
-	if (settings->flipH) {
+	if (settings->flip_h) {
 		/* do horizontal flip */
 		success = gimp_image_flip (
 			out->image_id,
@@ -367,7 +377,7 @@ static gboolean apply_fliprotate(fliprotate_settings settings, image_output out)
 		);
 	}
 	
-	if (settings->flipV) {
+	if (settings->flip_v) {
 		/* do vertical flip */
 		success = gimp_image_flip (
 			out->image_id,
@@ -379,7 +389,7 @@ static gboolean apply_fliprotate(fliprotate_settings settings, image_output out)
 		/* do rotation */
 		success = gimp_image_rotate (
 			out->image_id,
-			settings->rotate_type
+			settings->rotation_type
 		);
 	}
 	
@@ -455,7 +465,7 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 	gdouble posX, posY;
 	gint wmwidth, wmheight, wmasc, wmdesc;
 	
-	if (settings->textmode) {
+	if (settings->mode) {
 		if (strlen(settings->text) == 0) {
 			return TRUE;
 		}
@@ -515,14 +525,15 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
         gimp_layer_set_opacity(layerId, settings->opacity);
 	}
 	else {
-		if ((access(settings->imagefile, R_OK) == -1)) {
+		if (!g_file_test(settings->image_file, G_FILE_TEST_IS_REGULAR)) {//((access(settings->image_file, R_OK) == -1)) {
+			// error, can't access image file
 			return TRUE;
 		}
 		
 		layerId = gimp_file_load_layer(
 			GIMP_RUN_NONINTERACTIVE,
 			out->image_id,
-			settings->imagefile
+			settings->image_file
 		);
 		
 		gimp_layer_set_opacity(layerId, settings->opacity);
@@ -872,7 +883,7 @@ static gboolean image_save_tiff(image_output out, int compression)
  * 2 = old file wasn't the same (implicit overwrite)
  */
 static int overwrite_result(char* path, GtkWidget* parent) {
-	gboolean oldfile_access = (access(path, F_OK) == 0);
+	gboolean oldfile_access = g_file_test(path, G_FILE_TEST_IS_REGULAR);//(access(path, F_OK) == 0);
 	
 	if (bimp_alertoverwrite && oldfile_access) {
 		GtkWidget *dialog;
