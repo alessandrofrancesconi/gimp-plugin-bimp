@@ -26,7 +26,7 @@ static char* get_treeview_selection(gpointer);
 static void open_file_chooser(GtkWidget*, gpointer);
 static void open_folder_chooser(GtkWidget*, gpointer);
 static void add_input_file(char*);
-static void add_input_folder(char*);
+static void add_input_folder(char*, gpointer); 
 static void remove_input_file(GtkWidget*, GtkTreeSelection*);
 static void remove_all_input_files(GtkWidget*, gpointer);
 static void select_filename (GtkTreeView*, gpointer);
@@ -60,7 +60,7 @@ GtkWidget *popmenu_edit;
 GtkWidget *check_alertoverwrite;
 GtkWidget *check_deleteondone;
 GtkWidget *treeview_files;
-GtkWidget *file_chooser, *folder_chooser;
+GtkWidget *file_chooser, *folder_chooser, *with_subdirs;
 GtkWidget *button_preview;
 
 GtkWidget* progressbar_visible;
@@ -296,7 +296,8 @@ static void add_input_file(char* filename)
 	}
 }
 
-static void add_input_folder(char* folder) 
+/* Recursive function to add all files from the hierarchy if desired */
+static void add_input_folder_r(char* folder, gboolean with_subdirs) 
 {
 	DIR *dp;
 	struct dirent *ep;     
@@ -309,7 +310,17 @@ static void add_input_folder(char* folder)
 			char* mimetype;
 			GError *error;
 			GFileInfo *file_info = g_file_query_info (g_file_new_for_path(filename), "standard::*", 0, NULL, &error);
-			content_type = g_file_info_get_content_type (file_info);
+            
+            /* Folder processing */
+            if (g_file_info_get_file_type(file_info) == G_FILE_TYPE_DIRECTORY){
+                if (strcmp(ep->d_name, ".") == 0 || strcmp(ep->d_name, "..") == 0)
+                    continue;
+                if (with_subdirs) 
+                    add_input_folder_r(filename, with_subdirs);
+                continue;
+            }
+            
+            content_type = g_file_info_get_content_type (file_info);
 			mimetype = g_content_type_get_mime_type (content_type);
 			
 			if ((
@@ -331,7 +342,11 @@ static void add_input_folder(char* folder)
 	else {
 		bimp_show_error_dialog(g_strdup_printf(_("Couldn't read into \"%s\" directory."), folder), bimp_window_main);
 	}
-	
+}	
+
+static void add_input_folder(char* folder, gpointer with_subdirs) 
+{
+    add_input_folder_r(folder, (gboolean)GPOINTER_TO_INT(with_subdirs));
 	bimp_refresh_fileview();
 }
 
@@ -616,6 +631,8 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
 static void open_folder_chooser(GtkWidget *widget, gpointer data) 
 {
 	GSList *selection;
+    gboolean include_subdirs;
+
 	if (folder_chooser == NULL) { /* set the file chooser for the first time */
 		folder_chooser = gtk_file_chooser_dialog_new(
 			_("Select folders containing images"), 
@@ -625,12 +642,18 @@ static void open_folder_chooser(GtkWidget *widget, gpointer data)
 			GTK_STOCK_ADD, GTK_RESPONSE_ACCEPT, NULL
 		);
 		gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(folder_chooser), TRUE);
+    
+        /* Add checkbox to select the depth of file search */
+	    with_subdirs = gtk_check_button_new_with_label(_("Add files from the whole hierarchy"));
+        gtk_widget_show (with_subdirs);
+	    gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(folder_chooser), GTK_WIDGET(with_subdirs));
 	}
 	
 	/* show dialog */
 	if (gtk_dialog_run (GTK_DIALOG(folder_chooser)) == GTK_RESPONSE_ACCEPT) {
 		selection = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(folder_chooser));
-		g_slist_foreach(selection, (GFunc)add_input_folder, NULL);
+        include_subdirs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(with_subdirs));
+		g_slist_foreach(selection, (GFunc)add_input_folder, GINT_TO_POINTER(include_subdirs));
 	}
 	
 	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(folder_chooser));
