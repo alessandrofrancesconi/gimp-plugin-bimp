@@ -16,9 +16,18 @@
 #define BIMP_RESULT_WARNING 0
 #define BIMP_RESULT_ERROR -1
 
+/*#if defined _WIN32
+#define FILE_SEPARATOR '\\'
+#define FILE_SEPARATOR_STR "\\"
+#else
+#define FILE_SEPARATOR '/'
+#define FILE_SEPARATOR_STR "/"
+#endif*/
+
 GSList *bimp_input_filenames;
 char *bimp_output_folder;
 gboolean bimp_alertoverwrite;
+gboolean bimp_keepfolderhierarchy;
 gboolean bimp_deleteondone;
 
 gboolean bimp_is_busy;

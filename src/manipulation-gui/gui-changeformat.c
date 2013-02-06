@@ -373,7 +373,7 @@ void bimp_changeformat_save(changeformat_settings orig_settings)
 		((format_params_jpeg)orig_settings->params)->baseline = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_baseline));
 		
 		gtk_text_buffer_get_start_iter(buffer_comment, &start_comment);
-        gtk_text_buffer_get_end_iter(buffer_comment, &end_comment);
+		gtk_text_buffer_get_end_iter(buffer_comment, &end_comment);
 		((format_params_jpeg)orig_settings->params)->comment = g_strdup(gtk_text_buffer_get_text(buffer_comment, &start_comment, &end_comment, TRUE));
 		
 		((format_params_jpeg)orig_settings->params)->markers = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_markers));

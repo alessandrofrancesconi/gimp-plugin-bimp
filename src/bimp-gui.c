@@ -58,6 +58,7 @@ GtkWidget *scroll_sequence;
 GtkWidget *popmenu_add;
 GtkWidget *popmenu_edit;
 GtkWidget *check_alertoverwrite;
+GtkWidget *check_keepfolderhierarchy;
 GtkWidget *check_deleteondone;
 GtkWidget *treeview_files;
 GtkWidget *file_chooser, *folder_chooser, *with_subdirs;
@@ -89,8 +90,8 @@ void bimp_show_gui()
 		NULL,
 		GTK_STOCK_ABOUT, GTK_RESPONSE_HELP,
 		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
-        GTK_STOCK_APPLY, GTK_RESPONSE_APPLY, 
-        GTK_STOCK_STOP, GTK_RESPONSE_CANCEL, NULL
+		GTK_STOCK_APPLY, GTK_RESPONSE_APPLY, 
+		GTK_STOCK_STOP, GTK_RESPONSE_CANCEL, NULL
 	);
 	
 	gimp_window_set_transient (GTK_WINDOW(bimp_window_main));
@@ -132,6 +133,7 @@ void bimp_show_gui()
 				}
 				else {
 					bimp_alertoverwrite = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_alertoverwrite));
+					bimp_keepfolderhierarchy = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_keepfolderhierarchy));
 					bimp_deleteondone = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_deleteondone));
 					bimp_start_batch(bimp_window_main);
 				}
@@ -239,6 +241,10 @@ static GtkWidget* option_panel_new()
 	check_alertoverwrite = gtk_check_button_new_with_label(_("Alert when overwriting existing files"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_alertoverwrite), bimp_alertoverwrite);
 	
+	bimp_keepfolderhierarchy = FALSE;
+	check_keepfolderhierarchy = gtk_check_button_new_with_label(_("Keep folder hierarchy"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_keepfolderhierarchy), bimp_keepfolderhierarchy);
+	
 	bimp_deleteondone = FALSE;
 	check_deleteondone = gtk_check_button_new_with_label(_("Delete original file when done"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_deleteondone), bimp_deleteondone);
@@ -266,9 +272,10 @@ static GtkWidget* option_panel_new()
 	gtk_box_pack_start(GTK_BOX(hbox_outfolder), button_outfolder, FALSE, FALSE, 0);
 	
 	gtk_box_pack_start(GTK_BOX(vbox_useroptions), hbox_outfolder, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_alertoverwrite, FALSE, FALSE, 5);
+	gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_alertoverwrite, FALSE, FALSE, 2);
+	gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_keepfolderhierarchy, FALSE, FALSE, 2);
 	/* TODO: delete on done? gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_deleteondone, FALSE, FALSE, 0); */
-	gtk_box_pack_start(GTK_BOX(vbox_useroptions), button_preview, FALSE, FALSE, 5);
+	gtk_box_pack_start(GTK_BOX(vbox_useroptions), button_preview, FALSE, FALSE, 2);
 	
 	gtk_box_pack_start(GTK_BOX(hbox), vbox_input, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), vbox_useroptions, FALSE, FALSE, 10);
@@ -300,27 +307,27 @@ static void add_input_file(char* filename)
 static void add_input_folder_r(char* folder, gboolean with_subdirs) 
 {
 	DIR *dp;
-	struct dirent *ep;     
+	struct dirent *ep;
 	dp = opendir (folder);
 	g_print("%s\n", folder);
 	if (dp != NULL) {
 		while (ep = readdir (dp)) {
-			char* filename = g_strconcat(folder, "/", ep->d_name, NULL);
+			char* filename = g_strconcat(folder, FILE_SEPARATOR_STR /*"/"*/, ep->d_name, NULL);
 			const char *content_type;
 			char* mimetype;
 			GError *error;
 			GFileInfo *file_info = g_file_query_info (g_file_new_for_path(filename), "standard::*", 0, NULL, &error);
-            
-            /* Folder processing */
-            if (g_file_info_get_file_type(file_info) == G_FILE_TYPE_DIRECTORY){
-                if (strcmp(ep->d_name, ".") == 0 || strcmp(ep->d_name, "..") == 0)
-                    continue;
-                if (with_subdirs) 
-                    add_input_folder_r(filename, with_subdirs);
-                continue;
-            }
-            
-            content_type = g_file_info_get_content_type (file_info);
+
+			/* Folder processing */
+			if (g_file_info_get_file_type(file_info) == G_FILE_TYPE_DIRECTORY){
+				if (strcmp(ep->d_name, ".") == 0 || strcmp(ep->d_name, "..") == 0)
+					continue;
+				if (with_subdirs) 
+					add_input_folder_r(filename, with_subdirs);
+				continue;
+			}
+			
+			content_type = g_file_info_get_content_type (file_info);
 			mimetype = g_content_type_get_mime_type (content_type);
 			
 			if ((
@@ -346,7 +353,7 @@ static void add_input_folder_r(char* folder, gboolean with_subdirs)
 
 static void add_input_folder(char* folder, gpointer with_subdirs) 
 {
-    add_input_folder_r(folder, (gboolean)GPOINTER_TO_INT(with_subdirs));
+	add_input_folder_r(folder, (gboolean)GPOINTER_TO_INT(with_subdirs));
 	bimp_refresh_fileview();
 }
 
@@ -506,8 +513,8 @@ void bimp_refresh_fileview()
 	
 	GSList *iter;
 	for (iter = bimp_input_filenames; iter; iter = iter->next) {
-        add_to_fileview(iter->data);
-    }
+		add_to_fileview(iter->data);
+	}
 }
 
 /* returns the current selected filename (NULL of none) */
@@ -516,7 +523,7 @@ static char* get_treeview_selection(gpointer selection)
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 	char *selected = NULL;
-	GdkPixbuf *pixbuf_prev;         
+	GdkPixbuf *pixbuf_prev; 
 	
 	if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter)) {
 		gtk_tree_model_get(model, &iter, LIST_ITEM, &selected,  -1);
@@ -631,7 +638,7 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
 static void open_folder_chooser(GtkWidget *widget, gpointer data) 
 {
 	GSList *selection;
-    gboolean include_subdirs;
+	gboolean include_subdirs;
 
 	if (folder_chooser == NULL) { /* set the file chooser for the first time */
 		folder_chooser = gtk_file_chooser_dialog_new(
@@ -642,17 +649,17 @@ static void open_folder_chooser(GtkWidget *widget, gpointer data)
 			GTK_STOCK_ADD, GTK_RESPONSE_ACCEPT, NULL
 		);
 		gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(folder_chooser), TRUE);
-    
-        /* Add checkbox to select the depth of file search */
-	    with_subdirs = gtk_check_button_new_with_label(_("Add files from the whole hierarchy"));
-        gtk_widget_show (with_subdirs);
-	    gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(folder_chooser), GTK_WIDGET(with_subdirs));
+
+		/* Add checkbox to select the depth of file search */
+		with_subdirs = gtk_check_button_new_with_label(_("Add files from the whole hierarchy"));
+		gtk_widget_show (with_subdirs);
+		gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(folder_chooser), GTK_WIDGET(with_subdirs));
 	}
 	
 	/* show dialog */
 	if (gtk_dialog_run (GTK_DIALOG(folder_chooser)) == GTK_RESPONSE_ACCEPT) {
 		selection = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(folder_chooser));
-        include_subdirs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(with_subdirs));
+		include_subdirs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(with_subdirs));
 		g_slist_foreach(selection, (GFunc)add_input_folder, GINT_TO_POINTER(include_subdirs));
 	}
 	

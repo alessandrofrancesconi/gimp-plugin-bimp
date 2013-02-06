@@ -34,12 +34,15 @@ static gboolean image_save_jpeg(image_output, float, float, gboolean, gboolean, 
 static gboolean image_save_png(image_output, gboolean, int, gboolean, gboolean, gboolean, gboolean, gboolean, gboolean, gboolean);
 static gboolean image_save_tga(image_output, gboolean, int);
 static gboolean image_save_tiff(image_output, int);
+static gchar** array_path_folders (char *path);
 static int overwrite_result(char*, GtkWidget*);
 static char* get_datetime(void);
 
 char* current_datetime;
 int processed_count;
 int total_images;
+
+char* common_folder_path;
 
 void bimp_start_batch(gpointer parent_dialog)
 {
@@ -52,8 +55,75 @@ void bimp_start_batch(gpointer parent_dialog)
 	bimp_progress_bar_set(0.0, "");
 	
 	current_datetime = get_datetime();
-	
-	guint batch_idle_tag = g_idle_add((GSourceFunc) process_image, parent_dialog);
+	common_folder_path = NULL;
+
+	if (bimp_keepfolderhierarchy){
+		int i, j;
+		gboolean need_hierarchy = FALSE;
+		char * path = NULL;
+		char ** common_folder;
+		char ** current_folder;
+		size_t common_folder_size, current_folder_size;
+		
+		path = bimp_comp_get_filefolder(g_slist_nth(bimp_input_filenames,0)->data);
+		
+		common_folder = array_path_folders(path);
+		common_folder_size = 0;
+		for (common_folder_size = 0; common_folder[common_folder_size]!= NULL;++common_folder_size);
+
+		for (i=1; i < total_images ; i++)
+		{
+			path = bimp_comp_get_filefolder(g_slist_nth(bimp_input_filenames,i)->data);
+			current_folder = array_path_folders (path);
+			for (current_folder_size = 0; current_folder[current_folder_size]!= NULL;++current_folder_size);
+
+			// The common path is at most as long as the shortest path
+			while (common_folder_size > current_folder_size)
+			{
+				need_hierarchy = TRUE;
+				g_free(common_folder[common_folder_size-1]);
+				common_folder[common_folder_size-1] = NULL;
+				common_folder_size--;
+			}
+			
+			for (j=0; j < common_folder_size; ++j)
+			{
+				if (strcmp(common_folder[j], current_folder[j]) != 0) {
+					need_hierarchy = TRUE;
+					while (common_folder_size > j)
+					{
+						g_free(common_folder[common_folder_size-1]);
+						common_folder[common_folder_size-1] = NULL;
+						common_folder_size--;
+					}
+					break;
+				}
+			}
+
+			g_strfreev(current_folder);
+		}
+
+		if (need_hierarchy) {
+			for (i = 0; i < common_folder_size; ++i)
+				g_print("~ %s \n", common_folder[i]);
+			common_folder_path = g_strjoinv(FILE_SEPARATOR_STR /*"/"*/,common_folder);
+		}
+		g_strfreev(common_folder);
+
+		g_print("~ %s \n", common_folder_path);
+	}
+
+	guint batch_idle_tag = g_idle_add((GSourceFunc)process_image,parent_dialog);
+}
+
+static gchar** array_path_folders (char *path)
+{
+	GArray *array = NULL;
+	int i; 
+	char * normalized_path = (char*)g_malloc(sizeof(path));
+
+	normalized_path = g_strdup(path);
+	return g_strsplit(normalized_path,FILE_SEPARATOR_STR/*"/"*/,0);
 }
 
 static gboolean process_image(gpointer parent)
@@ -62,6 +132,7 @@ static gboolean process_image(gpointer parent)
 	char* orig_filename = NULL;
 	char* orig_basename = NULL;
 	char* orig_file_ext = NULL;
+	char* output_file_comp = NULL;
 	
 	/* load the file and assign ids */
 	orig_filename = g_slist_nth (bimp_input_filenames, processed_count)->data;
@@ -72,6 +143,8 @@ static gboolean process_image(gpointer parent)
 	g_print("\nWorking on file #%d: %s (%s)\n", processed_count+1, orig_basename, orig_filename);
 	bimp_progress_bar_set(((double)processed_count)/total_images, g_strdup_printf(_("Working on file %s..."), orig_filename));
 	
+	g_print("{ {%s} {%s} {%s} }", common_folder_path, orig_filename, orig_basename);
+
 	bimp_apply_drawable_manipulations(imageout, (gchar*)orig_filename, (gchar*)orig_basename); 
 
 	/* rename and save process... */
@@ -85,6 +158,36 @@ static gboolean process_image(gpointer parent)
 	else {
 		imageout->filename = orig_basename;
 	}
+
+	/* To keep the folder hierarchy */
+	if (common_folder_path == NULL)
+	{
+		// Not selected or required, everything goes into the same destination folder
+		output_file_comp = "";
+	}
+	else
+	{
+		// keep folders to add to output path
+		output_file_comp = 
+			g_strndup(&orig_filename[strlen(common_folder_path)+1],
+			strlen(orig_filename)-(strlen(common_folder_path)+1)
+			-strlen(orig_basename)-strlen(orig_file_ext)); 
+	}
+	
+	if (strlen(output_file_comp) > 0)
+	{
+#ifdef _WIN32		
+		// Clean output_file_comp
+		// Should only be concerned for ':' in Drive letter
+		for (i = 0; i < strlen(output_file_comp); ++i)
+			if ( output_file_comp[i] == ':' )
+				output_file_comp[i] = '_';
+#endif
+		// Create path if needed
+		g_mkdir_with_parents(g_strconcat(bimp_output_folder, 
+										 FILE_SEPARATOR_STR,
+										 output_file_comp, NULL), 0777);
+	}
 	
 	/* save the final image in output dir with proper format */
 	if(bimp_list_contains_manip(MANIP_CHANGEFORMAT)) {
@@ -94,7 +197,8 @@ static gboolean process_image(gpointer parent)
 		
 		g_print("Changing FORMAT to %s\n", format_type_string[type][0]);
 		imageout->filename = g_strconcat(imageout->filename, ".", format_type_string[type][0], NULL); /* append new file extension */
-		imageout->filepath = g_strconcat(bimp_output_folder, "/", imageout->filename, NULL); /* build new path */
+		
+		imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR/*"/"*/, output_file_comp, imageout->filename, NULL); /* build new path */
 		g_print("Saving file %s in %s\n", imageout->filename, imageout->filepath);
 		
 		int ow_res = overwrite_result(imageout->filepath, parent);
@@ -116,7 +220,7 @@ static gboolean process_image(gpointer parent)
 	else {
 		/* if not specified, save in original format */
 		imageout->filename = g_strconcat(imageout->filename, orig_file_ext, NULL); /* append old file extension */
-		imageout->filepath = g_strconcat(bimp_output_folder, "/", imageout->filename, NULL); /* build new path */
+		imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR/*"/"*/, output_file_comp, imageout->filename, NULL); /* build new path */
 		
 		int ow_res = overwrite_result(imageout->filepath, parent);
 		if (ow_res > 0) {
@@ -139,6 +243,7 @@ static gboolean process_image(gpointer parent)
 	gimp_image_delete(imageout->image_id); /* is it useful? */
 	g_free(orig_basename);
 	g_free(orig_file_ext);
+	g_free(output_file_comp);
 	g_free(imageout);
 
 	processed_count++;
@@ -296,7 +401,7 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 	}
 	else {
 	/* starting from 2.8, gimp_image_scale_full is deprecated. 
-     * use gimp_image_scale instead */
+	 * use gimp_image_scale instead */
 		GimpInterpolationType oldInterpolation;
 		oldInterpolation = gimp_context_get_interpolation();
 		
@@ -484,10 +589,10 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 			&wmwidth,
 			&wmheight,
 			&wmasc,
-            &wmdesc
-        );
-        
-        if (settings->position == WM_POS_TL) {
+			&wmdesc
+		);
+
+		if (settings->position == WM_POS_TL) {
 			posX = 10;
 			posY = 5;
 		}
@@ -507,22 +612,21 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 			posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);
 			posY = (gimp_image_height(out->image_id) / 2) - (wmheight / 2);
 		}
-        
+		
 		layerId = gimp_text_fontname(
 			out->image_id,
 			-1,
 			posX,
 			posY,
-            settings->text,
-            -1,
-            TRUE,
-            pango_font_description_get_size(settings->font) / PANGO_SCALE,
-            GIMP_PIXELS,
-            pango_font_description_get_family(settings->font)
-        );
-        gimp_context_set_foreground(&old_foreground);
-        
-        gimp_layer_set_opacity(layerId, settings->opacity);
+			settings->text,
+			-1,
+			TRUE,
+			pango_font_description_get_size(settings->font) / PANGO_SCALE,
+			GIMP_PIXELS,
+			pango_font_description_get_family(settings->font)
+		);
+		gimp_context_set_foreground(&old_foreground);
+		gimp_layer_set_opacity(layerId, settings->opacity);
 	}
 	else {
 		if (!g_file_test(settings->image_file, G_FILE_TEST_IS_REGULAR)) {//((access(settings->image_file, R_OK) == -1)) {
@@ -548,20 +652,19 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 				0
 			);
 		}
-        else {
-        //#else
-        /* starting from 2.8, gimp_image_add_layer is deprecated. 
-         * use gimp_image_insert_layer instead */
+		else {
+		//#else
+		/* starting from 2.8, gimp_image_add_layer is deprecated. 
+		 * use gimp_image_insert_layer instead */
 			gimp_image_insert_layer(
 				out->image_id,
 				layerId,
 				0,
 				0
 			);
-        }
-        //#endif
-        
-        if (settings->position == WM_POS_TL) {
+		}
+		//#endif
+		if (settings->position == WM_POS_TL) {
 			posX = 10;
 			posY = 10;
 		}
@@ -581,12 +684,12 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 			posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);
 			posY = (gimp_image_height(out->image_id) / 2) - (wmheight / 2);
 		}
-        
-        gimp_layer_set_offsets(
+		
+		gimp_layer_set_offsets(
 			layerId,
-            posX,
-            posY
-        );   
+			posX,
+			posY
+		);   
 	}
 	
 	out->drawable_id = gimp_image_merge_visible_layers(out->image_id, GIMP_CLIP_TO_IMAGE);
@@ -746,7 +849,7 @@ static gboolean image_save_gif(image_output out, gboolean interlace)
 		FALSE,
 		""
 	);
-    
+	
 	GimpParam *return_vals = gimp_run_procedure(
 			"file_gif_save",
 			&nreturn_vals,

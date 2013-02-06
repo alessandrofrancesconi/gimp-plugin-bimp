@@ -12,49 +12,49 @@
 /* replace all the occurrences of 'rep' into 'orig' with text 'with' */
 char* bimp_str_replace(char *orig, char *rep, char *with) 
 {
-    char *result;
-    char *ins;
-    char *tmp;
-    int len_rep;
-    int len_with;
-    int len_front;
-    int count;
+	char *result;
+	char *ins;
+	char *tmp;
+	int len_rep;
+	int len_with;
+	int len_front;
+	int count;
 
-    if (!orig) {
-        return NULL;
+	if (!orig) {
+		return NULL;
 	}
-    if (!rep || !(len_rep = strlen(rep))) {
-        return NULL;
+	if (!rep || !(len_rep = strlen(rep))) {
+		return NULL;
 	}
-    if (!(ins = strstr(orig, rep))) {
-        return NULL;
-	}
-	
-    if (!with) {
-        with = "";
-    }
-    
-    len_with = strlen(with);
-
-    for (count = 0; tmp = strstr(ins, rep); ++count) {
-        ins = tmp + len_rep;
-    }
-
-    tmp = result = malloc(strlen(orig) + (len_with - len_rep) * count + 1);
-
-    if (!result) {
-        return NULL;
+	if (!(ins = strstr(orig, rep))) {
+		return NULL;
 	}
 	
-    while (count--) {
-        ins = strstr(orig, rep);
-        len_front = ins - orig;
-        tmp = strncpy(tmp, orig, len_front) + len_front;
-        tmp = strcpy(tmp, with) + len_with;
-        orig += len_front + len_rep;
-    }
-    strcpy(tmp, orig);
-    return result;
+	if (!with) {
+		with = "";
+	}
+
+	len_with = strlen(with);
+
+	for (count = 0; tmp = strstr(ins, rep); ++count) {
+		ins = tmp + len_rep;
+	}
+
+	tmp = result = malloc(strlen(orig) + (len_with - len_rep) * count + 1);
+
+	if (!result) {
+		return NULL;
+	}
+	
+	while (count--) {
+		ins = strstr(orig, rep);
+		len_front = ins - orig;
+		tmp = strncpy(tmp, orig, len_front) + len_front;
+		tmp = strcpy(tmp, with) + len_with;
+		orig += len_front + len_rep;
+	}
+	strcpy(tmp, orig);
+	return result;
 }
 
 /* gets the filename from the given path 
@@ -64,16 +64,36 @@ char* bimp_comp_get_filename(char* path)
 	char *pfile;
 	
 	pfile = path + strlen(path);
-    for (; pfile > path; pfile--)
-    {
-        if ((*pfile == '\\') || (*pfile == '/'))
-        {
-            pfile++;
-            break;
-        }
-    }
-    
-    return pfile;
+	for (; pfile > path; pfile--)
+	{
+		if ((*pfile == FILE_SEPARATOR)) //'\\') || (*pfile == '/'))
+		{
+			pfile++;
+			break;
+		}
+	}
+
+	return pfile;
+}
+
+/* gets the filename from the given path 
+ * (compatible with unix and win) */
+char* bimp_comp_get_filefolder(char* path) 
+{
+	char *pfile;
+	int i;
+	char *folder = strdup(path);
+
+	pfile = folder + strlen(folder);
+	for (i = strlen(folder); i > 0 ; i--)
+	{
+		if ((folder[i-1] == FILE_SEPARATOR))
+		{
+			folder[i] = '\0';
+			break;
+		}
+	}
+	return folder;
 }
 
 /* simply the min function */
@@ -98,9 +118,9 @@ gboolean bimp_str_contains_cins(char* fullstr, char* search) {
 /* qsort C-string comparison function (with void* args) */ 
 int cstring_cmp(const void *a, const void *b) 
 { 
-    const char **ia = (const char **)a;
-    const char **ib = (const char **)b;
-    return strcmp(*ia, *ib);
+	const char **ia = (const char **)a;
+	const char **ib = (const char **)b;
+	return strcmp(*ia, *ib);
 } 
 
 void bimp_write_manipulation(manipulation man, gpointer file) 
