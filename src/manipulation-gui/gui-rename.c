@@ -53,7 +53,8 @@ void check_entrytext (GtkEditable *editable, gpointer parent)
 		gtk_dialog_set_response_sensitive (GTK_DIALOG(parent), GTK_RESPONSE_ACCEPT, FALSE);
 	} else if (
 		/* check for invalid characters (for Windows systems) */
-		strstr(entrytext, FILE_SEPARATOR_STR) != NULL ||
+		strstr(entrytext, "\\") != NULL ||
+		strstr(entrytext, "/") != NULL ||
 		strstr(entrytext, "*") != NULL ||
 		strstr(entrytext, ":") != NULL ||
 		strstr(entrytext, "?") != NULL ||

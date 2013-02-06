@@ -106,7 +106,7 @@ void bimp_start_batch(gpointer parent_dialog)
 		if (need_hierarchy) {
 			for (i = 0; i < common_folder_size; ++i)
 				g_print("~ %s \n", common_folder[i]);
-			common_folder_path = g_strjoinv(FILE_SEPARATOR_STR /*"/"*/,common_folder);
+			common_folder_path = g_strjoinv(FILE_SEPARATOR_STR,common_folder);
 		}
 		g_strfreev(common_folder);
 
@@ -123,7 +123,7 @@ static gchar** array_path_folders (char *path)
 	char * normalized_path = (char*)g_malloc(sizeof(path));
 
 	normalized_path = g_strdup(path);
-	return g_strsplit(normalized_path,FILE_SEPARATOR_STR/*"/"*/,0);
+	return g_strsplit(normalized_path,FILE_SEPARATOR_STR,0);
 }
 
 static gboolean process_image(gpointer parent)
@@ -198,7 +198,7 @@ static gboolean process_image(gpointer parent)
 		g_print("Changing FORMAT to %s\n", format_type_string[type][0]);
 		imageout->filename = g_strconcat(imageout->filename, ".", format_type_string[type][0], NULL); /* append new file extension */
 		
-		imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR/*"/"*/, output_file_comp, imageout->filename, NULL); /* build new path */
+		imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); /* build new path */
 		g_print("Saving file %s in %s\n", imageout->filename, imageout->filepath);
 		
 		int ow_res = overwrite_result(imageout->filepath, parent);
@@ -220,7 +220,7 @@ static gboolean process_image(gpointer parent)
 	else {
 		/* if not specified, save in original format */
 		imageout->filename = g_strconcat(imageout->filename, orig_file_ext, NULL); /* append old file extension */
-		imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR/*"/"*/, output_file_comp, imageout->filename, NULL); /* build new path */
+		imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); /* build new path */
 		
 		int ow_res = overwrite_result(imageout->filepath, parent);
 		if (ow_res > 0) {
