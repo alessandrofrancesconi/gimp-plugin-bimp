@@ -309,7 +309,7 @@ static void add_input_folder_r(char* folder, gboolean with_subdirs)
 	DIR *dp;
 	struct dirent *ep;
 	dp = opendir (folder);
-	g_print("%s\n", folder);
+	
 	if (dp != NULL) {
 		while (ep = readdir (dp)) {
 			char* filename = g_strconcat(folder, FILE_SEPARATOR_STR /*"/"*/, ep->d_name, NULL);

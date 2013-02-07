@@ -103,14 +103,10 @@ void bimp_start_batch(gpointer parent_dialog)
 			g_strfreev(current_folder);
 		}
 
-		if (need_hierarchy) {
-			for (i = 0; i < common_folder_size; ++i)
-				g_print("~ %s \n", common_folder[i]);
+		if (need_hierarchy) 
 			common_folder_path = g_strjoinv(FILE_SEPARATOR_STR,common_folder);
-		}
+		
 		g_strfreev(common_folder);
-
-		g_print("~ %s \n", common_folder_path);
 	}
 
 	guint batch_idle_tag = g_idle_add((GSourceFunc)process_image,parent_dialog);
@@ -143,8 +139,6 @@ static gboolean process_image(gpointer parent)
 	g_print("\nWorking on file #%d: %s (%s)\n", processed_count+1, orig_basename, orig_filename);
 	bimp_progress_bar_set(((double)processed_count)/total_images, g_strdup_printf(_("Working on file %s..."), orig_filename));
 	
-	g_print("{ {%s} {%s} {%s} }", common_folder_path, orig_filename, orig_basename);
-
 	bimp_apply_drawable_manipulations(imageout, (gchar*)orig_filename, (gchar*)orig_basename); 
 
 	/* rename and save process... */
