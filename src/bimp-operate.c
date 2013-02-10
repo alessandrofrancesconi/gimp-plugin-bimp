@@ -173,7 +173,8 @@ static gboolean process_image(gpointer parent)
 #ifdef _WIN32		
 		// Clean output_file_comp
 		// Should only be concerned for ':' in Drive letter
-		for (i = 0; i < strlen(output_file_comp); ++i)
+		int i;
+        for (i = 0; i < strlen(output_file_comp); ++i)
 			if ( output_file_comp[i] == ':' )
 				output_file_comp[i] = '_';
 #endif
