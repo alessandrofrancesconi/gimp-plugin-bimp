@@ -1,1 +1,15 @@
-gcc -o bin/win32/bimp.exe -Wall -O2 -Wno-unused-variable -Wno-pointer-sign -Wno-parentheses src/*.c src/manipulation-gui/*.c -LC:/dev/gtk-dev/lib -lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 -lgio-2.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpangocairo-1.0 -lpango-1.0 -lcairo -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -LC:/dev/gimp-dev/lib -LC:/dev/pcre-dev/lib -lgimpui-2.0 -lgimpwidgets-2.0 -lgimpmodule-2.0 -lgimp-2.0 -lgimpmath-2.0 -lgimpconfig-2.0 -lgimpcolor-2.0 -lgimpbase-2.0 -lpcre -mms-bitfields -mwindows -m32 -IC:/dev/gtk-dev/include/gtk-2.0 -IC:/dev/gtk-dev/lib/gtk-2.0/include -IC:/dev/gtk-dev/include/atk-1.0 -IC:/dev/gtk-dev/include/cairo -IC:/dev/gtk-dev/include/pango-1.0 -IC:/dev/gtk-dev/include/glib-2.0 -IC:/dev/gtk-dev/lib/glib-2.0/include -IC:/dev/gtk-dev/include -IC:/dev/gtk-dev/include/freetype2 -IC:/dev/gtk-dev/include/libpng14 -IC:/dev/gimp-dev/include/gimp-2.0 -IC:/dev/pcre-dev/include -DGIMP_DISABLE_DEPRECATED
+set libdir=C:\DevelopmentTools\C\libs
+set gtk=gtk-bundle_2.16.6-20100912_win32
+set gimp=gimp-2.8.2-i686-dev
+set pcre=pcre-7.0-lib
+
+set mingwdir=C:\DevelopmentTools\C\MinGW
+set gccdir=%mingwdir%\bin
+set msysdir=%mingwdir%\msys\1.0\bin
+set compPATH=%gccdir%;%msysdir%;%libdir%\%gimp%\bin;%libdir%\%gtk%\bin;%libdir%\%pcre%\bin;
+
+set PATH=%PATH%;%compPATH%
+
+%gccdir%\gcc.exe -o bin\win32\bimp.exe -Wall -O2 -Wno-unused-variable -Wno-pointer-sign -Wno-parentheses src\*.c src\manipulation-gui\*.c -L%libdir%\%gtk%\lib -lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 -lgio-2.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpangocairo-1.0 -lpango-1.0 -lcairo -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -L%libdir%\%gimp%\lib -L%libdir%\%pcre%\lib -lgimpui-2.0 -lgimpwidgets-2.0 -lgimpmodule-2.0 -lgimp-2.0 -lgimpmath-2.0 -lgimpconfig-2.0 -lgimpcolor-2.0 -lgimpbase-2.0 -lpcre -mms-bitfields -mwindows -m32 -I%libdir%\%gtk%\include\gtk-2.0 -I%libdir%\%gtk%\lib\gtk-2.0\include -I%libdir%\%gtk%\include\atk-1.0 -I%libdir%\%gtk%\include\cairo -I%libdir%\%gtk%\include\pango-1.0 -I%libdir%\%gtk%\include\glib-2.0 -I%libdir%\%gtk%\lib\glib-2.0\include -I%libdir%\%gtk%\include -I%libdir%\%gtk%\include\freetype2 -I%libdir%\%gtk%\include\libpng14 -I%libdir%\%gimp%\include\gimp-2.0 -I%libdir%\%pcre%\include -DGIMP_DISABLE_DEPRECATED
+
+pause
