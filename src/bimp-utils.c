@@ -80,11 +80,9 @@ char* bimp_comp_get_filename(char* path)
  * (compatible with unix and win) */
 char* bimp_comp_get_filefolder(char* path) 
 {
-	char *pfile;
 	int i;
 	char *folder = strdup(path);
 
-	pfile = folder + strlen(folder);
 	for (i = strlen(folder); i > 0 ; i--)
 	{
 		if ((folder[i-1] == FILE_SEPARATOR))
