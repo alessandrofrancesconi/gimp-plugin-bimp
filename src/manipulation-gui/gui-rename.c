@@ -5,6 +5,7 @@
 #include "gui-rename.h"
 #include "../bimp-manipulations.h"
 #include "../bimp-gui.h"
+#include "../bimp-utils.h"
 #include "../plugin-intl.h"
 
 static void check_entrytext (GtkEditable*, gpointer);
@@ -52,8 +53,8 @@ void check_entrytext (GtkEditable *editable, gpointer parent)
 		gtk_dialog_set_response_sensitive (GTK_DIALOG(parent), GTK_RESPONSE_ACCEPT, FALSE);
 	} else if (
 		/* check for invalid characters (for Windows systems) */
-		strstr(entrytext, "/") != NULL || 
 		strstr(entrytext, "\\") != NULL ||
+		strstr(entrytext, "/") != NULL ||
 		strstr(entrytext, "*") != NULL ||
 		strstr(entrytext, ":") != NULL ||
 		strstr(entrytext, "?") != NULL ||
