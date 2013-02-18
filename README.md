@@ -16,7 +16,7 @@ Then:
 	
 Or:
 
-	sudo make && make install-admin
+	make && sudo make install-admin
 
 To make and install for every user in the system (needs root privileges).
 
