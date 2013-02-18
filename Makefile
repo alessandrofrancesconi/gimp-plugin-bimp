@@ -15,11 +15,11 @@ uninstall:
 	gimptool-2.0 --uninstall-bin bimp
 	rm -R $(USER_INSTALL_DIR)/bimp-locale
 
-admin-install:
+install-admin:
 	gimptool-2.0 --install-admin-bin ./bin/bimp
 	cp -Rf ./bin/win32/bimp-locale/ $(SYSTEM_INSTALL_DIR)
 
-admin-uninstall:
+uninstall-admin:
 	gimptool-2.0 --uninstall-admin-bin bimp
 	rm -R $(SYSTEM_INSTALL_DIR)/bimp-locale
 

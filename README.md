@@ -13,10 +13,15 @@ the full set of libraries and dependences for compiling BIMP.
 Then:
 
 	make && make install
+	
+Or:
+
+	sudo make && make install-admin
+
+To make and install for every user in the system (needs root privileges).
 
 1.	Make sure that the "bimp-locale" folder is copied in the plug-in directory too! If not, you can do it manually by copying it from ./bin/win32.
-2.	Don't type 'sudo' before 'make install', otherwise "normal" users won't see the installed plugin
-3.	Don't mind the warnings...
+2.	Don't mind the warnings...
 
 
 Installing under Windows
