@@ -1,16 +1,27 @@
 GIMPARGS = $(shell gimptool-2.0 --cflags --libs)
 PCREARGS = $(shell pcre-config --cflags --libs)
-CP_OUTPUT = $(shell gimptool-2.0 --install-bin ./bin/bimp)
-SAVE_DIR = $(shell echo $(CP_OUTPUT) | sed 's/cp \S* \(\S*\)/\1/')
+SYSTEM_INSTALL_DIR = $(shell gimptool-2.0 --dry-run --install-admin-bin ./bin/bimp | sed 's/cp \S* \(\S*\)/\1/')
+USER_INSTALL_DIR = $(shell gimptool-2.0 --dry-run --install-bin ./bin/bimp | sed 's/cp \S* \(\S*\)/\1/')
+
 make: 
+	which gimptool-2.0 && which pcre-config && \
 	gcc -o ./bin/bimp -Wall -O2 -Wno-unused-variable -Wno-pointer-sign -Wno-parentheses src/*.c src/manipulation-gui/*.c $(GIMPARGS) $(PCREARGS) -DGIMP_DISABLE_DEPRECATED
 	
 install: 
 	gimptool-2.0 --install-bin ./bin/bimp
-	cp -Rf ./bin/win32/bimp-locale/ $(SAVE_DIR)
+	cp -Rf ./bin/win32/bimp-locale/ $(USER_INSTALL_DIR)
 	
 uninstall: 
 	gimptool-2.0 --uninstall-bin bimp
+	rm -R $(USER_INSTALL_DIR)/bimp-locale
+
+admin-install:
+	gimptool-2.0 --install-admin-bin ./bin/bimp
+	cp -Rf ./bin/win32/bimp-locale/ $(SYSTEM_INSTALL_DIR)
+
+admin-uninstall:
+	gimptool-2.0 --uninstall-admin-bin bimp
+	rm -R $(SYSTEM_INSTALL_DIR)/bimp-locale
 
 clean:
 	rm ./bin/bimp
