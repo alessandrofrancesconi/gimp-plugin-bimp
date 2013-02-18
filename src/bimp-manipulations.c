@@ -65,12 +65,12 @@ gboolean bimp_list_contains_manip(manipulation_type search)
 	GSList *iterator = NULL;
 	manipulation_type elem_type;
 	
-    for (iterator = bimp_selected_manipulations; iterator && find == FALSE; iterator = iterator->next) {
-        elem_type = ((manipulation)(iterator->data))->type;
-        if (elem_type == search) find = TRUE;
-    }
-    
-    return find;
+	for (iterator = bimp_selected_manipulations; iterator && find == FALSE; iterator = iterator->next) {
+		elem_type = ((manipulation)(iterator->data))->type;
+		if (elem_type == search) find = TRUE;
+	}
+
+	return find;
 }
 
 /* get the first occurrence of manipulation of type 'search' from the selected ones */
@@ -80,12 +80,12 @@ manipulation bimp_list_get_manip(manipulation_type search)
 	manipulation found_man = NULL;
 	GSList *iterator = NULL;
 	
-    for (iterator = bimp_selected_manipulations; iterator && find == FALSE; iterator = iterator->next) {
-        found_man = (manipulation)(iterator->data);
-        if (found_man->type == search) find = TRUE;
-    }
-    
-    return found_man;
+	for (iterator = bimp_selected_manipulations; iterator && find == FALSE; iterator = iterator->next) {
+		found_man = (manipulation)(iterator->data);
+		if (found_man->type == search) find = TRUE;
+	}
+	
+	return found_man;
 }
 
 /* set of constructors for each type of manipulation (with default values) */

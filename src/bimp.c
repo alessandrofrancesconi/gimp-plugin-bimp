@@ -220,9 +220,9 @@ static gboolean proc_has_compatible_params(gchar* proc_name)
 	gchar* proc_date;
 	GimpPDBProcType proc_type;
 	gint num_params;
-    gint num_values;
-    GimpParamDef *params;
-    GimpParamDef *return_vals;
+	gint num_values;
+	GimpParamDef *params;
+	GimpParamDef *return_vals;
 	
 	gimp_procedural_db_proc_info (
 		proc_name,
@@ -272,15 +272,13 @@ static char* get_bimp_localedir()
 	// different methods for getting the plugin's absolute path, for different systems
 #ifdef __unix__
 	readlink("/proc/self/exe", path, bufsize);
-	div[0] = '/';
 #elif defined _WIN32
 	GetModuleFileName(GetModuleHandle(NULL), path, bufsize);
-	div[0] = '\\';
 #elif defined __APPLE__
 	_NSGetExecutablePath(path, &bufsize);
-	div[0] = '/';
 #endif
 	
+	div[0] = FILE_SEPARATOR /*'/'*/;
 	div[1] = '\0';
 	memset(g_strrstr(path, div), '\0', 1); // truncate at the last path divisor (eliminates "bimp.exe")
 	

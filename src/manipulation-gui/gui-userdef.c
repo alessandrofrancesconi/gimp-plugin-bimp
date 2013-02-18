@@ -214,9 +214,9 @@ static void update_selected_procedure(gchar* procedure)
 	gchar* proc_date;
 	GimpPDBProcType proc_type;
 	gint num_params;
-    gint num_values;
-    GimpParamDef *params;
-    GimpParamDef *return_vals;
+	gint num_values;
+	GimpParamDef *params;
+	GimpParamDef *return_vals;
 	
 	gimp_procedural_db_proc_info (
 		procedure,
@@ -314,7 +314,7 @@ static void update_procedure_box(userdef_settings settings)
 		gint num_params, num_values;
 		GimpParamDef *params;
 		GimpParamDef *return_vals;
-    
+		
 		GtkWidget *label_procname, *label_procdescr, *label_procauthor;
 		
 		/* get procedure's general info*/
