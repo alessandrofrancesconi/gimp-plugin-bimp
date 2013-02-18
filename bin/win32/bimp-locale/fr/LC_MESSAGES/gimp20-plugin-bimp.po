@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gimp-plugin-bimp\n"
 "POT-Creation-Date: 2013-01-26 17:51+0100\n"
-"PO-Revision-Date: 2013-01-26 18:09+0100\n"
+"PO-Revision-Date: 2013-01-28 08:44-0500\n"
 "Last-Translator: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language: fr\n"
@@ -16,9 +16,10 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\\manipulation-gui\n"
 
+# Être consistant dans la traduction de 'manipulation' par 'modification'
 #: bimp-gui.c:128 bimp-gui.c:782
 msgid "The manipulations set is empty!"
-msgstr "Aucune  modification dans la liste!"
+msgstr "Aucune modification dans la liste!"
 
 #: bimp-gui.c:131
 msgid "The file list is empty!"
@@ -60,9 +61,10 @@ msgstr "Avertir du remplacement des fichiers"
 msgid "Delete original file when done"
 msgstr "Terminer en supprimant les fichiers initiaux"
 
+# La miniature seulement
 #: bimp-gui.c:249
 msgid "Click for preview"
-msgstr "Cliquez pour la prévisualisation"
+msgstr "Cliquer ici prévisualise"
 
 #: bimp-gui.c:332
 #, c-format
@@ -71,7 +73,7 @@ msgstr "Lecture du dossier impossible pour  \"%s\""
 
 #: bimp-gui.c:383
 msgid "Can't show a preview because the manipulations set is empty"
-msgstr "Pas de prévisualisation sans  modification"
+msgstr "Pas de prévisualisation sans modification"
 
 #: bimp-gui.c:406
 msgid "Preview"
@@ -79,7 +81,7 @@ msgstr "Prévisualisation"
 
 #: bimp-gui.c:418
 msgid "This is how the selected image will look like after the batch process"
-msgstr "Voici l'image sélectionnée après modification "
+msgstr "Voici l'image sélectionnée avant et après les modifications "
 
 #: bimp-gui.c:521
 msgid "Select images"
@@ -92,15 +94,15 @@ msgstr "Tous les formats pris en charge"
 
 #: bimp-gui.c:621
 msgid "Select folders containing images"
-msgstr "Sélectionnez les dossiers contenant des images"
+msgstr "Sélectionner les dossiers contenant des images"
 
 #: bimp-gui.c:668 bimp-gui.c:788
 msgid "Save this set..."
-msgstr "Enregistrer cet ensemble..."
+msgstr "Enregistrer cette liste 'BIMP'..."
 
 #: bimp-gui.c:672 bimp-gui.c:840
 msgid "Load set..."
-msgstr "Charger une ensemble..."
+msgstr "Ouvrir une liste 'BIMP'..."
 
 #: bimp-gui.c:683
 msgid "Edit properties..."
@@ -108,16 +110,16 @@ msgstr "Change les propriétés..."
 
 #: bimp-gui.c:686
 msgid "Remove this manipulation"
-msgstr "Supprimer ce changement"
+msgstr "Supprimer cette modification"
 
 #: bimp-gui.c:718
 msgid "Can't add another manipulation of this kind. Only one is permitted!"
 msgstr ""
-"Impossible d'ajouter un autre changement de ce type. Un seul est permis!"
+"Impossible d'ajouter une autre modification de ce type. Une seule permise!"
 
 #: bimp-gui.c:805 bimp-gui.c:857
 msgid "An error occured when importing a saved batch file :("
-msgstr ""
+msgstr "Incapable d'ouvrir le fichier 'BIMP' désigné :("
 
 #: bimp-gui.c:828
 msgid "This will overwrite current manipulations set. Continue?"
@@ -125,7 +127,7 @@ msgstr "Ceci remplace l'ensemble actuel des modifications. Continuer?"
 
 #: bimp-gui.c:891 bimp.c:77
 msgid "Applies GIMP manipulations on groups of images"
-msgstr "Apliquer des modifications GIMP par lot, à des groupes d'images"
+msgstr "Appliquer des modifications 'GIMP' par lot, à des groupes d'images"
 
 #: bimp-gui.c:898
 msgid "translator-name <translator-email>"
@@ -155,7 +157,7 @@ msgstr "Net ou flou"
 
 #: bimp-manipulations.c:260
 msgid "Add a Watermark"
-msgstr "Ajouter un Filigrane"
+msgstr "Ajouter un filigrane"
 
 #: bimp-manipulations.c:263
 msgid "Change format and compression"
@@ -167,7 +169,7 @@ msgstr "Renommer selon un modèle"
 
 #: bimp-manipulations.c:269
 msgid "Other GIMP procedure..."
-msgstr "Autre procédure de GIMP..."
+msgstr "Autre procédure de 'GIMP'..."
 
 #: bimp-operate.c:73
 #, c-format
@@ -334,7 +336,7 @@ msgstr "Compression RLE"
 #: manipulation-gui/gui-changeformat.c:272
 #: .\manipulation-gui/gui-changeformat.c:272
 msgid "Image origin"
-msgstr "Origine de l'image"
+msgstr "Origine sur l'image"
 
 #: manipulation-gui/gui-changeformat.c:277
 #: manipulation-gui/gui-watermark.c:233
@@ -450,7 +452,7 @@ msgstr "Panoramique étendu"
 
 #: manipulation-gui/gui-crop.c:123 .\manipulation-gui/gui-crop.c:123
 msgid "EU Passport portrait"
-msgstr "Photo de passeport  EU"
+msgstr "Photo de passeport UE"
 
 #: manipulation-gui/gui-crop.c:126 .\manipulation-gui/gui-crop.c:126
 msgid "Classic smartphone screen"
@@ -462,7 +464,7 @@ msgstr "Écran tablette classique"
 
 #: manipulation-gui/gui-crop.c:132 .\manipulation-gui/gui-crop.c:132
 msgid "Custom ratio"
-msgstr "Rapport personnalisé"
+msgstr "Rapport d'aspect personnalisé"
 
 #: manipulation-gui/gui-fliprotate.c:19 .\manipulation-gui/gui-fliprotate.c:19
 msgid "Flip"
@@ -515,7 +517,7 @@ msgstr ""
 
 #: manipulation-gui/gui-resize.c:37 .\manipulation-gui/gui-resize.c:37
 msgid "Set to a percentage of the original"
-msgstr "Fixer en pourcentage de l'original"
+msgstr "Fixer en pourcentage du format initial"
 
 #: manipulation-gui/gui-resize.c:39 .\manipulation-gui/gui-resize.c:39
 msgid "Set exact size in pixel"
@@ -566,7 +568,8 @@ msgid ""
 "Choose a supported GIMP procedure from the list on the left\n"
 "and define its parameters on the right."
 msgstr ""
-"Choisir une procédure GIMP prise en charge à partir de la liste de gauche \n"
+"Choisir une procédure 'GIMP' prise en charge à partir de la liste de "
+"gauche \n"
 "et définissez ses paramètres à votre droite."
 
 #: manipulation-gui/gui-userdef.c:61 .\manipulation-gui/gui-userdef.c:61
@@ -621,7 +624,7 @@ msgstr "Opacité"
 
 #: manipulation-gui/gui-watermark.c:142 .\manipulation-gui/gui-watermark.c:142
 msgid "Position on the image"
-msgstr "Position de l'immage"
+msgstr "Position sur l'image"
 
 #: manipulation-gui/gui-watermark.c:236 .\manipulation-gui/gui-watermark.c:236
 msgid "Top-right"
