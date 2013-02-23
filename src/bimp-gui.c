@@ -40,7 +40,6 @@ static void edit_clicked_manipulation(GtkMenuItem*, gpointer);
 static void remove_clicked_manipulation(GtkMenuItem*, gpointer);
 static void add_manipulation_button(manipulation);
 
-/* TODO! */
 static void save_set(GtkMenuItem*, gpointer);
 static void load_set(GtkMenuItem*, gpointer);
 
@@ -245,6 +244,7 @@ static GtkWidget* option_panel_new()
 	check_keepfolderhierarchy = gtk_check_button_new_with_label(_("Keep folder hierarchy"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_keepfolderhierarchy), bimp_keepfolderhierarchy);
 	
+	/* TODO? */
 	bimp_deleteondone = FALSE;
 	check_deleteondone = gtk_check_button_new_with_label(_("Delete original file when done"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_deleteondone), bimp_deleteondone);
@@ -904,7 +904,10 @@ static void load_set(GtkMenuItem *menuitem, gpointer user_data)
 
 static void open_about() 
 {
-	const gchar *auth[] = { "Alessandro Francesconi <alessandrofrancesconi@live.it>", NULL };
+	const gchar *auth[] = { 
+		"Alessandro Francesconi <alessandrofrancesconi@live.it>", 
+		"Thomas Mevel <thomas.prog@mevtho.com>", 
+		NULL };
 	const gchar *license = 
 		"This program is free software; you can redistribute it and/or modify "
 		"it under the terms of the GNU General Public License as published by "
