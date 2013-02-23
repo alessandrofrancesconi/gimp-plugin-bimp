@@ -386,17 +386,17 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 	}
 	
 	/* do resize */
-	if (GIMP_MAJOR_VERSION == 2 && GIMP_MINOR_VERSION <= 6) {
+	//if (GIMP_MAJOR_VERSION == 2 && GIMP_MINOR_VERSION <= 6) {
 		success = gimp_image_scale_full (
 			out->image_id, 
 			final_w, 
 			final_h, 
 			settings->interpolation
 		);
-	}
-	else {
+	//}
+	//else {
 	/* starting from 2.8, gimp_image_scale_full is deprecated. 
-	 * use gimp_image_scale instead */
+	 * use gimp_image_scale instead 
 		GimpInterpolationType oldInterpolation;
 		oldInterpolation = gimp_context_get_interpolation();
 		
@@ -409,7 +409,7 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 		);
 		
 		success = gimp_context_set_interpolation (oldInterpolation);
-	}
+	}*/
 	
 	return success;
 }
@@ -639,26 +639,23 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 		wmwidth = gimp_drawable_width(layerId);
 		wmheight = gimp_drawable_height(layerId);
 		
-		if (GIMP_MAJOR_VERSION == 2 && GIMP_MINOR_VERSION <= 6) {
-		// #if (GIMP_MAJOR_VERSION == 2) && (GIMP_MINOR_VERSION <= 6)
+		//if (GIMP_MAJOR_VERSION == 2 && GIMP_MINOR_VERSION <= 6) {
 			gimp_image_add_layer(
 				out->image_id,
 				layerId,
 				0
 			);
-		}
-		else {
-		//#else
+		//}
+		//else {
 		/* starting from 2.8, gimp_image_add_layer is deprecated. 
-		 * use gimp_image_insert_layer instead */
+		 * use gimp_image_insert_layer instead 
 			gimp_image_insert_layer(
 				out->image_id,
 				layerId,
 				0,
 				0
-			);
-		}
-		//#endif
+			);*/
+		//}
 		if (settings->position == WM_POS_TL) {
 			posX = 10;
 			posY = 10;
