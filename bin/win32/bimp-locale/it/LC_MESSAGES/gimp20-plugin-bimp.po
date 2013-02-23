@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gimp-plugin-bimp\n"
-"POT-Creation-Date: 2013-01-26 17:49+0100\n"
-"PO-Revision-Date: 2013-01-26 18:08+0100\n"
+"POT-Creation-Date: 2013-02-23 11:32+0100\n"
+"PO-Revision-Date: 2013-02-23 11:33+0100\n"
 "Last-Translator: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\\manipulation-gui\n"
 
-#: bimp-gui.c:128 bimp-gui.c:782
+#: bimp-gui.c:128 bimp-gui.c:812
 msgid "The manipulations set is empty!"
 msgstr "L'insieme delle modifiche è vuoto!"
 
@@ -24,112 +24,120 @@ msgstr "L'insieme delle modifiche è vuoto!"
 msgid "The file list is empty!"
 msgstr "La lista dei file origine è vuota!"
 
-#: bimp-gui.c:159
+#: bimp-gui.c:160
 msgid "Manipulation set"
 msgstr "Insieme delle modifiche"
 
-#: bimp-gui.c:191
+#: bimp-gui.c:192
 msgid "Input files and options"
 msgstr "File di origine ed opzioni"
 
-#: bimp-gui.c:215
+#: bimp-gui.c:216
 msgid "Add images"
 msgstr "Aggiungi immagini"
 
-#: bimp-gui.c:217
+#: bimp-gui.c:218
 msgid "Add folders"
 msgstr "Aggiungi cartelle"
 
-#: bimp-gui.c:223
+#: bimp-gui.c:224
 msgid "Remove selected"
 msgstr "Rimuovi selezionati"
 
-#: bimp-gui.c:225
+#: bimp-gui.c:226
 msgid "Remove all"
 msgstr "Rimuovi tutti"
 
-#: bimp-gui.c:233
+#: bimp-gui.c:234
 msgid "Output folder"
 msgstr "Salva in"
 
-#: bimp-gui.c:239
+#: bimp-gui.c:240
 msgid "Alert when overwriting existing files"
 msgstr "Avvisa se si sovrascrivono file esistenti"
 
-#: bimp-gui.c:243
+#: bimp-gui.c:244
+msgid "Keep folder hierarchy"
+msgstr "Mantieni la gerarchia delle cartelle"
+
+#: bimp-gui.c:249
 msgid "Delete original file when done"
 msgstr "Cancella i file originali quando ho finito"
 
-#: bimp-gui.c:249
+#: bimp-gui.c:255
 msgid "Click for preview"
 msgstr "Clicca per un'anteprima"
 
-#: bimp-gui.c:332
+#: bimp-gui.c:350
 #, c-format
 msgid "Couldn't read into \"%s\" directory."
 msgstr "Impossibile leggere dalla cartella \"%s\""
 
-#: bimp-gui.c:383
+#: bimp-gui.c:405
 msgid "Can't show a preview because the manipulations set is empty"
 msgstr ""
 "Impossibile visualizzare un'anteprima\n"
 "poichè l'insieme delle modifiche è vuoto"
 
-#: bimp-gui.c:406
+#: bimp-gui.c:428
 msgid "Preview"
 msgstr "Anteprima"
 
-#: bimp-gui.c:418
+#: bimp-gui.c:440
 msgid "This is how the selected image will look like after the batch process"
 msgstr "Ecco come apparirà l'immagine selezionata dopo il processo di modifica"
 
-#: bimp-gui.c:521
+#: bimp-gui.c:543
 msgid "Select images"
 msgstr "Scegli immagine"
 
-#: bimp-gui.c:530 manipulation-gui/gui-watermark.c:65
+#: bimp-gui.c:552 manipulation-gui/gui-watermark.c:65
 #: .\manipulation-gui/gui-watermark.c:65
 msgid "All supported types"
 msgstr "Tutti i formati supportati"
 
-#: bimp-gui.c:621
+#: bimp-gui.c:645
 msgid "Select folders containing images"
 msgstr "Seleziona delle cartelle contenenti immagini"
 
-#: bimp-gui.c:668 bimp-gui.c:788
+#: bimp-gui.c:654
+msgid "Add files from the whole hierarchy"
+msgstr "Aggiungi anche le cartelle interne"
+
+#: bimp-gui.c:698 bimp-gui.c:819
 msgid "Save this set..."
 msgstr "Salva questo set..."
 
-#: bimp-gui.c:672 bimp-gui.c:840
+#: bimp-gui.c:702 bimp-gui.c:875
 msgid "Load set..."
 msgstr "Carica set..."
 
-#: bimp-gui.c:683
+#: bimp-gui.c:713
 msgid "Edit properties..."
 msgstr "Cambia proprietà..."
 
-#: bimp-gui.c:686
+#: bimp-gui.c:716
 msgid "Remove this manipulation"
 msgstr "Rimuovi questa modifica"
 
-#: bimp-gui.c:718
+#: bimp-gui.c:748
 msgid "Can't add another manipulation of this kind. Only one is permitted!"
 msgstr ""
 "Impossibile aggiungere un'altra modifica di questo tipo. Una sola è permessa!"
 
-#: bimp-gui.c:805 bimp-gui.c:857
+#: bimp-gui.c:840 bimp-gui.c:892
 msgid "An error occured when importing a saved batch file :("
 msgstr "E' avvenuto un errore durante il caricamento :("
 
-#: bimp-gui.c:828
+#: bimp-gui.c:863
 msgid "This will overwrite current manipulations set. Continue?"
 msgstr "Questo sovrascriverà l'insieme delle modifiche corrente. Continuare?"
 
-#: bimp-gui.c:891 bimp.c:77
+#: bimp-gui.c:926 bimp.c:77
 msgid "Applies GIMP manipulations on groups of images"
 msgstr "Applica modifiche GIMP a gruppi di immagini"
 
-#: bimp-gui.c:898
+#: bimp-gui.c:933
 msgid "translator-name <translator-email>"
 msgstr ""
 "Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
@@ -171,29 +179,29 @@ msgstr "Rinomina con un pattern"
 msgid "Other GIMP procedure..."
 msgstr "Altra procedura di GIMP..."
 
-#: bimp-operate.c:73
+#: bimp-operate.c:140
 #, c-format
 msgid "Working on file %s..."
 msgstr "Lavorando sul file %s"
 
-#: bimp-operate.c:148
+#: bimp-operate.c:248
 msgid "Operations stopped"
 msgstr "Operazione fermata"
 
-#: bimp-operate.c:154
+#: bimp-operate.c:254
 msgid "End, all files have been processed"
 msgstr "Fine, tutti i file sono stati processati"
 
-#: bimp-operate.c:895
+#: bimp-operate.c:993
 #, c-format
 msgid "File %s already exists, overwrite it?"
 msgstr "Il file %s esiste già, sovrascriverlo?"
 
-#: bimp-operate.c:901
+#: bimp-operate.c:999
 msgid "Yes, don't ask again"
 msgstr "Si, non chiedermelo più"
 
-#: bimp-operate.c:905
+#: bimp-operate.c:1003
 msgid "Overwrite?"
 msgstr "Sovrascrivere?"
 
@@ -482,23 +490,23 @@ msgstr "Verticalmente"
 msgid "Rotation"
 msgstr "Rotazione"
 
-#: manipulation-gui/gui-rename.c:25 .\manipulation-gui/gui-rename.c:25
+#: manipulation-gui/gui-rename.c:26 .\manipulation-gui/gui-rename.c:26
 msgid "Keywords"
 msgstr "Keyword"
 
-#: manipulation-gui/gui-rename.c:29 .\manipulation-gui/gui-rename.c:29
+#: manipulation-gui/gui-rename.c:30 .\manipulation-gui/gui-rename.c:30
 msgid "Original filename (without extension)"
 msgstr "Nome file originale (senza estensione)"
 
-#: manipulation-gui/gui-rename.c:30 .\manipulation-gui/gui-rename.c:30
+#: manipulation-gui/gui-rename.c:31 .\manipulation-gui/gui-rename.c:31
 msgid "Incremental number"
 msgstr "Numero incrementale"
 
-#: manipulation-gui/gui-rename.c:31 .\manipulation-gui/gui-rename.c:31
+#: manipulation-gui/gui-rename.c:32 .\manipulation-gui/gui-rename.c:32
 msgid "Date and time (YYYY-MM-DD_hh-mm)"
 msgstr "Data e ora (AAAA-MM-GG_hh-mm)"
 
-#: manipulation-gui/gui-rename.c:51 .\manipulation-gui/gui-rename.c:51
+#: manipulation-gui/gui-rename.c:52 .\manipulation-gui/gui-rename.c:52
 #, c-format
 msgid ""
 "Can't save!\n"
@@ -507,7 +515,7 @@ msgstr ""
 "Impossibile salvare!\n"
 "Deve esserci un simbolo '%s' o '%s'."
 
-#: manipulation-gui/gui-rename.c:63 .\manipulation-gui/gui-rename.c:63
+#: manipulation-gui/gui-rename.c:64 .\manipulation-gui/gui-rename.c:64
 msgid ""
 "Can't save!\n"
 "Pattern contains invalid characters."
