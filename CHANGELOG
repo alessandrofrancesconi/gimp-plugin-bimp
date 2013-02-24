@@ -4,6 +4,17 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+1.1:
+ - Possibility to retrieve images from the whole hierarchy when opening a folder (thanks to Thomas Mevel @mevtho)
+ - Added a folder hierarchy saving in the output folder (thanks to Thomas Mevel @mevtho)
+ - (temporary) fix for fail-start in GIMP 2.6 for Windows
+ - Fixed wrong limits interpretation in "Other GIMP procedure" window (issue #31)
+ - Fixed crash when converting image files without extension into another format (partially fixes #28)
+ - Fixed crash when adding input folders that contain files with special chars
+ - Updated French and Italian translations
+ - Better Makefile for Linux (thanks to @ivoanjo)
+ - Some code optimizations
+
 1.0:
  - (finally) Added "Save set" and "Load set" features (issue #10)
  - Possibility to set a custom aspect ratio under "Crop"

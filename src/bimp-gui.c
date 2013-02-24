@@ -306,21 +306,24 @@ static void add_input_file(char* filename)
 /* Recursive function to add all files from the hierarchy if desired */
 static void add_input_folder_r(char* folder, gboolean with_subdirs) 
 {
-	DIR *dp;
-	struct dirent *ep;
-	dp = opendir (folder);
+	GDir *dp;
+	const gchar* entry;
+	dp = g_dir_open (folder, 0, NULL);
 	
 	if (dp != NULL) {
-		while (ep = readdir (dp)) {
-			char* filename = g_strconcat(folder, FILE_SEPARATOR_STR /*"/"*/, ep->d_name, NULL);
+		while (entry = g_dir_read_name (dp)) {			
+			
+			char* filename = g_strconcat(folder, FILE_SEPARATOR_STR, entry, NULL);
+			
 			const char *content_type;
 			char* mimetype;
 			GError *error;
 			GFileInfo *file_info = g_file_query_info (g_file_new_for_path(filename), "standard::*", 0, NULL, &error);
 
+			
 			/* Folder processing */
 			if (g_file_info_get_file_type(file_info) == G_FILE_TYPE_DIRECTORY){
-				if (strcmp(ep->d_name, ".") == 0 || strcmp(ep->d_name, "..") == 0)
+				if (strcmp(entry, ".") == 0 || strcmp(entry, "..") == 0)
 					continue;
 				if (with_subdirs) 
 					add_input_folder_r(filename, with_subdirs);
@@ -344,7 +347,7 @@ static void add_input_folder_r(char* folder, gboolean with_subdirs)
 				bimp_input_filenames = g_slist_append(bimp_input_filenames, filename);
 			}
 		}
-		(void) closedir (dp);
+		g_dir_close (dp);
 	}
 	else {
 		bimp_show_error_dialog(g_strdup_printf(_("Couldn't read into \"%s\" directory."), folder), bimp_window_main);

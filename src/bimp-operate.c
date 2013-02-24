@@ -40,6 +40,7 @@ static char* get_datetime(void);
 
 char* current_datetime;
 int processed_count;
+int success_count;
 int total_images;
 
 char* common_folder_path;
@@ -50,6 +51,7 @@ void bimp_start_batch(gpointer parent_dialog)
 	
 	g_print("\nBIMP - Batch Manipulation Plugin\nStart batch processing...\n");
 	processed_count = 0;
+	success_count = 0;
 	total_images = g_slist_length(bimp_input_filenames);
 	
 	bimp_progress_bar_set(0.0, "");
@@ -69,13 +71,13 @@ void bimp_start_batch(gpointer parent_dialog)
 		
 		common_folder = array_path_folders(path);
 		common_folder_size = 0;
-		for (common_folder_size = 0; common_folder[common_folder_size]!= NULL;++common_folder_size);
+		for (common_folder_size = 0; common_folder[common_folder_size] != NULL; ++common_folder_size);
 
 		for (i=1; i < total_images ; i++)
 		{
 			path = bimp_comp_get_filefolder(g_slist_nth(bimp_input_filenames,i)->data);
 			current_folder = array_path_folders (path);
-			for (current_folder_size = 0; current_folder[current_folder_size]!= NULL;++current_folder_size);
+			for (current_folder_size = 0; current_folder[current_folder_size] != NULL; ++current_folder_size);
 
 			// The common path is at most as long as the shortest path
 			while (common_folder_size > current_folder_size)
@@ -104,7 +106,7 @@ void bimp_start_batch(gpointer parent_dialog)
 		}
 
 		if (need_hierarchy) 
-			common_folder_path = g_strjoinv(FILE_SEPARATOR_STR,common_folder);
+			common_folder_path = g_strjoinv(FILE_SEPARATOR_STR, common_folder);
 		
 		g_strfreev(common_folder);
 	}
@@ -119,26 +121,44 @@ static gchar** array_path_folders (char *path)
 	char * normalized_path = (char*)g_malloc(sizeof(path));
 
 	normalized_path = g_strdup(path);
-	return g_strsplit(normalized_path,FILE_SEPARATOR_STR,0);
+	return g_strsplit(normalized_path, FILE_SEPARATOR_STR, 0);
 }
 
 static gboolean process_image(gpointer parent)
 {
+	gboolean success = TRUE;
+	
 	image_output imageout = (image_output)g_malloc(sizeof(struct imageout_str));
 	char* orig_filename = NULL;
 	char* orig_basename = NULL;
 	char* orig_file_ext = NULL;
 	char* output_file_comp = NULL;
 	
-	/* load the file and assign ids */
+	/* store original file path and name */
 	orig_filename = g_slist_nth (bimp_input_filenames, processed_count)->data;
+	orig_basename = g_strdup(bimp_comp_get_filename(orig_filename)); 
 	
-	orig_basename = g_strdup(bimp_comp_get_filename(orig_filename)); /* store original filename */
-	orig_file_ext = g_strdup(strrchr(orig_basename, '.')); /* store original extension */
+	/* store original extension and check error cases */
+	orig_file_ext = g_strdup(strrchr(orig_basename, '.'));
 	
-	g_print("\nWorking on file #%d: %s (%s)\n", processed_count+1, orig_basename, orig_filename);
+	if (orig_file_ext == NULL) {
+		/* under Linux, GtkFileChooser permits to pick an image file without extension, but GIMP cannot 
+		 * save it back if its format remains unchanged. Operation can continue only if a MANIP_CHANGEFORMAT
+		 * is present */
+		if (bimp_list_contains_manip(MANIP_CHANGEFORMAT)) {
+			orig_file_ext = g_malloc0(sizeof(char));
+		}		
+		else {
+			bimp_show_error_dialog(g_strdup_printf(_("Can't save image %s: input file has no extension.\nYou can solve this error by adding a \"Change format or compression\" step"), orig_filename), bimp_window_main);
+			success = FALSE;
+			goto process_end;
+		}
+	}
+	
+	g_print("\nWorking on file %d of %d (%s)\n", processed_count+1, total_images, orig_filename);
 	bimp_progress_bar_set(((double)processed_count)/total_images, g_strdup_printf(_("Working on file %s..."), orig_filename));
 	
+	/* apply all the main manipulations */
 	bimp_apply_drawable_manipulations(imageout, (gchar*)orig_filename, (gchar*)orig_basename); 
 
 	/* rename and save process... */
@@ -157,7 +177,7 @@ static gboolean process_image(gpointer parent)
 	if (common_folder_path == NULL)
 	{
 		// Not selected or required, everything goes into the same destination folder
-		output_file_comp = "";
+		output_file_comp = g_malloc0(sizeof(char));
 	}
 	else
 	{
@@ -179,69 +199,52 @@ static gboolean process_image(gpointer parent)
 				output_file_comp[i] = '_';
 #endif
 		// Create path if needed
-		g_mkdir_with_parents(g_strconcat(bimp_output_folder, 
-										 FILE_SEPARATOR_STR,
-										 output_file_comp, NULL), 0777);
+		g_mkdir_with_parents(
+			g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, NULL), 
+			0777
+		);
 	}
 	
-	/* save the final image in output dir with proper format */
+	/* save the final image in output dir with proper format and params */
+	format_type final_format = -1;
+	format_params params = NULL;
+	
 	if(bimp_list_contains_manip(MANIP_CHANGEFORMAT)) {
 		changeformat_settings settings = (changeformat_settings)(bimp_list_get_manip(MANIP_CHANGEFORMAT))->settings;
-		format_type type = settings->format;
-		format_params params = settings->params;
+		final_format = settings->format;
+		params = settings->params;
 		
-		g_print("Changing FORMAT to %s\n", format_type_string[type][0]);
-		imageout->filename = g_strconcat(imageout->filename, ".", format_type_string[type][0], NULL); /* append new file extension */
-		
-		imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); /* build new path */
-		g_print("Saving file %s in %s\n", imageout->filename, imageout->filepath);
-		
-		int ow_res = overwrite_result(imageout->filepath, parent);
-		if (ow_res > 0) {
-			image_save(type, imageout, params);
-			
-			/* TODO?
-			if (ow_res == 2 && bimp_deleteondone) {
-				if (g_remove (orig_filename) < 0) 
-					g_print("Error, Can't remove old file!\n");
-				}
-				else obsolete_file[processed_count] = TRUE;
-			}*/
-		}
-		else {
-			g_print("File has not been overwritten!\n");
-		}
+		g_print("Changing FORMAT to %s\n", format_type_string[final_format][0]);
+		imageout->filename = g_strconcat(imageout->filename, ".", format_type_string[final_format][0], NULL); /* append new file extension */
 	}
 	else {
 		/* if not specified, save in original format */
-		imageout->filename = g_strconcat(imageout->filename, orig_file_ext, NULL); /* append old file extension */
-		imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); /* build new path */
-		
-		int ow_res = overwrite_result(imageout->filepath, parent);
-		if (ow_res > 0) {
-			g_print("Saving file %s in %s\n", imageout->filename, imageout->filepath);
-			image_save(-1, imageout, NULL);
-			
-			/*
-			if (ow_res == 2 && bimp_deleteondone) {
-				if (g_remove (orig_filename) < 0) 
-					g_print("Error, Can't remove old file!\n");
-				}
-				else obsolete_file[processed_count] = TRUE;
-			}*/
-		}
-		else {
-			g_print("File has not been overwritten!\n");
-		}
+		imageout->filename = g_strconcat(imageout->filename, orig_file_ext, NULL); /* append old file extension */		
+		final_format = -1;	
+	}
+	
+	imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); /* build new path */
+	
+	int ow_res = overwrite_result(imageout->filepath, parent);
+	if (ow_res > 0) {
+		g_print("Saving file %s in %s\n", imageout->filename, imageout->filepath);
+		image_save(final_format, imageout, params);
+	}
+	else {
+		g_print("File has not been overwritten!\n");
 	}
 
 	gimp_image_delete(imageout->image_id); /* is it useful? */
+	
+process_end:
+
 	g_free(orig_basename);
 	g_free(orig_file_ext);
 	g_free(output_file_comp);
 	g_free(imageout);
 
 	processed_count++;
+	if (success) success_count++; 
 	
 	/* TODO: errors check here */
 	if (!bimp_is_busy) {
@@ -251,15 +254,10 @@ static gboolean process_image(gpointer parent)
 	}
 	else {
 		if (processed_count == total_images) {
-			bimp_progress_bar_set(1.0, _("End, all files have been processed"));
-			g_print("\nEnd, all %d files have been processed.\n", processed_count);
+			int errors_count = processed_count - success_count;
+			bimp_progress_bar_set(1.0, g_strdup_printf(_("End, all files have been processed with %d errors"), errors_count));
+			g_print("\nEnd, %d files have been processed with %d errors.\n", processed_count, errors_count);
 			
-			/*int i;
-			for (i = 0; i < total_images; i++) {
-				if (obsolete_file[i]) bimp_input_filenames = g_slist_delete_link(bimp_input_filenames, g_slist_nth (bimp_input_filenames, i));
-			}
-			bimp_refresh_fileview();
-			*/
 			bimp_set_busy(FALSE);
 			
 			return FALSE;
@@ -298,7 +296,7 @@ void bimp_apply_drawable_manipulations(image_output imageout, gchar* orig_filena
 	if(bimp_list_contains_manip(MANIP_WATERMARK)) {
 		g_print("Applying WATERMARK...\n");
 		apply_watermark((watermark_settings)(bimp_list_get_manip(MANIP_WATERMARK))->settings, imageout);
-	}	
+	}
 }
 
 static gboolean apply_manipulation(manipulation man, image_output out) 
@@ -386,17 +384,19 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 	}
 	
 	/* do resize */
-	//if (GIMP_MAJOR_VERSION == 2 && GIMP_MINOR_VERSION <= 6) {
+	#if defined _WIN32 || (!defined _WIN32 && (GIMP_MAJOR_VERSION == 2) && (GIMP_MINOR_VERSION <= 6))
+	
 		success = gimp_image_scale_full (
 			out->image_id, 
 			final_w, 
 			final_h, 
 			settings->interpolation
 		);
-	//}
-	//else {
-	/* starting from 2.8, gimp_image_scale_full is deprecated. 
-	 * use gimp_image_scale instead 
+		
+	#else
+	
+		/* starting from 2.8, gimp_image_scale_full is deprecated. 
+		* use gimp_image_scale instead */ 
 		GimpInterpolationType oldInterpolation;
 		oldInterpolation = gimp_context_get_interpolation();
 		
@@ -409,7 +409,8 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 		);
 		
 		success = gimp_context_set_interpolation (oldInterpolation);
-	}*/
+	
+	#endif
 	
 	return success;
 }
@@ -639,23 +640,27 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 		wmwidth = gimp_drawable_width(layerId);
 		wmheight = gimp_drawable_height(layerId);
 		
-		//if (GIMP_MAJOR_VERSION == 2 && GIMP_MINOR_VERSION <= 6) {
+		#if defined _WIN32 || (!defined _WIN32 && (GIMP_MAJOR_VERSION == 2) && (GIMP_MINOR_VERSION <= 6))
+		
 			gimp_image_add_layer(
 				out->image_id,
 				layerId,
 				0
 			);
-		//}
-		//else {
-		/* starting from 2.8, gimp_image_add_layer is deprecated. 
-		 * use gimp_image_insert_layer instead 
+		
+		#else
+		
+			/* starting from 2.8, gimp_image_add_layer is deprecated. 
+			* use gimp_image_insert_layer instead */
 			gimp_image_insert_layer(
 				out->image_id,
 				layerId,
 				0,
 				0
-			);*/
-		//}
+			);
+			
+		#endif
+		
 		if (settings->position == WM_POS_TL) {
 			posX = 10;
 			posY = 10;
@@ -974,11 +979,11 @@ static gboolean image_save_tiff(image_output out, int compression)
 
 /* returns a result code following this schema:
  * 0 = user responses "don't overwite" to a confirm dialog
- * 1 = old file was the same as the new one and user response "yes, overwite"
+ * 1 = old file was the same as the new one and user responses "yes, overwite"
  * 2 = old file wasn't the same (implicit overwrite)
  */
 static int overwrite_result(char* path, GtkWidget* parent) {
-	gboolean oldfile_access = g_file_test(path, G_FILE_TEST_IS_REGULAR);//(access(path, F_OK) == 0);
+	gboolean oldfile_access = g_file_test(path, G_FILE_TEST_IS_REGULAR);
 	
 	if (bimp_alertoverwrite && oldfile_access) {
 		GtkWidget *dialog;
