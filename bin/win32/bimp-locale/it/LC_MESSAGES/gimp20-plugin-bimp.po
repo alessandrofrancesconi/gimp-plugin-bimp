@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gimp-plugin-bimp\n"
-"POT-Creation-Date: 2013-02-23 11:32+0100\n"
-"PO-Revision-Date: 2013-02-23 11:33+0100\n"
+"POT-Creation-Date: 2013-02-24 14:00+0100\n"
+"PO-Revision-Date: 2013-02-24 14:02+0100\n"
 "Last-Translator: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language: it\n"
@@ -133,11 +133,11 @@ msgstr "E' avvenuto un errore durante il caricamento :("
 msgid "This will overwrite current manipulations set. Continue?"
 msgstr "Questo sovrascriverà l'insieme delle modifiche corrente. Continuare?"
 
-#: bimp-gui.c:926 bimp.c:77
+#: bimp-gui.c:929 bimp.c:77
 msgid "Applies GIMP manipulations on groups of images"
 msgstr "Applica modifiche GIMP a gruppi di immagini"
 
-#: bimp-gui.c:933
+#: bimp-gui.c:936
 msgid "translator-name <translator-email>"
 msgstr ""
 "Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
@@ -179,29 +179,40 @@ msgstr "Rinomina con un pattern"
 msgid "Other GIMP procedure..."
 msgstr "Altra procedura di GIMP..."
 
-#: bimp-operate.c:140
+#: bimp-operate.c:152
+#, c-format
+msgid ""
+"Can't save image %s: input file has no extension.\n"
+"You can solve this error by adding a \"Change format or compression\" step"
+msgstr ""
+"Impossibile salvare l'immagine %s: il file originale non ha estensione.\n"
+"Puoi correggere questo errore aggiungendo un passo \"Cambia formato e "
+"compressione\"."
+
+#: bimp-operate.c:159
 #, c-format
 msgid "Working on file %s..."
 msgstr "Lavorando sul file %s"
 
-#: bimp-operate.c:248
+#: bimp-operate.c:251
 msgid "Operations stopped"
 msgstr "Operazione fermata"
 
-#: bimp-operate.c:254
-msgid "End, all files have been processed"
-msgstr "Fine, tutti i file sono stati processati"
+#: bimp-operate.c:258
+#, c-format
+msgid "End, all files have been processed with %d errors"
+msgstr "Fine, tutti i file sono stati processati con %d errori"
 
-#: bimp-operate.c:993
+#: bimp-operate.c:995
 #, c-format
 msgid "File %s already exists, overwrite it?"
 msgstr "Il file %s esiste già, sovrascriverlo?"
 
-#: bimp-operate.c:999
+#: bimp-operate.c:1001
 msgid "Yes, don't ask again"
 msgstr "Si, non chiedermelo più"
 
-#: bimp-operate.c:1003
+#: bimp-operate.c:1005
 msgid "Overwrite?"
 msgstr "Sovrascrivere?"
 

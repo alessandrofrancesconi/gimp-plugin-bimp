@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gimp-plugin-bimp\n"
-"POT-Creation-Date: 2013-01-26 17:51+0100\n"
-"PO-Revision-Date: 2013-01-28 08:44-0500\n"
+"POT-Creation-Date: 2013-02-24 14:05+0100\n"
+"PO-Revision-Date: 2013-02-24 14:05+0100\n"
 "Last-Translator: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Poedit-SearchPath-1: .\\manipulation-gui\n"
 
 # Être consistant dans la traduction de 'manipulation' par 'modification'
-#: bimp-gui.c:128 bimp-gui.c:782
+#: bimp-gui.c:128 bimp-gui.c:812
 msgid "The manipulations set is empty!"
 msgstr "Aucune modification dans la liste!"
 
@@ -25,111 +25,119 @@ msgstr "Aucune modification dans la liste!"
 msgid "The file list is empty!"
 msgstr "La liste des fichiers est vide!"
 
-#: bimp-gui.c:159
+#: bimp-gui.c:160
 msgid "Manipulation set"
 msgstr "Liste des modifications"
 
-#: bimp-gui.c:191
+#: bimp-gui.c:192
 msgid "Input files and options"
 msgstr "Fichiers d'entrée et options"
 
-#: bimp-gui.c:215
+#: bimp-gui.c:216
 msgid "Add images"
 msgstr "Ajouter des images"
 
-#: bimp-gui.c:217
+#: bimp-gui.c:218
 msgid "Add folders"
 msgstr "Ajouter des dossiers"
 
-#: bimp-gui.c:223
+#: bimp-gui.c:224
 msgid "Remove selected"
 msgstr "Supprimer la sélection"
 
-#: bimp-gui.c:225
+#: bimp-gui.c:226
 msgid "Remove all"
 msgstr "Tout supprimer"
 
-#: bimp-gui.c:233
+#: bimp-gui.c:234
 msgid "Output folder"
 msgstr "Sauver dans "
 
-#: bimp-gui.c:239
+#: bimp-gui.c:240
 msgid "Alert when overwriting existing files"
 msgstr "Avertir du remplacement des fichiers"
 
-#: bimp-gui.c:243
+#: bimp-gui.c:244
+msgid "Keep folder hierarchy"
+msgstr ""
+
+#: bimp-gui.c:249
 msgid "Delete original file when done"
 msgstr "Terminer en supprimant les fichiers initiaux"
 
 # La miniature seulement
-#: bimp-gui.c:249
+#: bimp-gui.c:255
 msgid "Click for preview"
 msgstr "Cliquer ici prévisualise"
 
-#: bimp-gui.c:332
+#: bimp-gui.c:350
 #, c-format
 msgid "Couldn't read into \"%s\" directory."
 msgstr "Lecture du dossier impossible pour  \"%s\""
 
-#: bimp-gui.c:383
+#: bimp-gui.c:405
 msgid "Can't show a preview because the manipulations set is empty"
 msgstr "Pas de prévisualisation sans modification"
 
-#: bimp-gui.c:406
+#: bimp-gui.c:428
 msgid "Preview"
 msgstr "Prévisualisation"
 
-#: bimp-gui.c:418
+#: bimp-gui.c:440
 msgid "This is how the selected image will look like after the batch process"
 msgstr "Voici l'image sélectionnée avant et après les modifications "
 
-#: bimp-gui.c:521
+#: bimp-gui.c:543
 msgid "Select images"
 msgstr "Choisir l'image"
 
-#: bimp-gui.c:530 manipulation-gui/gui-watermark.c:65
+#: bimp-gui.c:552 manipulation-gui/gui-watermark.c:65
 #: .\manipulation-gui/gui-watermark.c:65
 msgid "All supported types"
 msgstr "Tous les formats pris en charge"
 
-#: bimp-gui.c:621
+#: bimp-gui.c:645
 msgid "Select folders containing images"
 msgstr "Sélectionner les dossiers contenant des images"
 
-#: bimp-gui.c:668 bimp-gui.c:788
+#: bimp-gui.c:654
+msgid "Add files from the whole hierarchy"
+msgstr ""
+
+#: bimp-gui.c:698 bimp-gui.c:819
 msgid "Save this set..."
 msgstr "Enregistrer cette liste 'BIMP'..."
 
-#: bimp-gui.c:672 bimp-gui.c:840
+#: bimp-gui.c:702 bimp-gui.c:875
 msgid "Load set..."
 msgstr "Ouvrir une liste 'BIMP'..."
 
-#: bimp-gui.c:683
+#: bimp-gui.c:713
 msgid "Edit properties..."
 msgstr "Change les propriétés..."
 
-#: bimp-gui.c:686
+#: bimp-gui.c:716
 msgid "Remove this manipulation"
 msgstr "Supprimer cette modification"
 
-#: bimp-gui.c:718
+#: bimp-gui.c:748
 msgid "Can't add another manipulation of this kind. Only one is permitted!"
 msgstr ""
 "Impossible d'ajouter une autre modification de ce type. Une seule permise!"
 
-#: bimp-gui.c:805 bimp-gui.c:857
+#: bimp-gui.c:840 bimp-gui.c:892
 msgid "An error occured when importing a saved batch file :("
 msgstr "Incapable d'ouvrir le fichier 'BIMP' désigné :("
 
-#: bimp-gui.c:828
+#: bimp-gui.c:863
 msgid "This will overwrite current manipulations set. Continue?"
 msgstr "Ceci remplace l'ensemble actuel des modifications. Continuer?"
 
-#: bimp-gui.c:891 bimp.c:77
+#: bimp-gui.c:929 bimp.c:77
 msgid "Applies GIMP manipulations on groups of images"
 msgstr "Appliquer des modifications 'GIMP' par lot, à des groupes d'images"
 
-#: bimp-gui.c:898
+#: bimp-gui.c:936
 msgid "translator-name <translator-email>"
 msgstr ""
 "Francesca Fusaroli\n"
@@ -171,29 +179,37 @@ msgstr "Renommer selon un modèle"
 msgid "Other GIMP procedure..."
 msgstr "Autre procédure de 'GIMP'..."
 
-#: bimp-operate.c:73
+#: bimp-operate.c:152
+#, c-format
+msgid ""
+"Can't save image %s: input file has no extension.\n"
+"You can solve this error by adding a \"Change format or compression\" step"
+msgstr ""
+
+#: bimp-operate.c:159
 #, c-format
 msgid "Working on file %s..."
 msgstr "Travaille sur le fichier %s..."
 
-#: bimp-operate.c:148
+#: bimp-operate.c:251
 msgid "Operations stopped"
 msgstr "Arrêt de l'opération"
 
-#: bimp-operate.c:154
-msgid "End, all files have been processed"
-msgstr "Fin, tous les fichiers ont été traités"
+#: bimp-operate.c:258
+#, c-format
+msgid "End, all files have been processed with %d errors"
+msgstr "Fin, tous les fichiers ont été traités avec %d erreurs"
 
-#: bimp-operate.c:895
+#: bimp-operate.c:995
 #, c-format
 msgid "File %s already exists, overwrite it?"
 msgstr "Le fichier %s existe déjà, écraser?"
 
-#: bimp-operate.c:901
+#: bimp-operate.c:1001
 msgid "Yes, don't ask again"
 msgstr "Oui, sans m'avertir"
 
-#: bimp-operate.c:905
+#: bimp-operate.c:1005
 msgid "Overwrite?"
 msgstr "Écraser?"
 
@@ -482,23 +498,23 @@ msgstr "Verticale"
 msgid "Rotation"
 msgstr "Rotation"
 
-#: manipulation-gui/gui-rename.c:25 .\manipulation-gui/gui-rename.c:25
+#: manipulation-gui/gui-rename.c:26 .\manipulation-gui/gui-rename.c:26
 msgid "Keywords"
 msgstr "Symboles clés"
 
-#: manipulation-gui/gui-rename.c:29 .\manipulation-gui/gui-rename.c:29
+#: manipulation-gui/gui-rename.c:30 .\manipulation-gui/gui-rename.c:30
 msgid "Original filename (without extension)"
 msgstr "Nom du fichier originel (sans extension)"
 
-#: manipulation-gui/gui-rename.c:30 .\manipulation-gui/gui-rename.c:30
+#: manipulation-gui/gui-rename.c:31 .\manipulation-gui/gui-rename.c:31
 msgid "Incremental number"
 msgstr "Numéro successif"
 
-#: manipulation-gui/gui-rename.c:31 .\manipulation-gui/gui-rename.c:31
+#: manipulation-gui/gui-rename.c:32 .\manipulation-gui/gui-rename.c:32
 msgid "Date and time (YYYY-MM-DD_hh-mm)"
 msgstr "Date et heure  (AAAA-MM-JJ_hh-mm)"
 
-#: manipulation-gui/gui-rename.c:51 .\manipulation-gui/gui-rename.c:51
+#: manipulation-gui/gui-rename.c:52 .\manipulation-gui/gui-rename.c:52
 #, c-format
 msgid ""
 "Can't save!\n"
@@ -507,7 +523,7 @@ msgstr ""
 "Impossible d'enregistrer!\n"
 "Le symbole '%s' ou '%s' manque."
 
-#: manipulation-gui/gui-rename.c:63 .\manipulation-gui/gui-rename.c:63
+#: manipulation-gui/gui-rename.c:64 .\manipulation-gui/gui-rename.c:64
 msgid ""
 "Can't save!\n"
 "Pattern contains invalid characters."
