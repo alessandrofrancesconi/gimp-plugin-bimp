@@ -339,6 +339,7 @@ static void add_input_folder_r(char* folder, gboolean with_subdirs)
 				strcmp(mimetype, "image/gif") == 0 ||
 				strcmp(mimetype, "image/png") == 0 ||
 				strcmp(mimetype, "image/tiff") == 0 ||
+				strcmp(mimetype, "image/svg+xml") == 0 ||
 				strcmp(mimetype, "image/x-xcf") == 0 ||
 				strcmp(mimetype, "image/x-compressed-xcf") == 0||
 				strcmp(mimetype, "application/x-ext-xcf") == 0) && 
@@ -540,7 +541,7 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
 	GSList *selection;
 	
 	if (file_chooser == NULL) { /* set the file chooser for the first time */
-		GtkFileFilter *filter_all, *supported[6];
+		GtkFileFilter *filter_all, *supported[7];
 
 		file_chooser = gtk_file_chooser_dialog_new(
 			_("Select images"), 
@@ -598,24 +599,34 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
 	#endif
 	
 		supported[4] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[4],"TIFF");
+		gtk_file_filter_set_name(supported[4],"SVG");
 	#ifdef __APPLE__
-		gtk_file_filter_add_pattern (supported[4], "*.[tT][iI][fF][fF]");
-		gtk_file_filter_add_pattern (filter_all, "*.[tT][iI][fF][fF]");
+		gtk_file_filter_add_pattern (supported[4], "*.[sS][vV][gG]");
+		gtk_file_filter_add_pattern (filter_all, "*.[sS][vV][gG]");
 	#else
-		gtk_file_filter_add_mime_type(supported[4],"image/tiff");
-		gtk_file_filter_add_mime_type(filter_all,"image/tiff");
+		gtk_file_filter_add_mime_type(supported[4],"image/svg+xml");
+		gtk_file_filter_add_mime_type(filter_all,"image/svg+xml");
 	#endif
 	
 		supported[5] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[5],"XCF");
+		gtk_file_filter_set_name(supported[5],"TIFF");
 	#ifdef __APPLE__
-		gtk_file_filter_add_pattern (supported[5], "*.[xX][cC][fF]");
+		gtk_file_filter_add_pattern (supported[5], "*.[tT][iI][fF][fF]");
+		gtk_file_filter_add_pattern (filter_all, "*.[tT][iI][fF][fF]");
+	#else
+		gtk_file_filter_add_mime_type(supported[5],"image/tiff");
+		gtk_file_filter_add_mime_type(filter_all,"image/tiff");
+	#endif
+	
+		supported[6] = gtk_file_filter_new();
+		gtk_file_filter_set_name(supported[6],"XCF");
+	#ifdef __APPLE__
+		gtk_file_filter_add_pattern (supported[6], "*.[xX][cC][fF]");
 		gtk_file_filter_add_pattern (filter_all, "*.[xX][cC][fF]");
 	#else
-		gtk_file_filter_add_mime_type(supported[5],"image/x-xcf");
-		gtk_file_filter_add_mime_type(supported[5],"image/x-compressed-xcf");
-		gtk_file_filter_add_mime_type(supported[5],"application/x-ext-xcf");
+		gtk_file_filter_add_mime_type(supported[6],"image/x-xcf");
+		gtk_file_filter_add_mime_type(supported[6],"image/x-compressed-xcf");
+		gtk_file_filter_add_mime_type(supported[6],"application/x-ext-xcf");
 		gtk_file_filter_add_mime_type(filter_all,"image/x-xcf");
 		gtk_file_filter_add_mime_type(filter_all,"image/x-compressed-xcf");
 		gtk_file_filter_add_mime_type(filter_all,"application/x-ext-xcf");
@@ -623,7 +634,7 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
 	
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_chooser), filter_all);
 		int i;
-		for(i = 0; i < 6; i++) {
+		for(i = 0; i < 7; i++) {
 			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_chooser), supported[i]);
 		}
 	}
