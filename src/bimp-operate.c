@@ -140,7 +140,6 @@ static gboolean process_image(gpointer parent)
 	
 	/* store original extension and check error cases */
 	orig_file_ext = g_strdup(strrchr(orig_basename, '.'));
-	
 	if (orig_file_ext == NULL) {
 		/* under Linux, GtkFileChooser permits to pick an image file without extension, but GIMP cannot 
 		 * save it back if its format remains unchanged. Operation can continue only if a MANIP_CHANGEFORMAT
@@ -149,10 +148,15 @@ static gboolean process_image(gpointer parent)
 			orig_file_ext = g_malloc0(sizeof(char));
 		}		
 		else {
-			bimp_show_error_dialog(g_strdup_printf(_("Can't save image %s: input file has no extension.\nYou can solve this error by adding a \"Change format or compression\" step"), orig_filename), bimp_window_main);
+			bimp_show_error_dialog(g_strdup_printf(_("Can't save image %s: input file has no extension.\nYou can solve this error by adding a \"Change format or compression\" step"), orig_basename), bimp_window_main);
 			success = FALSE;
 			goto process_end;
 		}
+	}
+	else if (g_ascii_strcasecmp(orig_file_ext, ".svg") == 0 && !bimp_list_contains_manip(MANIP_CHANGEFORMAT)) {
+		bimp_show_error_dialog(g_strdup_printf(_("GIMP can't save %s back to its original SVG format.\nYou can solve this error by adding a \"Change format or compression\" step"), orig_basename), bimp_window_main);
+		success = FALSE;
+		goto process_end;
 	}
 	
 	g_print("\nWorking on file %d of %d (%s)\n", processed_count+1, total_images, orig_filename);
