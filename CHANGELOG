@@ -4,6 +4,10 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+1.2:
+ - BIMP can now accept SVG images as input
+ - Updated French and Italian translations
+
 1.1:
  - Possibility to retrieve images from the whole hierarchy when opening a folder (thanks to Thomas Mevel @mevtho)
  - Added a folder hierarchy saving in the output folder (thanks to Thomas Mevel @mevtho)
