@@ -22,12 +22,12 @@ static GtkWidget* sequence_panel_new(void);
 static GtkWidget* option_panel_new(void);
 static void init_fileview(void);
 static void add_to_fileview(char*);
-static char* get_treeview_selection(gpointer);
+static GSList* get_treeview_selection();
 static void open_file_chooser(GtkWidget*, gpointer);
 static void open_folder_chooser(GtkWidget*, gpointer);
 static void add_input_file(char*);
 static void add_input_folder(char*, gpointer); 
-static void remove_input_file(GtkWidget*, GtkTreeSelection*);
+static void remove_input_file(GtkWidget*, gpointer);
 static void remove_all_input_files(GtkWidget*, gpointer);
 static void select_filename (GtkTreeView*, gpointer);
 static void update_preview(char*);
@@ -184,8 +184,6 @@ static GtkWidget* option_panel_new()
 	GtkWidget *scroll_input;
 	GtkWidget *button_add, *button_addfolder, *button_remove, *button_removeall;
 	
-	GtkTreeSelection *treesel_file;
-	
 	GtkWidget *vbox_useroptions, *hbox_outfolder;
 	GtkWidget *label_chooser, *button_outfolder;
 	
@@ -201,11 +199,12 @@ static GtkWidget* option_panel_new()
 	scroll_input = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll_input), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_widget_set_size_request(scroll_input, FILE_LIST_PANEL_W, FILE_LIST_PANEL_H);
+	
 	treeview_files = gtk_tree_view_new();
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(treeview_files), FALSE);
+	gtk_tree_selection_set_mode (gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview_files)), GTK_SELECTION_MULTIPLE);
 	init_fileview();
 	bimp_refresh_fileview();
-	treesel_file = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview_files));
 	
 	/* Sub-sub-panel for input file buttons */
 	vbox_buttons = gtk_vbox_new(FALSE, 1);
@@ -284,11 +283,12 @@ static GtkWidget* option_panel_new()
 
 	g_signal_connect(G_OBJECT(button_add), "clicked", G_CALLBACK(open_file_chooser), NULL);
 	g_signal_connect(G_OBJECT(button_addfolder), "clicked", G_CALLBACK(open_folder_chooser), NULL);
-	g_signal_connect(G_OBJECT(button_remove), "clicked", G_CALLBACK(remove_input_file), treesel_file);
+	g_signal_connect(G_OBJECT(button_remove), "clicked", G_CALLBACK(remove_input_file), NULL);
 	g_signal_connect(G_OBJECT(button_removeall), "clicked", G_CALLBACK(remove_all_input_files), NULL);
 	g_signal_connect(G_OBJECT(button_outfolder), "selection-changed", G_CALLBACK(set_output_folder), NULL);
-	g_signal_connect(G_OBJECT(treeview_files), "cursor-changed", G_CALLBACK(select_filename), treesel_file);
-	g_signal_connect(G_OBJECT(button_preview), "clicked", G_CALLBACK(show_preview), treesel_file);
+	g_signal_connect(G_OBJECT(gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview_files))), "changed", G_CALLBACK(select_filename), NULL);
+	g_signal_connect(G_OBJECT(button_preview), "clicked", G_CALLBACK(show_preview), NULL);
+	
 	
 	return panel;
 }
@@ -314,12 +314,9 @@ static void add_input_folder_r(char* folder, gboolean with_subdirs)
 		while (entry = g_dir_read_name (dp)) {			
 			
 			char* filename = g_strconcat(folder, FILE_SEPARATOR_STR, entry, NULL);
-			
-			const char *content_type;
-			char* mimetype;
+			char* file_extension = g_strdup(strrchr(filename, '.'));
 			GError *error;
 			GFileInfo *file_info = g_file_query_info (g_file_new_for_path(filename), "standard::*", 0, NULL, &error);
-
 			
 			/* Folder processing */
 			if (g_file_info_get_file_type(file_info) == G_FILE_TYPE_DIRECTORY){
@@ -329,20 +326,18 @@ static void add_input_folder_r(char* folder, gboolean with_subdirs)
 					add_input_folder_r(filename, with_subdirs);
 				continue;
 			}
-			
-			content_type = g_file_info_get_content_type (file_info);
-			mimetype = g_content_type_get_mime_type (content_type);
-			
+						
 			if ((
-				strcmp(mimetype, "image/bmp") == 0 ||
-				strcmp(mimetype, "image/jpeg") == 0 ||
-				strcmp(mimetype, "image/gif") == 0 ||
-				strcmp(mimetype, "image/png") == 0 ||
-				strcmp(mimetype, "image/tiff") == 0 ||
-				strcmp(mimetype, "image/svg+xml") == 0 ||
-				strcmp(mimetype, "image/x-xcf") == 0 ||
-				strcmp(mimetype, "image/x-compressed-xcf") == 0||
-				strcmp(mimetype, "application/x-ext-xcf") == 0) && 
+				g_ascii_strcasecmp(file_extension, ".bmp") == 0 ||
+				g_ascii_strcasecmp(file_extension, ".jpeg") == 0 ||
+				g_ascii_strcasecmp(file_extension, ".jpg") == 0 ||
+				g_ascii_strcasecmp(file_extension, ".jpe") == 0 ||
+				g_ascii_strcasecmp(file_extension, ".gif") == 0 ||
+				g_ascii_strcasecmp(file_extension, ".png") == 0 ||
+				g_ascii_strcasecmp(file_extension, ".tif") == 0 ||
+				g_ascii_strcasecmp(file_extension, ".tiff") == 0 ||
+				g_ascii_strcasecmp(file_extension, ".svg") == 0 ||
+				g_ascii_strcasecmp(file_extension, ".xcf") == 0) && 
 				g_slist_find_custom(bimp_input_filenames, filename, (GCompareFunc)strcmp) == NULL)
 			{
 				bimp_input_filenames = g_slist_append(bimp_input_filenames, filename);
@@ -361,18 +356,47 @@ static void add_input_folder(char* folder, gpointer with_subdirs)
 	bimp_refresh_fileview();
 }
 
-static void remove_input_file(GtkWidget *widget, GtkTreeSelection* selection) 
+/* returns the list of currently selected filenames (NULL of none) */
+static GSList* get_treeview_selection() 
 {
-	char *selected = get_treeview_selection(selection);
-	if (selected != NULL) {
-		bimp_input_filenames = g_slist_delete_link(bimp_input_filenames, g_slist_find_custom(bimp_input_filenames, selected, (GCompareFunc)strcmp));
-		bimp_refresh_fileview();
-		update_preview(NULL); /* clear the preview widget */
-		g_free(selected);
-	}	
+	GtkTreeModel *model;
+	GList *selected_rows = gtk_tree_selection_get_selected_rows(gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview_files)), &model);
+	GList *i = NULL;
+	GSList *out = NULL;
+	
+	if (selected_rows != NULL) {
+		for (i = selected_rows; i != NULL; i = g_list_next(i) ) {
+			GtkTreeIter iter;
+			char* selected_i;
+			if (gtk_tree_model_get_iter(model, &iter, (GtkTreePath*)i->data) == TRUE) {
+				gtk_tree_model_get(model, &iter, LIST_ITEM, &selected_i, -1);
+				out = g_slist_append(out, selected_i);
+			}
+		}
+		
+		g_list_foreach (selected_rows, (GFunc) gtk_tree_path_free, NULL);
+		g_list_free (selected_rows);
+	}
+	
+	return out;
 }
 
-static void remove_all_input_files(GtkWidget *widget, gpointer selection) 
+static void remove_input_file(GtkWidget *widget, gpointer data) 
+{
+	GSList *selection = get_treeview_selection();
+	GSList *i;
+	
+	if (selection != NULL) {
+		for (i = selection; i != NULL; i = g_slist_next(i) ) {
+			bimp_input_filenames = g_slist_delete_link(bimp_input_filenames, g_slist_find_custom(bimp_input_filenames, (char*)(i->data), (GCompareFunc)strcmp));
+		}
+		
+		bimp_refresh_fileview();
+		update_preview(NULL); /* clear the preview widget */
+	}
+}
+
+static void remove_all_input_files(GtkWidget *widget, gpointer data) 
 {
 	g_slist_free(bimp_input_filenames);
 	bimp_input_filenames = NULL;
@@ -381,11 +405,15 @@ static void remove_all_input_files(GtkWidget *widget, gpointer selection)
 }
 
 /* called when the user clicks on a filename row to update the preview widget */
-static void select_filename (GtkTreeView *tree_view, gpointer selection) 
+static void select_filename (GtkTreeView *tree_view, gpointer data) 
 {
-	char* selected = get_treeview_selection(selection);
-	if (selected != NULL) {
-		update_preview(selected);
+	GSList *selection = get_treeview_selection();
+	
+	if (selection != NULL && g_slist_length(selection) == 1) {
+		update_preview((gchar*)(selection->data));
+	}
+	else {
+		update_preview(NULL);
 	}
 }
 
@@ -403,7 +431,7 @@ static void update_preview (gchar* filename)
 }
 
 /* opens a dialog containing two panels: the original selected image on the left and the result of the selected manipulations on the right */
-static void show_preview (GtkTreeView *tree_view, gpointer selection) 
+static void show_preview (GtkTreeView *tree_view, gpointer data) 
 {
 	if (g_slist_length(bimp_selected_manipulations) == 0) {
 		bimp_show_error_dialog(_("Can't show a preview because the manipulations set is empty"), bimp_window_main);
@@ -415,15 +443,18 @@ static void show_preview (GtkTreeView *tree_view, gpointer selection)
 		GtkWidget *image_orig, *image_final;
 		GtkWidget *image_forward;
 		
+		GSList* selection = get_treeview_selection();
+		if (selection == NULL && g_slist_length(selection) != 1) return;
+		
+		char* selected_str = g_slist_nth_data(selection, 0);
+		
 		image_output imageout_orig = (image_output)g_malloc(sizeof(struct imageout_str));
 		image_output imageout_final = (image_output)g_malloc(sizeof(struct imageout_str));
 		
-		char* selected = get_treeview_selection(selection);
-		
-		imageout_orig->image_id = gimp_file_load(GIMP_RUN_NONINTERACTIVE, (gchar*)selected, (gchar*)selected);
+		imageout_orig->image_id = gimp_file_load(GIMP_RUN_NONINTERACTIVE, (gchar*)selected_str, (gchar*)selected_str);
 		imageout_orig->drawable_id = gimp_image_merge_visible_layers(imageout_orig->image_id, GIMP_CLIP_TO_IMAGE); 
 		
-		bimp_apply_drawable_manipulations(imageout_final, (gchar*)selected, (gchar*)selected);
+		bimp_apply_drawable_manipulations(imageout_final, (gchar*)selected_str, (gchar*)selected_str);
 		
 		pixbuf_orig = gimp_drawable_get_thumbnail(imageout_orig->drawable_id, PREVIEW_IMG_W, PREVIEW_IMG_H, GIMP_PIXBUF_KEEP_ALPHA);
 		pixbuf_final = gimp_drawable_get_thumbnail(imageout_final->drawable_id, PREVIEW_IMG_W, PREVIEW_IMG_H, GIMP_PIXBUF_KEEP_ALPHA);
@@ -465,7 +496,6 @@ static void show_preview (GtkTreeView *tree_view, gpointer selection)
 			g_free(imageout_orig);
 			g_free(imageout_final);
 		}
-		
 	}
 }
 
@@ -521,21 +551,6 @@ void bimp_refresh_fileview()
 	}
 }
 
-/* returns the current selected filename (NULL of none) */
-static char* get_treeview_selection(gpointer selection) 
-{
-	GtkTreeIter iter;
-	GtkTreeModel *model;
-	char *selected = NULL;
-	GdkPixbuf *pixbuf_prev; 
-	
-	if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter)) {
-		gtk_tree_model_get(model, &iter, LIST_ITEM, &selected,  -1);
-	}
-	
-	return selected;
-}
-
 static void open_file_chooser(GtkWidget *widget, gpointer data) 
 {
 	GSList *selection;
@@ -556,82 +571,46 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
 		gtk_file_filter_set_name(filter_all,_("All supported types"));
 		
 		supported[0] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[0],"BMP");
-	#ifdef __APPLE__
-		/* Workaround for Mac OSX, that seems to have a bug on GTK file selectors */
-		gtk_file_filter_add_pattern (supported[0], "*.[bB][mM][pP]");
-		gtk_file_filter_add_pattern (filter_all, "*.[bB][mM][pP]");
-	#else
-		gtk_file_filter_add_mime_type(supported[0],"image/bmp");
-		gtk_file_filter_add_mime_type(filter_all,"image/bmp");
-	#endif
-	
+		gtk_file_filter_set_name(supported[0], "Bitmap (*.bmp)");
+		gtk_file_filter_add_pattern (supported[0], "*.bmp");
+		gtk_file_filter_add_pattern (filter_all, "*.bmp");
+		
 		supported[1] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[1],"JPEG");
-	#ifdef __APPLE__
-		gtk_file_filter_add_pattern (supported[1], "*.[jJ][pP][gG]");
-		gtk_file_filter_add_pattern (supported[1], "*.[jJ][pP][eE][gG]");
-		gtk_file_filter_add_pattern (filter_all, "*.[jJ][pP][gG]");
-		gtk_file_filter_add_pattern (filter_all, "*.[jJ][pP][eE][gG]");
-	#else
-		gtk_file_filter_add_mime_type(supported[1],"image/jpeg");
-		gtk_file_filter_add_mime_type(filter_all,"image/jpeg");
-	#endif
+		gtk_file_filter_set_name(supported[1], "JPEG (*.jpg, *.jpeg, *jpe)");
+		gtk_file_filter_add_pattern (supported[1], "*.jpg");
+		gtk_file_filter_add_pattern (supported[1], "*.jpeg");
+		gtk_file_filter_add_pattern (supported[1], "*.jpe");
+		gtk_file_filter_add_pattern (filter_all, "*.jpg");
+		gtk_file_filter_add_pattern (filter_all, "*.jpeg");
+		gtk_file_filter_add_pattern (filter_all, "*.jpe");
 	
 		supported[2] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[2],"GIF");
-	#ifdef __APPLE__
-		gtk_file_filter_add_pattern (supported[2], "*.[gG][iI][fF]");
-		gtk_file_filter_add_pattern (filter_all, "*.[gG][iI][fF]");
-	#else
-		gtk_file_filter_add_mime_type(supported[2],"image/gif");
-		gtk_file_filter_add_mime_type(filter_all,"image/gif");
-	#endif
-	
+		gtk_file_filter_set_name(supported[2], "GIF (*.gif)");
+		gtk_file_filter_add_pattern (supported[2], "*.gif");
+		gtk_file_filter_add_pattern (filter_all, "*.gif");
+		
 		supported[3] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[3],"PNG");
-	#ifdef __APPLE__
-		gtk_file_filter_add_pattern (supported[3], "*.[pP][nN][gG]");
-		gtk_file_filter_add_pattern (filter_all, "*.[pP][nN][gG]");
-	#else
-		gtk_file_filter_add_mime_type(supported[3],"image/png");
-		gtk_file_filter_add_mime_type(filter_all,"image/png");
-	#endif
-	
+		gtk_file_filter_set_name(supported[3], "PNG (*.png)");
+		gtk_file_filter_add_pattern (supported[3], "*.png");
+		gtk_file_filter_add_pattern (filter_all, "*.png");
+		
 		supported[4] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[4],"SVG");
-	#ifdef __APPLE__
-		gtk_file_filter_add_pattern (supported[4], "*.[sS][vV][gG]");
-		gtk_file_filter_add_pattern (filter_all, "*.[sS][vV][gG]");
-	#else
-		gtk_file_filter_add_mime_type(supported[4],"image/svg+xml");
-		gtk_file_filter_add_mime_type(filter_all,"image/svg+xml");
-	#endif
+		gtk_file_filter_set_name(supported[4], "Scalable Vector Graphics (*.svg)");
+		gtk_file_filter_add_pattern (supported[4], "*.svg");
+		gtk_file_filter_add_pattern (filter_all, "*.svg");
 	
 		supported[5] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[5],"TIFF");
-	#ifdef __APPLE__
-		gtk_file_filter_add_pattern (supported[5], "*.[tT][iI][fF][fF]");
-		gtk_file_filter_add_pattern (filter_all, "*.[tT][iI][fF][fF]");
-	#else
-		gtk_file_filter_add_mime_type(supported[5],"image/tiff");
-		gtk_file_filter_add_mime_type(filter_all,"image/tiff");
-	#endif
+		gtk_file_filter_set_name(supported[5], "TIFF (*tif, *.tiff)");
+		gtk_file_filter_add_pattern (supported[5], "*.tiff");
+		gtk_file_filter_add_pattern (supported[5], "*.tif");
+		gtk_file_filter_add_pattern (filter_all, "*.tiff");
+		gtk_file_filter_add_pattern (filter_all, "*.tif");
 	
 		supported[6] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[6],"XCF");
-	#ifdef __APPLE__
-		gtk_file_filter_add_pattern (supported[6], "*.[xX][cC][fF]");
-		gtk_file_filter_add_pattern (filter_all, "*.[xX][cC][fF]");
-	#else
-		gtk_file_filter_add_mime_type(supported[6],"image/x-xcf");
-		gtk_file_filter_add_mime_type(supported[6],"image/x-compressed-xcf");
-		gtk_file_filter_add_mime_type(supported[6],"application/x-ext-xcf");
-		gtk_file_filter_add_mime_type(filter_all,"image/x-xcf");
-		gtk_file_filter_add_mime_type(filter_all,"image/x-compressed-xcf");
-		gtk_file_filter_add_mime_type(filter_all,"application/x-ext-xcf");
-	#endif
-	
+		gtk_file_filter_set_name(supported[6], "GIMP XCF (*.xcf)");
+		gtk_file_filter_add_pattern (supported[6], "*.xcf");
+		gtk_file_filter_add_pattern (filter_all, "*.xcf");
+			
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_chooser), filter_all);
 		int i;
 		for(i = 0; i < 7; i++) {

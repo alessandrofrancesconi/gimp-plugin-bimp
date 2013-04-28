@@ -160,7 +160,7 @@ static gboolean process_image(gpointer parent)
 	}
 	
 	g_print("\nWorking on file %d of %d (%s)\n", processed_count+1, total_images, orig_filename);
-	bimp_progress_bar_set(((double)processed_count)/total_images, g_strdup_printf(_("Working on file %s..."), orig_filename));
+	bimp_progress_bar_set(((double)processed_count)/total_images, g_strdup_printf(_("Working on file %s..."), orig_basename));
 	
 	/* apply all the main manipulations */
 	bimp_apply_drawable_manipulations(imageout, (gchar*)orig_filename, (gchar*)orig_basename); 

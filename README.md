@@ -34,6 +34,11 @@ or
 `<User-dir>\.gimp<version>\plug-ins`
 
 
+For Mac OSX users
+-----------------
+There's no need to install or compile BIMP on Mac, because the default native build of GIMP for Mac OSX 10.8 made by Simone from http://gimp.lisanet.de/Website/Download.html already includes BIMP!
+
+
 Support this project
 --------------------
 

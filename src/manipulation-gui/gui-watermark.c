@@ -64,58 +64,36 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 	filter_all = gtk_file_filter_new();
 	gtk_file_filter_set_name(filter_all, _("All supported types"));
 	
-	supported[0] = gtk_file_filter_new();
-	gtk_file_filter_set_name(supported[0],"BMP");
-	#ifdef __APPLE__
-		/* Workaround for Mac OSX, that seems to have a bug on GTK file selectors */
-		gtk_file_filter_add_pattern (supported[0], "*.[bB][mM][pP]");
-		gtk_file_filter_add_pattern (filter_all, "*.[bB][mM][pP]");
-	#else
-		gtk_file_filter_add_mime_type(supported[0],"image/bmp");
-		gtk_file_filter_add_mime_type(filter_all,"image/bmp");
-	#endif
-	
+		supported[0] = gtk_file_filter_new();
+		gtk_file_filter_set_name(supported[0], "Bitmap (*.bmp)");
+		gtk_file_filter_add_pattern (supported[0], "*.bmp");
+		gtk_file_filter_add_pattern (filter_all, "*.bmp");
+		
 		supported[1] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[1],"JPEG");
-	#ifdef __APPLE__
-		gtk_file_filter_add_pattern (supported[1], "*.[jJ][pP][gG]");
-		gtk_file_filter_add_pattern (supported[1], "*.[jJ][pP][eE][gG]");
-		gtk_file_filter_add_pattern (filter_all, "*.[jJ][pP][gG]");
-		gtk_file_filter_add_pattern (filter_all, "*.[jJ][pP][eE][gG]");
-	#else
-		gtk_file_filter_add_mime_type(supported[1],"image/jpeg");
-		gtk_file_filter_add_mime_type(filter_all,"image/jpeg");
-	#endif
+		gtk_file_filter_set_name(supported[1], "JPEG (*.jpg, *.jpeg, *jpe)");
+		gtk_file_filter_add_pattern (supported[1], "*.jpg");
+		gtk_file_filter_add_pattern (supported[1], "*.jpeg");
+		gtk_file_filter_add_pattern (supported[1], "*.jpe");
+		gtk_file_filter_add_pattern (filter_all, "*.jpg");
+		gtk_file_filter_add_pattern (filter_all, "*.jpeg");
+		gtk_file_filter_add_pattern (filter_all, "*.jpe");
 	
 		supported[2] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[2],"GIF");
-	#ifdef __APPLE__
-		gtk_file_filter_add_pattern (supported[2], "*.[gG][iI][fF]");
-		gtk_file_filter_add_pattern (filter_all, "*.[gG][iI][fF]");
-	#else
-		gtk_file_filter_add_mime_type(supported[2],"image/gif");
-		gtk_file_filter_add_mime_type(filter_all,"image/gif");
-	#endif
-	
+		gtk_file_filter_set_name(supported[2], "GIF (*.gif)");
+		gtk_file_filter_add_pattern (supported[2], "*.gif");
+		gtk_file_filter_add_pattern (filter_all, "*.gif");
+		
 		supported[3] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[3],"PNG");
-	#ifdef __APPLE__
-		gtk_file_filter_add_pattern (supported[3], "*.[pP][nN][gG]");
-		gtk_file_filter_add_pattern (filter_all, "*.[pP][nN][gG]");
-	#else
-		gtk_file_filter_add_mime_type(supported[3],"image/png");
-		gtk_file_filter_add_mime_type(filter_all,"image/png");
-	#endif
-	
+		gtk_file_filter_set_name(supported[3], "PNG (*.png)");
+		gtk_file_filter_add_pattern (supported[3], "*.png");
+		gtk_file_filter_add_pattern (filter_all, "*.png");
+		
 		supported[4] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[4],"TIFF");
-	#ifdef __APPLE__
-		gtk_file_filter_add_pattern (supported[4], "*.[tT][iI][fF][fF]");
-		gtk_file_filter_add_pattern (filter_all, "*.[tT][iI][fF][fF]");
-	#else
-		gtk_file_filter_add_mime_type(supported[4],"image/tiff");
-		gtk_file_filter_add_mime_type(filter_all,"image/tiff");
-	#endif
+		gtk_file_filter_set_name(supported[4], "TIFF (*tif, *.tiff)");
+		gtk_file_filter_add_pattern (supported[4], "*.tiff");
+		gtk_file_filter_add_pattern (supported[4], "*.tif");
+		gtk_file_filter_add_pattern (filter_all, "*.tiff");
+		gtk_file_filter_add_pattern (filter_all, "*.tif");
 	
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(chooser_image), filter_all);
 	int i;
