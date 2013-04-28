@@ -5,7 +5,9 @@ http://www.alessandrofrancesconi.it/projects/bimp
 Changelog:
 
 1.3:
- - <WAITING FOR APPROVAL>
+ - Changed the way the FileChooser lets you pick image files and folders (should solve issues #23 and #35)
+ - Enabled multiple selection in the input files panel
+ - NOTE for Mac OSX users: There's no need to install or compile BIMP on Mac anymore, see the README
 
 1.2:
  - BIMP can now accept SVG images as input

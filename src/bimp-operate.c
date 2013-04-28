@@ -148,7 +148,7 @@ static gboolean process_image(gpointer parent)
 			orig_file_ext = g_malloc0(sizeof(char));
 		}		
 		else {
-			bimp_show_error_dialog(g_strdup_printf(_("Can't save image %s: input file has no extension.\nYou can solve this error by adding a \"Change format or compression\" step"), orig_basename), bimp_window_main);
+			bimp_show_error_dialog(g_strdup_printf(_("Can't save image \"%s\": input file has no extension.\nYou can solve this error by adding a \"Change format or compression\" step"), orig_basename), bimp_window_main);
 			success = FALSE;
 			goto process_end;
 		}
@@ -160,7 +160,7 @@ static gboolean process_image(gpointer parent)
 	}
 	
 	g_print("\nWorking on file %d of %d (%s)\n", processed_count+1, total_images, orig_filename);
-	bimp_progress_bar_set(((double)processed_count)/total_images, g_strdup_printf(_("Working on file %s..."), orig_basename));
+	bimp_progress_bar_set(((double)processed_count)/total_images, g_strdup_printf(_("Working on file \"%s\"..."), orig_basename));
 	
 	/* apply all the main manipulations */
 	bimp_apply_drawable_manipulations(imageout, (gchar*)orig_filename, (gchar*)orig_basename); 
