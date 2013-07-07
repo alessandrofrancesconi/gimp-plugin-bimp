@@ -32,7 +32,7 @@ static void remove_all_input_files(GtkWidget*, gpointer);
 static void select_filename (GtkTreeView*, gpointer);
 static void update_preview(char*);
 static void show_preview(GtkTreeView*, gpointer);
-static void set_output_folder(GtkFileChooserButton*, gpointer);
+static void set_output_folder(GtkWidget*, gpointer);
 static void popmenus_init(void);
 static void open_popup_menu(GtkWidget*, gpointer);
 static void add_manipulation_from_id(GtkMenuItem*, gpointer);
@@ -234,7 +234,7 @@ static GtkWidget* option_panel_new()
 	button_outfolder = gtk_file_chooser_button_new(_("Select output folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_outfolder), ""); // workaround for (none) selected folder
 	bimp_output_folder = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(button_outfolder));
-	gtk_widget_set_size_request(button_outfolder, 170, 30);
+	gtk_widget_set_size_request(button_outfolder, 180, 30);
 	
 	bimp_alertoverwrite = TRUE;
 	check_alertoverwrite = gtk_check_button_new_with_label(_("Alert when overwriting existing files"));
@@ -286,7 +286,7 @@ static GtkWidget* option_panel_new()
 	g_signal_connect(G_OBJECT(button_addfolder), "clicked", G_CALLBACK(open_folder_chooser), NULL);
 	g_signal_connect(G_OBJECT(button_remove), "clicked", G_CALLBACK(remove_input_file), NULL);
 	g_signal_connect(G_OBJECT(button_removeall), "clicked", G_CALLBACK(remove_all_input_files), NULL);
-	g_signal_connect(G_OBJECT(button_outfolder), "file-set", G_CALLBACK(set_output_folder), NULL);
+	g_signal_connect(G_OBJECT(button_outfolder), "selection-changed", G_CALLBACK(set_output_folder), NULL);
 	g_signal_connect(G_OBJECT(gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview_files))), "changed", G_CALLBACK(select_filename), NULL);
 	g_signal_connect(G_OBJECT(button_preview), "clicked", G_CALLBACK(show_preview), NULL);
 	
@@ -661,7 +661,7 @@ static void open_folder_chooser(GtkWidget *widget, gpointer data)
 	gtk_widget_hide (folder_chooser);
 }
 
-static void set_output_folder(GtkFileChooserButton *widget, gpointer data) 
+static void set_output_folder(GtkWidget *widget, gpointer data) 
 {
 	bimp_output_folder = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
 }

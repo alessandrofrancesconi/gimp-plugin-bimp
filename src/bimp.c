@@ -288,6 +288,6 @@ static char* get_bimp_localedir()
 /* C-string case-insensitive comparison function (with gconstpointer args) */ 
 static int glib_strcmpi(gconstpointer str1, gconstpointer str2)
 {
-    return strcmpi(str1, str2);
+    return strcasecmp(str1, str2);
 }
 
