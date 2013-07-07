@@ -10,7 +10,6 @@ char* bimp_comp_get_filename(char*);
 char* bimp_comp_get_filefolder(char*);
 float bimp_min(float, float);
 gboolean bimp_str_contains_cins(char*, char*);
-int cstring_cmp(const void*, const void*);
 void bimp_write_manipulation(manipulation, gpointer);
 GimpParamDef bimp_get_param_info(gchar*, gint);
 

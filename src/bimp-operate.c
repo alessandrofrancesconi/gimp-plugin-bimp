@@ -45,6 +45,13 @@ int total_images;
 
 char* common_folder_path;
 
+gboolean list_contains_changeformat;
+gboolean list_contains_rename;
+gboolean list_contains_resize;
+gboolean list_contains_crop;
+gboolean list_contains_watermark;
+gboolean list_contains_savingplugin;
+
 void bimp_start_batch(gpointer parent_dialog)
 {
 	bimp_set_busy(TRUE);
@@ -111,7 +118,14 @@ void bimp_start_batch(gpointer parent_dialog)
 		g_strfreev(common_folder);
 	}
 
-	guint batch_idle_tag = g_idle_add((GSourceFunc)process_image,parent_dialog);
+	list_contains_changeformat = bimp_list_contains_manip(MANIP_CHANGEFORMAT);
+	list_contains_rename = bimp_list_contains_manip(MANIP_RENAME);
+	list_contains_resize = bimp_list_contains_manip(MANIP_RESIZE);
+	list_contains_crop = bimp_list_contains_manip(MANIP_CROP);
+	list_contains_watermark = bimp_list_contains_manip(MANIP_WATERMARK);
+	list_contains_savingplugin = bimp_list_contains_savingplugin();
+	
+	guint batch_idle_tag = g_idle_add((GSourceFunc)process_image, parent_dialog);
 }
 
 static gchar** array_path_folders (char *path)
@@ -144,7 +158,7 @@ static gboolean process_image(gpointer parent)
 		/* under Linux, GtkFileChooser permits to pick an image file without extension, but GIMP cannot 
 		 * save it back if its format remains unchanged. Operation can continue only if a MANIP_CHANGEFORMAT
 		 * is present */
-		if (bimp_list_contains_manip(MANIP_CHANGEFORMAT)) {
+		if (list_contains_changeformat) {
 			orig_file_ext = g_malloc0(sizeof(char));
 		}		
 		else {
@@ -153,7 +167,7 @@ static gboolean process_image(gpointer parent)
 			goto process_end;
 		}
 	}
-	else if (g_ascii_strcasecmp(orig_file_ext, ".svg") == 0 && !bimp_list_contains_manip(MANIP_CHANGEFORMAT)) {
+	else if (g_ascii_strcasecmp(orig_file_ext, ".svg") == 0 && !list_contains_changeformat) {
 		bimp_show_error_dialog(g_strdup_printf(_("GIMP can't save %s back to its original SVG format.\nYou can solve this error by adding a \"Change format or compression\" step"), orig_basename), bimp_window_main);
 		success = FALSE;
 		goto process_end;
@@ -169,7 +183,7 @@ static gboolean process_image(gpointer parent)
 	orig_basename[strlen(orig_basename) - strlen(orig_file_ext)] = '\0'; /* remove extension from basename */
 	
 	/* check if a rename pattern is defined */
-	if(bimp_list_contains_manip(MANIP_RENAME)) {
+	if(list_contains_rename) {
 		g_print("Applying RENAME...\n");
 		apply_rename((rename_settings)(bimp_list_get_manip(MANIP_RENAME))->settings, imageout, orig_basename);
 	}
@@ -178,13 +192,11 @@ static gboolean process_image(gpointer parent)
 	}
 
 	/* To keep the folder hierarchy */
-	if (common_folder_path == NULL)
-	{
+	if (common_folder_path == NULL)	{
 		// Not selected or required, everything goes into the same destination folder
 		output_file_comp = g_malloc0(sizeof(char));
 	}
-	else
-	{
+	else {
 		// keep folders to add to output path
 		output_file_comp = 
 			g_strndup(&orig_filename[strlen(common_folder_path)+1],
@@ -192,8 +204,7 @@ static gboolean process_image(gpointer parent)
 			-strlen(orig_basename)-strlen(orig_file_ext)); 
 	}
 	
-	if (strlen(output_file_comp) > 0)
-	{
+	if (strlen(output_file_comp) > 0) {
 #ifdef _WIN32		
 		// Clean output_file_comp
 		// Should only be concerned for ':' in Drive letter
@@ -213,21 +224,41 @@ static gboolean process_image(gpointer parent)
 	format_type final_format = -1;
 	format_params params = NULL;
 	
-	if(bimp_list_contains_manip(MANIP_CHANGEFORMAT)) {
-		changeformat_settings settings = (changeformat_settings)(bimp_list_get_manip(MANIP_CHANGEFORMAT))->settings;
-		final_format = settings->format;
-		params = settings->params;
-		
-		g_print("Changing FORMAT to %s\n", format_type_string[final_format][0]);
-		imageout->filename = g_strconcat(imageout->filename, ".", format_type_string[final_format][0], NULL); /* append new file extension */
+	if(list_contains_changeformat || list_contains_savingplugin) {
+	
+		if(list_contains_changeformat) {
+			changeformat_settings settings = (changeformat_settings)(bimp_list_get_manip(MANIP_CHANGEFORMAT))->settings;
+			final_format = settings->format;
+			params = settings->params;
+			
+			g_print("Changing FORMAT to %s\n", format_type_string[final_format][0]);
+			imageout->filename = g_strconcat(imageout->filename, ".", format_type_string[final_format][0], NULL); /* append new file extension */
+			imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); /* build new path */
+		}
+		else if (list_contains_savingplugin) {
+			// leave filename without extension and proceed calling each saving plugin
+			imageout->filename = g_strconcat(imageout->filename, ".dds", NULL);
+			imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); /* build new path */
+			
+			GSList *iterator = NULL;
+			manipulation man;
+			for (iterator = bimp_selected_manipulations; iterator; iterator = iterator->next) {
+				man = (manipulation)(iterator->data);
+				if (man->type == MANIP_USERDEF && strstr(((userdef_settings)(man->settings))->procedure, "-save") != NULL) {
+					// found a saving plugin, execute it
+					/* TODO!!!! This won't work yet, we need a way to extract the file extension managed by the selected saving plugin
+					 * e.g. "file-dds-save" -> "dds" (don't do it with regexp on plugin's name... to easy...) */
+					apply_userdef((userdef_settings)(man->settings), imageout);
+				}
+			}
+		}
 	}
 	else {
 		/* if not specified, save in original format */
-		imageout->filename = g_strconcat(imageout->filename, orig_file_ext, NULL); /* append old file extension */		
+		imageout->filename = g_strconcat(imageout->filename, orig_file_ext, NULL); /* append old file extension */	
+		imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); /* build new path */		
 		final_format = -1;	
 	}
-	
-	imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); /* build new path */
 	
 	int ow_res = overwrite_result(imageout->filepath, parent);
 	if (ow_res > 0) {
@@ -283,12 +314,12 @@ void bimp_apply_drawable_manipulations(image_output imageout, gchar* orig_filena
 	g_print("Drawable ID is %d\n", imageout->drawable_id);
 	
 	/* start manipulations sequence, resize and crop start first */
-	if (bimp_list_contains_manip(MANIP_RESIZE)) {
+	if (list_contains_resize) {
 		g_print("Applying RESIZE...\n");
 		apply_resize((resize_settings)(bimp_list_get_manip(MANIP_RESIZE))->settings, imageout);
 	}
 	
-	if (bimp_list_contains_manip(MANIP_CROP)) {
+	if (list_contains_crop) {
 		g_print("Applying CROP...\n");
 		apply_crop((crop_settings)(bimp_list_get_manip(MANIP_CROP))->settings, imageout);
 	}
@@ -297,7 +328,7 @@ void bimp_apply_drawable_manipulations(image_output imageout, gchar* orig_filena
 	g_slist_foreach(bimp_selected_manipulations, (GFunc)apply_manipulation, imageout);
 	
 	/*  watermark at last */
-	if(bimp_list_contains_manip(MANIP_WATERMARK)) {
+	if(list_contains_watermark) {
 		g_print("Applying WATERMARK...\n");
 		apply_watermark((watermark_settings)(bimp_list_get_manip(MANIP_WATERMARK))->settings, imageout);
 	}
@@ -319,7 +350,7 @@ static gboolean apply_manipulation(manipulation man, image_output out)
 		g_print("Applying SHARPBLUR...\n");
 		success = apply_sharpblur((sharpblur_settings)(man->settings), out);
 	}
-	else if (man->type == MANIP_USERDEF) {
+	else if (man->type == MANIP_USERDEF && strstr(((userdef_settings)(man->settings))->procedure, "-save") == NULL) {
 		g_print("Applying %s...\n", ((userdef_settings)(man->settings))->procedure);
 		success = apply_userdef((userdef_settings)(man->settings), out);
 	}
@@ -703,6 +734,8 @@ static gboolean apply_userdef(userdef_settings settings, image_output out)
 	gboolean success = TRUE;
 	
 	int param_i;
+	GimpParamDef param_info;
+	gboolean saving_function = (strstr(settings->procedure, "-save") != NULL);
 	for (param_i = 0; param_i < settings->num_params; param_i++) {
 		switch((settings->params[param_i]).type) {
 			case GIMP_PDB_IMAGE: 
@@ -711,6 +744,18 @@ static gboolean apply_userdef(userdef_settings settings, image_output out)
 			
 			case GIMP_PDB_DRAWABLE:
 				(settings->params[param_i]).data.d_drawable = out->drawable_id;
+				break;
+				
+			case GIMP_PDB_STRING:
+				if (saving_function) {
+					param_info = bimp_get_param_info(settings->procedure, param_i);
+					if (strcmp(param_info.name, "filename") == 0) {
+						(settings->params[param_i]).data.d_string = g_strdup(out->filepath);
+					}
+					else if (strcmp(param_info.name, "raw-filename") == 0) {
+						(settings->params[param_i]).data.d_string = g_strdup(out->filename);
+					}
+				}
 				break;
 			
 			default: break;
@@ -725,7 +770,7 @@ static gboolean apply_userdef(userdef_settings settings, image_output out)
 		settings->params
 	);
 	
-	out->drawable_id = gimp_image_merge_visible_layers(out->image_id, GIMP_CLIP_TO_IMAGE);
+	if (!saving_function) out->drawable_id = gimp_image_merge_visible_layers(out->image_id, GIMP_CLIP_TO_IMAGE);
 	
 	return success;
 }

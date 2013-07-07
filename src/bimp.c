@@ -1,7 +1,7 @@
 /*
  * BIMP - Batch Image Manipulation Plugin for GIMP
  * 
- * (C)2012 - Alessandro Francesconi
+ * (C)2013 - Alessandro Francesconi
  * http://www.alessandrofrancesconi.it/projects/bimp
  *  
  * This program is free software; you can redistribute it and/or modify
@@ -44,6 +44,7 @@ static void query (void);
 static GSList* get_supported_procedures(void);
 static gboolean proc_has_compatible_params (gchar*);
 static char* get_bimp_localedir(void);
+static int glib_strcmpi(gconstpointer, gconstpointer);
 
 static void run (
 	const gchar *name,
@@ -53,12 +54,11 @@ static void run (
 	GimpParam **return_vals
 	);
 
-const GimpPlugInInfo PLUG_IN_INFO =
-{
-  NULL,  /* init_proc  */
-  NULL,  /* quit_proc  */
-  query, /* query_proc */
-  run,   /* run_proc   */
+const GimpPlugInInfo PLUG_IN_INFO = {
+	NULL,  /* init_proc  */
+	NULL,  /* quit_proc  */
+	query, /* query_proc */
+	run,   /* run_proc   */
 };
 
 MAIN ()
@@ -78,7 +78,7 @@ static void query (void)
 		"Alessandro Francesconi <alessandrofrancesconi@live.it>",
 		"Copyright (C) Alessandro Francesconi\n"
 		"http://www.alessandrofrancesconi.it/projects/bimp",
-		"2012",
+		"2013",
 		"Batch Image Manipulation...",
 		"",
 		GIMP_PLUGIN,
@@ -132,7 +132,7 @@ static void run (
 /*
  * Used by userdef gui, filters the full list of GIMP procedures:
  *  - by ignoring system's procedures 
- *  - by ignoring procedures that contains non-compatible parameters datatypes (like FLOATARRAY, PATH, ...). */
+ *  - by ignoring procedures that contains non-compatible datatypes (like FLOATARRAY, PATH, ...). */
 static GSList* get_supported_procedures()
 {
 	gint proc_count;
@@ -152,7 +152,7 @@ static GSList* get_supported_procedures()
 			"file-glob|"
 			"twain-acquire|"
 			"-load|"
-			"-save|"
+			"-save|" // TODO: remove it for next feature "enable saving plugins"
 			"-select|"
 			"-free|"
 			"-help|"
@@ -196,13 +196,12 @@ static GSList* get_supported_procedures()
 		&results
 	);
 	
-	qsort(results, proc_count, sizeof(char*), cstring_cmp); /* sort alphabetically */
-	
 	int i;
 	for (i = 0; i < proc_count; i++) {
-		/* check each parameter for compatibility */
+		/* check each parameter for compatibility and sort it alphabetically */
 		if (proc_has_compatible_params(results[i])) {
-			compatible_list = g_slist_append(compatible_list, results[i]);
+			//compatible_list = g_slist_append(compatible_list, results[i]);
+			compatible_list = g_slist_insert_sorted(compatible_list, results[i], glib_strcmpi);
 		}
 	}
 	
@@ -249,7 +248,8 @@ static gboolean proc_has_compatible_params(gchar* proc_name)
 			param.type == GIMP_PDB_INT16 ||
 			param.type == GIMP_PDB_INT8 ||
 			param.type == GIMP_PDB_FLOAT ||
-			(param.type == GIMP_PDB_STRING && strstr(param.name, "filename") == NULL) ||
+			//(param.type == GIMP_PDB_STRING && strstr(param.name, "filename") == NULL) ||
+			param.type == GIMP_PDB_STRING ||
 			param.type == GIMP_PDB_COLOR ||
 			param.type == GIMP_PDB_DRAWABLE ||
 			param.type == GIMP_PDB_IMAGE
@@ -284,3 +284,10 @@ static char* get_bimp_localedir()
 	
 	return g_strconcat(path, div, "bimp-locale", NULL); // returns truncated path, plus "/bimp-locale" directory
 }
+
+/* C-string case-insensitive comparison function (with gconstpointer args) */ 
+static int glib_strcmpi(gconstpointer str1, gconstpointer str2)
+{
+    return strcmpi(str1, str2);
+}
+
