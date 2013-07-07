@@ -113,14 +113,6 @@ gboolean bimp_str_contains_cins(char* fullstr, char* search) {
 	);
 }
 
-/* qsort C-string comparison function (with void* args) */ 
-int cstring_cmp(const void *a, const void *b) 
-{ 
-	const char **ia = (const char **)a;
-	const char **ib = (const char **)b;
-	return strcmp(*ia, *ib);
-} 
-
 void bimp_write_manipulation(manipulation man, gpointer file) 
 {
 	fwrite(man, sizeof(struct manip_str), 1, file);

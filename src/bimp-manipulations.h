@@ -199,6 +199,7 @@ typedef struct manip_userdef_set {
 manipulation bimp_append_manipulation(manipulation_type);
 void bimp_remove_manipulation(manipulation);
 gboolean bimp_list_contains_manip(manipulation_type);
+gboolean bimp_list_contains_savingplugin(void);
 manipulation bimp_list_get_manip(manipulation_type);
 char* bimp_manip_get_string(manipulation_type);
 
