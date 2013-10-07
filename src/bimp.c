@@ -200,7 +200,6 @@ static GSList* get_supported_procedures()
 	for (i = 0; i < proc_count; i++) {
 		/* check each parameter for compatibility and sort it alphabetically */
 		if (proc_has_compatible_params(results[i])) {
-			//compatible_list = g_slist_append(compatible_list, results[i]);
 			compatible_list = g_slist_insert_sorted(compatible_list, results[i], glib_strcmpi);
 		}
 	}
@@ -265,9 +264,9 @@ static gboolean proc_has_compatible_params(gchar* proc_name)
 
 static char* get_bimp_localedir() 
 {
-	char path[1024];
-	int bufsize = sizeof(path);
-	char div[2];
+	int bufsize = 1024;
+	char* path = g_malloc0(bufsize);
+	char sep[2];
 	
 	// different methods for getting the plugin's absolute path, for different systems
 #ifdef __unix__
@@ -278,11 +277,11 @@ static char* get_bimp_localedir()
 	_NSGetExecutablePath(path, &bufsize);
 #endif
 	
-	div[0] = FILE_SEPARATOR /*'/'*/;
-	div[1] = '\0';
-	memset(g_strrstr(path, div), '\0', 1); // truncate at the last path divisor (eliminates "bimp.exe")
+	sep[0] = FILE_SEPARATOR /*'/'*/;
+	sep[1] = '\0';
+	memset(g_strrstr(path, sep), '\0', 1); // truncate at the last path separator (eliminates "bimp.exe")
 	
-	return g_strconcat(path, div, "bimp-locale", NULL); // returns truncated path, plus "/bimp-locale" directory
+	return g_strconcat(path, sep, "bimp-locale", NULL); // returns truncated path, plus "/bimp-locale" directory
 }
 
 /* C-string case-insensitive comparison function (with gconstpointer args) */ 

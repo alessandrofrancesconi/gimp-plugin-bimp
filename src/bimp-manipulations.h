@@ -128,6 +128,7 @@ typedef struct manip_color_set {
 	gint contrast;
 	gboolean levels_auto;
 	gboolean grayscale;
+	char* curve_file;
 } *color_settings;
 
 typedef struct manip_sharpblur_set { 

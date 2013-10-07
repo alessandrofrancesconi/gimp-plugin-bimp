@@ -183,6 +183,7 @@ manipulation manipulation_color_new()
 	((color_settings)color->settings)->contrast = 0;
 	((color_settings)color->settings)->grayscale = FALSE;
 	((color_settings)color->settings)->levels_auto = FALSE;
+	((color_settings)color->settings)->curve_file = NULL;
 	
 	return color;
 }

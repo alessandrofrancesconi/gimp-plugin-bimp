@@ -5,7 +5,6 @@
 #include "../bimp-manipulations.h"
 
 #define SHARPBLUR_WINDOW_W 400
-#define SHARPBLUR_WINDOW_H 150
 
 #define LABEL_SCALE_W 110
 #define LABEL_SCALE_H 60
