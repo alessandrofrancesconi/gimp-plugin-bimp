@@ -455,6 +455,7 @@ static void show_preview (GtkTreeView *tree_view, gpointer data)
 		imageout_orig->image_id = gimp_file_load(GIMP_RUN_NONINTERACTIVE, (gchar*)selected_str, (gchar*)selected_str);
 		imageout_orig->drawable_id = gimp_image_merge_visible_layers(imageout_orig->image_id, GIMP_CLIP_TO_IMAGE); 
 		
+		bimp_init_batch();
 		bimp_apply_drawable_manipulations(imageout_final, (gchar*)selected_str, (gchar*)selected_str);
 		
 		pixbuf_orig = gimp_drawable_get_thumbnail(imageout_orig->drawable_id, PREVIEW_IMG_W, PREVIEW_IMG_H, GIMP_PIXBUF_KEEP_ALPHA);
@@ -477,7 +478,7 @@ static void show_preview (GtkTreeView *tree_view, gpointer data)
 		
 		hbox = gtk_hbox_new(FALSE, 10);
 		image_orig = gtk_image_new_from_pixbuf(pixbuf_orig);
-		image_forward = gtk_image_new_from_stock(GTK_STOCK_GO_FORWARD, 15);
+		image_forward = gtk_image_new_from_stock(GTK_STOCK_GO_FORWARD, GTK_ICON_SIZE_BUTTON);
 		image_final = gtk_image_new_from_pixbuf(pixbuf_final);
 		
 		gtk_box_pack_start(GTK_BOX(hbox), image_orig, FALSE, FALSE, 0);
@@ -805,7 +806,6 @@ static void save_set(GtkMenuItem *menuitem, gpointer user_data)
 	if (g_slist_length(bimp_selected_manipulations) == 0) {
 		bimp_show_error_dialog(_("The manipulations set is empty!"), bimp_window_main);
 	} else {
-		FILE *fp;
 		gchar* output_file;
 		char* extension = ".bimp";
 		
@@ -842,7 +842,6 @@ static void save_set(GtkMenuItem *menuitem, gpointer user_data)
 	}
 }
 
-/* TODO */
 static void load_set(GtkMenuItem *menuitem, gpointer user_data)
 {
 	gboolean can_continue = TRUE;

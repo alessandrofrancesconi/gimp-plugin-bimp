@@ -5,7 +5,6 @@
 #include "../bimp-manipulations.h"
 
 #define WATERMARK_WINDOW_W 320
-#define WATERMARK_WINDOW_H 480
 
 #define INPUT_W 200
 #define INPUT_H 30

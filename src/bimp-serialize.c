@@ -9,9 +9,11 @@
 #include <libgimp/gimp.h>
 #include <string.h>
 #include <stdlib.h>
+#include <locale.h>
 #include "bimp.h"
 #include "bimp-manipulations.h"
 #include "bimp-utils.h"
+#include "bimp-serialize.h"
 
 static void append_manipulation_details(manipulation, GKeyFile*);
 static GSList* parse_manipulations(GKeyFile*); 
@@ -309,6 +311,7 @@ static void write_color(color_settings settings, GKeyFile* file)
 	g_key_file_set_integer(file, group_name, "contrast", settings->contrast);
 	g_key_file_set_boolean(file, group_name, "levels_auto", settings->levels_auto);
 	g_key_file_set_boolean(file, group_name, "grayscale", settings->grayscale);
+	if (settings->curve_file != NULL) g_key_file_set_string(file, group_name, "curve_file", settings->curve_file);
 }
 
 static manipulation read_color(GKeyFile* file) 
@@ -331,9 +334,147 @@ static manipulation read_color(GKeyFile* file)
 			
 		if (g_key_file_has_key(file, group_name, "grayscale", NULL)) 
 			settings->grayscale = g_key_file_get_boolean(file, group_name, "grayscale", NULL);
+			
+		if (g_key_file_has_key(file, group_name, "curve_file", NULL)) 
+			settings->curve_file = g_key_file_get_string(file, group_name, "curve_file", NULL);
 	}
 	
 	return man;
+}
+
+/* Reads the content of a GIMP's curve file (for Color manipulations). 
+ * The result is saved to be used with the gimp_curves_spline() function */
+gboolean parse_curve_file(
+	char* file, 
+	int* num_points_v, 
+	guint8** ctr_points_v,
+	int* num_points_r, 
+	guint8** ctr_points_r,
+	int* num_points_g, 
+	guint8** ctr_points_g,
+	int* num_points_b, 
+	guint8** ctr_points_b,
+	int* num_points_a, 
+	guint8** ctr_points_a
+) {
+	FILE* pFile;
+	pFile = fopen (file, "r");
+	
+	char* old_locale = setlocale(LC_NUMERIC, "");
+	setlocale(LC_NUMERIC, "C");
+	
+	char line[2400]; // line buffer
+	// temp values
+	int num_points_temp = 0;
+	guint8* ctr_points_temp = NULL;
+	
+	if (pFile == NULL) goto err;
+	else {		
+		// read header ("# GIMP curves tool settings")
+		if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+		if (strncmp(line, "#", 1) != 0) goto err;
+		
+		// next line is empty, ignore it
+		fgets(line, sizeof(line), pFile);
+	
+		// next line is "(time XX)"
+		int time;
+		if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+		if (sscanf (line, "(time %d)", &time) != 1) goto err;
+		
+		// next lines are the channels
+		char channel_name[6];
+		
+		if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+		while (sscanf (line, "(channel %[a-z])", channel_name) == 1) {
+			
+			g_free(ctr_points_temp);
+			ctr_points_temp = NULL;
+			
+			// "(curve", ignored
+			if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+			// "		(curve-type ...)", ignored
+			if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+			// "		(n-points XX)"
+			if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+			
+			int n_points;
+			if (sscanf (line, "    (n-points %d)", &n_points) != 1) goto err;
+			
+			//		(points XX X.X X.X
+			if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+			
+			double pX, pY;
+			int p_count = 0;
+			char* token = strtok(line + strlen(g_strdup_printf("    (points %d", n_points * 2)), " ");
+			while (token) {
+				
+				pX = atof(token);
+				token = strtok(NULL, " ");
+				if (!token) goto err;
+				pY = atof(token);
+				
+				if (pX > 0 && pY >= 0 &&
+					pX <= 1 && pY <= 1) 
+				{
+					// save X and Y
+					ctr_points_temp = (guint8*)g_realloc(ctr_points_temp, sizeof(guint8) * (p_count + 2)); // add one element to the array
+					ctr_points_temp[p_count]     = (guint8)(255 * pX); // round, map to [0;255] and save
+					ctr_points_temp[p_count + 1] = (guint8)(255 * pY);
+					
+					p_count += 2;
+				}
+				
+				token = strtok(NULL, " ");
+			}
+			
+			num_points_temp = p_count;
+			
+			//	"(n-samples XX)", ignored
+			fgets(line, sizeof(line), pFile);
+			//	"(samples XX ...", ignored
+			fgets(line, sizeof(line), pFile);
+			
+			// save in the proper variables
+			if (strcmp(channel_name, "value") == 0) {
+				*num_points_v = num_points_temp;
+				*ctr_points_v = g_memdup(ctr_points_temp, num_points_temp * sizeof(guint8));
+			}
+			else if (strcmp(channel_name, "red") == 0) {
+				*num_points_r = num_points_temp;
+				*ctr_points_r = g_memdup(ctr_points_temp, num_points_temp * sizeof(guint8));
+			}
+			else if (strcmp(channel_name, "green") == 0) {
+				*num_points_g = num_points_temp;
+				*ctr_points_g = g_memdup(ctr_points_temp, num_points_temp * sizeof(guint8));
+			}
+			else if (strcmp(channel_name, "blue") == 0) {
+				*num_points_b = num_points_temp;
+				*ctr_points_b = g_memdup(ctr_points_temp, num_points_temp * sizeof(guint8));
+			}
+			else if (strcmp(channel_name, "alpha") == 0) {
+				*num_points_a = num_points_temp;
+				*ctr_points_a = g_memdup(ctr_points_temp, num_points_temp * sizeof(guint8));
+			}
+			else goto err;
+			
+			// next channel
+			if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+		}
+		
+		// "# end of curves tool settings"
+		
+		setlocale(LC_NUMERIC, old_locale);
+		g_free(ctr_points_temp);
+		fclose (pFile);
+		return TRUE;
+	}
+	
+err:
+	setlocale(LC_NUMERIC, old_locale);
+	if (pFile != NULL) fclose (pFile);
+	if (ctr_points_temp != NULL) g_free(ctr_points_temp);
+	return FALSE;
 }
 
 static void write_sharpblur(sharpblur_settings settings, GKeyFile* file) 
@@ -586,7 +727,6 @@ static void write_userdef(userdef_settings settings, GKeyFile* file, int id)
 	g_key_file_set_string(file, group_name, "procedure", settings->procedure);
 	g_key_file_set_integer(file, group_name, "num_params", settings->num_params);
 	
-	gchar* out_params = "";
 	if (settings->num_params > 0) {		
 		int param_i;
 		GdkColor tempcolor;

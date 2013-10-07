@@ -14,6 +14,7 @@
 #include "bimp-manipulations.h"
 #include "bimp-gui.h"
 #include "bimp-utils.h"
+#include "bimp-serialize.h"
 #include "plugin-intl.h"
 
 static gboolean process_image(gpointer);
@@ -52,9 +53,38 @@ gboolean list_contains_crop;
 gboolean list_contains_watermark;
 gboolean list_contains_savingplugin;
 
+// set of variables to be used when doing Curve color correction
+// they are global so the batch process will read the source curve file once
+gboolean colorcurve_init;
+int colorcurve_num_points_v;
+guint8* colorcurve_ctr_points_v;
+int colorcurve_num_points_r;
+guint8* colorcurve_ctr_points_r;
+int colorcurve_num_points_g;
+guint8* colorcurve_ctr_points_g;
+int colorcurve_num_points_b;
+guint8* colorcurve_ctr_points_b;
+int colorcurve_num_points_a;
+guint8* colorcurve_ctr_points_a;
+
+
+void bimp_init_batch() 
+{
+	list_contains_resize = bimp_list_contains_manip(MANIP_RESIZE);
+	list_contains_crop = bimp_list_contains_manip(MANIP_CROP);
+	list_contains_changeformat = bimp_list_contains_manip(MANIP_CHANGEFORMAT);
+	list_contains_rename = bimp_list_contains_manip(MANIP_RENAME);
+	list_contains_watermark = bimp_list_contains_manip(MANIP_WATERMARK);
+	list_contains_savingplugin = bimp_list_contains_savingplugin();
+	
+	colorcurve_init = FALSE;
+}
+
 void bimp_start_batch(gpointer parent_dialog)
 {
 	bimp_set_busy(TRUE);
+
+	bimp_init_batch();
 	
 	g_print("\nBIMP - Batch Manipulation Plugin\nStart batch processing...\n");
 	processed_count = 0;
@@ -117,13 +147,6 @@ void bimp_start_batch(gpointer parent_dialog)
 		
 		g_strfreev(common_folder);
 	}
-
-	list_contains_changeformat = bimp_list_contains_manip(MANIP_CHANGEFORMAT);
-	list_contains_rename = bimp_list_contains_manip(MANIP_RENAME);
-	list_contains_resize = bimp_list_contains_manip(MANIP_RESIZE);
-	list_contains_crop = bimp_list_contains_manip(MANIP_CROP);
-	list_contains_watermark = bimp_list_contains_manip(MANIP_WATERMARK);
-	list_contains_savingplugin = bimp_list_contains_savingplugin();
 	
 	guint batch_idle_tag = g_idle_add((GSourceFunc)process_image, parent_dialog);
 }
@@ -131,7 +154,6 @@ void bimp_start_batch(gpointer parent_dialog)
 static gchar** array_path_folders (char *path)
 {
 	GArray *array = NULL;
-	int i; 
 	char * normalized_path = (char*)g_malloc(sizeof(path));
 
 	normalized_path = g_strdup(path);
@@ -553,6 +575,45 @@ static gboolean apply_color(color_settings settings, image_output out)
 	if (settings->levels_auto) {
 		/* do levels correction */
 		success = gimp_levels_stretch(out->drawable_id);
+	}
+	
+	if (settings->curve_file != NULL && !gimp_drawable_is_indexed(out->drawable_id)) {
+		/* apply curve */
+		
+		if (!colorcurve_init) { // read from the curve file only the first time
+			success = parse_curve_file(
+				settings->curve_file, 
+				&colorcurve_num_points_v, &colorcurve_ctr_points_v, 
+				&colorcurve_num_points_r, &colorcurve_ctr_points_r, 
+				&colorcurve_num_points_g, &colorcurve_ctr_points_g, 
+				&colorcurve_num_points_b, &colorcurve_ctr_points_b, 
+				&colorcurve_num_points_a, &colorcurve_ctr_points_a
+			); 
+		}
+		else success = TRUE;
+		
+		if (success) {
+			
+			if (colorcurve_num_points_v >= 4 && colorcurve_num_points_v <= 34) {
+				success = gimp_curves_spline(out->drawable_id, GIMP_HISTOGRAM_VALUE, colorcurve_num_points_v, colorcurve_ctr_points_v);
+			}
+			
+			if (colorcurve_num_points_r >= 4 && colorcurve_num_points_r <= 34) {
+				success = gimp_curves_spline(out->drawable_id, GIMP_HISTOGRAM_RED, colorcurve_num_points_r, colorcurve_ctr_points_r);
+			}
+			
+			if (colorcurve_num_points_g >= 4 && colorcurve_num_points_g <= 34) {
+				success = gimp_curves_spline(out->drawable_id, GIMP_HISTOGRAM_GREEN, colorcurve_num_points_g, colorcurve_ctr_points_g);
+			}
+			
+			if (colorcurve_num_points_b >= 4 && colorcurve_num_points_b <= 34) {
+				success = gimp_curves_spline(out->drawable_id, GIMP_HISTOGRAM_BLUE, colorcurve_num_points_b, colorcurve_ctr_points_b);
+			}
+			
+			if (colorcurve_num_points_a >= 4 && colorcurve_num_points_a <= 34) {
+				success = gimp_curves_spline(out->drawable_id, GIMP_HISTOGRAM_ALPHA, colorcurve_num_points_a, colorcurve_ctr_points_a);
+			}
+		}
 	}
 	
 	return success;

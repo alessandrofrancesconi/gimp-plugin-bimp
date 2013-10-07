@@ -4,9 +4,11 @@
 #include "../bimp-manipulations-gui.h"
 #include "../plugin-intl.h"
 
+static void toggle_curve(GtkToggleButton*, gpointer);
+
 GtkWidget *scale_bright, *scale_contrast;
-GtkWidget *check_autolevels, *check_grayscale;
-GSList *button_group;
+GtkWidget *check_autolevels, *check_grayscale, *check_curve;
+GtkWidget *chooser_curve;
 	
 GtkWidget* bimp_color_gui_new(color_settings settings)
 {
@@ -35,7 +37,18 @@ GtkWidget* bimp_color_gui_new(color_settings settings)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_grayscale), settings->grayscale);
 	check_autolevels = gtk_check_button_new_with_label(_("Automatic color levels correction"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_autolevels), settings->levels_auto);
-		
+	
+	check_curve = gtk_check_button_new_with_label(_("Change color curve from settings file:"));
+	chooser_curve = gtk_file_chooser_button_new(_("Select GIMP Curve file"), GTK_FILE_CHOOSER_ACTION_OPEN);
+	if (settings->curve_file != NULL) {
+		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(chooser_curve), settings->curve_file);
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_curve), TRUE);
+	}
+	else {
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_curve), FALSE);
+	}
+	gtk_widget_set_size_request (chooser_curve, INPUT_W, INPUT_H);
+	
 	gtk_box_pack_start(GTK_BOX(hbox_brightness), label_bright, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox_brightness), scale_bright, FALSE, FALSE, 0);
 	
@@ -46,8 +59,18 @@ GtkWidget* bimp_color_gui_new(color_settings settings)
 	gtk_box_pack_start(GTK_BOX(gui), hbox_contrast, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(gui), check_grayscale, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(gui), check_autolevels, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(gui), check_curve, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(gui), chooser_curve, FALSE, FALSE, 0);
+	
+	toggle_curve(NULL, NULL);
+	g_signal_connect(G_OBJECT(check_curve), "toggled", G_CALLBACK(toggle_curve), NULL);
 		
 	return gui;
+}
+
+void toggle_curve(GtkToggleButton *togglebutton, gpointer user_data) 
+{
+	gtk_widget_set_sensitive(GTK_WIDGET(chooser_curve), gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_curve)));
 }
 
 void bimp_color_save(color_settings orig_settings)
@@ -56,6 +79,15 @@ void bimp_color_save(color_settings orig_settings)
 	orig_settings->contrast = gtk_range_get_value(GTK_RANGE(scale_contrast));
 	orig_settings->grayscale = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_grayscale));
 	orig_settings->levels_auto = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_autolevels));
+	
+	char* filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(chooser_curve));
+	if (filename != NULL && gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_curve))) {
+		orig_settings->curve_file = g_strdup(filename);
+		g_free(filename);
+	}
+	else {
+		orig_settings->curve_file = NULL;
+	}
 }
 
 

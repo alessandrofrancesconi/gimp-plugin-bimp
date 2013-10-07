@@ -4,9 +4,6 @@
 #include <gtk/gtk.h>
 #include "../bimp-manipulations.h"
 
-#define FLIPROTATE_WINDOW_W 300
-#define FLIPROTATE_WINDOW_H 220
-
 #define BUTTON_FLIP_W 100
 #define BUTTON_FLIP_H 55
 

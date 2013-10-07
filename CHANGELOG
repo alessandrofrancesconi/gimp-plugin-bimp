@@ -4,6 +4,11 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+1.5:
+ - Added external Curve file chooser in Color manipulation (issue #46)
+ - Preview GUI didn't display Resize, Crop and Watermark manipulation results
+ - Manipulation windows have now better size (should fix issue #24)
+
 1.4:
  - Fixed a bug that displayed (none) in output folder button and caused BIMP to crash
  - Fixed a compilation error under Unix
