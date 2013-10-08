@@ -4,6 +4,9 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+1.6
+ - Curve parser can't load some kinds of GIMP Curve file (issue #46)
+
 1.5:
  - Added external Curve file chooser in Color manipulation (issue #46)
  - Preview GUI didn't display Resize, Crop and Watermark manipulation results
