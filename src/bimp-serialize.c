@@ -363,29 +363,23 @@ gboolean parse_curve_file(
 	char* old_locale = setlocale(LC_NUMERIC, "");
 	setlocale(LC_NUMERIC, "C");
 	
-	char line[2400]; // line buffer
-	// temp values
+	char line[2400];
+	char channel_name[6];
 	int num_points_temp = 0;
 	guint8* ctr_points_temp = NULL;
 	
 	if (pFile == NULL) goto err;
-	else {		
+	else {
 		// read header ("# GIMP curves tool settings")
 		if (fgets(line, sizeof(line), pFile) == NULL) goto err;
-		if (strncmp(line, "#", 1) != 0) goto err;
-		
-		// next line is empty, ignore it
-		fgets(line, sizeof(line), pFile);
-	
-		// next line is "(time XX)"
-		int time;
-		if (fgets(line, sizeof(line), pFile) == NULL) goto err;
-		if (sscanf (line, "(time %d)", &time) != 1) goto err;
-		
-		// next lines are the channels
-		char channel_name[6];
+		if (!g_str_has_prefix(line, "# GIMP")) goto err;
 		
 		if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+		while(!g_str_has_prefix(line, "(channel ")) {
+			if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+		}
+		
+		// reached the first "(channel " line
 		while (sscanf (line, "(channel %[a-z])", channel_name) == 1) {
 			
 			g_free(ctr_points_temp);
@@ -393,22 +387,28 @@ gboolean parse_curve_file(
 			
 			// "(curve", ignored
 			if (fgets(line, sizeof(line), pFile) == NULL) goto err;
-			// "		(curve-type ...)", ignored
-			if (fgets(line, sizeof(line), pFile) == NULL) goto err;
-			// "		(n-points XX)"
-			if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+			if (g_str_has_prefix(line, "(curve")) {
+				if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+			}
+			// "    (curve-type", ignored
+			if (g_str_has_prefix(line, "    (curve-type")) {
+				if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+			}
 			
+			// number of points
 			int n_points;
-			if (sscanf (line, "    (n-points %d)", &n_points) != 1) goto err;
+			if (g_str_has_prefix(line, "    (n-points")) {
+				if (sscanf (line, "    (n-points %d)", &n_points) != 1) goto err;
+				if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+			}
 			
-			//		(points XX X.X X.X
-			if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+			// points list
 			
 			double pX, pY;
 			int p_count = 0;
 			char* token = strtok(line + strlen(g_strdup_printf("    (points %d", n_points * 2)), " ");
+			
 			while (token) {
-				
 				pX = atof(token);
 				token = strtok(NULL, " ");
 				if (!token) goto err;
@@ -431,9 +431,13 @@ gboolean parse_curve_file(
 			num_points_temp = p_count;
 			
 			//	"(n-samples XX)", ignored
-			fgets(line, sizeof(line), pFile);
+			if (g_str_has_prefix(line, "    (n-samples")) {
+				if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+			}
 			//	"(samples XX ...", ignored
-			fgets(line, sizeof(line), pFile);
+			if (g_str_has_prefix(line, "    (samples")) {
+				if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+			}
 			
 			// save in the proper variables
 			if (strcmp(channel_name, "value") == 0) {
@@ -458,12 +462,16 @@ gboolean parse_curve_file(
 			}
 			else goto err;
 			
-			// next channel
+			// reach the next channel, or the end if this was the last
 			if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+			while(!g_str_has_prefix(line, "(channel ")) {
+				if (fgets(line, sizeof(line), pFile) == NULL) goto err;
+				if (g_str_has_prefix(line, "# end")) goto finish; 
+			}
 		}
 		
 		// "# end of curves tool settings"
-		
+finish:
 		setlocale(LC_NUMERIC, old_locale);
 		g_free(ctr_points_temp);
 		fclose (pFile);
