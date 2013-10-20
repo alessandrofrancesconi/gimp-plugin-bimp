@@ -284,11 +284,11 @@ static gboolean process_image(gpointer parent)
 	
 	int ow_res = overwrite_result(imageout->filepath, parent);
 	if (ow_res > 0) {
-			g_print("Saving file %s in %s\n", imageout->filename, imageout->filepath);
-			image_save(final_format, imageout, params);
+		g_print("Saving file %s in %s\n", imageout->filename, imageout->filepath);
+		image_save(final_format, imageout, params);
 	}
 	else {
-			g_print("File has not been overwritten!\n");
+		g_print("File has not been overwritten!\n");
 	}
 
 	gimp_image_delete(imageout->image_id); /* is it useful? */
@@ -1088,22 +1088,15 @@ static gboolean image_save_tiff(image_output out, int compression)
 }
 
 /* returns a result code following this schema:
- * 0 = user responses "don't overwrite" to a confirm dialog
- * 1 = old file was the same as the new one and user responses "yes, overwrite"
+ * 0 = user responses "don't overwite" to a confirm dialog
+ * 1 = old file was the same as the new one and user responses "yes, overwite"
  * 2 = old file wasn't the same (implicit overwrite)
  */
- 
- 
- // LOOK HERE
 static int overwrite_result(char* path, GtkWidget* parent) {
 	gboolean oldfile_access = g_file_test(path, G_FILE_TEST_IS_REGULAR);
 	
-	if ( (bimp_alertoverwrite == BIMP_ASK_OVERWRITE) && oldfile_access) {
+	if (bimp_alertoverwrite && oldfile_access) {
 		GtkWidget *dialog;
-		GtkWidget *check_alertoverwrite;
-		GtkWidget *dialog_action;
-		
-		
 		dialog = gtk_message_dialog_new(
 			GTK_WINDOW(parent),
 			GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1112,42 +1105,28 @@ static int overwrite_result(char* path, GtkWidget* parent) {
 			_("File %s already exists, overwrite it?"), bimp_comp_get_filename(path)
 		);
 		
-		// Add checkbox "Always apply decision"
-		dialog_action = gtk_dialog_get_action_area(GTK_DIALOG(dialog));
-		check_alertoverwrite = gtk_check_button_new_with_label("Always apply this decision.");
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_alertoverwrite), FALSE);
-		gtk_box_pack_start (GTK_BOX(dialog_action), check_alertoverwrite, FALSE, FALSE, 0);
-		gtk_widget_show (check_alertoverwrite);
-		
 		gtk_dialog_add_buttons (
 			GTK_DIALOG(dialog),
 			GTK_STOCK_YES, GTK_RESPONSE_YES,
+			_("Yes, don't ask again"), GTK_RESPONSE_APPLY,
 			GTK_STOCK_NO, GTK_RESPONSE_NO, NULL
 		);
 		
 		gtk_window_set_title(GTK_WINDOW(dialog), _("Overwrite?"));
-		gint result = gtk_dialog_run(GTK_DIALOG(dialog));		
-		gboolean dont_ask_anymore = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_alertoverwrite));		
+		gint result = gtk_dialog_run(GTK_DIALOG(dialog));
 		gtk_widget_destroy(dialog);
-				
-		if (result == GTK_RESPONSE_YES) {
-			if (dont_ask_anymore)
-				bimp_alertoverwrite = BIMP_OVERWRITE_SKIP_ASK;
+		
+		if (result == GTK_RESPONSE_APPLY) {
+			bimp_alertoverwrite = FALSE;
 			return 1;
-		}
-		else {
-			if (dont_ask_anymore)
-				bimp_alertoverwrite = BIMP_DONT_OVERWRITE_SKIP_ASK;
+		} else if (result == GTK_RESPONSE_YES) {
+			return 1;
+		} else {
 			return 0;
 		}
 	}
 	else {
-		if (oldfile_access) {
-			return (bimp_alertoverwrite == BIMP_OVERWRITE_SKIP_ASK) ? 1 : 0;
-		}
-		else {
-			return 2;
-		}
+		return (oldfile_access ? 1 : 2);
 	}
 }
 
