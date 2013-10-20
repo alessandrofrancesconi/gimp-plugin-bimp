@@ -16,9 +16,13 @@
 #define BIMP_RESULT_WARNING 0
 #define BIMP_RESULT_ERROR -1
 
+#define BIMP_ASK_OVERWRITE 0
+#define BIMP_OVERWRITE_SKIP_ASK 1
+#define BIMP_DONT_OVERWRITE_SKIP_ASK 2
+
 GSList *bimp_input_filenames;
 char *bimp_output_folder;
-gboolean bimp_alertoverwrite;
+gint bimp_alertoverwrite;
 gboolean bimp_keepfolderhierarchy;
 gboolean bimp_deleteondone;
 
