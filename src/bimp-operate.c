@@ -1130,14 +1130,6 @@ static int overwrite_result(char* path, GtkWidget* parent) {
 		gboolean dont_ask_anymore = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_alertoverwrite));		
 		gtk_widget_destroy(dialog);
 				
-		 dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
-			                      GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  GTK_MESSAGE_ERROR,
-                                  GTK_BUTTONS_CLOSE,
-                                  (dont_ask_anymore)?"IS CHECKED":"IS_NOT_CHECKED");
-								 gtk_dialog_run (GTK_DIALOG (dialog));
-								 gtk_widget_destroy (dialog);
-		
 		if (result == GTK_RESPONSE_YES) {
 			if (dont_ask_anymore)
 				bimp_alertoverwrite = BIMP_OVERWRITE_SKIP_ASK;
