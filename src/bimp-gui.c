@@ -7,6 +7,7 @@
 #include <libgimp/gimp.h>
 #include <libgimp/gimpui.h>
 #include <string.h>
+#include <stdlib.h>
 #include <dirent.h>
 #include "bimp.h"
 #include "bimp-manipulations.h"
@@ -32,7 +33,7 @@ static void remove_all_input_files(GtkWidget*, gpointer);
 static void select_filename (GtkTreeView*, gpointer);
 static void update_preview(char*);
 static void show_preview(GtkTreeView*, gpointer);
-static void set_output_folder(GtkWidget*, gpointer);
+static void open_outputfolder_chooser(GtkWidget*, gpointer);
 static void popmenus_init(void);
 static void open_popup_menu(GtkWidget*, gpointer);
 static void add_manipulation_from_id(GtkMenuItem*, gpointer);
@@ -50,6 +51,8 @@ static void progressbar_end_hidden (gpointer);
 static void progressbar_settext_hidden (const gchar*, gpointer);
 static void progressbar_setvalue_hidden (double, gpointer);
 
+static char* get_user_dir(void); 
+
 GtkWidget *panel_sequence;
 GtkWidget *panel_options;
 GtkWidget *hbox_sequence;
@@ -60,8 +63,8 @@ GtkWidget *check_alertoverwrite;
 GtkWidget *check_keepfolderhierarchy;
 GtkWidget *check_deleteondone;
 GtkWidget *treeview_files;
-GtkWidget *file_chooser, *folder_chooser, *with_subdirs;
 GtkWidget *button_preview;
+GtkWidget *button_outfolder;
 
 GtkWidget* progressbar_visible;
 const gchar* progressbar_data;
@@ -185,7 +188,7 @@ static GtkWidget* option_panel_new()
 	GtkWidget *button_add, *button_addfolder, *button_remove, *button_removeall;
 	
 	GtkWidget *vbox_useroptions, *hbox_outfolder;
-	GtkWidget *label_chooser, *button_outfolder;
+	GtkWidget *label_chooser;
 	
 	panel = gtk_frame_new(_("Input files and options"));
 	gtk_widget_set_size_request (panel, OPTION_PANEL_W, OPTION_PANEL_H);
@@ -231,9 +234,14 @@ static GtkWidget* option_panel_new()
 	
 	hbox_outfolder = gtk_hbox_new(FALSE, 3);
 	label_chooser = gtk_label_new(_("Output folder"));
-	button_outfolder = gtk_file_chooser_button_new(_("Select output folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_outfolder), ""); // workaround for (none) selected folder
-	bimp_output_folder = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(button_outfolder));
+	
+	bimp_output_folder = get_user_dir();
+	
+	char* last_folder = g_strrstr(bimp_output_folder, FILE_SEPARATOR_STR) + 1;
+	if (strlen(last_folder) == 0) last_folder = bimp_output_folder;
+	button_outfolder = gtk_button_new_with_label(last_folder);
+	
+	gtk_widget_set_tooltip_text (button_outfolder, bimp_output_folder);
 	gtk_widget_set_size_request(button_outfolder, 180, 30);
 	
 	bimp_alertoverwrite = TRUE;
@@ -286,10 +294,9 @@ static GtkWidget* option_panel_new()
 	g_signal_connect(G_OBJECT(button_addfolder), "clicked", G_CALLBACK(open_folder_chooser), NULL);
 	g_signal_connect(G_OBJECT(button_remove), "clicked", G_CALLBACK(remove_input_file), NULL);
 	g_signal_connect(G_OBJECT(button_removeall), "clicked", G_CALLBACK(remove_all_input_files), NULL);
-	g_signal_connect(G_OBJECT(button_outfolder), "selection-changed", G_CALLBACK(set_output_folder), NULL);
+	g_signal_connect(G_OBJECT(button_outfolder), "clicked", G_CALLBACK(open_outputfolder_chooser), NULL);
 	g_signal_connect(G_OBJECT(gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview_files))), "changed", G_CALLBACK(select_filename), NULL);
 	g_signal_connect(G_OBJECT(button_preview), "clicked", G_CALLBACK(show_preview), NULL);
-	
 	
 	return panel;
 }
@@ -557,67 +564,65 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
 {
 	GSList *selection;
 	
-	if (file_chooser == NULL) { /* set the file chooser for the first time */
 		GtkFileFilter *filter_all, *supported[7];
 
-		file_chooser = gtk_file_chooser_dialog_new(
-			_("Select images"), 
-			NULL, 
-			GTK_FILE_CHOOSER_ACTION_OPEN, 
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CLOSE, 
-			GTK_STOCK_ADD, GTK_RESPONSE_ACCEPT, NULL
-		);
-		gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(file_chooser), TRUE);
-		
-		filter_all = gtk_file_filter_new();
-		gtk_file_filter_set_name(filter_all,_("All supported types"));
-		
-		supported[0] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[0], "Bitmap (*.bmp)");
-		gtk_file_filter_add_pattern (supported[0], "*.bmp");
-		gtk_file_filter_add_pattern (filter_all, "*.bmp");
-		
-		supported[1] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[1], "JPEG (*.jpg, *.jpeg, *jpe)");
-		gtk_file_filter_add_pattern (supported[1], "*.jpg");
-		gtk_file_filter_add_pattern (supported[1], "*.jpeg");
-		gtk_file_filter_add_pattern (supported[1], "*.jpe");
-		gtk_file_filter_add_pattern (filter_all, "*.jpg");
-		gtk_file_filter_add_pattern (filter_all, "*.jpeg");
-		gtk_file_filter_add_pattern (filter_all, "*.jpe");
+	GtkWidget* file_chooser = gtk_file_chooser_dialog_new(
+		_("Select images"), 
+		NULL, 
+		GTK_FILE_CHOOSER_ACTION_OPEN, 
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CLOSE, 
+		GTK_STOCK_ADD, GTK_RESPONSE_ACCEPT, NULL
+	);
+	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(file_chooser), TRUE);
 	
-		supported[2] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[2], "GIF (*.gif)");
-		gtk_file_filter_add_pattern (supported[2], "*.gif");
-		gtk_file_filter_add_pattern (filter_all, "*.gif");
-		
-		supported[3] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[3], "PNG (*.png)");
-		gtk_file_filter_add_pattern (supported[3], "*.png");
-		gtk_file_filter_add_pattern (filter_all, "*.png");
-		
-		supported[4] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[4], "Scalable Vector Graphics (*.svg)");
-		gtk_file_filter_add_pattern (supported[4], "*.svg");
-		gtk_file_filter_add_pattern (filter_all, "*.svg");
+	filter_all = gtk_file_filter_new();
+	gtk_file_filter_set_name(filter_all,_("All supported types"));
 	
-		supported[5] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[5], "TIFF (*tif, *.tiff)");
-		gtk_file_filter_add_pattern (supported[5], "*.tiff");
-		gtk_file_filter_add_pattern (supported[5], "*.tif");
-		gtk_file_filter_add_pattern (filter_all, "*.tiff");
-		gtk_file_filter_add_pattern (filter_all, "*.tif");
+	supported[0] = gtk_file_filter_new();
+	gtk_file_filter_set_name(supported[0], "Bitmap (*.bmp)");
+	gtk_file_filter_add_pattern (supported[0], "*.bmp");
+	gtk_file_filter_add_pattern (filter_all, "*.bmp");
 	
-		supported[6] = gtk_file_filter_new();
-		gtk_file_filter_set_name(supported[6], "GIMP XCF (*.xcf)");
-		gtk_file_filter_add_pattern (supported[6], "*.xcf");
-		gtk_file_filter_add_pattern (filter_all, "*.xcf");
-			
-		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_chooser), filter_all);
-		int i;
-		for(i = 0; i < 7; i++) {
-			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_chooser), supported[i]);
-		}
+	supported[1] = gtk_file_filter_new();
+	gtk_file_filter_set_name(supported[1], "JPEG (*.jpg, *.jpeg, *jpe)");
+	gtk_file_filter_add_pattern (supported[1], "*.jpg");
+	gtk_file_filter_add_pattern (supported[1], "*.jpeg");
+	gtk_file_filter_add_pattern (supported[1], "*.jpe");
+	gtk_file_filter_add_pattern (filter_all, "*.jpg");
+	gtk_file_filter_add_pattern (filter_all, "*.jpeg");
+	gtk_file_filter_add_pattern (filter_all, "*.jpe");
+
+	supported[2] = gtk_file_filter_new();
+	gtk_file_filter_set_name(supported[2], "GIF (*.gif)");
+	gtk_file_filter_add_pattern (supported[2], "*.gif");
+	gtk_file_filter_add_pattern (filter_all, "*.gif");
+	
+	supported[3] = gtk_file_filter_new();
+	gtk_file_filter_set_name(supported[3], "PNG (*.png)");
+	gtk_file_filter_add_pattern (supported[3], "*.png");
+	gtk_file_filter_add_pattern (filter_all, "*.png");
+	
+	supported[4] = gtk_file_filter_new();
+	gtk_file_filter_set_name(supported[4], "Scalable Vector Graphics (*.svg)");
+	gtk_file_filter_add_pattern (supported[4], "*.svg");
+	gtk_file_filter_add_pattern (filter_all, "*.svg");
+
+	supported[5] = gtk_file_filter_new();
+	gtk_file_filter_set_name(supported[5], "TIFF (*tif, *.tiff)");
+	gtk_file_filter_add_pattern (supported[5], "*.tiff");
+	gtk_file_filter_add_pattern (supported[5], "*.tif");
+	gtk_file_filter_add_pattern (filter_all, "*.tiff");
+	gtk_file_filter_add_pattern (filter_all, "*.tif");
+
+	supported[6] = gtk_file_filter_new();
+	gtk_file_filter_set_name(supported[6], "GIMP XCF (*.xcf)");
+	gtk_file_filter_add_pattern (supported[6], "*.xcf");
+	gtk_file_filter_add_pattern (filter_all, "*.xcf");
+		
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_chooser), filter_all);
+	int i;
+	for(i = 0; i < 7; i++) {
+		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_chooser), supported[i]);
 	}
 	
 	/* show dialog */
@@ -626,8 +631,7 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
 		g_slist_foreach(selection, (GFunc)add_input_file, NULL);
 	}
 	
-	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(file_chooser));
-	gtk_widget_hide (file_chooser);
+	gtk_widget_destroy (file_chooser);
 }
 
 static void open_folder_chooser(GtkWidget *widget, gpointer data) 
@@ -635,21 +639,19 @@ static void open_folder_chooser(GtkWidget *widget, gpointer data)
 	GSList *selection;
 	gboolean include_subdirs;
 
-	if (folder_chooser == NULL) { /* set the file chooser for the first time */
-		folder_chooser = gtk_file_chooser_dialog_new(
-			_("Select folders containing images"), 
-			NULL, 
-			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, 
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CLOSE, 
-			GTK_STOCK_ADD, GTK_RESPONSE_ACCEPT, NULL
-		);
-		gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(folder_chooser), TRUE);
+	GtkWidget* folder_chooser = gtk_file_chooser_dialog_new(
+		_("Select folders containing images"), 
+		NULL, 
+		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, 
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CLOSE, 
+		GTK_STOCK_ADD, GTK_RESPONSE_ACCEPT, NULL
+	);
+	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(folder_chooser), TRUE);
 
-		/* Add checkbox to select the depth of file search */
-		with_subdirs = gtk_check_button_new_with_label(_("Add files from the whole hierarchy"));
-		gtk_widget_show (with_subdirs);
-		gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(folder_chooser), GTK_WIDGET(with_subdirs));
-	}
+	/* Add checkbox to select the depth of file search */
+	GtkWidget* with_subdirs = gtk_check_button_new_with_label(_("Add files from the whole hierarchy"));
+	gtk_widget_show (with_subdirs);
+	gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(folder_chooser), GTK_WIDGET(with_subdirs));
 	
 	/* show dialog */
 	if (gtk_dialog_run (GTK_DIALOG(folder_chooser)) == GTK_RESPONSE_ACCEPT) {
@@ -658,13 +660,31 @@ static void open_folder_chooser(GtkWidget *widget, gpointer data)
 		g_slist_foreach(selection, (GFunc)add_input_folder, GINT_TO_POINTER(include_subdirs));
 	}
 	
-	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(folder_chooser));
-	gtk_widget_hide (folder_chooser);
+	gtk_widget_destroy (folder_chooser);
 }
 
-static void set_output_folder(GtkWidget *widget, gpointer data) 
+static void open_outputfolder_chooser(GtkWidget *widget, gpointer data) 
 {
-	bimp_output_folder = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
+	GtkWidget* chooser = gtk_file_chooser_dialog_new(
+		_("Select output folder"), 
+		NULL, 
+		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, 
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CLOSE, 
+		GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL
+	);
+	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(chooser), FALSE);
+
+	if (gtk_dialog_run (GTK_DIALOG(chooser)) == GTK_RESPONSE_ACCEPT) {
+		bimp_output_folder = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(chooser))->data;
+		
+		char* last_folder = g_strrstr(bimp_output_folder, FILE_SEPARATOR_STR) + 1;
+		if (strlen(last_folder) == 0) last_folder = bimp_output_folder;
+		gtk_button_set_label(GTK_BUTTON(button_outfolder), last_folder);
+		
+		gtk_widget_set_tooltip_text(button_outfolder, bimp_output_folder);
+	}
+	
+	gtk_widget_destroy (chooser);
 }
 
 /* initializes the two menus that appears when the user clicks on the "add new" button 
@@ -1010,4 +1030,19 @@ void bimp_set_busy(gboolean busy) {
 	
 	gtk_widget_set_sensitive(panel_sequence, !busy);
 	gtk_widget_set_sensitive(panel_options, !busy);
+}
+
+static char* get_user_dir() 
+{
+	char* path = NULL;
+	
+#ifdef _WIN32
+	path = g_strconcat(getenv("HOMEDRIVE"), getenv("HOMEPATH"), NULL);
+	if (strlen(path) == 0) path = "C:\\";
+#else
+	path = getenv("HOME");
+	if (strlen(path) == 0) path = "/";
+#endif
+	
+	return path;
 }

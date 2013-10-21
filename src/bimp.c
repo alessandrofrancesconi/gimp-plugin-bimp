@@ -266,7 +266,6 @@ static char* get_bimp_localedir()
 {
 	int bufsize = 1024;
 	char* path = g_malloc0(bufsize);
-	char sep[2];
 	
 	// different methods for getting the plugin's absolute path, for different systems
 #ifdef __unix__
@@ -277,11 +276,9 @@ static char* get_bimp_localedir()
 	_NSGetExecutablePath(path, &bufsize);
 #endif
 	
-	sep[0] = FILE_SEPARATOR /*'/'*/;
-	sep[1] = '\0';
-	memset(g_strrstr(path, sep), '\0', 1); // truncate at the last path separator (eliminates "bimp.exe")
+	memset(g_strrstr(path, FILE_SEPARATOR_STR), '\0', 1); // truncate at the last path separator (eliminates "bimp.exe")
 	
-	return g_strconcat(path, sep, "bimp-locale", NULL); // returns truncated path, plus "/bimp-locale" directory
+	return g_strconcat(path, FILE_SEPARATOR_STR, "bimp-locale", NULL); // returns truncated path, plus "/bimp-locale" directory
 }
 
 /* C-string case-insensitive comparison function (with gconstpointer args) */ 

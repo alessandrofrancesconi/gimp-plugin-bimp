@@ -18,7 +18,7 @@ Or:
 
 	make && sudo make install-admin
 
-To make and install for every user in the system (needs root privileges).
+to make and install for every user in the system (needs root privileges).
 
 1.	Make sure that the "bimp-locale" folder is copied in the plug-in directory too! If not, you can do it manually by copying it from ./bin/win32.
 2.	Don't mind the warnings...
