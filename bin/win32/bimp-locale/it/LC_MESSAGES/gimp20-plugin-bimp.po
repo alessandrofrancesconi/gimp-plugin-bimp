@@ -1,195 +1,200 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gimp-plugin-bimp\n"
-"POT-Creation-Date: 2013-03-05 21:07+0100\n"
-"PO-Revision-Date: 2013-03-05 21:08+0100\n"
+"POT-Creation-Date: 2013-10-23 19:14+0100\n"
+"PO-Revision-Date: 2013-10-23 19:14+0100\n"
 "Last-Translator: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.5.7\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: ..\\..\\..\\..\\..\\src\\\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\\manipulation-gui\n"
 
-#: bimp-gui.c:128 bimp-gui.c:826
+#: bimp-gui.c:131 bimp-gui.c:827
 msgid "The manipulations set is empty!"
 msgstr "L'insieme delle modifiche è vuoto!"
 
-#: bimp-gui.c:131
+#: bimp-gui.c:134
 msgid "The file list is empty!"
 msgstr "La lista dei file origine è vuota!"
 
-#: bimp-gui.c:160
+#: bimp-gui.c:163
 msgid "Manipulation set"
 msgstr "Insieme delle modifiche"
 
-#: bimp-gui.c:192
+#: bimp-gui.c:193
 msgid "Input files and options"
 msgstr "File di origine ed opzioni"
 
-#: bimp-gui.c:216
+#: bimp-gui.c:218
 msgid "Add images"
 msgstr "Aggiungi immagini"
 
-#: bimp-gui.c:218
+#: bimp-gui.c:220
 msgid "Add folders"
 msgstr "Aggiungi cartelle"
 
-#: bimp-gui.c:224
+#: bimp-gui.c:226
 msgid "Remove selected"
 msgstr "Rimuovi selezionati"
 
-#: bimp-gui.c:226
+#: bimp-gui.c:228
 msgid "Remove all"
 msgstr "Rimuovi tutti"
 
-#: bimp-gui.c:234
+#: bimp-gui.c:236
 msgid "Output folder"
 msgstr "Salva in"
 
-#: bimp-gui.c:240
+#: bimp-gui.c:248
 msgid "Alert when overwriting existing files"
 msgstr "Avvisa se si sovrascrivono file esistenti"
 
-#: bimp-gui.c:244
+#: bimp-gui.c:252
 msgid "Keep folder hierarchy"
 msgstr "Mantieni la gerarchia delle cartelle"
 
-#: bimp-gui.c:249
+#: bimp-gui.c:257
 msgid "Delete original file when done"
 msgstr "Cancella i file originali quando ho finito"
 
-#: bimp-gui.c:255
+#: bimp-gui.c:263
 msgid "Click for preview"
 msgstr "Clicca per un'anteprima"
 
-#: bimp-gui.c:354
+#: bimp-gui.c:357
 #, c-format
 msgid "Couldn't read into \"%s\" directory."
 msgstr "Impossibile leggere dalla cartella \"%s\""
 
-#: bimp-gui.c:409
+#: bimp-gui.c:445
 msgid "Can't show a preview because the manipulations set is empty"
 msgstr ""
 "Impossibile visualizzare un'anteprima\n"
 "poichè l'insieme delle modifiche è vuoto"
 
-#: bimp-gui.c:432
+#: bimp-gui.c:472
 msgid "Preview"
 msgstr "Anteprima"
 
-#: bimp-gui.c:444
+#: bimp-gui.c:484
 msgid "This is how the selected image will look like after the batch process"
 msgstr "Ecco come apparirà l'immagine selezionata dopo il processo di modifica"
 
-#: bimp-gui.c:547
+#: bimp-gui.c:570
 msgid "Select images"
 msgstr "Scegli immagine"
 
-#: bimp-gui.c:556 manipulation-gui/gui-watermark.c:65
+#: bimp-gui.c:579 manipulation-gui/gui-watermark.c:65
 #: .\manipulation-gui/gui-watermark.c:65
 msgid "All supported types"
 msgstr "Tutti i formati supportati"
 
-#: bimp-gui.c:659
+#: bimp-gui.c:643
 msgid "Select folders containing images"
 msgstr "Seleziona delle cartelle contenenti immagini"
 
-#: bimp-gui.c:668
+#: bimp-gui.c:652
 msgid "Add files from the whole hierarchy"
 msgstr "Aggiungi anche le cartelle interne"
 
-#: bimp-gui.c:712 bimp-gui.c:833
+#: bimp-gui.c:669
+#, fuzzy
+msgid "Select output folder"
+msgstr "Salva in"
+
+#: bimp-gui.c:713 bimp-gui.c:833
 msgid "Save this set..."
 msgstr "Salva questo set..."
 
-#: bimp-gui.c:716 bimp-gui.c:889
+#: bimp-gui.c:717 bimp-gui.c:888
 msgid "Load set..."
 msgstr "Carica set..."
 
-#: bimp-gui.c:727
+#: bimp-gui.c:728
 msgid "Edit properties..."
 msgstr "Cambia proprietà..."
 
-#: bimp-gui.c:730
+#: bimp-gui.c:731
 msgid "Remove this manipulation"
 msgstr "Rimuovi questa modifica"
 
-#: bimp-gui.c:762
+#: bimp-gui.c:763
 msgid "Can't add another manipulation of this kind. Only one is permitted!"
 msgstr ""
 "Impossibile aggiungere un'altra modifica di questo tipo. Una sola è permessa!"
 
-#: bimp-gui.c:854 bimp-gui.c:906
+#: bimp-gui.c:854 bimp-gui.c:905
 msgid "An error occured when importing a saved batch file :("
 msgstr "E' avvenuto un errore durante il caricamento :("
 
-#: bimp-gui.c:877
+#: bimp-gui.c:876
 msgid "This will overwrite current manipulations set. Continue?"
 msgstr "Questo sovrascriverà l'insieme delle modifiche corrente. Continuare?"
 
-#: bimp-gui.c:943 bimp.c:77
+#: bimp-gui.c:942 bimp.c:77
 msgid "Applies GIMP manipulations on groups of images"
 msgstr "Applica modifiche GIMP a gruppi di immagini"
 
-#: bimp-gui.c:950
+#: bimp-gui.c:949
 msgid "translator-name <translator-email>"
 msgstr ""
 "Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Cristiano Bergoglio <cristiano.bergoglio@gmail.com>"
 
-#: bimp-manipulations.c:245
+#: bimp-manipulations.c:275
 msgid "Resize"
 msgstr "Ridimensiona"
 
-#: bimp-manipulations.c:248
+#: bimp-manipulations.c:278
 msgid "Crop"
 msgstr "Ritaglia"
 
-#: bimp-manipulations.c:251
+#: bimp-manipulations.c:281
 msgid "Flip or Rotate"
 msgstr "Rifletti o ruota"
 
-#: bimp-manipulations.c:254
+#: bimp-manipulations.c:284
 msgid "Color correction"
 msgstr "Correzione colore"
 
-#: bimp-manipulations.c:257
+#: bimp-manipulations.c:287
 msgid "Sharp or Blur"
 msgstr "Rendi nitido o sfuoca"
 
-#: bimp-manipulations.c:260
+#: bimp-manipulations.c:290
 msgid "Add a Watermark"
 msgstr "Aggiungi un watermark"
 
-#: bimp-manipulations.c:263
+#: bimp-manipulations.c:293
 msgid "Change format and compression"
 msgstr "Cambia formato e compressione"
 
-#: bimp-manipulations.c:266
+#: bimp-manipulations.c:296
 msgid "Rename with a pattern"
 msgstr "Rinomina con un pattern"
 
-#: bimp-manipulations.c:269
+#: bimp-manipulations.c:299
 msgid "Other GIMP procedure..."
 msgstr "Altra procedura di GIMP..."
 
-#: bimp-operate.c:151
-#, c-format
+#: bimp-operate.c:187
+#, fuzzy, c-format
 msgid ""
-"Can't save image %s: input file has no extension.\n"
+"Can't save image \"%s\": input file has no extension.\n"
 "You can solve this error by adding a \"Change format or compression\" step"
 msgstr ""
 "Impossibile salvare l'immagine %s: il file originale non ha estensione.\n"
 "Puoi correggere questo errore aggiungendo un passo \"Cambia formato e "
 "compressione\"."
 
-#: bimp-operate.c:157
+#: bimp-operate.c:193
 #, c-format
 msgid ""
 "GIMP can't save %s back to its original SVG format.\n"
@@ -199,30 +204,30 @@ msgstr ""
 "Puoi correggere questo errore aggiungendo un passo \"Cambia formato e "
 "compressione\"."
 
-#: bimp-operate.c:163
-#, c-format
-msgid "Working on file %s..."
+#: bimp-operate.c:199
+#, fuzzy, c-format
+msgid "Working on file \"%s\"..."
 msgstr "Lavorando sul file %s"
 
-#: bimp-operate.c:255
+#: bimp-operate.c:336
 msgid "Operations stopped"
 msgstr "Operazione fermata"
 
-#: bimp-operate.c:262
+#: bimp-operate.c:343
 #, c-format
 msgid "End, all files have been processed with %d errors"
 msgstr "Fine, tutti i file sono stati processati con %d errori"
 
-#: bimp-operate.c:999
+#: bimp-operate.c:1137
 #, c-format
 msgid "File %s already exists, overwrite it?"
 msgstr "Il file %s esiste già, sovrascriverlo?"
 
-#: bimp-operate.c:1005
-msgid "Yes, don't ask again"
-msgstr "Si, non chiedermelo più"
+#: bimp-operate.c:1142
+msgid "Always apply this decision."
+msgstr "Applica sempre questa decisione"
 
-#: bimp-operate.c:1009
+#: bimp-operate.c:1154
 msgid "Overwrite?"
 msgstr "Sovrascrivere?"
 
@@ -368,16 +373,16 @@ msgid "Image origin"
 msgstr "Origine immagine"
 
 #: manipulation-gui/gui-changeformat.c:277
-#: manipulation-gui/gui-watermark.c:233
+#: manipulation-gui/gui-watermark.c:211
 #: .\manipulation-gui/gui-changeformat.c:277
-#: .\manipulation-gui/gui-watermark.c:233
+#: .\manipulation-gui/gui-watermark.c:211
 msgid "Top-left"
 msgstr "Sopra a sinistra"
 
 #: manipulation-gui/gui-changeformat.c:278
-#: manipulation-gui/gui-watermark.c:242
+#: manipulation-gui/gui-watermark.c:220
 #: .\manipulation-gui/gui-changeformat.c:278
-#: .\manipulation-gui/gui-watermark.c:242
+#: .\manipulation-gui/gui-watermark.c:220
 msgid "Bottom-left"
 msgstr "In basso a sinistra"
 
@@ -425,21 +430,29 @@ msgstr ""
 "Questa procedura non richiede\n"
 "parametri editabili"
 
-#: manipulation-gui/gui-color.c:19 .\manipulation-gui/gui-color.c:19
+#: manipulation-gui/gui-color.c:21 .\manipulation-gui/gui-color.c:21
 msgid "Brightness"
 msgstr "Luminosità"
 
-#: manipulation-gui/gui-color.c:27 .\manipulation-gui/gui-color.c:27
+#: manipulation-gui/gui-color.c:29 .\manipulation-gui/gui-color.c:29
 msgid "Contrast"
 msgstr "Contrasto"
 
-#: manipulation-gui/gui-color.c:34 .\manipulation-gui/gui-color.c:34
+#: manipulation-gui/gui-color.c:36 .\manipulation-gui/gui-color.c:36
 msgid "Convert to grayscale"
 msgstr "Converti in scala di grigi"
 
-#: manipulation-gui/gui-color.c:36 .\manipulation-gui/gui-color.c:36
+#: manipulation-gui/gui-color.c:38 .\manipulation-gui/gui-color.c:38
 msgid "Automatic color levels correction"
 msgstr "Correggi automaticamenti i livelli di colore"
+
+#: manipulation-gui/gui-color.c:41 .\manipulation-gui/gui-color.c:41
+msgid "Change color curve from settings file:"
+msgstr "Cambia la curva di colori da un file esterno:"
+
+#: manipulation-gui/gui-color.c:42 .\manipulation-gui/gui-color.c:42
+msgid "Select GIMP Curve file"
+msgstr "Scegli un file di impostazioni Curve di GIMP"
 
 #: manipulation-gui/gui-crop.c:27 .\manipulation-gui/gui-crop.c:27
 msgid "Crop to a standard aspect ratio"
@@ -616,7 +629,7 @@ msgstr ""
 msgid "Author"
 msgstr "Autore"
 
-#: manipulation-gui/gui-userdef.c:565 .\manipulation-gui/gui-userdef.c:565
+#: manipulation-gui/gui-userdef.c:570 .\manipulation-gui/gui-userdef.c:570
 msgid "This procedure takes no editable params"
 msgstr ""
 "Questa procedura non richiede\n"
@@ -646,25 +659,28 @@ msgstr "Watermark a immagine"
 msgid "Select image"
 msgstr "Scegli immagine"
 
-#: manipulation-gui/gui-watermark.c:132 .\manipulation-gui/gui-watermark.c:132
+#: manipulation-gui/gui-watermark.c:110 .\manipulation-gui/gui-watermark.c:110
 msgid "Opacity"
 msgstr "Opacità"
 
-#: manipulation-gui/gui-watermark.c:142 .\manipulation-gui/gui-watermark.c:142
+#: manipulation-gui/gui-watermark.c:120 .\manipulation-gui/gui-watermark.c:120
 msgid "Position on the image"
 msgstr "Posizione nell'immagine"
 
-#: manipulation-gui/gui-watermark.c:236 .\manipulation-gui/gui-watermark.c:236
+#: manipulation-gui/gui-watermark.c:214 .\manipulation-gui/gui-watermark.c:214
 msgid "Top-right"
 msgstr "Sopra a destra"
 
-#: manipulation-gui/gui-watermark.c:239 .\manipulation-gui/gui-watermark.c:239
+#: manipulation-gui/gui-watermark.c:217 .\manipulation-gui/gui-watermark.c:217
 msgid "Center"
 msgstr "Al centro"
 
-#: manipulation-gui/gui-watermark.c:245 .\manipulation-gui/gui-watermark.c:245
+#: manipulation-gui/gui-watermark.c:223 .\manipulation-gui/gui-watermark.c:223
 msgid "Bottom-right"
 msgstr "In basso a destra"
+
+#~ msgid "Yes, don't ask again"
+#~ msgstr "Si, non chiedermelo più"
 
 #~ msgid "Save this set"
 #~ msgstr "Salva questo set"

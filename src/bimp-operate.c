@@ -197,9 +197,9 @@ static gboolean process_image(gpointer parent)
 	
 	g_print("\nWorking on file %d of %d (%s)\n", processed_count+1, total_images, orig_filename);
 	bimp_progress_bar_set(((double)processed_count)/total_images, g_strdup_printf(_("Working on file \"%s\"..."), orig_basename));
-	
-	/* apply all the main manipulations */
-	bimp_apply_drawable_manipulations(imageout, (gchar*)orig_filename, (gchar*)orig_basename); 
+
+
+
 
 	/* rename and save process... */
 	orig_basename[strlen(orig_basename) - strlen(orig_file_ext)] = '\0'; /* remove extension from basename */
@@ -246,32 +246,36 @@ static gboolean process_image(gpointer parent)
 	format_type final_format = -1;
 	format_params params = NULL;
 	
-	if(list_contains_changeformat || list_contains_savingplugin) {
-	
-		if(list_contains_changeformat) {
-			changeformat_settings settings = (changeformat_settings)(bimp_list_get_manip(MANIP_CHANGEFORMAT))->settings;
-			final_format = settings->format;
-			params = settings->params;
-			
-			g_print("Changing FORMAT to %s\n", format_type_string[final_format][0]);
-			imageout->filename = g_strconcat(imageout->filename, ".", format_type_string[final_format][0], NULL); /* append new file extension */
-			imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); /* build new path */
-		}
-		else if (list_contains_savingplugin) {
-			// leave filename without extension and proceed calling each saving plugin
-			imageout->filename = g_strconcat(imageout->filename, ".dds", NULL);
-			imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); /* build new path */
-			
-			GSList *iterator = NULL;
-			manipulation man;
-			for (iterator = bimp_selected_manipulations; iterator; iterator = iterator->next) {
-				man = (manipulation)(iterator->data);
-				if (man->type == MANIP_USERDEF && strstr(((userdef_settings)(man->settings))->procedure, "-save") != NULL) {
-					// found a saving plugin, execute it
-					/* TODO!!!! This won't work yet, we need a way to extract the file extension managed by the selected saving plugin
-					 * e.g. "file-dds-save" -> "dds" (don't do it with regexp on plugin's name... to easy...) */
-					apply_userdef((userdef_settings)(man->settings), imageout);
-				}
+	if(list_contains_changeformat) {
+
+
+		changeformat_settings settings = (changeformat_settings)(bimp_list_get_manip(MANIP_CHANGEFORMAT))->settings;
+		final_format = settings->format;
+		params = settings->params;
+		
+
+		g_print("Changing FORMAT to %s\n", format_type_string[final_format][0]);
+		imageout->filename = g_strconcat(imageout->filename, ".", format_type_string[final_format][0], NULL); /* append new file extension */
+		imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); /* build new path */
+	}
+	/* TO CHECK what apply_userdef does once coded */
+
+	else if (list_contains_savingplugin) {
+		// leave filename without extension and proceed calling each saving plugin
+		imageout->filename = g_strconcat(imageout->filename, ".dds", NULL);
+		imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); /* build new path */
+		
+
+		GSList *iterator = NULL;
+		manipulation man;
+		for (iterator = bimp_selected_manipulations; iterator; iterator = iterator->next) {
+			man = (manipulation)(iterator->data);
+			if (man->type == MANIP_USERDEF && strstr(((userdef_settings)(man->settings))->procedure, "-save") != NULL) {
+				// found a saving plugin, execute it
+				/* TODO!!!! This won't work yet, we need a way to extract the file extension managed by the selected saving plugin
+				 * e.g. "file-dds-save" -> "dds" (don't do it with regexp on plugin's name... to easy...) */
+				apply_userdef((userdef_settings)(man->settings), imageout);
+
 			}
 		}
 	}
@@ -282,14 +286,38 @@ static gboolean process_image(gpointer parent)
 		final_format = -1;	
 	}
 	
-	int ow_res = overwrite_result(imageout->filepath, parent);
-	if (ow_res > 0) {
-		g_print("Saving file %s in %s\n", imageout->filename, imageout->filepath);
-		image_save(final_format, imageout, params);
+	/* check if writing possible */
+	if (bimp_alertoverwrite != BIMP_OVERWRITE_SKIP_ASK) {
+		// file already exists ?
+		gboolean oldfile_access = g_file_test(imageout->filepath, G_FILE_TEST_IS_REGULAR);		
+		if (oldfile_access) {
+			// "Don't overwrite" without confirmation
+			if (bimp_alertoverwrite == BIMP_DONT_OVERWRITE_SKIP_ASK) {
+				g_print("Destination file already exists!\n");
+				goto process_end;
+			}
+			
+			// Ask what to do
+			int ow_res = overwrite_result(imageout->filepath, parent);
+			if (ow_res == 0) {
+				g_print("Destination file has not been overwritten!\n");
+				goto process_end;
+			}
+		}
+		//
+
+
 	}
-	else {
-		g_print("File has not been overwritten!\n");
-	}
+	
+	/* apply all the main manipulations */
+	bimp_apply_drawable_manipulations(imageout, (gchar*)orig_filename, (gchar*)orig_basename); 
+	
+	/* Save */
+	g_print("Saving file %s in %s\n", imageout->filename, imageout->filepath);
+	image_save(final_format, imageout, params);
+
+
+
 
 	gimp_image_delete(imageout->image_id); /* is it useful? */
 	
@@ -1088,15 +1116,19 @@ static gboolean image_save_tiff(image_output out, int compression)
 }
 
 /* returns a result code following this schema:
- * 0 = user responses "don't overwite" to a confirm dialog
- * 1 = old file was the same as the new one and user responses "yes, overwite"
+ * 0 = user responses "don't overwrite" to a confirm dialog
+ * 1 = old file was the same as the new one and user responses "yes, overwrite"
  * 2 = old file wasn't the same (implicit overwrite)
  */
 static int overwrite_result(char* path, GtkWidget* parent) {
 	gboolean oldfile_access = g_file_test(path, G_FILE_TEST_IS_REGULAR);
 	
-	if (bimp_alertoverwrite && oldfile_access) {
+	if ( (bimp_alertoverwrite == BIMP_ASK_OVERWRITE) && oldfile_access) {
 		GtkWidget *dialog;
+		GtkWidget *check_alertoverwrite;
+		GtkWidget *dialog_action;
+		
+		
 		dialog = gtk_message_dialog_new(
 			GTK_WINDOW(parent),
 			GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1105,28 +1137,46 @@ static int overwrite_result(char* path, GtkWidget* parent) {
 			_("File %s already exists, overwrite it?"), bimp_comp_get_filename(path)
 		);
 		
+		// Add checkbox "Always apply decision"
+		dialog_action = gtk_dialog_get_action_area(GTK_DIALOG(dialog));
+		check_alertoverwrite = gtk_check_button_new_with_label(_("Always apply this decision"));
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_alertoverwrite), FALSE);
+		gtk_box_pack_start (GTK_BOX(dialog_action), check_alertoverwrite, FALSE, FALSE, 0);
+		gtk_widget_show (check_alertoverwrite);
+		
 		gtk_dialog_add_buttons (
 			GTK_DIALOG(dialog),
 			GTK_STOCK_YES, GTK_RESPONSE_YES,
-			_("Yes, don't ask again"), GTK_RESPONSE_APPLY,
+
 			GTK_STOCK_NO, GTK_RESPONSE_NO, NULL
 		);
 		
 		gtk_window_set_title(GTK_WINDOW(dialog), _("Overwrite?"));
-		gint result = gtk_dialog_run(GTK_DIALOG(dialog));
+		gint result = gtk_dialog_run(GTK_DIALOG(dialog));		
+		gboolean dont_ask_anymore = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_alertoverwrite));		
 		gtk_widget_destroy(dialog);
-		
-		if (result == GTK_RESPONSE_APPLY) {
-			bimp_alertoverwrite = FALSE;
+				
+
+		if (result == GTK_RESPONSE_YES) {
+			if (dont_ask_anymore)
+				bimp_alertoverwrite = BIMP_OVERWRITE_SKIP_ASK;
 			return 1;
-		} else if (result == GTK_RESPONSE_YES) {
-			return 1;
-		} else {
+		}
+		else {
+			if (dont_ask_anymore)
+				bimp_alertoverwrite = BIMP_DONT_OVERWRITE_SKIP_ASK;
+
+
 			return 0;
 		}
 	}
 	else {
-		return (oldfile_access ? 1 : 2);
+		if (oldfile_access) {
+			return (bimp_alertoverwrite == BIMP_OVERWRITE_SKIP_ASK) ? 1 : 0;
+		}
+		else {
+			return 2;
+		}
 	}
 }
 
@@ -1144,3 +1194,4 @@ static char* get_datetime() {
 
 	return format;
 }
+

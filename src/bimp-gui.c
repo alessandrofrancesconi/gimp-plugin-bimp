@@ -134,7 +134,7 @@ void bimp_show_gui()
 					bimp_show_error_dialog(_("The file list is empty!"), bimp_window_main);
 				}
 				else {
-					bimp_alertoverwrite = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_alertoverwrite));
+					bimp_alertoverwrite = ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_alertoverwrite)) ) ? BIMP_ASK_OVERWRITE : BIMP_OVERWRITE_SKIP_ASK;
 					bimp_keepfolderhierarchy = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_keepfolderhierarchy));
 					bimp_deleteondone = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_deleteondone));
 					bimp_start_batch(bimp_window_main);
@@ -238,15 +238,15 @@ static GtkWidget* option_panel_new()
 	bimp_output_folder = get_user_dir();
 	
 	char* last_folder = g_strrstr(bimp_output_folder, FILE_SEPARATOR_STR) + 1;
-	if (strlen(last_folder) == 0) last_folder = bimp_output_folder;
+	if (last_folder == NULL || strlen(last_folder) == 0) last_folder = bimp_output_folder;
 	button_outfolder = gtk_button_new_with_label(last_folder);
 	
 	gtk_widget_set_tooltip_text (button_outfolder, bimp_output_folder);
 	gtk_widget_set_size_request(button_outfolder, 180, 30);
 	
-	bimp_alertoverwrite = TRUE;
+	bimp_alertoverwrite = BIMP_ASK_OVERWRITE; 
 	check_alertoverwrite = gtk_check_button_new_with_label(_("Alert when overwriting existing files"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_alertoverwrite), bimp_alertoverwrite);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_alertoverwrite), TRUE); 
 	
 	bimp_keepfolderhierarchy = FALSE;
 	check_keepfolderhierarchy = gtk_check_button_new_with_label(_("Keep folder hierarchy"));
@@ -678,7 +678,7 @@ static void open_outputfolder_chooser(GtkWidget *widget, gpointer data)
 		bimp_output_folder = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(chooser))->data;
 		
 		char* last_folder = g_strrstr(bimp_output_folder, FILE_SEPARATOR_STR) + 1;
-		if (strlen(last_folder) == 0) last_folder = bimp_output_folder;
+		if (last_folder == NULL || strlen(last_folder) == 0) last_folder = bimp_output_folder;
 		gtk_button_set_label(GTK_BUTTON(button_outfolder), last_folder);
 		
 		gtk_widget_set_tooltip_text(button_outfolder, bimp_output_folder);
