@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gimp-plugin-bimp\n"
 "POT-Creation-Date: 2013-10-23 19:14+0100\n"
-"PO-Revision-Date: 2013-10-23 19:14+0100\n"
+"PO-Revision-Date: 2013-10-23 19:18+0100\n"
 "Last-Translator: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language: it\n"
@@ -224,7 +224,8 @@ msgid "File %s already exists, overwrite it?"
 msgstr "Il file %s esiste già, sovrascriverlo?"
 
 #: bimp-operate.c:1142
-msgid "Always apply this decision."
+#, fuzzy
+msgid "Always apply this decision"
 msgstr "Applica sempre questa decisione"
 
 #: bimp-operate.c:1154
