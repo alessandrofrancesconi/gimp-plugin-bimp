@@ -184,9 +184,9 @@ void toggle_units_group(GtkToggleButton *togglebutton, gpointer user_data)
 		gtk_spin_button_configure (GTK_SPIN_BUTTON(spin_resY), GTK_ADJUSTMENT(gtk_adjustment_new (gtk_spin_button_get_value (GTK_SPIN_BUTTON(spin_resY)), 0.005, 65536.000, 1.000, 1, 0)), 0, 3);
 	}
 	
-	gtk_widget_set_sensitive(GTK_WIDGET(check_aspect), (percent_active || !both_active));
-	gtk_widget_set_sensitive(GTK_WIDGET(spin_width), (percent_active || both_active || width_active));
-	gtk_widget_set_sensitive(GTK_WIDGET(spin_height), (percent_active || both_active || height_active));	
+	gtk_widget_set_sensitive(GTK_WIDGET(check_aspect), TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(spin_width), (!percent_active || both_active || width_active));
+	gtk_widget_set_sensitive(GTK_WIDGET(spin_height), (!percent_active || both_active || height_active));
 }
 
 void toggle_resolution(GtkToggleButton *togglebutton, gpointer user_data) 

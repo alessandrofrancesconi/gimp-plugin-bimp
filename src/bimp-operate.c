@@ -463,9 +463,20 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 		}
 		else {
 			/* both dimensions are defined */
+			if (settings->aspect_ratio) {
+				// Find which new dimension is the smallest percentage of the existing image dinmension
+				gdouble newwpct = (float)settings->new_w_px / (float)gimp_image_width(out->image_id);
+				gdouble newhpct = (float)settings->new_h_px / (float)gimp_image_height(out->image_id);
+				gdouble newpct = (newwpct < newhpct) ? newwpct : newhpct;
+
+				final_w = round((float)gimp_image_width(out->image_id) * newpct);
+				final_h = round((float)gimp_image_height(out->image_id) * newpct);
+			}
+			else {
 			final_w = settings->new_w_px;
 			final_h = settings->new_h_px;
 		}
+	}
 	}
 	
 	/* do resize */
@@ -716,6 +727,10 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 			posX = 10;
 			posY = 5;
 		}
+		else if (settings->position == WM_POS_TC) {
+			posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);
+			posY = 5;
+		}
 		else if (settings->position == WM_POS_TR) {
 			posX = gimp_image_width(out->image_id) - wmwidth - 10;
 			posY = 5;
@@ -724,9 +739,21 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 			posX = 10;
 			posY = gimp_image_height(out->image_id) - wmheight - 5;
 		}
+		else if (settings->position == WM_POS_BC) {
+			posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);
+			posY = gimp_image_height(out->image_id) - wmheight - 5;
+		}
 		else if (settings->position == WM_POS_BR) {
 			posX = gimp_image_width(out->image_id) - wmwidth - 10;
 			posY = gimp_image_height(out->image_id) - wmheight - 5;
+		}
+		else if (settings->position == WM_POS_CL) {
+			posX = 10;
+			posY = (gimp_image_height(out->image_id) / 2) - (wmheight / 2);
+		}
+		else if (settings->position == WM_POS_CR) {
+			posX = gimp_image_width(out->image_id) - wmwidth - 10;
+			posY = (gimp_image_height(out->image_id) / 2) - (wmheight / 2);
 		}
 		else {
 			posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);
@@ -789,6 +816,10 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 			posX = 10;
 			posY = 10;
 		}
+		else if (settings->position == WM_POS_TC) {
+			posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);
+			posY = 10;
+		}
 		else if (settings->position == WM_POS_TR) {
 			posX = gimp_image_width(out->image_id) - wmwidth - 10;
 			posY = 10;
@@ -797,9 +828,21 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 			posX = 10;
 			posY = gimp_image_height(out->image_id) - wmheight - 10;
 		}
+		else if (settings->position == WM_POS_BC) {
+			posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);
+			posY = gimp_image_height(out->image_id) - wmheight - 10;
+		}
 		else if (settings->position == WM_POS_BR) {
 			posX = gimp_image_width(out->image_id) - wmwidth - 10;
 			posY = gimp_image_height(out->image_id) - wmheight - 10;
+		}
+		else if (settings->position == WM_POS_CL) {
+			posX = 10;
+			posY = (gimp_image_height(out->image_id) / 2) - (wmheight / 2);
+		}
+		else if (settings->position == WM_POS_CR) {
+			posX = gimp_image_width(out->image_id) - wmwidth - 10;
+			posY = (gimp_image_height(out->image_id) / 2) - (wmheight / 2);
 		}
 		else {
 			posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);

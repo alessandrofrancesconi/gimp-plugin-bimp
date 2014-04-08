@@ -75,9 +75,13 @@ static const char* format_type_string[][2] = {
 
 typedef enum watermark_position {
 	WM_POS_TL = 0,
+	WM_POS_TC,
 	WM_POS_TR,
+	WM_POS_CL,
 	WM_POS_CC,
+	WM_POS_CR,
 	WM_POS_BL,
+	WM_POS_BC,
 	WM_POS_BR,
 	WM_POS_END
 } watermark_position;
