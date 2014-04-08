@@ -894,7 +894,7 @@ static void load_set(GtkMenuItem *menuitem, gpointer user_data)
 		
 		GtkFileFilter *filter_bimp = gtk_file_filter_new();
 		gtk_file_filter_set_name(filter_bimp, "BIMP manipulations set (*.bimp)");
-		gtk_file_filter_add_pattern (filter_bimp, "*.bimp");
+		gtk_file_filter_add_pattern (filter_bimp, "*.[bB][iI][mM][pP]");
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_loader), filter_bimp);
 		
 		if (gtk_dialog_run (GTK_DIALOG(file_loader)) == GTK_RESPONSE_ACCEPT) {

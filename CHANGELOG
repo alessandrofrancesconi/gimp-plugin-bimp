@@ -4,6 +4,9 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+1.8
+ - Unrecognized capital file extensions on Unix
+
 1.7
  - Replaced buggy GtkFileChooserButton with GtkButton to select output folder (should be the end of the nightmare) (issue #42 and #43)
  - Changed overwrite confirmation and moved image modifications after overwriting check (thanks to Thomas Mevel @mevtho) (issue #50)
