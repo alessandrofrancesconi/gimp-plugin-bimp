@@ -10,7 +10,8 @@ Changelog:
    are treated as maximum sizes for the resulting image. (issue #25) (thanks to @Walt9Z)
  - Resize and Crop manipulations are now treated as "normal priority" steps. Originally they started first, now they follow
    the original order given by the user in the GUI (issue #53)
- - Added "tall" smartphone screen Crop presets (for devices like iPhone 5+)
+ - It's now possible to select the current source folder as the output destination (only if every input file is located in it).
+ - Added "tall" smartphone screen Crop preset (for devices like iPhone 5+)
  - JPEG subsampling settings was wrong (issue #52)
  - Updated Italian translation
    
