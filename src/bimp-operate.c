@@ -48,8 +48,6 @@ char* common_folder_path;
 
 gboolean list_contains_changeformat;
 gboolean list_contains_rename;
-gboolean list_contains_resize;
-gboolean list_contains_crop;
 gboolean list_contains_watermark;
 gboolean list_contains_savingplugin;
 
@@ -70,8 +68,6 @@ guint8* colorcurve_ctr_points_a;
 
 void bimp_init_batch() 
 {
-	list_contains_resize = bimp_list_contains_manip(MANIP_RESIZE);
-	list_contains_crop = bimp_list_contains_manip(MANIP_CROP);
 	list_contains_changeformat = bimp_list_contains_manip(MANIP_CHANGEFORMAT);
 	list_contains_rename = bimp_list_contains_manip(MANIP_RENAME);
 	list_contains_watermark = bimp_list_contains_manip(MANIP_WATERMARK);
@@ -198,9 +194,6 @@ static gboolean process_image(gpointer parent)
 	g_print("\nWorking on file %d of %d (%s)\n", processed_count+1, total_images, orig_filename);
 	bimp_progress_bar_set(((double)processed_count)/total_images, g_strdup_printf(_("Working on file \"%s\"..."), orig_basename));
 
-
-
-
 	/* rename and save process... */
 	orig_basename[strlen(orig_basename) - strlen(orig_file_ext)] = '\0'; /* remove extension from basename */
 	
@@ -247,7 +240,6 @@ static gboolean process_image(gpointer parent)
 	format_params params = NULL;
 	
 	if(list_contains_changeformat) {
-
 
 		changeformat_settings settings = (changeformat_settings)(bimp_list_get_manip(MANIP_CHANGEFORMAT))->settings;
 		final_format = settings->format;
@@ -363,17 +355,6 @@ void bimp_apply_drawable_manipulations(image_output imageout, gchar* orig_filena
 	gimp_layer_add_alpha (imageout->drawable_id);
 	g_print("Drawable ID is %d\n", imageout->drawable_id);
 	
-	/* start manipulations sequence, resize and crop start first */
-	if (list_contains_resize) {
-		g_print("Applying RESIZE...\n");
-		apply_resize((resize_settings)(bimp_list_get_manip(MANIP_RESIZE))->settings, imageout);
-	}
-	
-	if (list_contains_crop) {
-		g_print("Applying CROP...\n");
-		apply_crop((crop_settings)(bimp_list_get_manip(MANIP_CROP))->settings, imageout);
-	}
-	
 	/* apply all the intermediate manipulations */
 	g_slist_foreach(bimp_selected_manipulations, (GFunc)apply_manipulation, imageout);
 	
@@ -388,7 +369,15 @@ static gboolean apply_manipulation(manipulation man, image_output out)
 {
 	gboolean success = TRUE;
 	
-	if (man->type == MANIP_FLIPROTATE) {
+	if (man->type == MANIP_RESIZE) {
+		g_print("Applying RESIZE...\n");
+		apply_resize((resize_settings)(bimp_list_get_manip(MANIP_RESIZE))->settings, out);
+	}
+	else if (man->type == MANIP_CROP) {
+		g_print("Applying CROP...\n");
+		apply_crop((crop_settings)(bimp_list_get_manip(MANIP_CROP))->settings, out);
+	}
+	else if (man->type == MANIP_FLIPROTATE) {
 		g_print("Applying FLIP OR ROTATE...\n");
 		success = apply_fliprotate((fliprotate_settings)(man->settings), out);
 	}
@@ -464,7 +453,7 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 		else {
 			/* both dimensions are defined */
 			if (settings->aspect_ratio) {
-				// Find which new dimension is the smallest percentage of the existing image dinmension
+				// Find which new dimension is the smallest percentage of the existing image dimension
 				gdouble newwpct = (float)settings->new_w_px / (float)gimp_image_width(out->image_id);
 				gdouble newhpct = (float)settings->new_h_px / (float)gimp_image_height(out->image_id);
 				gdouble newpct = (newwpct < newhpct) ? newwpct : newhpct;
@@ -473,10 +462,10 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 				final_h = round((float)gimp_image_height(out->image_id) * newpct);
 			}
 			else {
-			final_w = settings->new_w_px;
-			final_h = settings->new_h_px;
+				final_w = settings->new_w_px;
+				final_h = settings->new_h_px;
+			}
 		}
-	}
 	}
 	
 	/* do resize */
@@ -628,6 +617,8 @@ static gboolean apply_color(color_settings settings, image_output out)
 				&colorcurve_num_points_b, &colorcurve_ctr_points_b, 
 				&colorcurve_num_points_a, &colorcurve_ctr_points_a
 			); 
+			
+			colorcurve_init = TRUE;
 		}
 		else success = TRUE;
 		

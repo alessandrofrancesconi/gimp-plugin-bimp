@@ -4,6 +4,16 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+1.9
+ - Added watermark alignment buttons for top-center, center-left, center-right, bottom-center (thanks to @Walt9Z)
+ - It's now possible to resize both dimension but keeping the aspect ratio. In this case, the pixel width/height 
+   are treated as maximum sizes for the resulting image. (issue #25) (thanks to @Walt9Z)
+ - Resize and Crop manipulations are now treated as "normal priority" steps. Originally they started first, now they follow
+   the original order given by the user in the GUI (issue #53)
+ - Added "tall" smartphone screen Crop presets (for devices like iPhone 5+)
+ - JPEG subsampling settings was wrong (issue #52)
+ - Updated Italian translation
+   
 1.8
  - Unrecognized capital file extensions on Unix
 

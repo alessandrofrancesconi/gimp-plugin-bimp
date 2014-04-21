@@ -76,7 +76,7 @@ char* bimp_comp_get_filename(char* path)
 	return pfile;
 }
 
-/* gets the filename from the given path 
+/* gets only the file folder from the given path 
  * (compatible with unix and win) */
 char* bimp_comp_get_filefolder(char* path) 
 {

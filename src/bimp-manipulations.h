@@ -38,6 +38,7 @@ typedef enum crop_preset {
 	CROP_PRESET_1610,
 	CROP_PRESET_EUPORT,
 	CROP_PRESET_PHONE,
+	CROP_PRESET_TALLPHONE,
 	CROP_PRESET_TABLET,
 	CROP_PRESET_CUSTOM,
 	CROP_PRESET_END
@@ -50,6 +51,7 @@ static const short int crop_preset_ratio[][2] = {
 	{16,10},	/* CROP_PRESET_1610 */
 	{7,9},		/* CROP_PRESET_EUPORT */
 	{2,3},		/* CROP_PRESET_PHONE */
+	{40,71},	/* CROP_PRESET_TALLPHONE */
 	{3,4}		/* CROP_PRESET_TABLET */
 };
 

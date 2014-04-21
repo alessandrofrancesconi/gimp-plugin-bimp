@@ -233,7 +233,7 @@ manipulation manipulation_changeformat_new()
 	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->entropy = TRUE;
 	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->progressive = FALSE;
 	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->comment = "";
-	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->subsampling = 3;
+	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->subsampling = 2;
 	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->baseline = TRUE;
 	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->markers = 0;
 	((format_params_jpeg)((changeformat_settings)changeformat->settings)->params)->dct = 1;

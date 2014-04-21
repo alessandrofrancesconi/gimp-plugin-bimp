@@ -113,10 +113,11 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
 		gtk_widget_set_size_request (label_subsampling, 100, LABEL_H);
 		combo_subsampling = gtk_combo_box_new_text();
 		gtk_widget_set_size_request (combo_subsampling, 180, COMBO_H);
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_subsampling), g_strconcat("1x1, 1x1, 1x1 (", _("Quality"), ")", NULL));
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_subsampling), "2x1, 1x1, 1x1 (4:2:2)");
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_subsampling), "1x2, 1x1, 1x1");
 		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_subsampling), g_strconcat("2x2, 1x1, 1x1 (", _("Small size"), ")", NULL));
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_subsampling), "2x1, 1x1, 1x1 (4:2:2)");
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_subsampling), g_strconcat("1x1, 1x1, 1x1 (", _("Quality"), ")", NULL));
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_subsampling), "1x2, 1x1, 1x1");
+		
 		
 		hbox_dct = gtk_hbox_new(FALSE, 5);
 		label_dct = gtk_label_new(g_strconcat(_("DCT algorithm"), ": ", NULL));
@@ -156,7 +157,7 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
 			gtk_text_buffer_set_text (buffer_comment, "", -1); 
 			gtk_text_view_set_buffer(GTK_TEXT_VIEW(text_comment), buffer_comment);
 			
-			gtk_combo_box_set_active(GTK_COMBO_BOX(combo_subsampling), 3);
+			gtk_combo_box_set_active(GTK_COMBO_BOX(combo_subsampling), 2);
 			gtk_combo_box_set_active(GTK_COMBO_BOX(combo_dct), 1);
 		}
 		

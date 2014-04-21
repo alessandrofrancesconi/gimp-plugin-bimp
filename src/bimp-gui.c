@@ -34,6 +34,7 @@ static void select_filename (GtkTreeView*, gpointer);
 static void update_preview(char*);
 static void show_preview(GtkTreeView*, gpointer);
 static void open_outputfolder_chooser(GtkWidget*, gpointer);
+static void set_source_output_folder(GtkWidget*, gpointer);
 static void popmenus_init(void);
 static void open_popup_menu(GtkWidget*, gpointer);
 static void add_manipulation_from_id(GtkMenuItem*, gpointer);
@@ -65,6 +66,8 @@ GtkWidget *check_deleteondone;
 GtkWidget *treeview_files;
 GtkWidget *button_preview;
 GtkWidget *button_outfolder;
+GtkWidget *button_samefolder;
+char* common_source_folder;
 
 GtkWidget* progressbar_visible;
 const gchar* progressbar_data;
@@ -206,8 +209,6 @@ static GtkWidget* option_panel_new()
 	treeview_files = gtk_tree_view_new();
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(treeview_files), FALSE);
 	gtk_tree_selection_set_mode (gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview_files)), GTK_SELECTION_MULTIPLE);
-	init_fileview();
-	bimp_refresh_fileview();
 	
 	/* Sub-sub-panel for input file buttons */
 	vbox_buttons = gtk_vbox_new(FALSE, 1);
@@ -244,6 +245,12 @@ static GtkWidget* option_panel_new()
 	gtk_widget_set_tooltip_text (button_outfolder, bimp_output_folder);
 	gtk_widget_set_size_request(button_outfolder, 180, 30);
 	
+	button_samefolder = gtk_button_new();
+	GtkWidget* samefolder_icon = gtk_image_new_from_stock(GTK_STOCK_UNDO, GTK_ICON_SIZE_BUTTON);
+	gtk_button_set_image(GTK_BUTTON(button_samefolder), samefolder_icon);
+	gtk_widget_set_tooltip_text (button_samefolder, _("Use the same source folder as the output"));
+	gtk_widget_set_size_request(button_samefolder, 30, 30);
+	
 	bimp_alertoverwrite = BIMP_ASK_OVERWRITE; 
 	check_alertoverwrite = gtk_check_button_new_with_label(_("Alert when overwriting existing files"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_alertoverwrite), TRUE); 
@@ -278,6 +285,7 @@ static GtkWidget* option_panel_new()
 	
 	gtk_box_pack_start(GTK_BOX(hbox_outfolder), label_chooser, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox_outfolder), button_outfolder, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox_outfolder), button_samefolder, FALSE, FALSE, 0);
 	
 	gtk_box_pack_start(GTK_BOX(vbox_useroptions), hbox_outfolder, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_alertoverwrite, FALSE, FALSE, 2);
@@ -295,8 +303,12 @@ static GtkWidget* option_panel_new()
 	g_signal_connect(G_OBJECT(button_remove), "clicked", G_CALLBACK(remove_input_file), NULL);
 	g_signal_connect(G_OBJECT(button_removeall), "clicked", G_CALLBACK(remove_all_input_files), NULL);
 	g_signal_connect(G_OBJECT(button_outfolder), "clicked", G_CALLBACK(open_outputfolder_chooser), NULL);
+	g_signal_connect(G_OBJECT(button_samefolder), "clicked", G_CALLBACK(set_source_output_folder), NULL);
 	g_signal_connect(G_OBJECT(gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview_files))), "changed", G_CALLBACK(select_filename), NULL);
 	g_signal_connect(G_OBJECT(button_preview), "clicked", G_CALLBACK(show_preview), NULL);
+	
+	init_fileview();
+	bimp_refresh_fileview();
 	
 	return panel;
 }
@@ -328,7 +340,7 @@ static void add_input_folder_r(char* folder, gboolean with_subdirs)
 			
 			/* Folder processing */
 			if (g_file_info_get_file_type(file_info) == G_FILE_TYPE_DIRECTORY){
-				if (strcmp(entry, ".") == 0 || strcmp(entry, "..") == 0)
+				if (g_strcmp0(entry, ".") == 0 || g_strcmp0(entry, "..") == 0)
 					continue;
 				if (with_subdirs) 
 					add_input_folder_r(filename, with_subdirs);
@@ -555,9 +567,35 @@ void bimp_refresh_fileview()
 	}
 	
 	GSList *iter;
-	for (iter = bimp_input_filenames; iter; iter = iter->next) {
-		add_to_fileview(iter->data);
+	char *prev_filepath = NULL;
+	
+	g_free(common_source_folder);
+	common_source_folder = NULL;
+	
+	if (g_slist_length(bimp_input_filenames) > 0) {
+		iter = bimp_input_filenames;
+		prev_filepath = g_path_get_dirname(iter->data);
+		common_source_folder = g_strdup(prev_filepath);
+		
+		for (; iter; iter = iter->next) {
+			add_to_fileview(iter->data);
+			
+			if (common_source_folder != NULL && g_strcmp0(prev_filepath, g_path_get_dirname(iter->data)) != 0) {
+				g_free(prev_filepath);
+				prev_filepath = NULL;
+				g_free(common_source_folder);
+				common_source_folder = NULL;
+			}
+			else {
+				g_free(prev_filepath);
+				prev_filepath = g_path_get_dirname(iter->data);
+			}
+		}
+	
 	}
+	
+	gtk_widget_set_sensitive(button_samefolder, (common_source_folder != NULL));
+	g_free(prev_filepath);
 }
 
 static void open_file_chooser(GtkWidget *widget, gpointer data) 
@@ -673,7 +711,8 @@ static void open_outputfolder_chooser(GtkWidget *widget, gpointer data)
 		GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL
 	);
 	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(chooser), FALSE);
-
+	if (common_source_folder != NULL) gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(chooser), common_source_folder);
+	
 	if (gtk_dialog_run (GTK_DIALOG(chooser)) == GTK_RESPONSE_ACCEPT) {
 		bimp_output_folder = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(chooser))->data;
 		
@@ -685,6 +724,17 @@ static void open_outputfolder_chooser(GtkWidget *widget, gpointer data)
 	}
 	
 	gtk_widget_destroy (chooser);
+}
+
+static void set_source_output_folder(GtkWidget *widget, gpointer data) 
+{
+	if (common_source_folder != NULL) {
+		char* last_folder = g_strrstr(common_source_folder, FILE_SEPARATOR_STR) + 1;
+		if (last_folder == NULL || strlen(last_folder) == 0) last_folder = common_source_folder;
+		gtk_button_set_label(GTK_BUTTON(button_outfolder), last_folder);
+		
+		gtk_widget_set_tooltip_text(button_outfolder, common_source_folder);
+	}
 }
 
 /* initializes the two menus that appears when the user clicks on the "add new" button 
@@ -894,7 +944,7 @@ static void load_set(GtkMenuItem *menuitem, gpointer user_data)
 		
 		GtkFileFilter *filter_bimp = gtk_file_filter_new();
 		gtk_file_filter_set_name(filter_bimp, "BIMP manipulations set (*.bimp)");
-		gtk_file_filter_add_pattern (filter_bimp, "*.[bB][iI][mM][pP]");
+		gtk_file_filter_add_pattern (filter_bimp, "*.bimp");
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_loader), filter_bimp);
 		
 		if (gtk_dialog_run (GTK_DIALOG(file_loader)) == GTK_RESPONSE_ACCEPT) {
@@ -920,6 +970,7 @@ static void open_about()
 	const gchar *auth[] = { 
 		"Alessandro Francesconi <alessandrofrancesconi@live.it>", 
 		"Thomas Mevel <thomas.prog@mevtho.com>", 
+		"Walt9Z",
 		NULL };
 	const gchar *license = 
 		"This program is free software; you can redistribute it and/or modify "

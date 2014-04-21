@@ -125,6 +125,9 @@ static char* crop_preset_get_string(crop_preset cps) {
 	else if (cps == CROP_PRESET_PHONE) {
 		crop_string = g_strconcat(_("Classic smartphone screen"), " (2:3)", NULL);
 	}
+	else if (cps == CROP_PRESET_TALLPHONE) {
+		crop_string = g_strconcat(_("Tall smartphone screen"), " (40:71)", NULL);
+	}
 	else if (cps == CROP_PRESET_TABLET) {
 		crop_string = g_strconcat(_("Classic tablet screen"), " (3:4)", NULL);
 	}
