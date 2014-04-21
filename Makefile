@@ -25,4 +25,7 @@ uninstall-admin:
 
 clean:
 	rm ./bin/bimp
+	
+all:
+	make
 
