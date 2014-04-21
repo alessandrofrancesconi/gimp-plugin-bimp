@@ -243,7 +243,7 @@ static GtkWidget* option_panel_new()
 	button_outfolder = gtk_button_new_with_label(last_folder);
 	
 	gtk_widget_set_tooltip_text (button_outfolder, bimp_output_folder);
-	gtk_widget_set_size_request(button_outfolder, 180, 30);
+	gtk_widget_set_size_request(button_outfolder, 175, 30);
 	
 	button_samefolder = gtk_button_new();
 	GtkWidget* samefolder_icon = gtk_image_new_from_stock(GTK_STOCK_UNDO, GTK_ICON_SIZE_BUTTON);

@@ -8,7 +8,7 @@ Changelog:
  - Added watermark alignment buttons for top-center, center-left, center-right, bottom-center (thanks to @Walt9Z)
  - It's now possible to resize both dimension but keeping the aspect ratio. In this case, the pixel width/height 
    are treated as maximum sizes for the resulting image. (issue #25) (thanks to @Walt9Z)
- - Resize and Crop manipulations are now treated as "normal priority" steps. Originally they started first, now they follow
+ - Resize and Crop manipulations are now treated as "normal priority" steps. Previously they started first, now they follow
    the original order given by the user in the GUI (issue #53)
  - It's now possible to select the current source folder as the output destination (only if every input file is located in it).
  - Added "tall" smartphone screen Crop preset (for devices like iPhone 5+)

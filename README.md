@@ -9,7 +9,7 @@ Compiling and installing under Linux/Unix
 -----------------------------------------
 
 You must install libgimp2.0-dev and libpcre3-dev packages in order to have 
-the full set of libraries and dependences for compiling BIMP.
+the full set of libraries and dependences to compile BIMP.
 Then:
 
 	make && make install
@@ -37,10 +37,10 @@ or
 For Mac OSX users
 -----------------
 There's no need to install or compile BIMP on Mac, because the default native build of GIMP for Mac OSX 10.8 made by Simone from http://gimp.lisanet.de/Website/Download.html already includes BIMP!
-
+(however, it's not guaranteed to be the very latest version)
 
 Support this project
 --------------------
 
 Visit http://github.com/alessandrofrancesconi/gimp-plugin-bimp/issues
-for posting bugs and enhancements. Make it better!
+and post alerts for bugs or enhancements. Make it better!
