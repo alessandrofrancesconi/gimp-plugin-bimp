@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gimp-plugin-bimp\n"
-"POT-Creation-Date: 2014-04-21 23:01+0100\n"
-"PO-Revision-Date: 2014-04-21 23:02+0100\n"
+"POT-Creation-Date: 2014-04-25 14:55+0100\n"
+"PO-Revision-Date: 2014-04-25 14:55+0100\n"
 "Last-Translator: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\\manipulation-gui\n"
 
-#: bimp-gui.c:134 bimp-gui.c:877
+#: bimp-gui.c:134 bimp-gui.c:864
 msgid "The manipulations set is empty!"
 msgstr "L'insieme delle modifiche è vuoto!"
 
@@ -53,8 +53,8 @@ msgid "Output folder"
 msgstr "Salva in"
 
 #: bimp-gui.c:251
-msgid "Use the same source folder as the output"
-msgstr "Usa la cartella d'origine come cartella di destinazione"
+msgid "Use the selected file's location as the output"
+msgstr "Usa la posizione del file selezionato come cartella di destinazione"
 
 #: bimp-gui.c:255
 msgid "Alert when overwriting existing files"
@@ -77,75 +77,75 @@ msgstr "Clicca per un'anteprima"
 msgid "Couldn't read into \"%s\" directory."
 msgstr "Impossibile leggere dalla cartella \"%s\""
 
-#: bimp-gui.c:457
+#: bimp-gui.c:466
 msgid "Can't show a preview because the manipulations set is empty"
 msgstr ""
 "Impossibile visualizzare un'anteprima\n"
 "poichè l'insieme delle modifiche è vuoto"
 
-#: bimp-gui.c:484
+#: bimp-gui.c:493
 msgid "Preview"
 msgstr "Anteprima"
 
-#: bimp-gui.c:496
+#: bimp-gui.c:505
 msgid "This is how the selected image will look like after the batch process"
 msgstr "Ecco come apparirà l'immagine selezionata dopo il processo di modifica"
 
-#: bimp-gui.c:608
+#: bimp-gui.c:594
 msgid "Select images"
 msgstr "Scegli immagine"
 
-#: bimp-gui.c:617 manipulation-gui/gui-watermark.c:67
+#: bimp-gui.c:603 manipulation-gui/gui-watermark.c:67
 #: .\manipulation-gui/gui-watermark.c:67
 msgid "All supported types"
 msgstr "Tutti i formati supportati"
 
-#: bimp-gui.c:681
+#: bimp-gui.c:667
 msgid "Select folders containing images"
 msgstr "Seleziona delle cartelle contenenti immagini"
 
-#: bimp-gui.c:690
+#: bimp-gui.c:676
 msgid "Add files from the whole hierarchy"
 msgstr "Aggiungi anche le cartelle interne"
 
-#: bimp-gui.c:707
+#: bimp-gui.c:693
 msgid "Select output folder"
 msgstr "Salva in"
 
-#: bimp-gui.c:763 bimp-gui.c:883
+#: bimp-gui.c:750 bimp-gui.c:870
 msgid "Save this set..."
 msgstr "Salva questo set..."
 
-#: bimp-gui.c:767 bimp-gui.c:938
+#: bimp-gui.c:754 bimp-gui.c:925
 msgid "Load set..."
 msgstr "Carica set..."
 
-#: bimp-gui.c:778
+#: bimp-gui.c:765
 msgid "Edit properties..."
 msgstr "Cambia proprietà..."
 
-#: bimp-gui.c:781
+#: bimp-gui.c:768
 msgid "Remove this manipulation"
 msgstr "Rimuovi questa modifica"
 
-#: bimp-gui.c:813
+#: bimp-gui.c:800
 msgid "Can't add another manipulation of this kind. Only one is permitted!"
 msgstr ""
 "Impossibile aggiungere un'altra modifica di questo tipo. Una sola è permessa!"
 
-#: bimp-gui.c:904 bimp-gui.c:955
+#: bimp-gui.c:891 bimp-gui.c:942
 msgid "An error occured when importing a saved batch file :("
 msgstr "E' avvenuto un errore durante il caricamento :("
 
-#: bimp-gui.c:926
+#: bimp-gui.c:913
 msgid "This will overwrite current manipulations set. Continue?"
 msgstr "Questo sovrascriverà l'insieme delle modifiche corrente. Continuare?"
 
-#: bimp-gui.c:993 bimp.c:77
+#: bimp-gui.c:980 bimp.c:77
 msgid "Applies GIMP manipulations on groups of images"
 msgstr "Applica modifiche GIMP a gruppi di immagini"
 
-#: bimp-gui.c:1000
+#: bimp-gui.c:987
 msgid "translator-name <translator-email>"
 msgstr ""
 "Alessandro Francesconi <alessandrofrancesconi@live.it>\n"

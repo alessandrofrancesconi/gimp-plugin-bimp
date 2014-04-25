@@ -31,7 +31,7 @@ static void add_input_folder(char*, gpointer);
 static void remove_input_file(GtkWidget*, gpointer);
 static void remove_all_input_files(GtkWidget*, gpointer);
 static void select_filename (GtkTreeView*, gpointer);
-static void update_preview(char*);
+static void update_selection(char*);
 static void show_preview(GtkTreeView*, gpointer);
 static void open_outputfolder_chooser(GtkWidget*, gpointer);
 static void set_source_output_folder(GtkWidget*, gpointer);
@@ -67,7 +67,7 @@ GtkWidget *treeview_files;
 GtkWidget *button_preview;
 GtkWidget *button_outfolder;
 GtkWidget *button_samefolder;
-char* common_source_folder;
+char* selected_source_folder;
 
 GtkWidget* progressbar_visible;
 const gchar* progressbar_data;
@@ -248,7 +248,7 @@ static GtkWidget* option_panel_new()
 	button_samefolder = gtk_button_new();
 	GtkWidget* samefolder_icon = gtk_image_new_from_stock(GTK_STOCK_UNDO, GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image(GTK_BUTTON(button_samefolder), samefolder_icon);
-	gtk_widget_set_tooltip_text (button_samefolder, _("Use the same source folder as the output"));
+	gtk_widget_set_tooltip_text (button_samefolder, _("Use the selected file's location as the output"));
 	gtk_widget_set_size_request(button_samefolder, 30, 30);
 	
 	bimp_alertoverwrite = BIMP_ASK_OVERWRITE; 
@@ -412,7 +412,7 @@ static void remove_input_file(GtkWidget *widget, gpointer data)
 		}
 		
 		bimp_refresh_fileview();
-		update_preview(NULL); /* clear the preview widget */
+		update_selection(NULL); /* clear the preview widget */
 	}
 }
 
@@ -421,7 +421,7 @@ static void remove_all_input_files(GtkWidget *widget, gpointer data)
 	g_slist_free(bimp_input_filenames);
 	bimp_input_filenames = NULL;
 	bimp_refresh_fileview();
-	update_preview(NULL);
+	update_selection(NULL);
 }
 
 /* called when the user clicks on a filename row to update the preview widget */
@@ -430,24 +430,33 @@ static void select_filename (GtkTreeView *tree_view, gpointer data)
 	GSList *selection = get_treeview_selection();
 	
 	if (selection != NULL && g_slist_length(selection) == 1) {
-		update_preview((gchar*)(selection->data));
+		update_selection((gchar*)(selection->data));
 	}
 	else {
-		update_preview(NULL);
+		update_selection(NULL);
 	}
 }
 
-/* updates the preview widget by loading (and scaling) a new image */
-static void update_preview (gchar* filename) 
+/* updates the GUI according to the current selected filename */
+static void update_selection (gchar* filename) 
 {	
+	g_free(selected_source_folder);
 	if (filename != NULL) {
+		// update preview
 		GdkPixbuf *pixbuf_prev = gdk_pixbuf_new_from_file_at_scale(filename, FILE_PREVIEW_W - 20, FILE_PREVIEW_H - 30, TRUE, NULL);
 		gtk_button_set_image(GTK_BUTTON(button_preview), gtk_image_new_from_pixbuf (pixbuf_prev));
 		gtk_widget_show(button_preview);
+		
+		// update current selection
+		selected_source_folder = g_path_get_dirname(filename);
 	} else {
+		// invalidate
 		gtk_button_set_image(GTK_BUTTON(button_preview), NULL);
 		gtk_widget_hide(button_preview);
+		selected_source_folder = NULL;
 	}
+	
+	gtk_widget_set_sensitive(button_samefolder, (selected_source_folder != NULL));
 }
 
 /* opens a dialog containing two panels: the original selected image on the left and the result of the selected manipulations on the right */
@@ -567,42 +576,19 @@ void bimp_refresh_fileview()
 	}
 	
 	GSList *iter;
-	char *prev_filepath = NULL;
-	
-	g_free(common_source_folder);
-	common_source_folder = NULL;
-	
 	if (g_slist_length(bimp_input_filenames) > 0) {
 		iter = bimp_input_filenames;
-		prev_filepath = g_path_get_dirname(iter->data);
-		common_source_folder = g_strdup(prev_filepath);
-		
 		for (; iter; iter = iter->next) {
 			add_to_fileview(iter->data);
-			
-			if (common_source_folder != NULL && g_strcmp0(prev_filepath, g_path_get_dirname(iter->data)) != 0) {
-				g_free(prev_filepath);
-				prev_filepath = NULL;
-				g_free(common_source_folder);
-				common_source_folder = NULL;
-			}
-			else {
-				g_free(prev_filepath);
-				prev_filepath = g_path_get_dirname(iter->data);
-			}
 		}
-	
 	}
-	
-	gtk_widget_set_sensitive(button_samefolder, (common_source_folder != NULL));
-	g_free(prev_filepath);
 }
 
 static void open_file_chooser(GtkWidget *widget, gpointer data) 
 {
 	GSList *selection;
 	
-		GtkFileFilter *filter_all, *supported[7];
+	GtkFileFilter *filter_all, *supported[7];
 
 	GtkWidget* file_chooser = gtk_file_chooser_dialog_new(
 		_("Select images"), 
@@ -711,7 +697,7 @@ static void open_outputfolder_chooser(GtkWidget *widget, gpointer data)
 		GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL
 	);
 	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(chooser), FALSE);
-	if (common_source_folder != NULL) gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(chooser), common_source_folder);
+	if (selected_source_folder != NULL) gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(chooser), selected_source_folder);
 	
 	if (gtk_dialog_run (GTK_DIALOG(chooser)) == GTK_RESPONSE_ACCEPT) {
 		bimp_output_folder = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(chooser))->data;
@@ -728,12 +714,13 @@ static void open_outputfolder_chooser(GtkWidget *widget, gpointer data)
 
 static void set_source_output_folder(GtkWidget *widget, gpointer data) 
 {
-	if (common_source_folder != NULL) {
-		char* last_folder = g_strrstr(common_source_folder, FILE_SEPARATOR_STR) + 1;
-		if (last_folder == NULL || strlen(last_folder) == 0) last_folder = common_source_folder;
-		gtk_button_set_label(GTK_BUTTON(button_outfolder), last_folder);
+	if (selected_source_folder != NULL) {
+		char* last_folder = g_strrstr(selected_source_folder, FILE_SEPARATOR_STR) + 1;
+		if (last_folder == NULL || strlen(last_folder) == 0) last_folder = selected_source_folder;
 		
-		gtk_widget_set_tooltip_text(button_outfolder, common_source_folder);
+		gtk_button_set_label(GTK_BUTTON(button_outfolder), last_folder);
+		gtk_widget_set_tooltip_text(button_outfolder, selected_source_folder);
+		bimp_output_folder = g_strdup(selected_source_folder);
 	}
 }
 

@@ -4,6 +4,10 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+1.10
+ - Changed the behaviour of the new "current source folder as output destination" button. Now it takes 
+   the location of the current selected file as the output folder.
+
 1.9
  - Added watermark alignment buttons for top-center, center-left, center-right, bottom-center (thanks to @Walt9Z)
  - It's now possible to resize both dimension but keeping the aspect ratio. In this case, the pixel width/height 

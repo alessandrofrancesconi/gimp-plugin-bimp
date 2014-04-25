@@ -78,7 +78,7 @@ static void query (void)
 		"Alessandro Francesconi <alessandrofrancesconi@live.it>",
 		"Copyright (C) Alessandro Francesconi\n"
 		"http://www.alessandrofrancesconi.it/projects/bimp",
-		"2013",
+		"2014",
 		"Batch Image Manipulation...",
 		"",
 		GIMP_PLUGIN,
