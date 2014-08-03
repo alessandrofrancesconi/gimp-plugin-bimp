@@ -175,7 +175,7 @@ static void write_resize(resize_settings settings, GKeyFile* file)
 	g_key_file_set_integer(file, group_name, "new_h_px", settings->new_h_px);
 	g_key_file_set_integer(file, group_name, "resize_mode", settings->resize_mode);
 	g_key_file_set_boolean(file, group_name, "aspect_ratio", settings->aspect_ratio);
-	g_key_file_set_integer(file, group_name, "interpolation", settings->aspect_ratio);
+	g_key_file_set_integer(file, group_name, "interpolation", settings->interpolation);
 	g_key_file_set_boolean(file, group_name, "change_res", settings->change_res);
 	g_key_file_set_integer(file, group_name, "new_res_x", settings->new_res_x);
 	g_key_file_set_integer(file, group_name, "new_res_y", settings->new_res_y);

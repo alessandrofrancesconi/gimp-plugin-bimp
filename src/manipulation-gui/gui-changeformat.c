@@ -124,8 +124,8 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
 		gtk_widget_set_size_request (label_dct, 100, LABEL_H);
 		combo_dct = gtk_combo_box_new_text();
 		gtk_widget_set_size_request (combo_dct, 150, COMBO_H);
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_dct), _("Fast integer"));
 		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_dct), _("Integer"));
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_dct), _("Fast integer"));
 		gtk_combo_box_append_text(GTK_COMBO_BOX(combo_dct), _("Float"));
 		
 		if (selected_format == settings->format) {

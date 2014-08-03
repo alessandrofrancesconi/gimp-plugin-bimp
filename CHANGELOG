@@ -4,6 +4,11 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+1.11 ONEONE!!ONE!ONE!!ONE!!
+ - Added Czech translation (thanks to Stanislav Vágner)
+ - JPEG DCT settings was wrong (issue #64)
+ - JPEG interpolation was not saved during "Save set" process (issue #63)
+
 1.10
  - Changed the behaviour of the new "current source folder as output destination" button. Now it takes 
    the location of the current selected file as the output folder.
