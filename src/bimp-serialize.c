@@ -793,7 +793,7 @@ static manipulation read_userdef(GKeyFile* file, int id)
 			GdkColor usercolor;
 			GimpRGB rgbdata;
 			for (param_i = 0; param_i < settings->num_params; param_i++) {
-				param_info = bimp_get_param_info(settings->procedure, param_i);
+				param_info = pdb_proc_get_param_info(settings->procedure, param_i);
 				
 				settings->params[param_i].type = param_info.type;
 				gchar* param_i_str = g_strdup_printf("PARAM%d", param_i);
