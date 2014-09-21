@@ -9,8 +9,16 @@
 #include <libgimp/gimp.h>
 #include "bimp-utils.h"
 
+#ifdef __unix__
+	#include <unistd.h>
+#elif defined _WIN32
+	#include <windows.h>
+#elif defined __APPLE__
+	#include <mach-o/dyld.h>
+#endif
+
 /* replace all the occurrences of 'rep' into 'orig' with text 'with' */
-char* bimp_str_replace(char *orig, char *rep, char *with) 
+char* str_replace(char *orig, char *rep, char *with) 
 {
 	char *result;
 	char *ins;
@@ -59,7 +67,7 @@ char* bimp_str_replace(char *orig, char *rep, char *with)
 
 /* gets the filename from the given path 
  * (compatible with unix and win) */
-char* bimp_comp_get_filename(char* path) 
+char* comp_get_filename(char* path) 
 {
 	char *pfile;
 	
@@ -78,7 +86,7 @@ char* bimp_comp_get_filename(char* path)
 
 /* gets only the file folder from the given path 
  * (compatible with unix and win) */
-char* bimp_comp_get_filefolder(char* path) 
+char* comp_get_filefolder(char* path) 
 {
 	int i;
 	char *folder = strdup(path);
@@ -94,17 +102,9 @@ char* bimp_comp_get_filefolder(char* path)
 	return folder;
 }
 
-/* simply the min function */
-float bimp_min(float a, float b) {
-	if (a < b)
-		return a;
-	else
-		return b;
-}
-
 /* return TRUE if the first string 'fullstr' contains one or more occurences of substring 'search'.
  * (case-insensitive version) */
-gboolean bimp_str_contains_cins(char* fullstr, char* search) {
+gboolean str_contains_cins(char* fullstr, char* search) {
 	return (
 		strstr(
 			g_ascii_strdown(fullstr, strlen(fullstr)), 
@@ -113,13 +113,7 @@ gboolean bimp_str_contains_cins(char* fullstr, char* search) {
 	);
 }
 
-void bimp_write_manipulation(manipulation man, gpointer file) 
-{
-	fwrite(man, sizeof(struct manip_str), 1, file);
-	fflush(file);
-}
-
-GimpParamDef bimp_get_param_info(gchar* proc_name, gint arg_num) 
+GimpParamDef pdb_proc_get_param_info(gchar* proc_name, gint arg_num) 
 {
 	GimpParamDef param_info;
 	GimpPDBArgType type;
@@ -139,4 +133,44 @@ GimpParamDef bimp_get_param_info(gchar* proc_name, gint arg_num)
 	param_info.description = g_strdup(desc);
 	
 	return param_info;
+}
+
+char* get_user_dir() 
+{
+	char* path = NULL;
+	
+#ifdef _WIN32
+	path = g_strconcat(getenv("HOMEDRIVE"), getenv("HOMEPATH"), NULL);
+	if (strlen(path) == 0) path = "C:\\";
+#else
+	path = getenv("HOME");
+	if (strlen(path) == 0) path = "/";
+#endif
+	
+	return path;
+}
+
+char* get_bimp_localedir() 
+{
+	int bufsize = 1024;
+	char* path = g_malloc0(bufsize);
+	
+	// different methods for getting the plugin's absolute path, for different systems
+#ifdef __unix__
+	readlink("/proc/self/exe", path, bufsize);
+#elif defined _WIN32
+	GetModuleFileName(GetModuleHandle(NULL), path, bufsize);
+#elif defined __APPLE__
+	_NSGetExecutablePath(path, &bufsize);
+#endif
+	
+	memset(g_strrstr(path, FILE_SEPARATOR_STR), '\0', 1); // truncate at the last path separator (eliminates "bimp.exe")
+	
+	return g_strconcat(path, FILE_SEPARATOR_STR, "bimp-locale", NULL); // returns truncated path, plus "/bimp-locale" directory
+}
+
+/* C-string case-insensitive comparison function (with gconstpointer args) */ 
+int glib_strcmpi(gconstpointer str1, gconstpointer str2)
+{
+    return strcasecmp(str1, str2);
 }

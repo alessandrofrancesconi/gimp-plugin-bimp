@@ -159,7 +159,7 @@ static int fill_procedure_list(char* search, char* selection)
 	int finalcount = 0, selected_i = -1;
 	for(iter = bimp_supported_procedures; iter; iter = iter->next) {
 		gchar** procedure_name = iter->data;
-		if (search == NULL || (search != NULL && bimp_str_contains_cins((char*)procedure_name, search))) {
+		if (search == NULL || (search != NULL && str_contains_cins((char*)procedure_name, search))) {
 			store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(treeview_procedures)));
 			gtk_list_store_append(store, &treeiter);
 			gtk_list_store_set(store, &treeiter, LIST_ITEM, procedure_name, -1);
@@ -375,7 +375,7 @@ static void update_procedure_box(userdef_settings settings)
 		unsigned int desclen = 0;
 		
 		for (param_i = 0; param_i < num_params; param_i++) {
-			param_info = bimp_get_param_info(settings->procedure, param_i);
+			param_info = pdb_proc_get_param_info(settings->procedure, param_i);
 			editable = TRUE;
 			
 			switch(param_info.type) {
@@ -384,7 +384,7 @@ static void update_procedure_box(userdef_settings settings)
 						editable = FALSE;
 					}
 					else {
-						if (strcmp(param_info.name, "toggle") == 0 || (bimp_str_contains_cins(param_info.description, "true") && bimp_str_contains_cins(param_info.description, "false"))) {
+						if (strcmp(param_info.name, "toggle") == 0 || (str_contains_cins(param_info.description, "true") && str_contains_cins(param_info.description, "false"))) {
 							/* if it's named 'toggle' or contains TRUE/FALSE pretend to be a boolean value */
 							param_widget[param_i] = gtk_check_button_new();
 							gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(param_widget[param_i]), (settings->params[param_i]).data.d_int32 == 1 ? TRUE : FALSE);
@@ -508,8 +508,8 @@ static void update_procedure_box(userdef_settings settings)
 					}
 					else if (
 						strcmp(param_info.name, "opacity") == 0 || 
-						bimp_str_contains_cins(param_info.description, "%") || 
-						bimp_str_contains_cins(param_info.description, "percent")
+						str_contains_cins(param_info.description, "%") || 
+						str_contains_cins(param_info.description, "percent")
 						) {
 						/* if the param is an opacity or percent value, its range goes from 0.0 to 100.0 */
 						min = 0.0;
@@ -597,7 +597,7 @@ void bimp_userdef_save(userdef_settings orig_settings)
 	GdkColor usercolor;
 	GimpRGB rgbdata;
 	for (param_i = 0; param_i < orig_settings->num_params; param_i++) {
-		param_info = bimp_get_param_info(orig_settings->procedure, param_i);
+		param_info = pdb_proc_get_param_info(orig_settings->procedure, param_i);
 		
 		orig_settings->params[param_i].type = temp_settings->params[param_i].type;
 		
@@ -608,7 +608,7 @@ void bimp_userdef_save(userdef_settings orig_settings)
 				}
 				else if (strcmp(param_info.name, "run-mode") == 0) {
 					(orig_settings->params[param_i]).data.d_int32 = (gint32)GIMP_RUN_NONINTERACTIVE;
-				} else if (strcmp(param_info.name, "toggle") == 0 || (bimp_str_contains_cins(param_info.description, "true") && bimp_str_contains_cins(param_info.description, "false"))) {
+				} else if (strcmp(param_info.name, "toggle") == 0 || (str_contains_cins(param_info.description, "true") && str_contains_cins(param_info.description, "false"))) {
 					(orig_settings->params[param_i]).data.d_int32 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(param_widget[param_i])) ? 1 : 0;
 				}
 				else {

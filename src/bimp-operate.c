@@ -100,7 +100,7 @@ void bimp_start_batch(gpointer parent_dialog)
 		char ** current_folder;
 		size_t common_folder_size, current_folder_size;
 		
-		path = bimp_comp_get_filefolder(g_slist_nth(bimp_input_filenames,0)->data);
+		path = comp_get_filefolder(g_slist_nth(bimp_input_filenames,0)->data);
 		
 		common_folder = array_path_folders(path);
 		common_folder_size = 0;
@@ -108,7 +108,7 @@ void bimp_start_batch(gpointer parent_dialog)
 
 		for (i=1; i < total_images ; i++)
 		{
-			path = bimp_comp_get_filefolder(g_slist_nth(bimp_input_filenames,i)->data);
+			path = comp_get_filefolder(g_slist_nth(bimp_input_filenames,i)->data);
 			current_folder = array_path_folders (path);
 			for (current_folder_size = 0; current_folder[current_folder_size] != NULL; ++current_folder_size);
 
@@ -168,7 +168,7 @@ static gboolean process_image(gpointer parent)
 	
 	/* store original file path and name */
 	orig_filename = g_slist_nth (bimp_input_filenames, processed_count)->data;
-	orig_basename = g_strdup(bimp_comp_get_filename(orig_filename)); 
+	orig_basename = g_strdup(comp_get_filename(orig_filename)); 
 	
 	/* store original extension and check error cases */
 	orig_file_ext = g_strdup(strrchr(orig_basename, '.'));
@@ -667,7 +667,7 @@ static gboolean apply_sharpblur(sharpblur_settings settings, image_output out)
 		);
 	} else if (settings->amount > 0){
 		/* do blur */
-		float minsize = bimp_min(gimp_image_width(out->image_id)/4, gimp_image_height(out->image_id)/4);
+		float minsize = min(gimp_image_width(out->image_id)/4, gimp_image_height(out->image_id)/4);
 		float radius = (minsize / 100) * settings->amount;
 		GimpParam *return_vals = gimp_run_procedure(
 			"plug_in_gauss",
@@ -871,7 +871,7 @@ static gboolean apply_userdef(userdef_settings settings, image_output out)
 				
 			case GIMP_PDB_STRING:
 				if (saving_function) {
-					param_info = bimp_get_param_info(settings->procedure, param_i);
+					param_info = pdb_proc_get_param_info(settings->procedure, param_i);
 					if (strcmp(param_info.name, "filename") == 0) {
 						(settings->params[param_i]).data.d_string = g_strdup(out->filepath);
 					}
@@ -906,7 +906,7 @@ static gboolean apply_rename(rename_settings settings, image_output out, char* o
 	
 	/* search for 'RENAME_KEY_ORIG' occurrences and replace the final filename */
 	if(strstr(out->filename, RENAME_KEY_ORIG) != NULL) {
-		out->filename = bimp_str_replace(out->filename, RENAME_KEY_ORIG, orig_name);
+		out->filename = str_replace(out->filename, RENAME_KEY_ORIG, orig_name);
 	}
 	
 	/* same thing for count and datetime */
@@ -914,11 +914,11 @@ static gboolean apply_rename(rename_settings settings, image_output out, char* o
 	if(strstr(out->filename, RENAME_KEY_COUNT) != NULL)	{
 		char strcount[5];
 		sprintf(strcount, "%i", processed_count + 1);
-		out->filename = bimp_str_replace(out->filename, RENAME_KEY_COUNT, strcount);
+		out->filename = str_replace(out->filename, RENAME_KEY_COUNT, strcount);
 	}
 	
 	if(strstr(out->filename, RENAME_KEY_DATETIME) != NULL)	{
-		out->filename = bimp_str_replace(out->filename, RENAME_KEY_DATETIME, current_datetime);
+		out->filename = str_replace(out->filename, RENAME_KEY_DATETIME, current_datetime);
 	}
 	
 	g_free(orig_name);
@@ -1168,7 +1168,7 @@ static int overwrite_result(char* path, GtkWidget* parent) {
 			GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_MESSAGE_QUESTION,
 			GTK_BUTTONS_NONE,
-			_("File %s already exists, overwrite it?"), bimp_comp_get_filename(path)
+			_("File %s already exists, overwrite it?"), comp_get_filename(path)
 		);
 		
 		// Add checkbox "Always apply decision"

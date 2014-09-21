@@ -32,19 +32,9 @@
 #include "bimp-utils.h"
 #include "plugin-intl.h"
 
-#ifdef __unix__
-	#include <unistd.h>
-#elif defined _WIN32
-	#include <windows.h>
-#elif defined __APPLE__
-	#include <mach-o/dyld.h>
-#endif
-
 static void query (void);
 static GSList* get_supported_procedures(void);
-static gboolean proc_has_compatible_params (gchar*);
-static char* get_bimp_localedir(void);
-static int glib_strcmpi(gconstpointer, gconstpointer);
+static gboolean pdb_proc_has_compatible_params (gchar*);
 
 static void run (
 	const gchar *name,
@@ -199,7 +189,7 @@ static GSList* get_supported_procedures()
 	int i;
 	for (i = 0; i < proc_count; i++) {
 		/* check each parameter for compatibility and sort it alphabetically */
-		if (proc_has_compatible_params(results[i])) {
+		if (pdb_proc_has_compatible_params(results[i])) {
 			compatible_list = g_slist_insert_sorted(compatible_list, results[i], glib_strcmpi);
 		}
 	}
@@ -209,7 +199,7 @@ static GSList* get_supported_procedures()
 	return compatible_list;
 }
 
-static gboolean proc_has_compatible_params(gchar* proc_name) 
+static gboolean pdb_proc_has_compatible_params(gchar* proc_name) 
 {
 	gchar* proc_blurb;
 	gchar* proc_help;
@@ -240,7 +230,7 @@ static gboolean proc_has_compatible_params(gchar* proc_name)
 	GimpParamDef param;
 	gboolean compatible = TRUE;
 	for (i = 0; (i < num_params) && compatible; i++) {
-		param = bimp_get_param_info(proc_name, i);
+		param = pdb_proc_get_param_info(proc_name, i);
 		
 		if (
 			param.type == GIMP_PDB_INT32 ||
@@ -260,30 +250,5 @@ static gboolean proc_has_compatible_params(gchar* proc_name)
 	}
 	
 	return (compatible && num_params > 0);
-}
-
-static char* get_bimp_localedir() 
-{
-	int bufsize = 1024;
-	char* path = g_malloc0(bufsize);
-	
-	// different methods for getting the plugin's absolute path, for different systems
-#ifdef __unix__
-	readlink("/proc/self/exe", path, bufsize);
-#elif defined _WIN32
-	GetModuleFileName(GetModuleHandle(NULL), path, bufsize);
-#elif defined __APPLE__
-	_NSGetExecutablePath(path, &bufsize);
-#endif
-	
-	memset(g_strrstr(path, FILE_SEPARATOR_STR), '\0', 1); // truncate at the last path separator (eliminates "bimp.exe")
-	
-	return g_strconcat(path, FILE_SEPARATOR_STR, "bimp-locale", NULL); // returns truncated path, plus "/bimp-locale" directory
-}
-
-/* C-string case-insensitive comparison function (with gconstpointer args) */ 
-static int glib_strcmpi(gconstpointer str1, gconstpointer str2)
-{
-    return strcasecmp(str1, str2);
 }
 

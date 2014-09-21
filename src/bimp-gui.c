@@ -52,8 +52,6 @@ static void progressbar_end_hidden (gpointer);
 static void progressbar_settext_hidden (const gchar*, gpointer);
 static void progressbar_setvalue_hidden (double, gpointer);
 
-static char* get_user_dir(void); 
-
 GtkWidget *panel_sequence;
 GtkWidget *panel_options;
 GtkWidget *hbox_sequence;
@@ -1068,19 +1066,4 @@ void bimp_set_busy(gboolean busy) {
 	
 	gtk_widget_set_sensitive(panel_sequence, !busy);
 	gtk_widget_set_sensitive(panel_options, !busy);
-}
-
-static char* get_user_dir() 
-{
-	char* path = NULL;
-	
-#ifdef _WIN32
-	path = g_strconcat(getenv("HOMEDRIVE"), getenv("HOMEPATH"), NULL);
-	if (strlen(path) == 0) path = "C:\\";
-#else
-	path = getenv("HOME");
-	if (strlen(path) == 0) path = "/";
-#endif
-	
-	return path;
 }
