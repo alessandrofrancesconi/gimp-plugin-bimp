@@ -13,6 +13,10 @@ GimpParamDef pdb_proc_get_param_info(gchar*, gint);
 char* get_user_dir(void); 
 char* get_bimp_localedir(void);
 int glib_strcmpi(gconstpointer, gconstpointer);
+gchar** get_path_folders (char*);
+char* get_datetime(void);
+time_t get_modification_time(char*);
+int set_modification_time(char*, time_t);
 
 #if defined _WIN32
 #define FILE_SEPARATOR '\\'

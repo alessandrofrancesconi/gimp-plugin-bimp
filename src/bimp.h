@@ -22,9 +22,11 @@
 
 GSList *bimp_input_filenames;
 char *bimp_output_folder;
-gint bimp_alertoverwrite;
-gboolean bimp_keepfolderhierarchy;
-gboolean bimp_deleteondone;
+
+gint bimp_opt_alertoverwrite;
+gboolean bimp_opt_keepfolderhierarchy;
+gboolean bimp_opt_deleteondone;
+gboolean bimp_opt_keepdates;
 
 gboolean bimp_is_busy;
 

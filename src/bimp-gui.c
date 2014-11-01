@@ -59,7 +59,7 @@ GtkWidget *panel_sequence, *panel_options;
 GtkWidget *hbox_sequence;
 GtkWidget *scroll_sequence;
 GtkWidget *popmenu_add, *popmenu_edit, *popmenu_addfiles, *popmenu_removefiles;
-GtkWidget *check_alertoverwrite, *check_keepfolderhierarchy, *check_deleteondone;
+GtkWidget *check_keepfolderhierarchy, *check_deleteondone, *check_keepdates;
 GtkWidget *treeview_files;
 GtkWidget *button_preview, *button_outfolder, *button_samefolder;
 GtkWidget* progressbar_visible;
@@ -132,9 +132,10 @@ void bimp_show_gui()
 					bimp_show_error_dialog(_("The file list is empty!"), bimp_window_main);
 				}
 				else {
-					bimp_alertoverwrite = ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_alertoverwrite)) ) ? BIMP_ASK_OVERWRITE : BIMP_OVERWRITE_SKIP_ASK;
-					bimp_keepfolderhierarchy = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_keepfolderhierarchy));
-					bimp_deleteondone = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_deleteondone));
+					bimp_opt_alertoverwrite = BIMP_ASK_OVERWRITE;
+					bimp_opt_keepfolderhierarchy = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_keepfolderhierarchy));
+					bimp_opt_deleteondone = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_deleteondone));
+					bimp_opt_keepdates = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_keepdates));
 					bimp_start_batch(bimp_window_main);
 				}
 			}
@@ -237,18 +238,22 @@ static GtkWidget* option_panel_new()
 	gtk_widget_set_tooltip_text (button_samefolder, _("Use the selected file's location as the output"));
 	gtk_widget_set_size_request(button_samefolder, 30, 30);
 	
-	bimp_alertoverwrite = BIMP_ASK_OVERWRITE; 
-	check_alertoverwrite = gtk_check_button_new_with_label(_("Alert when overwriting existing files"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_alertoverwrite), TRUE); 
+	bimp_opt_alertoverwrite = BIMP_ASK_OVERWRITE; 
+	//check_alertoverwrite = gtk_check_button_new_with_label(_("Alert when overwriting existing files"));
+	//gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_alertoverwrite), TRUE); 
 	
-	bimp_keepfolderhierarchy = FALSE;
+	bimp_opt_keepfolderhierarchy = FALSE;
 	check_keepfolderhierarchy = gtk_check_button_new_with_label(_("Keep folder hierarchy"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_keepfolderhierarchy), bimp_keepfolderhierarchy);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_keepfolderhierarchy), bimp_opt_keepfolderhierarchy);
 	
 	/* TODO? */
-	bimp_deleteondone = FALSE;
+	bimp_opt_deleteondone = FALSE;
 	check_deleteondone = gtk_check_button_new_with_label(_("Delete original file when done"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_deleteondone), bimp_deleteondone);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_deleteondone), bimp_opt_deleteondone);
+	
+	bimp_opt_keepdates = FALSE;
+	check_keepdates = gtk_check_button_new_with_label(_("Keep the modification dates"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_keepdates), bimp_opt_keepdates);
 	
 	button_preview = gtk_button_new();
 	gtk_widget_set_size_request(button_preview, FILE_PREVIEW_W, FILE_PREVIEW_H);
@@ -269,9 +274,10 @@ static GtkWidget* option_panel_new()
 	gtk_box_pack_start(GTK_BOX(hbox_outfolder), button_samefolder, FALSE, FALSE, 0);
 	
 	gtk_box_pack_start(GTK_BOX(vbox_useroptions), hbox_outfolder, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_alertoverwrite, FALSE, FALSE, 2);
-	gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_keepfolderhierarchy, FALSE, FALSE, 2);
-	/* TODO: delete on done? gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_deleteondone, FALSE, FALSE, 0); */
+	//gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_alertoverwrite, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_keepfolderhierarchy, FALSE, FALSE, 0);
+	// TODO: delete on done? gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_deleteondone, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_keepdates, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox_useroptions), button_preview, FALSE, FALSE, 2);
 	
 	gtk_box_pack_start(GTK_BOX(hbox), vbox_input, FALSE, FALSE, 0);
@@ -767,7 +773,7 @@ static void popmenus_init()
 	menuitem = gtk_menu_item_new_with_label(_("Add single images..."));
 	g_signal_connect(menuitem, "activate", G_CALLBACK(open_file_chooser), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(popmenu_addfiles), menuitem);
-	menuitem = gtk_menu_item_new_with_label(_("Add entire folders..."));
+	menuitem = gtk_menu_item_new_with_label(_("Add folders..."));
 	g_signal_connect(menuitem, "activate", G_CALLBACK(open_folder_chooser), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(popmenu_addfiles), menuitem);
 	menuitem = gtk_menu_item_new_with_label(_("Add all opened images"));
@@ -777,10 +783,10 @@ static void popmenus_init()
 	/* menu to remove files to the list */
 	popmenu_removefiles = gtk_menu_new();
 	
-	menuitem = gtk_menu_item_new_with_label(_("Remove selected files"));
+	menuitem = gtk_menu_item_new_with_label(_("Remove selected"));
 	g_signal_connect(menuitem, "activate", G_CALLBACK(remove_input_file), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(popmenu_removefiles), menuitem);
-	menuitem = gtk_menu_item_new_with_label(_("Remove all the files"));
+	menuitem = gtk_menu_item_new_with_label(_("Remove all"));
 	g_signal_connect(menuitem, "activate", G_CALLBACK(remove_all_input_files), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(popmenu_removefiles), menuitem);
 	

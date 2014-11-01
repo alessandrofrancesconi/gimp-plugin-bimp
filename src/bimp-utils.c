@@ -17,6 +17,10 @@
 	#include <mach-o/dyld.h>
 #endif
 
+#include <sys/stat.h>
+#include <time.h>
+#include <utime.h>
+
 /* replace all the occurrences of 'rep' into 'orig' with text 'with' */
 char* str_replace(char *orig, char *rep, char *with) 
 {
@@ -173,4 +177,55 @@ char* get_bimp_localedir()
 int glib_strcmpi(gconstpointer str1, gconstpointer str2)
 {
     return strcasecmp(str1, str2);
+}
+
+gchar** get_path_folders (char *path)
+{
+	char * normalized_path = (char*)g_malloc(sizeof(path));
+
+	normalized_path = g_strdup(path);
+	return g_strsplit(normalized_path, FILE_SEPARATOR_STR, 0);
+}
+
+/* gets the current date and time in "%Y-%m-%d_%H-%M" format */
+char* get_datetime() 
+{
+	time_t rawtime;
+	struct tm * timeinfo;
+	char* format;
+
+	format = (char*)malloc(sizeof(char)*18);
+	time ( &rawtime );
+	timeinfo = localtime ( &rawtime );
+
+	strftime (format, 18, "%Y-%m-%d_%H-%M", timeinfo);
+
+	return format;
+}
+
+time_t get_modification_time(char* filename) 
+{
+	struct stat filestats;
+	if (stat(filename, &filestats) < 0) {
+		return -1;
+	}
+
+	return filestats.st_mtime;
+}
+
+int set_modification_time(char* filename, time_t mtime) 
+{
+	struct stat filestats;
+	
+	if (stat(filename, &filestats) < 0) {
+		return -1;
+	}
+
+	struct utimbuf new_time;
+	new_time.actime = filestats.st_atime;
+	new_time.modtime = mtime;
+	if (utime(filename, &new_time) < 0) {
+		return -1;
+	}
+	else return 0;
 }

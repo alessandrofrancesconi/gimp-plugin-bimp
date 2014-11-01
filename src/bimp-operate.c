@@ -1,6 +1,5 @@
-/*
- * Functions called when the user clicks on 'APPLY'
- */
+// Functions called when the user clicks on 'APPLY'
+ 
 
 #include <string.h>
 #include <unistd.h>
@@ -35,9 +34,7 @@ static gboolean image_save_jpeg(image_output, float, float, gboolean, gboolean, 
 static gboolean image_save_png(image_output, gboolean, int, gboolean, gboolean, gboolean, gboolean, gboolean, gboolean, gboolean);
 static gboolean image_save_tga(image_output, gboolean, int);
 static gboolean image_save_tiff(image_output, int);
-static gchar** array_path_folders (char *path);
 static int overwrite_result(char*, GtkWidget*);
-static char* get_datetime(void);
 
 char* current_datetime;
 int processed_count;
@@ -65,34 +62,23 @@ guint8* colorcurve_ctr_points_b;
 int colorcurve_num_points_a;
 guint8* colorcurve_ctr_points_a;
 
-
-void bimp_init_batch() 
-{
-	list_contains_changeformat = bimp_list_contains_manip(MANIP_CHANGEFORMAT);
-	list_contains_rename = bimp_list_contains_manip(MANIP_RENAME);
-	list_contains_watermark = bimp_list_contains_manip(MANIP_WATERMARK);
-	list_contains_savingplugin = bimp_list_contains_savingplugin();
-	
-	colorcurve_init = FALSE;
-}
-
 void bimp_start_batch(gpointer parent_dialog)
 {
 	bimp_set_busy(TRUE);
 
-	bimp_init_batch();
-	
+	// initialization
 	g_print("\nBIMP - Batch Manipulation Plugin\nStart batch processing...\n");
 	processed_count = 0;
 	success_count = 0;
 	total_images = g_slist_length(bimp_input_filenames);
-	
 	bimp_progress_bar_set(0.0, "");
+	
+	bimp_init_batch();
 	
 	current_datetime = get_datetime();
 	common_folder_path = NULL;
 
-	if (bimp_keepfolderhierarchy){
+	if (bimp_opt_keepfolderhierarchy){
 		int i, j;
 		gboolean need_hierarchy = FALSE;
 		char * path = NULL;
@@ -102,14 +88,14 @@ void bimp_start_batch(gpointer parent_dialog)
 		
 		path = comp_get_filefolder(g_slist_nth(bimp_input_filenames,0)->data);
 		
-		common_folder = array_path_folders(path);
+		common_folder = get_path_folders(path);
 		common_folder_size = 0;
 		for (common_folder_size = 0; common_folder[common_folder_size] != NULL; ++common_folder_size);
 
 		for (i=1; i < total_images ; i++)
 		{
 			path = comp_get_filefolder(g_slist_nth(bimp_input_filenames,i)->data);
-			current_folder = array_path_folders (path);
+			current_folder = get_path_folders (path);
 			for (current_folder_size = 0; current_folder[current_folder_size] != NULL; ++current_folder_size);
 
 			// The common path is at most as long as the shortest path
@@ -144,16 +130,18 @@ void bimp_start_batch(gpointer parent_dialog)
 		g_strfreev(common_folder);
 	}
 	
+	// start on a new thread
 	guint batch_idle_tag = g_idle_add((GSourceFunc)process_image, parent_dialog);
 }
 
-static gchar** array_path_folders (char *path)
+void bimp_init_batch()
 {
-	GArray *array = NULL;
-	char * normalized_path = (char*)g_malloc(sizeof(path));
-
-	normalized_path = g_strdup(path);
-	return g_strsplit(normalized_path, FILE_SEPARATOR_STR, 0);
+	list_contains_changeformat = bimp_list_contains_manip(MANIP_CHANGEFORMAT);
+	list_contains_rename = bimp_list_contains_manip(MANIP_RENAME);
+	list_contains_watermark = bimp_list_contains_manip(MANIP_WATERMARK);
+	list_contains_savingplugin = bimp_list_contains_savingplugin();
+	
+	colorcurve_init = FALSE;
 }
 
 static gboolean process_image(gpointer parent)
@@ -166,14 +154,14 @@ static gboolean process_image(gpointer parent)
 	char* orig_file_ext = NULL;
 	char* output_file_comp = NULL;
 	
-	/* store original file path and name */
+	// store original file path and name 
 	orig_filename = g_slist_nth (bimp_input_filenames, processed_count)->data;
 	orig_basename = g_strdup(comp_get_filename(orig_filename)); 
 	
-	/* store original extension and check error cases */
+	// store original extension and check error cases 
 	orig_file_ext = g_strdup(strrchr(orig_basename, '.'));
 	if (orig_file_ext == NULL) {
-		/* under Linux, GtkFileChooser permits to pick an image file without extension, but GIMP cannot 
+		/* under Linux, GtkFileChooser lets to pick an image file without extension, but GIMP cannot 
 		 * save it back if its format remains unchanged. Operation can continue only if a MANIP_CHANGEFORMAT
 		 * is present */
 		if (list_contains_changeformat) {
@@ -191,13 +179,13 @@ static gboolean process_image(gpointer parent)
 		goto process_end;
 	}
 	
-	g_print("\nWorking on file %d of %d (%s)\n", processed_count+1, total_images, orig_filename);
+	g_print("\nWorking on file %d of %d (%s)\n", processed_count + 1, total_images, orig_filename);
 	bimp_progress_bar_set(((double)processed_count)/total_images, g_strdup_printf(_("Working on file \"%s\"..."), orig_basename));
 
-	/* rename and save process... */
-	orig_basename[strlen(orig_basename) - strlen(orig_file_ext)] = '\0'; /* remove extension from basename */
+	// rename and save process... 
+	orig_basename[strlen(orig_basename) - strlen(orig_file_ext)] = '\0'; // remove extension from basename 
 	
-	/* check if a rename pattern is defined */
+	// check if a rename pattern is defined 
 	if(list_contains_rename) {
 		g_print("Applying RENAME...\n");
 		apply_rename((rename_settings)(bimp_list_get_manip(MANIP_RENAME))->settings, imageout, orig_basename);
@@ -206,7 +194,7 @@ static gboolean process_image(gpointer parent)
 		imageout->filename = orig_basename;
 	}
 
-	/* To keep the folder hierarchy */
+	// To keep the folder hierarchy 
 	if (common_folder_path == NULL)	{
 		// Not selected or required, everything goes into the same destination folder
 		output_file_comp = g_malloc0(sizeof(char));
@@ -235,95 +223,102 @@ static gboolean process_image(gpointer parent)
 		);
 	}
 	
-	/* save the final image in output dir with proper format and params */
+	// save the final image in output dir with proper format and params 
 	format_type final_format = -1;
 	format_params params = NULL;
 	
 	if(list_contains_changeformat) {
-
 		changeformat_settings settings = (changeformat_settings)(bimp_list_get_manip(MANIP_CHANGEFORMAT))->settings;
 		final_format = settings->format;
 		params = settings->params;
-		
 
 		g_print("Changing FORMAT to %s\n", format_type_string[final_format][0]);
-		imageout->filename = g_strconcat(imageout->filename, ".", format_type_string[final_format][0], NULL); /* append new file extension */
-		imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); /* build new path */
+		imageout->filename = g_strconcat(imageout->filename, ".", format_type_string[final_format][0], NULL); // append new file extension 
+		imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); // build new path 
 	}
-	/* TO CHECK what apply_userdef does once coded */
+	// TO CHECK what apply_userdef does once coded 
 
 	else if (list_contains_savingplugin) {
 		// leave filename without extension and proceed calling each saving plugin
 		imageout->filename = g_strconcat(imageout->filename, ".dds", NULL);
-		imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); /* build new path */
+		imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); // build new path 
 		
-
 		GSList *iterator = NULL;
 		manipulation man;
 		for (iterator = bimp_selected_manipulations; iterator; iterator = iterator->next) {
 			man = (manipulation)(iterator->data);
 			if (man->type == MANIP_USERDEF && strstr(((userdef_settings)(man->settings))->procedure, "-save") != NULL) {
-				// found a saving plugin, execute it
-				/* TODO!!!! This won't work yet, we need a way to extract the file extension managed by the selected saving plugin
-				 * e.g. "file-dds-save" -> "dds" (don't do it with regexp on plugin's name... to easy...) */
+				/* found a saving plugin, execute it
+				// TODO!!!! This won't work yet, we need a way to extract the file extension managed by the selected saving plugin
+				 * e.g. "file-dds-save" -> "dds" (don't do it with regexp on plugin's name... too easy...) */
 				apply_userdef((userdef_settings)(man->settings), imageout);
-
 			}
 		}
 	}
 	else {
-		/* if not specified, save in original format */
-		imageout->filename = g_strconcat(imageout->filename, orig_file_ext, NULL); /* append old file extension */	
-		imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); /* build new path */		
+		// if not specified, save in original format 
+		imageout->filename = g_strconcat(imageout->filename, orig_file_ext, NULL); // append old file extension 	
+		imageout->filepath = g_strconcat(bimp_output_folder, FILE_SEPARATOR_STR, output_file_comp, imageout->filename, NULL); // build new path 		
 		final_format = -1;	
 	}
 	
-	/* check if writing possible */
-	if (bimp_alertoverwrite != BIMP_OVERWRITE_SKIP_ASK) {
+	// check if writing possible 
+	gboolean will_overwrite = FALSE;
+	if (bimp_opt_alertoverwrite != BIMP_OVERWRITE_SKIP_ASK) {
 		// file already exists ?
-		gboolean oldfile_access = g_file_test(imageout->filepath, G_FILE_TEST_IS_REGULAR);		
-		if (oldfile_access) {
+		will_overwrite = g_file_test(imageout->filepath, G_FILE_TEST_IS_REGULAR);		
+		if (will_overwrite) {
 			// "Don't overwrite" without confirmation
-			if (bimp_alertoverwrite == BIMP_DONT_OVERWRITE_SKIP_ASK) {
-				g_print("Destination file already exists!\n");
+			if (bimp_opt_alertoverwrite == BIMP_DONT_OVERWRITE_SKIP_ASK) {
+				g_print("Destination file already exists and won't be overwritten\n");
 				goto process_end;
 			}
-			
-			// Ask what to do
-			int ow_res = overwrite_result(imageout->filepath, parent);
-			if (ow_res == 0) {
-				g_print("Destination file has not been overwritten!\n");
-				goto process_end;
+			else {
+				// Ask what to do
+				int ow_res = overwrite_result(imageout->filepath, parent);
+				if (ow_res == 0) {
+					g_print("Destination file already exists and user select to don't overwrite\n");
+					goto process_end;
+				}
 			}
 		}
-		//
-
-
 	}
 	
-	/* apply all the main manipulations */
+	// apply all the main manipulations 
 	bimp_apply_drawable_manipulations(imageout, (gchar*)orig_filename, (gchar*)orig_basename); 
 	
-	/* Save */
+	time_t mod_time = -1;
+	if (will_overwrite && bimp_opt_keepdates) {
+		// I must keep the dates even if the file has been overwritten
+		mod_time = get_modification_time(imageout->filepath);
+		if (mod_time == -1) g_print("An error occurred when retrieving the modification date of file.\n");
+	}
+	
+	// Save 
 	g_print("Saving file %s in %s\n", imageout->filename, imageout->filepath);
 	image_save(final_format, imageout, params);
+	
+	if (will_overwrite && bimp_opt_keepdates && mod_time > -1) {
+		// replace with the old dates
+		int res = set_modification_time(imageout->filepath, mod_time);
+		if (res == -1) g_print("An error occurred when replacing the modification date of file.\n");
+	}
 
-
-
-
-	gimp_image_delete(imageout->image_id); /* is it useful? */
+	gimp_image_delete(imageout->image_id); // is it useful? 
 	
 process_end:
 
 	g_free(orig_basename);
 	g_free(orig_file_ext);
 	g_free(output_file_comp);
+	g_free(imageout->filename);
+	g_free(imageout->filepath);
 	g_free(imageout);
 
 	processed_count++;
 	if (success) success_count++; 
 	
-	/* TODO: errors check here */
+	// TODO: errors check here 
 	if (!bimp_is_busy) {
 		bimp_progress_bar_set(0.0, _("Operations stopped"));
 		g_print("\nStopped, %d files processed.\n", processed_count);
@@ -347,18 +342,18 @@ process_end:
 
 void bimp_apply_drawable_manipulations(image_output imageout, gchar* orig_filename, gchar* orig_basename)
 {
-	imageout->image_id = gimp_file_load(GIMP_RUN_NONINTERACTIVE, orig_filename, orig_basename); /* load file and get image id */
-	/* LOAD ERROR CHECK HERE */
+	imageout->image_id = gimp_file_load(GIMP_RUN_NONINTERACTIVE, orig_filename, orig_basename); // load file and get image id 
+	// LOAD ERROR CHECK HERE 
 	g_print("Image ID is %d\n", imageout->image_id);
 	
-	imageout->drawable_id = gimp_image_merge_visible_layers(imageout->image_id, GIMP_CLIP_TO_IMAGE); /* merge levels and get drawable id */
+	imageout->drawable_id = gimp_image_merge_visible_layers(imageout->image_id, GIMP_CLIP_TO_IMAGE); // merge levels and get drawable id 
 	gimp_layer_add_alpha (imageout->drawable_id);
 	g_print("Drawable ID is %d\n", imageout->drawable_id);
 	
-	/* apply all the intermediate manipulations */
+	// apply all the intermediate manipulations 
 	g_slist_foreach(bimp_selected_manipulations, (GFunc)apply_manipulation, imageout);
 	
-	/*  watermark at last */
+	//  watermark at last 
 	if(list_contains_watermark) {
 		g_print("Applying WATERMARK...\n");
 		apply_watermark((watermark_settings)(bimp_list_get_manip(MANIP_WATERMARK))->settings, imageout);
@@ -411,7 +406,7 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 		);
 		
 		if ((settings->new_res_x != orig_res_x) || (settings->new_res_y != orig_res_y)) {
-			/* change resolution */
+			// change resolution 
 			success = gimp_image_set_resolution(
 				out->image_id,
 				settings->new_res_x,
@@ -422,17 +417,17 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 	
 	
 	if (settings->resize_mode == RESIZE_PERCENT) {
-		/* user selected a percentage of the original size */
+		// user selected a percentage of the original size 
 		final_w = round((gimp_image_width(out->image_id) * settings->new_w_pc) / 100.0);
 		final_h = round((gimp_image_height(out->image_id) * settings->new_h_pc) / 100.0);
 	}
 	else {
-		/* user typed exact pixel size */
+		// user typed exact pixel size 
 		if (settings->resize_mode == RESIZE_PIXEL_WIDTH) {
-			/* width only */
+			// width only 
 			final_w = settings->new_w_px;
 			if (settings->aspect_ratio) {
-				/* and maintain aspect ratio */
+				// and maintain aspect ratio 
 				final_h = round(((float)settings->new_w_px * gimp_image_height(out->image_id)) / gimp_image_width(out->image_id));
 			}
 			else {
@@ -440,10 +435,10 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 			}
 		}
 		else if (settings->resize_mode == RESIZE_PIXEL_HEIGHT) {
-			/* height only */
+			// height only 
 			final_h = settings->new_h_px;
 			if (settings->aspect_ratio) {
-				/* and maintain aspect ratio */
+				// and maintain aspect ratio 
 				final_w = round(((float)settings->new_h_px * gimp_image_width(out->image_id)) / gimp_image_height(out->image_id));
 			}
 			else {
@@ -451,7 +446,7 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 			}
 		}
 		else {
-			/* both dimensions are defined */
+			// both dimensions are defined 
 			if (settings->aspect_ratio) {
 				// Find which new dimension is the smallest percentage of the existing image dimension
 				gdouble newwpct = (float)settings->new_w_px / (float)gimp_image_width(out->image_id);
@@ -468,7 +463,7 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 		}
 	}
 	
-	/* do resize */
+	// do resize 
 	#if defined _WIN32 || (!defined _WIN32 && (GIMP_MAJOR_VERSION == 2) && (GIMP_MINOR_VERSION <= 6))
 	
 		success = gimp_image_scale_full (
@@ -481,7 +476,7 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 	#else
 	
 		/* starting from 2.8, gimp_image_scale_full is deprecated. 
-		* use gimp_image_scale instead */ 
+		* use gimp_image_scale instead  */
 		GimpInterpolationType oldInterpolation;
 		oldInterpolation = gimp_context_get_interpolation();
 		
@@ -526,13 +521,13 @@ static gboolean apply_crop(crop_settings settings, image_output out)
 		}
 		
 		if (( (float)oldWidth / oldHeight ) > ( ratio1 / ratio2) ) { 
-			/* crop along the width */
+			// crop along the width 
 			newHeight = oldHeight;
 			newWidth = round(( ratio1 * (float)newHeight ) / ratio2);
 			posX = (oldWidth - newWidth) / 2;
 			posY = 0;
 		} else { 
-			/* crop along the height */
+			// crop along the height 
 			newWidth = oldWidth;
 			newHeight = round(( ratio2 * (float)newWidth) / ratio1);
 			posX = 0;
@@ -556,7 +551,7 @@ static gboolean apply_fliprotate(fliprotate_settings settings, image_output out)
 	gboolean success = TRUE;
 	
 	if (settings->flip_h) {
-		/* do horizontal flip */
+		// do horizontal flip 
 		success = gimp_image_flip (
 			out->image_id,
 			GIMP_ORIENTATION_HORIZONTAL
@@ -564,7 +559,7 @@ static gboolean apply_fliprotate(fliprotate_settings settings, image_output out)
 	}
 	
 	if (settings->flip_v) {
-		/* do vertical flip */
+		// do vertical flip 
 		success = gimp_image_flip (
 			out->image_id,
 			GIMP_ORIENTATION_VERTICAL
@@ -572,7 +567,7 @@ static gboolean apply_fliprotate(fliprotate_settings settings, image_output out)
 	}
 	
 	if (settings->rotate) {
-		/* do rotation */
+		// do rotation 
 		success = gimp_image_rotate (
 			out->image_id,
 			settings->rotation_type
@@ -587,7 +582,7 @@ static gboolean apply_color(color_settings settings, image_output out)
 	gboolean success = TRUE;
 	
 	if (settings->brightness != 0 || settings->contrast != 0) {
-		/* brightness or contrast have been modified, apply the manipulation */
+		// brightness or contrast have been modified, apply the manipulation 
 		success = gimp_brightness_contrast(
 			out->drawable_id, 
 			settings->brightness, 
@@ -596,17 +591,17 @@ static gboolean apply_color(color_settings settings, image_output out)
 	}
 	
 	if (settings->grayscale && !gimp_drawable_is_gray(out->drawable_id)) {
-		/* do grayscale conversion */
+		// do grayscale conversion 
 		success = gimp_image_convert_grayscale(out->image_id);
 	}
 	
 	if (settings->levels_auto) {
-		/* do levels correction */
+		// do levels correction 
 		success = gimp_levels_stretch(out->drawable_id);
 	}
 	
 	if (settings->curve_file != NULL && !gimp_drawable_is_indexed(out->drawable_id)) {
-		/* apply curve */
+		// apply curve 
 		
 		if (!colorcurve_init) { // read from the curve file only the first time
 			success = parse_curve_file(
@@ -655,9 +650,9 @@ static gboolean apply_sharpblur(sharpblur_settings settings, image_output out)
 	gint nreturn_vals;
 	
 	if (settings->amount < 0) {
-		/* do sharp */
+		// do sharp 
 		GimpParam *return_vals = gimp_run_procedure(
-			"plug_in_sharpen", /* could use plug_in_unsharp_mask, but there's a datatype bug in 2.6.x version */
+			"plug_in_sharpen", // could use plug_in_unsharp_mask, but there's a datatype bug in 2.6.x version 
 			&nreturn_vals,
 			GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
 			GIMP_PDB_IMAGE, out->image_id,
@@ -666,7 +661,7 @@ static gboolean apply_sharpblur(sharpblur_settings settings, image_output out)
 			GIMP_PDB_END
 		);
 	} else if (settings->amount > 0){
-		/* do blur */
+		// do blur 
 		float minsize = min(gimp_image_width(out->image_id)/4, gimp_image_height(out->image_id)/4);
 		float radius = (minsize / 100) * settings->amount;
 		GimpParam *return_vals = gimp_run_procedure(
@@ -904,12 +899,12 @@ static gboolean apply_rename(rename_settings settings, image_output out, char* o
 	
 	out->filename = g_strdup(settings->pattern);
 	
-	/* search for 'RENAME_KEY_ORIG' occurrences and replace the final filename */
+	// search for 'RENAME_KEY_ORIG' occurrences and replace the final filename 
 	if(strstr(out->filename, RENAME_KEY_ORIG) != NULL) {
 		out->filename = str_replace(out->filename, RENAME_KEY_ORIG, orig_name);
 	}
 	
-	/* same thing for count and datetime */
+	// same thing for count and datetime 
 	
 	if(strstr(out->filename, RENAME_KEY_COUNT) != NULL)	{
 		char strcount[5];
@@ -926,7 +921,7 @@ static gboolean apply_rename(rename_settings settings, image_output out, char* o
 	return TRUE;
 }
 
-/* following: set of functions that saves the image file in various formats */
+// following: set of functions that saves the image file in various formats 
 
 static gboolean image_save(format_type type, image_output imageout, format_params params) 
 {
@@ -1008,7 +1003,7 @@ static gboolean image_save_gif(image_output out, gboolean interlace)
 {
 	gint nreturn_vals;
 	
-	/* first, convert to indexed-256 color mode */
+	// first, convert to indexed-256 color mode 
 	gimp_image_convert_indexed(
 		out->image_id,
 		GIMP_FS_DITHER,
@@ -1027,10 +1022,10 @@ static gboolean image_save_gif(image_output out, gboolean interlace)
 			GIMP_PDB_DRAWABLE, out->drawable_id,
 			GIMP_PDB_STRING, out->filepath,
 			GIMP_PDB_STRING, out->filename,
-			GIMP_PDB_INT32, interlace ? 1 : 0,	/* Try to save as interlaced */
-			GIMP_PDB_INT32, 1,					/* (animated gif) loop infinitely */
-			GIMP_PDB_INT32, 0,					/* (animated gif) Default delay between framese in milliseconds */
-			GIMP_PDB_INT32, 0,					/* (animated gif) Default disposal type (0=don't care, 1=combine, 2=replace) */
+			GIMP_PDB_INT32, interlace ? 1 : 0,	// Try to save as interlaced 
+			GIMP_PDB_INT32, 1,					// (animated gif) loop infinitely 
+			GIMP_PDB_INT32, 0,					// (animated gif) Default delay between framese in milliseconds 
+			GIMP_PDB_INT32, 0,					// (animated gif) Default disposal type (0=don't care, 1=combine, 2=replace) 
 			GIMP_PDB_END
 		);
 		
@@ -1058,7 +1053,7 @@ static gboolean image_save_jpeg(image_output out, float quality, float smoothing
 {
 	gint nreturn_vals;
 	
-	/* image needs to be RGB */
+	// image needs to be RGB 
 	if (!gimp_drawable_is_rgb(out->drawable_id)) {
 		gimp_image_convert_rgb(out->image_id);
 	}
@@ -1071,15 +1066,15 @@ static gboolean image_save_jpeg(image_output out, float quality, float smoothing
 			GIMP_PDB_DRAWABLE, out->drawable_id,
 			GIMP_PDB_STRING, out->filepath,
 			GIMP_PDB_STRING, out->filename,
-			GIMP_PDB_FLOAT, quality >= 3 ? quality/100 : 0.03,	/* Quality of saved image (0 <= quality <= 1) + small fix because final image doesn't change when quality < 3 */
-			GIMP_PDB_FLOAT, smoothing,				/* Smoothing factor for saved image (0 <= smoothing <= 1) */
-			GIMP_PDB_INT32, entropy ? 1 : 0,		/* Optimization of entropy encoding parameters (0/1) */
-			GIMP_PDB_INT32, progressive ? 1 : 0,	/* Enable progressive jpeg image loading - ignored if not compiled with HAVE_PROGRESSIVE_JPEG (0/1) */
-			GIMP_PDB_STRING, comment,				/* Image comment */
-			GIMP_PDB_INT32, subsampling,			/* The subsampling option number */
-			GIMP_PDB_INT32, baseline ? 1 : 0,		/* Force creation of a baseline JPEG (non-baseline JPEGs can't be read by all decoders) (0/1) */
-			GIMP_PDB_INT32, markers,				/* Frequency of restart markers (in rows, 0 = no restart markers) */
-			GIMP_PDB_INT32, dct,					/* DCT algorithm to use (speed/quality tradeoff) */
+			GIMP_PDB_FLOAT, quality >= 3 ? quality/100 : 0.03,	// Quality of saved image (0 <= quality <= 1) + small fix because final image doesn't change when quality < 3 
+			GIMP_PDB_FLOAT, smoothing,				// Smoothing factor for saved image (0 <= smoothing <= 1) 
+			GIMP_PDB_INT32, entropy ? 1 : 0,		// Optimization of entropy encoding parameters (0/1) 
+			GIMP_PDB_INT32, progressive ? 1 : 0,	// Enable progressive jpeg image loading - ignored if not compiled with HAVE_PROGRESSIVE_JPEG (0/1) 
+			GIMP_PDB_STRING, comment,				// Image comment 
+			GIMP_PDB_INT32, subsampling,			// The subsampling option number 
+			GIMP_PDB_INT32, baseline ? 1 : 0,		// Force creation of a baseline JPEG (non-baseline JPEGs can't be read by all decoders) (0/1) 
+			GIMP_PDB_INT32, markers,				// Frequency of restart markers (in rows, 0 = no restart markers) 
+			GIMP_PDB_INT32, dct,					// DCT algorithm to use (speed/quality tradeoff) 
 			GIMP_PDB_END
 		);
 	
@@ -1097,15 +1092,15 @@ static gboolean image_save_png(image_output out, gboolean interlace, int compres
 			GIMP_PDB_DRAWABLE, out->drawable_id,
 			GIMP_PDB_STRING, out->filepath,
 			GIMP_PDB_STRING, out->filename,
-			GIMP_PDB_INT32, interlace? 1 : 0,	/* Use Adam7 interlacing? */
-			GIMP_PDB_INT32, compression,		/* Deflate Compression factor (0-9) */
-			GIMP_PDB_INT32, savebgc? 1 : 0,		/* Write bKGD chunk? */
-			GIMP_PDB_INT32, savegamma? 1 : 0,	/* Write gAMA chunk? */
-			GIMP_PDB_INT32, saveoff? 1 : 0,		/* Write oFFs chunk? */
-			GIMP_PDB_INT32, savephys? 1 : 0,	/* Write phys chunk? */
-			GIMP_PDB_INT32, savetime? 1 : 0,	/* Write tIME chunk? */
-			GIMP_PDB_INT32, savecomm? 1 : 0,	/* Write comments chunk? */
-			GIMP_PDB_INT32, savetrans? 1 : 0,	/* Write trans chunk? */
+			GIMP_PDB_INT32, interlace? 1 : 0,	// Use Adam7 interlacing? 
+			GIMP_PDB_INT32, compression,		// Deflate Compression factor (0-9) 
+			GIMP_PDB_INT32, savebgc? 1 : 0,		// Write bKGD chunk? 
+			GIMP_PDB_INT32, savegamma? 1 : 0,	// Write gAMA chunk? 
+			GIMP_PDB_INT32, saveoff? 1 : 0,		// Write oFFs chunk? 
+			GIMP_PDB_INT32, savephys? 1 : 0,	// Write phys chunk? 
+			GIMP_PDB_INT32, savetime? 1 : 0,	// Write tIME chunk? 
+			GIMP_PDB_INT32, savecomm? 1 : 0,	// Write comments chunk? 
+			GIMP_PDB_INT32, savetrans? 1 : 0,	// Write trans chunk? 
 			GIMP_PDB_END
 		);
 		
@@ -1123,8 +1118,8 @@ static gboolean image_save_tga(image_output out, gboolean rle, int origin)
 			GIMP_PDB_DRAWABLE, out->drawable_id,
 			GIMP_PDB_STRING, out->filepath,
 			GIMP_PDB_STRING, out->filename,
-			GIMP_PDB_INT32, rle? 1 : 0,	/* Use RLE compression */
-			GIMP_PDB_INT32, origin,		/* Image origin */
+			GIMP_PDB_INT32, rle? 1 : 0,	// Use RLE compression 
+			GIMP_PDB_INT32, origin,		// Image origin 
 			GIMP_PDB_END
 		);
 		
@@ -1142,7 +1137,7 @@ static gboolean image_save_tiff(image_output out, int compression)
 			GIMP_PDB_DRAWABLE, out->drawable_id,
 			GIMP_PDB_STRING, out->filepath,
 			GIMP_PDB_STRING, out->filename,
-			GIMP_PDB_INT32, compression,	/* Compression type: { NONE (0), LZW (1), PACKBITS (2), DEFLATE (3), JPEG (4) } */
+			GIMP_PDB_INT32, compression,	// Compression type: { NONE (0), LZW (1), PACKBITS (2), DEFLATE (3), JPEG (4) } 
 			GIMP_PDB_END
 		);
 		
@@ -1152,12 +1147,11 @@ static gboolean image_save_tiff(image_output out, int compression)
 /* returns a result code following this schema:
  * 0 = user responses "don't overwrite" to a confirm dialog
  * 1 = old file was the same as the new one and user responses "yes, overwrite"
- * 2 = old file wasn't the same (implicit overwrite)
- */
+ * 2 = old file wasn't the same (implicit overwrite) */ 
 static int overwrite_result(char* path, GtkWidget* parent) {
 	gboolean oldfile_access = g_file_test(path, G_FILE_TEST_IS_REGULAR);
 	
-	if ( (bimp_alertoverwrite == BIMP_ASK_OVERWRITE) && oldfile_access) {
+	if ( (bimp_opt_alertoverwrite == BIMP_ASK_OVERWRITE) && oldfile_access) {
 		GtkWidget *dialog;
 		GtkWidget *check_alertoverwrite;
 		GtkWidget *dialog_action;
@@ -1193,39 +1187,22 @@ static int overwrite_result(char* path, GtkWidget* parent) {
 
 		if (result == GTK_RESPONSE_YES) {
 			if (dont_ask_anymore)
-				bimp_alertoverwrite = BIMP_OVERWRITE_SKIP_ASK;
+				bimp_opt_alertoverwrite = BIMP_OVERWRITE_SKIP_ASK;
 			return 1;
 		}
 		else {
 			if (dont_ask_anymore)
-				bimp_alertoverwrite = BIMP_DONT_OVERWRITE_SKIP_ASK;
-
+				bimp_opt_alertoverwrite = BIMP_DONT_OVERWRITE_SKIP_ASK;
 
 			return 0;
 		}
 	}
 	else {
 		if (oldfile_access) {
-			return (bimp_alertoverwrite == BIMP_OVERWRITE_SKIP_ASK) ? 1 : 0;
+			return (bimp_opt_alertoverwrite == BIMP_OVERWRITE_SKIP_ASK) ? 1 : 0;
 		}
 		else {
 			return 2;
 		}
 	}
 }
-
-/* gets the current date and time in "%Y-%m-%d_%H-%M" format */
-static char* get_datetime() {
-	time_t rawtime;
-	struct tm * timeinfo;
-	char* format;
-
-	format = (char*)malloc(sizeof(char)*18);
-	time ( &rawtime );
-	timeinfo = localtime ( &rawtime );
-
-	strftime (format, 18, "%Y-%m-%d_%H-%M", timeinfo);
-
-	return format;
-}
-
