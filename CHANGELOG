@@ -4,6 +4,14 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+1.12
+ - New layout for add/remove files buttons
+ - "Add all opened images" feature (#57)
+ - "Keep modification dates" option (#70)
+ - GIF images was not saved when using "Color Correction"
+ - Updated Italian, Polish and Czech translations
+ - Little code and memory optimizations
+
 1.11 ONEONE!!ONE!ONE!!ONE!!
  - Added Czech translation (thanks to Stanislav Vágner)
  - JPEG DCT settings was wrong (issue #64)

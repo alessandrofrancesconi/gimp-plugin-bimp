@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gimp-plugin-bimp\n"
-"POT-Creation-Date: 2013-02-24 14:07+0100\n"
-"PO-Revision-Date: 2013-03-14 19:00+0100\n"
+"POT-Creation-Date: 2014-11-16 12:11+0100\n"
+"PO-Revision-Date: 2014-11-16 12:21+0100\n"
 "Last-Translator: Pedro Cunha\n"
 "Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language: pt\n"
@@ -16,534 +16,275 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\\manipulation-gui\n"
 
-#: bimp-gui.c:128
-#: bimp-gui.c:812
-msgid "The manipulations set is empty!"
-msgstr "O conjunto de manipulações está vazio!"
-
-#: bimp-gui.c:131
-msgid "The file list is empty!"
-msgstr "A lista de ficheiros está vazia!"
-
-#: bimp-gui.c:160
-msgid "Manipulation set"
-msgstr "Conjunto de manipulação"
-
-#: bimp-gui.c:192
-msgid "Input files and options"
-msgstr "Ficheiros de entrada e opções"
-
-#: bimp-gui.c:216
-msgid "Add images"
-msgstr "Adicionar imagens"
-
-#: bimp-gui.c:218
-msgid "Add folders"
-msgstr "Adicionar pastas"
-
-#: bimp-gui.c:224
-msgid "Remove selected"
-msgstr "Remover seleccionado"
-
-#: bimp-gui.c:226
-msgid "Remove all"
-msgstr "Remover tudo"
-
-#: bimp-gui.c:234
-msgid "Output folder"
-msgstr "Pasta de destino"
-
-#: bimp-gui.c:240
-msgid "Alert when overwriting existing files"
-msgstr "Alertar ao substituir os ficheiros existentes"
-
-#: bimp-gui.c:244
-msgid "Keep folder hierarchy"
-msgstr "Manter a hierarquia da pasta"
-
-#: bimp-gui.c:249
-msgid "Delete original file when done"
-msgstr "Apagar o ficheiro original quando concluído"
-
-#: bimp-gui.c:255
-msgid "Click for preview"
-msgstr "Clique para pré-visualização"
-
-#: bimp-gui.c:350
-#, c-format
-msgid "Couldn't read into \"%s\" directory."
-msgstr "Não foi possível ler a pasta \"%s\""
-
-#: bimp-gui.c:405
-msgid "Can't show a preview because the manipulations set is empty"
-msgstr "Não é possível mostrar uma pré-visualização porque o conjunto de manipulação está vazio"
-
-#: bimp-gui.c:428
-msgid "Preview"
-msgstr "Pré-visualizar"
-
-#: bimp-gui.c:440
-msgid "This is how the selected image will look like after the batch process"
-msgstr "Isto é como a imagem seleccionada vai ficar depois do processamento em lote"
-
-#: bimp-gui.c:543
-msgid "Select images"
-msgstr "Seleccione as imagens"
-
-#: bimp-gui.c:552
-#: manipulation-gui/gui-watermark.c:65
-#: .\manipulation-gui/gui-watermark.c:65
-msgid "All supported types"
-msgstr "Todos os tipos suportados"
-
-#: bimp-gui.c:645
-msgid "Select folders containing images"
-msgstr "Seleccione pastas que contenham imagens"
-
-#: bimp-gui.c:654
-msgid "Add files from the whole hierarchy"
-msgstr "Adicionar ficheiros de toda a hierarquia"
-
-#: bimp-gui.c:698
-#: bimp-gui.c:819
-msgid "Save this set..."
-msgstr "Guardar este conjunto..."
-
-#: bimp-gui.c:702
-#: bimp-gui.c:875
-msgid "Load set..."
-msgstr "Carregar conjunto..."
-
-#: bimp-gui.c:713
-msgid "Edit properties..."
-msgstr "Editar propriedades"
-
-#: bimp-gui.c:716
-msgid "Remove this manipulation"
-msgstr "Remover esta manipulação"
-
-#: bimp-gui.c:748
-msgid "Can't add another manipulation of this kind. Only one is permitted!"
-msgstr "Não é possível adicionar outra manipulação deste tipo. Apenas uma é permitida!"
-
-#: bimp-gui.c:840
-#: bimp-gui.c:892
-msgid "An error occured when importing a saved batch file :("
-msgstr "Ocorreu um erro ao importar um ficheiro de lote :("
-
-#: bimp-gui.c:863
-msgid "This will overwrite current manipulations set. Continue?"
-msgstr "Isto irá substituir o conjunto de manipulação actual. Continuar?"
-
-#: bimp-gui.c:929
-#: bimp.c:77
-msgid "Applies GIMP manipulations on groups of images"
-msgstr "Aplica manipulações do GIMP a grupos de imagens"
-
-#: bimp-gui.c:936
-msgid "translator-name <translator-email>"
-msgstr "Pedro Cunha <gimpextensions@gmail.com>"
-
-#: bimp-manipulations.c:245
-msgid "Resize"
-msgstr "Redimensionar"
-
-#: bimp-manipulations.c:248
-msgid "Crop"
-msgstr "Cortar"
-
-#: bimp-manipulations.c:251
-msgid "Flip or Rotate"
-msgstr "Inverter ou Rodar"
-
-#: bimp-manipulations.c:254
-msgid "Color correction"
-msgstr "Correcção de cor"
-
-#: bimp-manipulations.c:257
-msgid "Sharp or Blur"
-msgstr "Aguçar ou Desfocar"
-
-#: bimp-manipulations.c:260
-msgid "Add a Watermark"
-msgstr "Adicionar marca de água"
-
-#: bimp-manipulations.c:263
-msgid "Change format and compression"
-msgstr "Alterar formato e compressão"
-
-#: bimp-manipulations.c:266
-msgid "Rename with a pattern"
-msgstr "Renomear com um padrão"
-
-#: bimp-manipulations.c:269
-msgid "Other GIMP procedure..."
-msgstr "Outro procedimento GIMP..."
-
-#: bimp-operate.c:152
-#, c-format
-msgid ""
-"Can't save image %s: input file has no extension.\n"
-"You can solve this error by adding a \"Change format or compression\" step"
-msgstr ""
-"Não é possível guardar imagem %s: ficheiro de entrada não tem extensão.\n"
-"Pode resolver este problema adicionando um passo \"Change format or compression\""
-
-#: bimp-operate.c:159
-#, c-format
-msgid "Working on file %s..."
-msgstr "A trabalhar no ficheiro %s..."
-
-#: bimp-operate.c:251
-msgid "Operations stopped"
-msgstr "Operações paradas"
-
-#: bimp-operate.c:258
-#, c-format
-msgid "End, all files have been processed with %d errors"
-msgstr "Terminado, todos os ficheiros foram processados com %d erros"
-
-#: bimp-operate.c:995
-#, c-format
-msgid "File %s already exists, overwrite it?"
-msgstr "O ficheiro %s já existe, substituir?"
-
-#: bimp-operate.c:1001
-msgid "Yes, don't ask again"
-msgstr "Sim, não perguntar novamente"
-
-#: bimp-operate.c:1005
-msgid "Overwrite?"
-msgstr "Substituir?"
-
-#: manipulation-gui/gui-changeformat.c:37
-#: .\manipulation-gui/gui-changeformat.c:37
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:37
 msgid "Format settings"
 msgstr "Definições de formato"
 
-#: manipulation-gui/gui-changeformat.c:58
-#: .\manipulation-gui/gui-changeformat.c:58
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:58
 msgid "Interlaced"
 msgstr "Interlaçado"
 
-#: manipulation-gui/gui-changeformat.c:78
-#: manipulation-gui/gui-changeformat.c:116
-#: .\manipulation-gui/gui-changeformat.c:78
-#: .\manipulation-gui/gui-changeformat.c:116
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:78
+#: LC_MESSAGES/manipulation-gui/gui-changeformat.c:118
 msgid "Quality"
 msgstr "Qualidade"
 
-#: manipulation-gui/gui-changeformat.c:84
-#: manipulation-gui/gui-changeformat.c:212
-#: .\manipulation-gui/gui-changeformat.c:84
-#: .\manipulation-gui/gui-changeformat.c:212
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:84
+#: LC_MESSAGES/manipulation-gui/gui-changeformat.c:213
 msgid "Advanced params"
 msgstr "Parâmetros avançados"
 
-#: manipulation-gui/gui-changeformat.c:88
-#: .\manipulation-gui/gui-changeformat.c:88
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:88
 msgid "Smoothing"
 msgstr "Suavização"
 
-#: manipulation-gui/gui-changeformat.c:95
-#: .\manipulation-gui/gui-changeformat.c:95
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:95
 msgid "Optimize"
 msgstr "Optimizar"
 
-#: manipulation-gui/gui-changeformat.c:96
-#: .\manipulation-gui/gui-changeformat.c:96
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:96
 msgid "Progressive"
 msgstr "Progressivo"
 
-#: manipulation-gui/gui-changeformat.c:97
-#: .\manipulation-gui/gui-changeformat.c:97
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:97
 msgid "Save baseline"
 msgstr "Guardar patamar"
 
-#: manipulation-gui/gui-changeformat.c:100
-#: .\manipulation-gui/gui-changeformat.c:100
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:100
 msgid "Comment"
 msgstr "Comentário"
 
-#: manipulation-gui/gui-changeformat.c:107
-#: .\manipulation-gui/gui-changeformat.c:107
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:107
 msgid "Markers rows"
 msgstr "Linhas marcadoras"
 
-#: manipulation-gui/gui-changeformat.c:112
-#: .\manipulation-gui/gui-changeformat.c:112
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:112
 msgid "Subsampling"
 msgstr "Subamostragem"
 
-#: manipulation-gui/gui-changeformat.c:119
-#: .\manipulation-gui/gui-changeformat.c:119
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:116
 msgid "Small size"
 msgstr "Tamanho pequeno"
 
-#: manipulation-gui/gui-changeformat.c:122
-#: .\manipulation-gui/gui-changeformat.c:122
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:123
 msgid "DCT algorithm"
 msgstr "Algoritmo DCT"
 
-#: manipulation-gui/gui-changeformat.c:126
-#: .\manipulation-gui/gui-changeformat.c:126
-msgid "Fast integer"
-msgstr "Inteiro rápido"
-
-#: manipulation-gui/gui-changeformat.c:127
-#: .\manipulation-gui/gui-changeformat.c:127
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:127
 msgid "Integer"
 msgstr "Inteiro"
 
-#: manipulation-gui/gui-changeformat.c:128
-#: .\manipulation-gui/gui-changeformat.c:128
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:128
+msgid "Fast integer"
+msgstr "Inteiro rápido"
+
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:129
 msgid "Float"
 msgstr "Flutuante"
 
-#: manipulation-gui/gui-changeformat.c:204
-#: .\manipulation-gui/gui-changeformat.c:204
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:205
 msgid "Interlace (Adam7)"
 msgstr "Interlaçar (Adam7)"
 
-#: manipulation-gui/gui-changeformat.c:206
-#: manipulation-gui/gui-changeformat.c:302
-#: .\manipulation-gui/gui-changeformat.c:206
-#: .\manipulation-gui/gui-changeformat.c:302
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:207
+#: LC_MESSAGES/manipulation-gui/gui-changeformat.c:303
 msgid "Compression"
 msgstr "Compressão"
 
-#: manipulation-gui/gui-changeformat.c:215
-#: .\manipulation-gui/gui-changeformat.c:215
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:216
 msgid "Save background color"
 msgstr "Guardar cor de fundo"
 
-#: manipulation-gui/gui-changeformat.c:216
-#: .\manipulation-gui/gui-changeformat.c:216
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:217
 msgid "Save gamma"
 msgstr "Guardar gama"
 
-#: manipulation-gui/gui-changeformat.c:217
-#: .\manipulation-gui/gui-changeformat.c:217
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:218
 msgid "Save layer offset"
 msgstr "Guardar camada de compensação"
 
-#: manipulation-gui/gui-changeformat.c:218
-#: .\manipulation-gui/gui-changeformat.c:218
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:219
 msgid "Save resolution"
 msgstr "Guardar resolução"
 
-#: manipulation-gui/gui-changeformat.c:219
-#: .\manipulation-gui/gui-changeformat.c:219
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:220
 msgid "Save creation date"
 msgstr "Guardar data de criação"
 
-#: manipulation-gui/gui-changeformat.c:220
-#: .\manipulation-gui/gui-changeformat.c:220
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:221
 msgid "Save comments"
 msgstr "Guardar comentários"
 
-#: manipulation-gui/gui-changeformat.c:221
-#: .\manipulation-gui/gui-changeformat.c:221
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:222
 msgid "Save color from transparent pixels"
 msgstr "Guardar cor para pixeis transparentes"
 
-#: manipulation-gui/gui-changeformat.c:269
-#: .\manipulation-gui/gui-changeformat.c:269
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:270
 msgid "RLE compression"
 msgstr "Compressão RLE"
 
-#: manipulation-gui/gui-changeformat.c:272
-#: .\manipulation-gui/gui-changeformat.c:272
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:273
 msgid "Image origin"
 msgstr "Origem da imagem"
 
-#: manipulation-gui/gui-changeformat.c:277
-#: manipulation-gui/gui-watermark.c:233
-#: .\manipulation-gui/gui-changeformat.c:277
-#: .\manipulation-gui/gui-watermark.c:233
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:278
+#: LC_MESSAGES/manipulation-gui/gui-watermark.c:241
 msgid "Top-left"
 msgstr "Topo-esquerda"
 
-#: manipulation-gui/gui-changeformat.c:278
-#: manipulation-gui/gui-watermark.c:242
-#: .\manipulation-gui/gui-changeformat.c:278
-#: .\manipulation-gui/gui-watermark.c:242
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:279
+#: LC_MESSAGES/manipulation-gui/gui-watermark.c:259
 msgid "Bottom-left"
 msgstr "Fundo-esquerda"
 
-#: manipulation-gui/gui-changeformat.c:307
-#: manipulation-gui/gui-fliprotate.c:40
-#: .\manipulation-gui/gui-changeformat.c:307
-#: .\manipulation-gui/gui-fliprotate.c:40
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:308
+#: LC_MESSAGES/manipulation-gui/gui-fliprotate.c:40
 msgid "None"
 msgstr "Nenhum"
 
-#: manipulation-gui/gui-changeformat.c:308
-#: .\manipulation-gui/gui-changeformat.c:308
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:309
 msgid "LZW"
 msgstr "LZW"
 
-#: manipulation-gui/gui-changeformat.c:309
-#: .\manipulation-gui/gui-changeformat.c:309
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:310
 msgid "Pack bits"
 msgstr "Pack bits"
 
-#: manipulation-gui/gui-changeformat.c:310
-#: .\manipulation-gui/gui-changeformat.c:310
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:311
 msgid "Deflate"
 msgstr "Deflate"
 
-#: manipulation-gui/gui-changeformat.c:311
-#: .\manipulation-gui/gui-changeformat.c:311
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:312
 msgid "JPEG"
 msgstr "JPEG"
 
-#: manipulation-gui/gui-changeformat.c:312
-#: .\manipulation-gui/gui-changeformat.c:312
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:313
 msgid "CCITT G3 Fax"
 msgstr "CCITT G3 Fax"
 
-#: manipulation-gui/gui-changeformat.c:313
-#: .\manipulation-gui/gui-changeformat.c:313
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:314
 msgid "CCITT G4 Fax"
 msgstr "CCITT G4 Fax"
 
-#: manipulation-gui/gui-changeformat.c:328
-#: .\manipulation-gui/gui-changeformat.c:328
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-changeformat.c:329
 msgid "This format has no params"
 msgstr "Este formato não tem parâmetros"
 
-#: manipulation-gui/gui-color.c:19
-#: .\manipulation-gui/gui-color.c:19
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-color.c:21
 msgid "Brightness"
 msgstr "Brilho"
 
-#: manipulation-gui/gui-color.c:27
-#: .\manipulation-gui/gui-color.c:27
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-color.c:29
 msgid "Contrast"
 msgstr "Contraste"
 
-#: manipulation-gui/gui-color.c:34
-#: .\manipulation-gui/gui-color.c:34
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-color.c:36
 msgid "Convert to grayscale"
 msgstr "Converter para escala de cinza"
 
-#: manipulation-gui/gui-color.c:36
-#: .\manipulation-gui/gui-color.c:36
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-color.c:38
 msgid "Automatic color levels correction"
 msgstr "Correcção automática de níveis de cor"
 
-#: manipulation-gui/gui-crop.c:27
-#: .\manipulation-gui/gui-crop.c:27
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-color.c:41
+msgid "Change color curve from settings file:"
+msgstr "Mudar cor da curva de ficheiro de configuração: "
+
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-color.c:42
+msgid "Select GIMP Curve file"
+msgstr "Seleccione ficheiro de curva GIMP"
+
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-crop.c:27
 msgid "Crop to a standard aspect ratio"
 msgstr "Cortar para uma proporção padrão"
 
-#: manipulation-gui/gui-crop.c:53
-#: .\manipulation-gui/gui-crop.c:53
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-crop.c:53
 msgid "Manual crop (pixel values)"
 msgstr "Corte manual (valores de pixeis)"
 
-#: manipulation-gui/gui-crop.c:58
-#: manipulation-gui/gui-resize.c:63
-#: .\manipulation-gui/gui-crop.c:58
-#: .\manipulation-gui/gui-resize.c:63
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-crop.c:58
+#: LC_MESSAGES/manipulation-gui/gui-resize.c:63
 msgid "Width"
 msgstr "Largura"
 
-#: manipulation-gui/gui-crop.c:62
-#: manipulation-gui/gui-resize.c:65
-#: .\manipulation-gui/gui-crop.c:62
-#: .\manipulation-gui/gui-resize.c:65
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-crop.c:62
+#: LC_MESSAGES/manipulation-gui/gui-resize.c:65
 msgid "Height"
 msgstr "Altura"
 
-#: manipulation-gui/gui-crop.c:108
-#: .\manipulation-gui/gui-crop.c:108
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-crop.c:108
 msgid "One-to-one"
 msgstr "Um-para-um"
 
-#: manipulation-gui/gui-crop.c:111
-#: .\manipulation-gui/gui-crop.c:111
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-crop.c:111
 msgid "Classic 35 mm film"
 msgstr "Filme clássico de 35 mm"
 
-#: manipulation-gui/gui-crop.c:114
-#: .\manipulation-gui/gui-crop.c:114
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-crop.c:114
 msgid "Standard VGA monitor"
 msgstr "Monitor VGA padrão"
 
-#: manipulation-gui/gui-crop.c:117
-#: .\manipulation-gui/gui-crop.c:117
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-crop.c:117
 msgid "Widescreen"
 msgstr "Ecrã panoramico"
 
-#: manipulation-gui/gui-crop.c:120
-#: .\manipulation-gui/gui-crop.c:120
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-crop.c:120
 msgid "Widescreen extended"
 msgstr "Ecrã panoramico extendido"
 
-#: manipulation-gui/gui-crop.c:123
-#: .\manipulation-gui/gui-crop.c:123
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-crop.c:123
 msgid "EU Passport portrait"
 msgstr "Retrato de passaporte da UE"
 
-#: manipulation-gui/gui-crop.c:126
-#: .\manipulation-gui/gui-crop.c:126
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-crop.c:126
 msgid "Classic smartphone screen"
 msgstr "Ecrã clássico de smartphone"
 
-#: manipulation-gui/gui-crop.c:129
-#: .\manipulation-gui/gui-crop.c:129
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-crop.c:129
+msgid "Tall smartphone screen"
+msgstr "Ecrã alto de smartphone"
+
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-crop.c:132
 msgid "Classic tablet screen"
 msgstr "Ecrã clássico de tablet"
 
-#: manipulation-gui/gui-crop.c:132
-#: .\manipulation-gui/gui-crop.c:132
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-crop.c:135
 msgid "Custom ratio"
 msgstr "Proporção personalizado"
 
-#: manipulation-gui/gui-fliprotate.c:19
-#: .\manipulation-gui/gui-fliprotate.c:19
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-fliprotate.c:19
 msgid "Flip"
 msgstr "Inverter"
 
-#: manipulation-gui/gui-fliprotate.c:23
-#: .\manipulation-gui/gui-fliprotate.c:23
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-fliprotate.c:23
 msgid "Horizontally"
 msgstr "Horizontalmente"
 
-#: manipulation-gui/gui-fliprotate.c:29
-#: .\manipulation-gui/gui-fliprotate.c:29
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-fliprotate.c:29
 msgid "Vertically"
 msgstr "Verticalmente"
 
-#: manipulation-gui/gui-fliprotate.c:37
-#: .\manipulation-gui/gui-fliprotate.c:37
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-fliprotate.c:37
 msgid "Rotation"
 msgstr "Rotação"
 
-#: manipulation-gui/gui-rename.c:26
-#: .\manipulation-gui/gui-rename.c:26
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-rename.c:26
 msgid "Keywords"
 msgstr "Palavras-chave"
 
-#: manipulation-gui/gui-rename.c:30
-#: .\manipulation-gui/gui-rename.c:30
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-rename.c:30
 msgid "Original filename (without extension)"
 msgstr "Nome de ficheiro original (sem extensão)"
 
-#: manipulation-gui/gui-rename.c:31
-#: .\manipulation-gui/gui-rename.c:31
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-rename.c:31
 msgid "Incremental number"
 msgstr "Número incremental"
 
-#: manipulation-gui/gui-rename.c:32
-#: .\manipulation-gui/gui-rename.c:32
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-rename.c:32
 msgid "Date and time (YYYY-MM-DD_hh-mm)"
 msgstr "Data e hora (YYYY-MM-DD_hh-mm)"
 
-#: manipulation-gui/gui-rename.c:52
-#: .\manipulation-gui/gui-rename.c:52
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-rename.c:52
 #, c-format
 msgid ""
 "Can't save!\n"
@@ -552,8 +293,7 @@ msgstr ""
 "Não é possível guardar!\n"
 "O símbolo '%s' ou '%s' tem que estar presente."
 
-#: manipulation-gui/gui-rename.c:64
-#: .\manipulation-gui/gui-rename.c:64
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-rename.c:64
 msgid ""
 "Can't save!\n"
 "Pattern contains invalid characters."
@@ -561,68 +301,55 @@ msgstr ""
 "Não é possivel gardar!\n"
 "Padrão contém caracteres inválidos."
 
-#: manipulation-gui/gui-resize.c:37
-#: .\manipulation-gui/gui-resize.c:37
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-resize.c:37
 msgid "Set to a percentage of the original"
 msgstr "Definir para uma percentagem do original"
 
-#: manipulation-gui/gui-resize.c:39
-#: .\manipulation-gui/gui-resize.c:39
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-resize.c:39
 msgid "Set exact size in pixel"
 msgstr "Definir tamanho exacto em pixeis"
 
-#: manipulation-gui/gui-resize.c:45
-#: .\manipulation-gui/gui-resize.c:45
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-resize.c:45
 msgid "For both dimensions"
 msgstr "Para ambas as dimensões"
 
-#: manipulation-gui/gui-resize.c:47
-#: .\manipulation-gui/gui-resize.c:47
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-resize.c:47
 msgid "Set width only"
 msgstr "Definir apenas largura"
 
-#: manipulation-gui/gui-resize.c:49
-#: .\manipulation-gui/gui-resize.c:49
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-resize.c:49
 msgid "Set height only"
 msgstr "Definir apenas altura"
 
-#: manipulation-gui/gui-resize.c:52
-#: .\manipulation-gui/gui-resize.c:52
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-resize.c:52
 msgid "Preserve aspect ratio"
 msgstr "Preservar proporção"
 
-#: manipulation-gui/gui-resize.c:56
-#: .\manipulation-gui/gui-resize.c:56
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-resize.c:56
 msgid "Interpolation quality"
 msgstr "Qualidade da interpolação"
 
-#: manipulation-gui/gui-resize.c:69
-#: .\manipulation-gui/gui-resize.c:69
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-resize.c:69
 msgid "Change resolution"
 msgstr "Alterar resolução"
 
-#: manipulation-gui/gui-resize.c:74
-#: .\manipulation-gui/gui-resize.c:74
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-resize.c:74
 msgid "X axis"
 msgstr "Eixo X"
 
-#: manipulation-gui/gui-resize.c:77
-#: .\manipulation-gui/gui-resize.c:77
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-resize.c:77
 msgid "Y axis"
 msgstr "Eixo Y"
 
-#: manipulation-gui/gui-sharpblur.c:17
-#: .\manipulation-gui/gui-sharpblur.c:17
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-sharpblur.c:17
 msgid "More sharpen"
 msgstr "Mais aguçado"
 
-#: manipulation-gui/gui-sharpblur.c:23
-#: .\manipulation-gui/gui-sharpblur.c:23
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-sharpblur.c:23
 msgid "More blurred"
 msgstr "Mais desfocado"
 
-#: manipulation-gui/gui-userdef.c:49
-#: .\manipulation-gui/gui-userdef.c:49
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-userdef.c:49
 msgid ""
 "Choose a supported GIMP procedure from the list on the left\n"
 "and define its parameters on the right."
@@ -630,13 +357,11 @@ msgstr ""
 "Escolha um procedimento suportado do GIMP da lista da esquerda\n"
 "e defina os parâmetros na direita."
 
-#: manipulation-gui/gui-userdef.c:61
-#: .\manipulation-gui/gui-userdef.c:61
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-userdef.c:61
 msgid "Search"
 msgstr "Procurar"
 
-#: manipulation-gui/gui-userdef.c:303
-#: .\manipulation-gui/gui-userdef.c:303
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-userdef.c:303
 msgid ""
 "Can't save because\n"
 "no procedure has been selected"
@@ -644,68 +369,221 @@ msgstr ""
 "Não é possível guardar porque\n"
 "nenhum procedimento foi seleccionado"
 
-#: manipulation-gui/gui-userdef.c:349
-#: .\manipulation-gui/gui-userdef.c:349
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-userdef.c:349
 msgid "Author"
 msgstr "Autor"
 
-#: manipulation-gui/gui-userdef.c:565
-#: .\manipulation-gui/gui-userdef.c:565
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-userdef.c:570
 msgid "This procedure takes no editable params"
 msgstr "Este procedimento leva parâmetros não editáveis"
 
-#: manipulation-gui/gui-watermark.c:30
-#: .\manipulation-gui/gui-watermark.c:30
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-watermark.c:32
 msgid "Text watermark"
 msgstr "Marca d'água de texto"
 
-#: manipulation-gui/gui-watermark.c:34
-#: .\manipulation-gui/gui-watermark.c:34
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-watermark.c:36
 msgid "Text"
 msgstr "Texto"
 
-#: manipulation-gui/gui-watermark.c:43
-#: .\manipulation-gui/gui-watermark.c:43
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-watermark.c:45
 msgid "Font"
 msgstr "Tipo de Letra"
 
-#: manipulation-gui/gui-watermark.c:49
-#: .\manipulation-gui/gui-watermark.c:49
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-watermark.c:51
 msgid "Color"
 msgstr "Cor"
 
-#: manipulation-gui/gui-watermark.c:56
-#: .\manipulation-gui/gui-watermark.c:56
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-watermark.c:58
 msgid "Image watermark"
 msgstr "Marca d'água de imagem"
 
-#: manipulation-gui/gui-watermark.c:60
-#: .\manipulation-gui/gui-watermark.c:60
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-watermark.c:62
 msgid "Select image"
 msgstr "Seleccione imagem"
 
-#: manipulation-gui/gui-watermark.c:132
-#: .\manipulation-gui/gui-watermark.c:132
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-watermark.c:67
+msgid "All supported types"
+msgstr "Todos os tipos suportados"
+
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-watermark.c:112
 msgid "Opacity"
 msgstr "Opacidade"
 
-#: manipulation-gui/gui-watermark.c:142
-#: .\manipulation-gui/gui-watermark.c:142
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-watermark.c:122
 msgid "Position on the image"
 msgstr "Posição da imagem"
 
-#: manipulation-gui/gui-watermark.c:236
-#: .\manipulation-gui/gui-watermark.c:236
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-watermark.c:244
+msgid "Top-center"
+msgstr "Topo-centro"
+
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-watermark.c:247
 msgid "Top-right"
 msgstr "Topo-direita"
 
-#: manipulation-gui/gui-watermark.c:239
-#: .\manipulation-gui/gui-watermark.c:239
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-watermark.c:250
+msgid "Center-left"
+msgstr "Centro-esquerda"
+
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-watermark.c:253
 msgid "Center"
 msgstr "Centro"
 
-#: manipulation-gui/gui-watermark.c:245
-#: .\manipulation-gui/gui-watermark.c:245
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-watermark.c:256
+msgid "Center-right"
+msgstr "Centro-direita"
+
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-watermark.c:262
+msgid "Bottom-center"
+msgstr "Fundo-centro"
+
+#: Desktop/Link to LC_MESSAGES/manipulation-gui/gui-watermark.c:265
 msgid "Bottom-right"
 msgstr "Fundo-direita"
 
+#~ msgid "The manipulations set is empty!"
+#~ msgstr "O conjunto de manipulações está vazio!"
+
+#~ msgid "The file list is empty!"
+#~ msgstr "A lista de ficheiros está vazia!"
+
+#~ msgid "Manipulation set"
+#~ msgstr "Conjunto de manipulação"
+
+#~ msgid "Input files and options"
+#~ msgstr "Ficheiros de entrada e opções"
+
+#~ msgid "Add images"
+#~ msgstr "Adicionar imagens"
+
+#~ msgid "Add folders"
+#~ msgstr "Adicionar pastas"
+
+#~ msgid "Remove selected"
+#~ msgstr "Remover seleccionado"
+
+#~ msgid "Remove all"
+#~ msgstr "Remover tudo"
+
+#~ msgid "Output folder"
+#~ msgstr "Pasta de destino"
+
+#~ msgid "Alert when overwriting existing files"
+#~ msgstr "Alertar ao substituir os ficheiros existentes"
+
+#~ msgid "Keep folder hierarchy"
+#~ msgstr "Manter a hierarquia da pasta"
+
+#~ msgid "Delete original file when done"
+#~ msgstr "Apagar o ficheiro original quando concluído"
+
+#~ msgid "Click for preview"
+#~ msgstr "Clique para pré-visualização"
+
+#~ msgid "Couldn't read into \"%s\" directory."
+#~ msgstr "Não foi possível ler a pasta \"%s\""
+
+#~ msgid "Can't show a preview because the manipulations set is empty"
+#~ msgstr ""
+#~ "Não é possível mostrar uma pré-visualização porque o conjunto de "
+#~ "manipulação está vazio"
+
+#~ msgid "Preview"
+#~ msgstr "Pré-visualizar"
+
+#~ msgid ""
+#~ "This is how the selected image will look like after the batch process"
+#~ msgstr ""
+#~ "Isto é como a imagem seleccionada vai ficar depois do processamento em "
+#~ "lote"
+
+#~ msgid "Select images"
+#~ msgstr "Seleccione as imagens"
+
+#~ msgid "Select folders containing images"
+#~ msgstr "Seleccione pastas que contenham imagens"
+
+#~ msgid "Add files from the whole hierarchy"
+#~ msgstr "Adicionar ficheiros de toda a hierarquia"
+
+#~ msgid "Save this set..."
+#~ msgstr "Guardar este conjunto..."
+
+#~ msgid "Load set..."
+#~ msgstr "Carregar conjunto..."
+
+#~ msgid "Edit properties..."
+#~ msgstr "Editar propriedades"
+
+#~ msgid "Remove this manipulation"
+#~ msgstr "Remover esta manipulação"
+
+#~ msgid "Can't add another manipulation of this kind. Only one is permitted!"
+#~ msgstr ""
+#~ "Não é possível adicionar outra manipulação deste tipo. Apenas uma é "
+#~ "permitida!"
+
+#~ msgid "An error occured when importing a saved batch file :("
+#~ msgstr "Ocorreu um erro ao importar um ficheiro de lote :("
+
+#~ msgid "This will overwrite current manipulations set. Continue?"
+#~ msgstr "Isto irá substituir o conjunto de manipulação actual. Continuar?"
+
+#~ msgid "Applies GIMP manipulations on groups of images"
+#~ msgstr "Aplica manipulações do GIMP a grupos de imagens"
+
+#~ msgid "translator-name <translator-email>"
+#~ msgstr "Pedro Cunha <gimpextensions@gmail.com>"
+
+#~ msgid "Resize"
+#~ msgstr "Redimensionar"
+
+#~ msgid "Crop"
+#~ msgstr "Cortar"
+
+#~ msgid "Flip or Rotate"
+#~ msgstr "Inverter ou Rodar"
+
+#~ msgid "Color correction"
+#~ msgstr "Correcção de cor"
+
+#~ msgid "Sharp or Blur"
+#~ msgstr "Aguçar ou Desfocar"
+
+#~ msgid "Add a Watermark"
+#~ msgstr "Adicionar marca de água"
+
+#~ msgid "Change format and compression"
+#~ msgstr "Alterar formato e compressão"
+
+#~ msgid "Rename with a pattern"
+#~ msgstr "Renomear com um padrão"
+
+#~ msgid "Other GIMP procedure..."
+#~ msgstr "Outro procedimento GIMP..."
+
+#~ msgid ""
+#~ "Can't save image %s: input file has no extension.\n"
+#~ "You can solve this error by adding a \"Change format or compression\" step"
+#~ msgstr ""
+#~ "Não é possível guardar imagem %s: ficheiro de entrada não tem extensão.\n"
+#~ "Pode resolver este problema adicionando um passo \"Change format or "
+#~ "compression\""
+
+#~ msgid "Working on file %s..."
+#~ msgstr "A trabalhar no ficheiro %s..."
+
+#~ msgid "Operations stopped"
+#~ msgstr "Operações paradas"
+
+#~ msgid "End, all files have been processed with %d errors"
+#~ msgstr "Terminado, todos os ficheiros foram processados com %d erros"
+
+#~ msgid "File %s already exists, overwrite it?"
+#~ msgstr "O ficheiro %s já existe, substituir?"
+
+#~ msgid "Yes, don't ask again"
+#~ msgstr "Sim, não perguntar novamente"
+
+#~ msgid "Overwrite?"
+#~ msgstr "Substituir?"

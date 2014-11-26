@@ -9,6 +9,7 @@ char* str_replace(char*, char*, char*);
 char* comp_get_filename(char*);
 char* comp_get_filefolder(char*);
 gboolean str_contains_cins(char*, char*);
+gboolean file_has_extension(char*, char*);
 GimpParamDef pdb_proc_get_param_info(gchar*, gint);
 char* get_user_dir(void); 
 char* get_bimp_localedir(void);

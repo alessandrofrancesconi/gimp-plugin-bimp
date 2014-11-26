@@ -1,11 +1,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gimp-plugin-bimp\n"
-"POT-Creation-Date: 2013-02-24 14:06+0100\n"
-"PO-Revision-Date: 2014-06-13 08:41+0100\n"
+"POT-Creation-Date: 2014-11-18 12:35+0100\n"
+"PO-Revision-Date: 2014-11-18 12:48+0100\n"
 "Last-Translator: Stanislav Vágner <vagner@volny.cz>\n"
 "Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
-"Language: de\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,18 +13,19 @@ msgstr ""
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: ..\\..\\..\\..\\..\\src\\\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\\manipulation-gui\n"
 
-#: bimp-gui.c:128 bimp-gui.c:812
+#: bimp-gui.c:129 bimp-gui.c:897
 msgid "The manipulations set is empty!"
 msgstr "Není vybrán žádný projekt!"
 
-#: bimp-gui.c:131
+#: bimp-gui.c:132
 msgid "The file list is empty!"
 msgstr "Seznam souborů je prázdný!"
 
-#: bimp-gui.c:160
+#: bimp-gui.c:162
 msgid "Manipulation set"
 msgstr "Výběr činnosti"
 
@@ -32,181 +33,210 @@ msgstr "Výběr činnosti"
 msgid "Input files and options"
 msgstr "Vybrané soubory a složky"
 
-#: bimp-gui.c:216
+#: bimp-gui.c:214
 msgid "Add images"
 msgstr "Přidat obrázek"
 
-#: bimp-gui.c:218
-msgid "Add folders"
-msgstr "Přidat složku"
-
-#: bimp-gui.c:224
-msgid "Remove selected"
-msgstr "Odstranit vybrané"
-
-#: bimp-gui.c:226
-msgid "Remove all"
+#: bimp-gui.c:216
+msgid "Remove images"
 msgstr "Odstranit vše"
 
-#: bimp-gui.c:234
+#: bimp-gui.c:224
 msgid "Output folder"
 msgstr "Cílová složka"
 
-#: bimp-gui.c:240
-msgid "Alert when overwriting existing files"
-msgstr "Upozornit při přepisování existujících souborů"
+#: bimp-gui.c:238
+msgid "Use the selected file's location as the output"
+msgstr "Použít složku obrázku jako cílovou"
 
-#: bimp-gui.c:244
+#: bimp-gui.c:246
 msgid "Keep folder hierarchy"
-msgstr "Zobrazit procházení složek"
+msgstr "Zachovat pořadí složek"
 
-#: bimp-gui.c:249
+#: bimp-gui.c:251
 msgid "Delete original file when done"
 msgstr "Smazat původní soubor po dokončení"
 
 #: bimp-gui.c:255
+msgid "Keep the modification dates"
+msgstr "Zachovat poslední datum změny"
+
+#: bimp-gui.c:261
 msgid "Click for preview"
 msgstr "Zobrazit náhled"
 
-#: bimp-gui.c:350
+#: bimp-gui.c:354
 #, c-format
 msgid "Couldn't read into \"%s\" directory."
 msgstr "Nelze načíst \"% s \" složku"
 
-#: bimp-gui.c:405
+#: bimp-gui.c:464
 msgid "Can't show a preview because the manipulations set is empty"
 msgstr "Nelze zobrazit náhled"
 
-#: bimp-gui.c:428
+#: bimp-gui.c:491
 msgid "Preview"
 msgstr "Ukázka"
 
-#: bimp-gui.c:440
+#: bimp-gui.c:503
 msgid "This is how the selected image will look like after the batch process"
 msgstr "Náhled vybraného obrázku po zpracování"
 
-#: bimp-gui.c:543
+#: bimp-gui.c:592
 msgid "Select images"
 msgstr "Vybrat obrázek"
 
-#: bimp-gui.c:552 manipulation-gui/gui-watermark.c:65
-#: .\manipulation-gui/gui-watermark.c:65
+#: bimp-gui.c:601 manipulation-gui/gui-watermark.c:67
+#: .\manipulation-gui/gui-watermark.c:67
 msgid "All supported types"
 msgstr "Všechny podporované typy"
 
-#: bimp-gui.c:645
+#: bimp-gui.c:665
 msgid "Select folders containing images"
 msgstr "Vybrat složku obsahující obrázky"
 
-#: bimp-gui.c:654
+#: bimp-gui.c:674
 msgid "Add files from the whole hierarchy"
 msgstr "Přidat soubory"
 
-#: bimp-gui.c:698 bimp-gui.c:819
+#: bimp-gui.c:691
+msgid "Select output folder"
+msgstr "Cílová složka"
+
+#: bimp-gui.c:748 bimp-gui.c:903
 msgid "Save this set..."
 msgstr "Uložit soubor"
 
-#: bimp-gui.c:702 bimp-gui.c:875
+#: bimp-gui.c:752 bimp-gui.c:958
 msgid "Load set..."
 msgstr "Načíst projekt"
 
-#: bimp-gui.c:713
+#: bimp-gui.c:763
 msgid "Edit properties..."
 msgstr "Upravit nastavení"
 
-#: bimp-gui.c:716
+#: bimp-gui.c:766
 msgid "Remove this manipulation"
 msgstr "Odstranit funkci"
 
-#: bimp-gui.c:748
-msgid "Can't add another manipulation of this kind. Only one is permitted!"
-msgstr "Nelze přidat další funkci tohoto druhu. Je povolena pouze jedna!"
+#: bimp-gui.c:773
+msgid "Add single images..."
+msgstr "Přidat obrázek"
 
-#: bimp-gui.c:840 bimp-gui.c:892
+#: bimp-gui.c:776
+msgid "Add folders..."
+msgstr "Přidat složku"
+
+#: bimp-gui.c:779
+msgid "Add all opened images"
+msgstr "Přidat otevřený obrázek"
+
+#: bimp-gui.c:786
+msgid "Remove selected"
+msgstr "Odstranit vybrané"
+
+#: bimp-gui.c:789
+msgid "Remove all"
+msgstr "Odstranit vše"
+
+#: bimp-gui.c:833
+msgid "Can't add another manipulation of this kind. Only one is permitted!"
+msgstr "Nelze přidat další funkci stejného druhu. Je povolena pouze jedna!"
+
+#: bimp-gui.c:924 bimp-gui.c:975
 msgid "An error occured when importing a saved batch file :("
 msgstr "Došlo k chybě při importu uloženého dávkového souboru"
 
-#: bimp-gui.c:863
+#: bimp-gui.c:946
 msgid "This will overwrite current manipulations set. Continue?"
 msgstr "Přepsat zvolené nastavení?"
 
-#: bimp-gui.c:929 bimp.c:77
+#: bimp-gui.c:1013 bimp.c:67
 msgid "Applies GIMP manipulations on groups of images"
-msgstr "Použít GIMP na skupinu obrázku"
+msgstr "Použít funkci na skupinu obrázku"
 
-#: bimp-gui.c:936
+#: bimp-gui.c:1020
 msgid "translator-name <translator-email>"
 msgstr "Stanislav Vágner <vagner@volny.cz>"
 
-#: bimp-manipulations.c:245
+#: bimp-manipulations.c:275
 msgid "Resize"
 msgstr "Změnit velikost"
 
-#: bimp-manipulations.c:248
+#: bimp-manipulations.c:278
 msgid "Crop"
 msgstr "Oříznout"
 
-#: bimp-manipulations.c:251
+#: bimp-manipulations.c:281
 msgid "Flip or Rotate"
 msgstr "Překlopit nebo otočit"
 
-#: bimp-manipulations.c:254
+#: bimp-manipulations.c:284
 msgid "Color correction"
 msgstr "Upravit barvy"
 
-#: bimp-manipulations.c:257
+#: bimp-manipulations.c:287
 msgid "Sharp or Blur"
 msgstr "Zaostřit nebo rozmazat"
 
-#: bimp-manipulations.c:260
+#: bimp-manipulations.c:290
 msgid "Add a Watermark"
 msgstr "Přidat vodoznak"
 
-#: bimp-manipulations.c:263
+#: bimp-manipulations.c:293
 msgid "Change format and compression"
 msgstr "Změnit formát a kompresi"
 
-#: bimp-manipulations.c:266
+#: bimp-manipulations.c:296
 msgid "Rename with a pattern"
 msgstr "Hromadné přejmenování"
 
-#: bimp-manipulations.c:269
+#: bimp-manipulations.c:299
 msgid "Other GIMP procedure..."
-msgstr "Další funkce GIMP"
+msgstr "Další funkce GIMPu"
 
-#: bimp-operate.c:152
+#: bimp-operate.c:171
 #, c-format
 msgid ""
-"Can't save image %s: input file has no extension.\n"
+"Can't save image \"%s\": input file has no extension.\n"
 "You can solve this error by adding a \"Change format or compression\" step"
 msgstr ""
 "Nelze uložit obrázek %s: vstupní soubor nemá příponu \n"
 "Můžete vyřešit tuto chybu přidáním \"Změnit formát nebo komprese \""
 
-#: bimp-operate.c:159
+#: bimp-operate.c:177
 #, c-format
-msgid "Working on file %s..."
+msgid ""
+"GIMP can't save %s back to its original SVG format.\n"
+"You can solve this error by adding a \"Change format or compression\" step"
+msgstr ""
+"Nelze uložit obrázek %s: vstupní soubor nemá příponu \n"
+"Můžete vyřešit tuto chybu přidáním \"Změnit formát nebo komprese \""
+
+#: bimp-operate.c:183
+#, c-format
+msgid "Working on file \"%s\"..."
 msgstr "Zpracovávám soubor %s"
 
-#: bimp-operate.c:251
+#: bimp-operate.c:323
 msgid "Operations stopped"
 msgstr "Zpracování dokončeno"
 
-#: bimp-operate.c:258
+#: bimp-operate.c:330
 #, c-format
 msgid "End, all files have been processed with %d errors"
 msgstr "Hotovo. Všechny soubory byly zpracovány s %d chyb"
 
-#: bimp-operate.c:995
+#: bimp-operate.c:1165
 #, c-format
 msgid "File %s already exists, overwrite it?"
 msgstr "Soubor %s existuje, přepsat?"
 
-#: bimp-operate.c:1001
-msgid "Yes, don't ask again"
-msgstr "Ano bez pokračování"
+#: bimp-operate.c:1170
+msgid "Always apply this decision"
+msgstr "Použít i pro další"
 
-#: bimp-operate.c:1005
+#: bimp-operate.c:1182
 msgid "Overwrite?"
 msgstr "Přepsat?"
 
@@ -221,16 +251,16 @@ msgid "Interlaced"
 msgstr "Prokládaně"
 
 #: manipulation-gui/gui-changeformat.c:78
-#: manipulation-gui/gui-changeformat.c:116
+#: manipulation-gui/gui-changeformat.c:118
 #: .\manipulation-gui/gui-changeformat.c:78
-#: .\manipulation-gui/gui-changeformat.c:116
+#: .\manipulation-gui/gui-changeformat.c:118
 msgid "Quality"
 msgstr "Kvalita"
 
 #: manipulation-gui/gui-changeformat.c:84
-#: manipulation-gui/gui-changeformat.c:212
+#: manipulation-gui/gui-changeformat.c:213
 #: .\manipulation-gui/gui-changeformat.c:84
-#: .\manipulation-gui/gui-changeformat.c:212
+#: .\manipulation-gui/gui-changeformat.c:213
 msgid "Advanced params"
 msgstr "Další parametry"
 
@@ -269,20 +299,15 @@ msgstr "Značka"
 msgid "Subsampling"
 msgstr "Podvzorkování"
 
-#: manipulation-gui/gui-changeformat.c:119
-#: .\manipulation-gui/gui-changeformat.c:119
+#: manipulation-gui/gui-changeformat.c:116
+#: .\manipulation-gui/gui-changeformat.c:116
 msgid "Small size"
 msgstr "Malá velikost"
 
-#: manipulation-gui/gui-changeformat.c:122
-#: .\manipulation-gui/gui-changeformat.c:122
+#: manipulation-gui/gui-changeformat.c:123
+#: .\manipulation-gui/gui-changeformat.c:123
 msgid "DCT algorithm"
 msgstr "DCT-algoritmus"
-
-#: manipulation-gui/gui-changeformat.c:126
-#: .\manipulation-gui/gui-changeformat.c:126
-msgid "Fast integer"
-msgstr "Rychlá celočíselná"
 
 #: manipulation-gui/gui-changeformat.c:127
 #: .\manipulation-gui/gui-changeformat.c:127
@@ -291,137 +316,150 @@ msgstr "Celočíselná"
 
 #: manipulation-gui/gui-changeformat.c:128
 #: .\manipulation-gui/gui-changeformat.c:128
+msgid "Fast integer"
+msgstr "Rychlá celočíselná"
+
+#: manipulation-gui/gui-changeformat.c:129
+#: .\manipulation-gui/gui-changeformat.c:129
 msgid "Float"
 msgstr "V desetinných číslech"
 
-#: manipulation-gui/gui-changeformat.c:204
-#: .\manipulation-gui/gui-changeformat.c:204
+#: manipulation-gui/gui-changeformat.c:205
+#: .\manipulation-gui/gui-changeformat.c:205
 msgid "Interlace (Adam7)"
 msgstr "Prokládaný (Adam7)"
 
-#: manipulation-gui/gui-changeformat.c:206
-#: manipulation-gui/gui-changeformat.c:302
-#: .\manipulation-gui/gui-changeformat.c:206
-#: .\manipulation-gui/gui-changeformat.c:302
+#: manipulation-gui/gui-changeformat.c:207
+#: manipulation-gui/gui-changeformat.c:303
+#: .\manipulation-gui/gui-changeformat.c:207
+#: .\manipulation-gui/gui-changeformat.c:303
 msgid "Compression"
 msgstr "Komprese"
 
-#: manipulation-gui/gui-changeformat.c:215
-#: .\manipulation-gui/gui-changeformat.c:215
+#: manipulation-gui/gui-changeformat.c:216
+#: .\manipulation-gui/gui-changeformat.c:216
 msgid "Save background color"
 msgstr "Uložit barvu pozadí"
 
-#: manipulation-gui/gui-changeformat.c:216
-#: .\manipulation-gui/gui-changeformat.c:216
+#: manipulation-gui/gui-changeformat.c:217
+#: .\manipulation-gui/gui-changeformat.c:217
 msgid "Save gamma"
 msgstr "Uložit gamma"
 
-#: manipulation-gui/gui-changeformat.c:217
-#: .\manipulation-gui/gui-changeformat.c:217
+#: manipulation-gui/gui-changeformat.c:218
+#: .\manipulation-gui/gui-changeformat.c:218
 msgid "Save layer offset"
 msgstr "Uložit ofset"
 
-#: manipulation-gui/gui-changeformat.c:218
-#: .\manipulation-gui/gui-changeformat.c:218
+#: manipulation-gui/gui-changeformat.c:219
+#: .\manipulation-gui/gui-changeformat.c:219
 msgid "Save resolution"
 msgstr "Uložit rozlišení"
 
-#: manipulation-gui/gui-changeformat.c:219
-#: .\manipulation-gui/gui-changeformat.c:219
+#: manipulation-gui/gui-changeformat.c:220
+#: .\manipulation-gui/gui-changeformat.c:220
 msgid "Save creation date"
 msgstr "Uložit datum vytvoření"
 
-#: manipulation-gui/gui-changeformat.c:220
-#: .\manipulation-gui/gui-changeformat.c:220
+#: manipulation-gui/gui-changeformat.c:221
+#: .\manipulation-gui/gui-changeformat.c:221
 msgid "Save comments"
 msgstr "Uložit komentář"
 
-#: manipulation-gui/gui-changeformat.c:221
-#: .\manipulation-gui/gui-changeformat.c:221
+#: manipulation-gui/gui-changeformat.c:222
+#: .\manipulation-gui/gui-changeformat.c:222
 msgid "Save color from transparent pixels"
 msgstr "Uložit průhledně"
 
-#: manipulation-gui/gui-changeformat.c:269
-#: .\manipulation-gui/gui-changeformat.c:269
+#: manipulation-gui/gui-changeformat.c:270
+#: .\manipulation-gui/gui-changeformat.c:270
 msgid "RLE compression"
 msgstr "RLE komprese"
 
-#: manipulation-gui/gui-changeformat.c:272
-#: .\manipulation-gui/gui-changeformat.c:272
+#: manipulation-gui/gui-changeformat.c:273
+#: .\manipulation-gui/gui-changeformat.c:273
 msgid "Image origin"
 msgstr "Původní"
 
-#: manipulation-gui/gui-changeformat.c:277
-#: manipulation-gui/gui-watermark.c:233
-#: .\manipulation-gui/gui-changeformat.c:277
-#: .\manipulation-gui/gui-watermark.c:233
+#: manipulation-gui/gui-changeformat.c:278
+#: manipulation-gui/gui-watermark.c:241
+#: .\manipulation-gui/gui-changeformat.c:278
+#: .\manipulation-gui/gui-watermark.c:241
 msgid "Top-left"
 msgstr "Vlevo nahoře"
 
-#: manipulation-gui/gui-changeformat.c:278
-#: manipulation-gui/gui-watermark.c:242
-#: .\manipulation-gui/gui-changeformat.c:278
-#: .\manipulation-gui/gui-watermark.c:242
+#: manipulation-gui/gui-changeformat.c:279
+#: manipulation-gui/gui-watermark.c:259
+#: .\manipulation-gui/gui-changeformat.c:279
+#: .\manipulation-gui/gui-watermark.c:259
 msgid "Bottom-left"
 msgstr "Vlevo dole"
 
-#: manipulation-gui/gui-changeformat.c:307
+#: manipulation-gui/gui-changeformat.c:308
 #: manipulation-gui/gui-fliprotate.c:40
-#: .\manipulation-gui/gui-changeformat.c:307
+#: .\manipulation-gui/gui-changeformat.c:308
 #: .\manipulation-gui/gui-fliprotate.c:40
 msgid "None"
 msgstr "Žádný"
 
-#: manipulation-gui/gui-changeformat.c:308
-#: .\manipulation-gui/gui-changeformat.c:308
+#: manipulation-gui/gui-changeformat.c:309
+#: .\manipulation-gui/gui-changeformat.c:309
 msgid "LZW"
 msgstr "LZW"
 
-#: manipulation-gui/gui-changeformat.c:309
-#: .\manipulation-gui/gui-changeformat.c:309
-msgid "Pack bits"
-msgstr "Pack bits -co to?"
-
 #: manipulation-gui/gui-changeformat.c:310
 #: .\manipulation-gui/gui-changeformat.c:310
-msgid "Deflate"
-msgstr "Vypustit"
+msgid "Pack bits"
+msgstr "PackBits formát"
 
 #: manipulation-gui/gui-changeformat.c:311
 #: .\manipulation-gui/gui-changeformat.c:311
-msgid "JPEG"
-msgstr "JPEG"
+msgid "Deflate"
+msgstr "Vypustit"
 
 #: manipulation-gui/gui-changeformat.c:312
 #: .\manipulation-gui/gui-changeformat.c:312
-msgid "CCITT G3 Fax"
-msgstr "CCITT G3 Fax"
+msgid "JPEG"
+msgstr "JPEG"
 
 #: manipulation-gui/gui-changeformat.c:313
 #: .\manipulation-gui/gui-changeformat.c:313
+msgid "CCITT G3 Fax"
+msgstr "CCITT G3 Fax"
+
+#: manipulation-gui/gui-changeformat.c:314
+#: .\manipulation-gui/gui-changeformat.c:314
 msgid "CCITT G4 Fax"
 msgstr "CCITT G4 Fax"
 
-#: manipulation-gui/gui-changeformat.c:328
-#: .\manipulation-gui/gui-changeformat.c:328
+#: manipulation-gui/gui-changeformat.c:329
+#: .\manipulation-gui/gui-changeformat.c:329
 msgid "This format has no params"
 msgstr "Tento formát nemá hodnoty"
 
-#: manipulation-gui/gui-color.c:19 .\manipulation-gui/gui-color.c:19
+#: manipulation-gui/gui-color.c:21 .\manipulation-gui/gui-color.c:21
 msgid "Brightness"
 msgstr "Jas"
 
-#: manipulation-gui/gui-color.c:27 .\manipulation-gui/gui-color.c:27
+#: manipulation-gui/gui-color.c:29 .\manipulation-gui/gui-color.c:29
 msgid "Contrast"
 msgstr "Kontrast"
 
-#: manipulation-gui/gui-color.c:34 .\manipulation-gui/gui-color.c:34
+#: manipulation-gui/gui-color.c:36 .\manipulation-gui/gui-color.c:36
 msgid "Convert to grayscale"
 msgstr "Převést na odstíny šedi"
 
-#: manipulation-gui/gui-color.c:36 .\manipulation-gui/gui-color.c:36
+#: manipulation-gui/gui-color.c:38 .\manipulation-gui/gui-color.c:38
 msgid "Automatic color levels correction"
 msgstr "Automatická korekce úrovně barev"
+
+#: manipulation-gui/gui-color.c:41 .\manipulation-gui/gui-color.c:41
+msgid "Change color curve from settings file:"
+msgstr "Načíst barevné podání ze souboru:"
+
+#: manipulation-gui/gui-color.c:42 .\manipulation-gui/gui-color.c:42
+msgid "Select GIMP Curve file"
+msgstr "Vybrat GIMP křivku ze souboru"
 
 #: manipulation-gui/gui-crop.c:27 .\manipulation-gui/gui-crop.c:27
 msgid "Crop to a standard aspect ratio"
@@ -470,10 +508,14 @@ msgid "Classic smartphone screen"
 msgstr "Pro smartphone"
 
 #: manipulation-gui/gui-crop.c:129 .\manipulation-gui/gui-crop.c:129
+msgid "Tall smartphone screen"
+msgstr "Pro smartphone"
+
+#: manipulation-gui/gui-crop.c:132 .\manipulation-gui/gui-crop.c:132
 msgid "Classic tablet screen"
 msgstr "Pro tablet"
 
-#: manipulation-gui/gui-crop.c:132 .\manipulation-gui/gui-crop.c:132
+#: manipulation-gui/gui-crop.c:135 .\manipulation-gui/gui-crop.c:135
 msgid "Custom ratio"
 msgstr "Vlastní rozlišení"
 
@@ -594,50 +636,72 @@ msgstr ""
 msgid "Author"
 msgstr "Autor"
 
-#: manipulation-gui/gui-userdef.c:565 .\manipulation-gui/gui-userdef.c:565
+#: manipulation-gui/gui-userdef.c:570 .\manipulation-gui/gui-userdef.c:570
 msgid "This procedure takes no editable params"
 msgstr "Tato funkce nemá žádné upravitelné možnosti"
 
-#: manipulation-gui/gui-watermark.c:30 .\manipulation-gui/gui-watermark.c:30
+#: manipulation-gui/gui-watermark.c:32 .\manipulation-gui/gui-watermark.c:32
 msgid "Text watermark"
 msgstr "Text vodoznaku"
 
-#: manipulation-gui/gui-watermark.c:34 .\manipulation-gui/gui-watermark.c:34
+#: manipulation-gui/gui-watermark.c:36 .\manipulation-gui/gui-watermark.c:36
 msgid "Text"
 msgstr "Text"
 
-#: manipulation-gui/gui-watermark.c:43 .\manipulation-gui/gui-watermark.c:43
+#: manipulation-gui/gui-watermark.c:45 .\manipulation-gui/gui-watermark.c:45
 msgid "Font"
 msgstr "Písmo"
 
-#: manipulation-gui/gui-watermark.c:49 .\manipulation-gui/gui-watermark.c:49
+#: manipulation-gui/gui-watermark.c:51 .\manipulation-gui/gui-watermark.c:51
 msgid "Color"
 msgstr "Barva"
 
-#: manipulation-gui/gui-watermark.c:56 .\manipulation-gui/gui-watermark.c:56
+#: manipulation-gui/gui-watermark.c:58 .\manipulation-gui/gui-watermark.c:58
 msgid "Image watermark"
 msgstr "Obrázek vodoznaku"
 
-#: manipulation-gui/gui-watermark.c:60 .\manipulation-gui/gui-watermark.c:60
+#: manipulation-gui/gui-watermark.c:62 .\manipulation-gui/gui-watermark.c:62
 msgid "Select image"
 msgstr "Vybrat obrázek"
 
-#: manipulation-gui/gui-watermark.c:132 .\manipulation-gui/gui-watermark.c:132
+#: manipulation-gui/gui-watermark.c:112 .\manipulation-gui/gui-watermark.c:112
 msgid "Opacity"
 msgstr "Neprůhlednost"
 
-#: manipulation-gui/gui-watermark.c:142 .\manipulation-gui/gui-watermark.c:142
+#: manipulation-gui/gui-watermark.c:122 .\manipulation-gui/gui-watermark.c:122
 msgid "Position on the image"
 msgstr "Pozice na obrázku"
 
-#: manipulation-gui/gui-watermark.c:236 .\manipulation-gui/gui-watermark.c:236
+#: manipulation-gui/gui-watermark.c:244 .\manipulation-gui/gui-watermark.c:244
+msgid "Top-center"
+msgstr "Vlevo nahoře"
+
+#: manipulation-gui/gui-watermark.c:247 .\manipulation-gui/gui-watermark.c:247
 msgid "Top-right"
 msgstr "Vpravo nahoře"
 
-#: manipulation-gui/gui-watermark.c:239 .\manipulation-gui/gui-watermark.c:239
+#: manipulation-gui/gui-watermark.c:250 .\manipulation-gui/gui-watermark.c:250
+msgid "Center-left"
+msgstr "Uprostřed"
+
+#: manipulation-gui/gui-watermark.c:253 .\manipulation-gui/gui-watermark.c:253
 msgid "Center"
 msgstr "Uprostřed"
 
-#: manipulation-gui/gui-watermark.c:245 .\manipulation-gui/gui-watermark.c:245
+#: manipulation-gui/gui-watermark.c:256 .\manipulation-gui/gui-watermark.c:256
+msgid "Center-right"
+msgstr "Uprostřed"
+
+#: manipulation-gui/gui-watermark.c:262 .\manipulation-gui/gui-watermark.c:262
+msgid "Bottom-center"
+msgstr "Vlevo dole"
+
+#: manipulation-gui/gui-watermark.c:265 .\manipulation-gui/gui-watermark.c:265
 msgid "Bottom-right"
 msgstr "Vpravo dole"
+
+#~ msgid "Alert when overwriting existing files"
+#~ msgstr "Upozornit při přepisování existujících souborů"
+
+#~ msgid "Yes, don't ask again"
+#~ msgstr "Ano bez pokračování"

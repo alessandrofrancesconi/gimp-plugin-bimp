@@ -45,7 +45,7 @@ gboolean bimp_serialize_to_file(gchar* filename)
 	GKeyFile *output_file = g_key_file_new();
 	g_key_file_set_list_separator(output_file, ';');
 	
-	g_key_file_set_comment (output_file, NULL, NULL, g_strdup_printf("BIMP %d.%d\nMANIPULATION SET DEFINITION", PLUG_IN_VERSION_MAJ, PLUG_IN_VERSION_MIN), NULL);
+	g_key_file_set_comment (output_file, NULL, NULL, g_strdup_printf("BIMP %s\nMANIPULATION SET DEFINITION", PLUG_IN_VERSION), NULL);
 	
 	userdef_count = 0;
 	g_slist_foreach(bimp_selected_manipulations, (GFunc)append_manipulation_details, output_file);

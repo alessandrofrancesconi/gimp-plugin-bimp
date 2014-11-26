@@ -583,6 +583,11 @@ static gboolean apply_color(color_settings settings, image_output out)
 	
 	if (settings->brightness != 0 || settings->contrast != 0) {
 		// brightness or contrast have been modified, apply the manipulation 
+		
+		if (!gimp_drawable_is_rgb(out->drawable_id)) {
+			gimp_image_convert_rgb(out->image_id);
+		}
+	
 		success = gimp_brightness_contrast(
 			out->drawable_id, 
 			settings->brightness, 
@@ -970,6 +975,21 @@ static gboolean image_save(format_type type, image_output imageout, format_param
 		result = image_save_tiff(imageout, ((format_params_tiff)params)->compression);
 	}
 	else {
+		// save in the original format
+		
+		// but first check if the images was a GIF and it's palette has changed during the process
+		if (file_has_extension(imageout->filename, ".gif") && gimp_drawable_is_rgb(imageout->drawable_id)) {
+			gimp_image_convert_indexed(
+				imageout->image_id,
+				GIMP_FS_DITHER,
+				GIMP_MAKE_PALETTE,
+				gimp_drawable_has_alpha (imageout->drawable_id) ? 255 : 256,
+				TRUE,
+				FALSE,
+				""
+			);
+		}
+	
 		result = gimp_file_save(
 			GIMP_RUN_NONINTERACTIVE, 
 			imageout->image_id, 
@@ -986,15 +1006,15 @@ static gboolean image_save_bmp(image_output out)
 {
 	gint nreturn_vals;
 	GimpParam *return_vals = gimp_run_procedure(
-			"file_bmp_save",
-			&nreturn_vals,
-			GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
-			GIMP_PDB_IMAGE, out->image_id,
-			GIMP_PDB_DRAWABLE, out->drawable_id,
-			GIMP_PDB_STRING, out->filepath,
-			GIMP_PDB_STRING, out->filename,
-			GIMP_PDB_END
-		);
+		"file_bmp_save",
+		&nreturn_vals,
+		GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
+		GIMP_PDB_IMAGE, out->image_id,
+		GIMP_PDB_DRAWABLE, out->drawable_id,
+		GIMP_PDB_STRING, out->filepath,
+		GIMP_PDB_STRING, out->filename,
+		GIMP_PDB_END
+	);
 	
 	return TRUE;
 }
@@ -1015,19 +1035,19 @@ static gboolean image_save_gif(image_output out, gboolean interlace)
 	);
 	
 	GimpParam *return_vals = gimp_run_procedure(
-			"file_gif_save",
-			&nreturn_vals,
-			GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
-			GIMP_PDB_IMAGE, out->image_id,
-			GIMP_PDB_DRAWABLE, out->drawable_id,
-			GIMP_PDB_STRING, out->filepath,
-			GIMP_PDB_STRING, out->filename,
-			GIMP_PDB_INT32, interlace ? 1 : 0,	// Try to save as interlaced 
-			GIMP_PDB_INT32, 1,					// (animated gif) loop infinitely 
-			GIMP_PDB_INT32, 0,					// (animated gif) Default delay between framese in milliseconds 
-			GIMP_PDB_INT32, 0,					// (animated gif) Default disposal type (0=don't care, 1=combine, 2=replace) 
-			GIMP_PDB_END
-		);
+		"file_gif_save",
+		&nreturn_vals,
+		GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
+		GIMP_PDB_IMAGE, out->image_id,
+		GIMP_PDB_DRAWABLE, out->drawable_id,
+		GIMP_PDB_STRING, out->filepath,
+		GIMP_PDB_STRING, out->filename,
+		GIMP_PDB_INT32, interlace ? 1 : 0,	// Try to save as interlaced 
+		GIMP_PDB_INT32, 1,					// (animated gif) loop infinitely 
+		GIMP_PDB_INT32, 0,					// (animated gif) Default delay between framese in milliseconds 
+		GIMP_PDB_INT32, 0,					// (animated gif) Default disposal type (0=don't care, 1=combine, 2=replace) 
+		GIMP_PDB_END
+	);
 		
 	return TRUE;
 }
@@ -1036,15 +1056,15 @@ static gboolean image_save_icon(image_output out)
 {
 	gint nreturn_vals;
 	GimpParam *return_vals = gimp_run_procedure(
-			"file_ico_save",
-			&nreturn_vals,
-			GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
-			GIMP_PDB_IMAGE, out->image_id,
-			GIMP_PDB_DRAWABLE, out->drawable_id,
-			GIMP_PDB_STRING, out->filepath,
-			GIMP_PDB_STRING, out->filename,
-			GIMP_PDB_END
-		);
+		"file_ico_save",
+		&nreturn_vals,
+		GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
+		GIMP_PDB_IMAGE, out->image_id,
+		GIMP_PDB_DRAWABLE, out->drawable_id,
+		GIMP_PDB_STRING, out->filepath,
+		GIMP_PDB_STRING, out->filename,
+		GIMP_PDB_END
+	);
 		
 	return TRUE;
 }
@@ -1059,24 +1079,24 @@ static gboolean image_save_jpeg(image_output out, float quality, float smoothing
 	}
 	
 	GimpParam *return_vals = gimp_run_procedure(
-			"file_jpeg_save",
-			&nreturn_vals,
-			GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
-			GIMP_PDB_IMAGE, out->image_id,
-			GIMP_PDB_DRAWABLE, out->drawable_id,
-			GIMP_PDB_STRING, out->filepath,
-			GIMP_PDB_STRING, out->filename,
-			GIMP_PDB_FLOAT, quality >= 3 ? quality/100 : 0.03,	// Quality of saved image (0 <= quality <= 1) + small fix because final image doesn't change when quality < 3 
-			GIMP_PDB_FLOAT, smoothing,				// Smoothing factor for saved image (0 <= smoothing <= 1) 
-			GIMP_PDB_INT32, entropy ? 1 : 0,		// Optimization of entropy encoding parameters (0/1) 
-			GIMP_PDB_INT32, progressive ? 1 : 0,	// Enable progressive jpeg image loading - ignored if not compiled with HAVE_PROGRESSIVE_JPEG (0/1) 
-			GIMP_PDB_STRING, comment,				// Image comment 
-			GIMP_PDB_INT32, subsampling,			// The subsampling option number 
-			GIMP_PDB_INT32, baseline ? 1 : 0,		// Force creation of a baseline JPEG (non-baseline JPEGs can't be read by all decoders) (0/1) 
-			GIMP_PDB_INT32, markers,				// Frequency of restart markers (in rows, 0 = no restart markers) 
-			GIMP_PDB_INT32, dct,					// DCT algorithm to use (speed/quality tradeoff) 
-			GIMP_PDB_END
-		);
+		"file_jpeg_save",
+		&nreturn_vals,
+		GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
+		GIMP_PDB_IMAGE, out->image_id,
+		GIMP_PDB_DRAWABLE, out->drawable_id,
+		GIMP_PDB_STRING, out->filepath,
+		GIMP_PDB_STRING, out->filename,
+		GIMP_PDB_FLOAT, quality >= 3 ? quality/100 : 0.03,	// Quality of saved image (0 <= quality <= 1) + small fix because final image doesn't change when quality < 3 
+		GIMP_PDB_FLOAT, smoothing,				// Smoothing factor for saved image (0 <= smoothing <= 1) 
+		GIMP_PDB_INT32, entropy ? 1 : 0,		// Optimization of entropy encoding parameters (0/1) 
+		GIMP_PDB_INT32, progressive ? 1 : 0,	// Enable progressive jpeg image loading - ignored if not compiled with HAVE_PROGRESSIVE_JPEG (0/1) 
+		GIMP_PDB_STRING, comment,				// Image comment 
+		GIMP_PDB_INT32, subsampling,			// The subsampling option number 
+		GIMP_PDB_INT32, baseline ? 1 : 0,		// Force creation of a baseline JPEG (non-baseline JPEGs can't be read by all decoders) (0/1) 
+		GIMP_PDB_INT32, markers,				// Frequency of restart markers (in rows, 0 = no restart markers) 
+		GIMP_PDB_INT32, dct,					// DCT algorithm to use (speed/quality tradeoff) 
+		GIMP_PDB_END
+	);
 	
 	return TRUE;
 }
@@ -1085,24 +1105,24 @@ static gboolean image_save_png(image_output out, gboolean interlace, int compres
 {	
 	gint nreturn_vals;
 	GimpParam *return_vals = gimp_run_procedure(
-			"file_png_save2",
-			&nreturn_vals,
-			GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
-			GIMP_PDB_IMAGE, out->image_id,
-			GIMP_PDB_DRAWABLE, out->drawable_id,
-			GIMP_PDB_STRING, out->filepath,
-			GIMP_PDB_STRING, out->filename,
-			GIMP_PDB_INT32, interlace? 1 : 0,	// Use Adam7 interlacing? 
-			GIMP_PDB_INT32, compression,		// Deflate Compression factor (0-9) 
-			GIMP_PDB_INT32, savebgc? 1 : 0,		// Write bKGD chunk? 
-			GIMP_PDB_INT32, savegamma? 1 : 0,	// Write gAMA chunk? 
-			GIMP_PDB_INT32, saveoff? 1 : 0,		// Write oFFs chunk? 
-			GIMP_PDB_INT32, savephys? 1 : 0,	// Write phys chunk? 
-			GIMP_PDB_INT32, savetime? 1 : 0,	// Write tIME chunk? 
-			GIMP_PDB_INT32, savecomm? 1 : 0,	// Write comments chunk? 
-			GIMP_PDB_INT32, savetrans? 1 : 0,	// Write trans chunk? 
-			GIMP_PDB_END
-		);
+		"file_png_save2",
+		&nreturn_vals,
+		GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
+		GIMP_PDB_IMAGE, out->image_id,
+		GIMP_PDB_DRAWABLE, out->drawable_id,
+		GIMP_PDB_STRING, out->filepath,
+		GIMP_PDB_STRING, out->filename,
+		GIMP_PDB_INT32, interlace? 1 : 0,	// Use Adam7 interlacing? 
+		GIMP_PDB_INT32, compression,		// Deflate Compression factor (0-9) 
+		GIMP_PDB_INT32, savebgc? 1 : 0,		// Write bKGD chunk? 
+		GIMP_PDB_INT32, savegamma? 1 : 0,	// Write gAMA chunk? 
+		GIMP_PDB_INT32, saveoff? 1 : 0,		// Write oFFs chunk? 
+		GIMP_PDB_INT32, savephys? 1 : 0,	// Write phys chunk? 
+		GIMP_PDB_INT32, savetime? 1 : 0,	// Write tIME chunk? 
+		GIMP_PDB_INT32, savecomm? 1 : 0,	// Write comments chunk? 
+		GIMP_PDB_INT32, savetrans? 1 : 0,	// Write trans chunk? 
+		GIMP_PDB_END
+	);
 		
 	return TRUE;
 }
@@ -1111,17 +1131,17 @@ static gboolean image_save_tga(image_output out, gboolean rle, int origin)
 {
 	gint nreturn_vals;
 	GimpParam *return_vals = gimp_run_procedure(
-			"file_tga_save",
-			&nreturn_vals,
-			GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
-			GIMP_PDB_IMAGE, out->image_id,
-			GIMP_PDB_DRAWABLE, out->drawable_id,
-			GIMP_PDB_STRING, out->filepath,
-			GIMP_PDB_STRING, out->filename,
-			GIMP_PDB_INT32, rle? 1 : 0,	// Use RLE compression 
-			GIMP_PDB_INT32, origin,		// Image origin 
-			GIMP_PDB_END
-		);
+		"file_tga_save",
+		&nreturn_vals,
+		GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
+		GIMP_PDB_IMAGE, out->image_id,
+		GIMP_PDB_DRAWABLE, out->drawable_id,
+		GIMP_PDB_STRING, out->filepath,
+		GIMP_PDB_STRING, out->filename,
+		GIMP_PDB_INT32, rle? 1 : 0,	// Use RLE compression 
+		GIMP_PDB_INT32, origin,		// Image origin 
+		GIMP_PDB_END
+	);
 		
 	return TRUE;
 }
@@ -1130,16 +1150,16 @@ static gboolean image_save_tiff(image_output out, int compression)
 {
 	gint nreturn_vals;
 	GimpParam *return_vals = gimp_run_procedure(
-			"file_tiff_save",
-			&nreturn_vals,
-			GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
-			GIMP_PDB_IMAGE, out->image_id,
-			GIMP_PDB_DRAWABLE, out->drawable_id,
-			GIMP_PDB_STRING, out->filepath,
-			GIMP_PDB_STRING, out->filename,
-			GIMP_PDB_INT32, compression,	// Compression type: { NONE (0), LZW (1), PACKBITS (2), DEFLATE (3), JPEG (4) } 
-			GIMP_PDB_END
-		);
+		"file_tiff_save",
+		&nreturn_vals,
+		GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
+		GIMP_PDB_IMAGE, out->image_id,
+		GIMP_PDB_DRAWABLE, out->drawable_id,
+		GIMP_PDB_STRING, out->filepath,
+		GIMP_PDB_STRING, out->filename,
+		GIMP_PDB_INT32, compression,	// Compression type: { NONE (0), LZW (1), PACKBITS (2), DEFLATE (3), JPEG (4) } 
+		GIMP_PDB_END
+	);
 		
 	return TRUE;
 }

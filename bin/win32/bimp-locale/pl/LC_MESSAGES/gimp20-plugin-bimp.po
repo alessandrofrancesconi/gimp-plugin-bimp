@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gimp-plugin-bimp\n"
 "POT-Creation-Date: 2013-02-24 14:07+0100\n"
-"PO-Revision-Date: 2013-05-05 02:34+0100\n"
-"Last-Translator: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
+"PO-Revision-Date: 2014-11-12 21:20+0100\n"
+"Last-Translator: MareroQ <marero@o2.pl>\n"
 "Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: ..\\..\\..\\..\\..\\src\\\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -34,15 +34,31 @@ msgstr "Pliki do przetworzenia i opcje"
 
 #: bimp-gui.c:216
 msgid "Add images"
-msgstr "Dodaj pojedyńczy obraz"
+msgstr "Dodaj obrazy"
 
 #: bimp-gui.c:218
-msgid "Add folders"
-msgstr "Dodaj pliki z katalogu"
+msgid "Add folders..."
+msgstr "Dodaj pliki z katalogu..."
+
+#: bimp-gui.c:773
+msgid "Add single images..."
+msgstr "Dodaj obraz..."
+
+#: bimp-gui.c:779
+msgid "Add all opened images"
+msgstr "Dodaj wszystkie otwarte obrazy"
+
+#: bimp-gui.c:216
+msgid "Remove images"
+msgstr "Usuń obrazy"
 
 #: bimp-gui.c:224
 msgid "Remove selected"
 msgstr "Usuń wybrany plik"
+
+#: bimp-gui.c:255
+msgid "Keep the modification dates"
+msgstr "Zachowaj daty modyfikacji"
 
 #: bimp-gui.c:226
 msgid "Remove all"
@@ -186,10 +202,10 @@ msgstr ""
 "Nie można zapisać %s obrazu:. Plik wejściowy nie ma rozszerzenia.\n"
 "Można rozwiązać ten problem przez edycję w  \"Zmień format lub kompresji \" "
 
-#: bimp-operate.c:159
+#: bimp-operate.c:183
 #, c-format
-msgid "Working on file %s..."
-msgstr "Przetworzono plików %s..."
+msgid "Working on file \"%s\"..."
+msgstr "Przetworzanie pliku \"%s\"..."
 
 #: bimp-operate.c:251
 msgid "Operations stopped"
@@ -198,7 +214,7 @@ msgstr "Operacje skończyły się"
 #: bimp-operate.c:258
 #, c-format
 msgid "End, all files have been processed with %d errors"
-msgstr "Koniec, wszystkie pliki zostały przetworzone z%d błędów"
+msgstr "Koniec, wszystkie pliki zostały przetworzone - %d błędów"
 
 #: bimp-operate.c:995
 #, c-format
@@ -245,17 +261,17 @@ msgstr "Wygładzenie"
 #: manipulation-gui/gui-changeformat.c:95
 #: .\manipulation-gui/gui-changeformat.c:95
 msgid "Optimize"
-msgstr "Zoptymalizuj"
+msgstr "Optymalizuj"
 
 #: manipulation-gui/gui-changeformat.c:96
 #: .\manipulation-gui/gui-changeformat.c:96
 msgid "Progressive"
-msgstr "Progresywnie"
+msgstr "Przyrostowo"
 
 #: manipulation-gui/gui-changeformat.c:97
 #: .\manipulation-gui/gui-changeformat.c:97
 msgid "Save baseline"
-msgstr "Save baseline"
+msgstr "Zapisz baz."
 
 #: manipulation-gui/gui-changeformat.c:100
 #: .\manipulation-gui/gui-changeformat.c:100
@@ -265,12 +281,12 @@ msgstr "Komentarz"
 #: manipulation-gui/gui-changeformat.c:107
 #: .\manipulation-gui/gui-changeformat.c:107
 msgid "Markers rows"
-msgstr "Markers rows"
+msgstr "Markery (rzędy) "
 
 #: manipulation-gui/gui-changeformat.c:112
 #: .\manipulation-gui/gui-changeformat.c:112
 msgid "Subsampling"
-msgstr "Subsampling"
+msgstr "Podpróbkowanie"
 
 #: manipulation-gui/gui-changeformat.c:119
 #: .\manipulation-gui/gui-changeformat.c:119
@@ -280,22 +296,22 @@ msgstr "Mały rozmiar"
 #: manipulation-gui/gui-changeformat.c:122
 #: .\manipulation-gui/gui-changeformat.c:122
 msgid "DCT algorithm"
-msgstr "DCT algorytm"
+msgstr "Metoda DCT"
 
 #: manipulation-gui/gui-changeformat.c:126
 #: .\manipulation-gui/gui-changeformat.c:126
 msgid "Fast integer"
-msgstr "Fast integer"
+msgstr "Szybka stałoprzecinkowa"
 
 #: manipulation-gui/gui-changeformat.c:127
 #: .\manipulation-gui/gui-changeformat.c:127
 msgid "Integer"
-msgstr "Całość"
+msgstr "Stałoprzecinkowa"
 
 #: manipulation-gui/gui-changeformat.c:128
 #: .\manipulation-gui/gui-changeformat.c:128
 msgid "Float"
-msgstr "Oderwij"
+msgstr "Zmiennoprzecinkowa"
 
 #: manipulation-gui/gui-changeformat.c:204
 #: .\manipulation-gui/gui-changeformat.c:204
@@ -648,3 +664,32 @@ msgstr "Środek"
 #: manipulation-gui/gui-watermark.c:245 .\manipulation-gui/gui-watermark.c:245
 msgid "Bottom-right"
 msgstr "Dolny-prawy"
+
+#: manipulation-gui/gui-color.c:41 .\manipulation-gui/gui-color.c:41
+msgid "Change color curve from settings file:"
+msgstr "Zaimportuj krzywą koloru z pliku :"
+
+msgid "Save this set"
+msgstr "Zapis ustawień"
+
+msgid "Load set"
+msgstr "Wczytanie ustawień"
+
+msgid "Always apply this decision"
+msgstr "Zapamiętać tę decyzję ?"
+
+#: manipulation-gui/gui-watermark.c:250 .\manipulation-gui/gui-watermark.c:250
+msgid "Center-left"
+msgstr "Środek-lewy"
+
+#: manipulation-gui/gui-watermark.c:256 .\manipulation-gui/gui-watermark.c:256
+msgid "Center-right"
+msgstr "Środek-prawy"
+
+#: manipulation-gui/gui-watermark.c:262 .\manipulation-gui/gui-watermark.c:262
+msgid "Bottom-center"
+msgstr "Środek-dół"
+
+#: manipulation-gui/gui-watermark.c:244 .\manipulation-gui/gui-watermark.c:244
+msgid "Top-center"
+msgstr "Środek-góra"

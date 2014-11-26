@@ -117,6 +117,13 @@ gboolean str_contains_cins(char* fullstr, char* search) {
 	);
 }
 
+gboolean file_has_extension(char* file, char* ext) {
+	return g_str_has_suffix(
+		g_ascii_strdown(file, strlen(file)), 
+		g_ascii_strdown(ext, strlen(ext))
+	); 
+}
+
 GimpParamDef pdb_proc_get_param_info(gchar* proc_name, gint arg_num) 
 {
 	GimpParamDef param_info;

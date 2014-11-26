@@ -1009,7 +1009,7 @@ static void open_about()
 	gtk_show_about_dialog( 
 		GTK_WINDOW(bimp_window_main),
 		"program-name", PLUG_IN_FULLNAME,
-		"version", g_strdup_printf("%d.%d", PLUG_IN_VERSION_MAJ, PLUG_IN_VERSION_MIN),
+		"version", PLUG_IN_VERSION,
 		"comments", _("Applies GIMP manipulations on groups of images"),
 		"logo", gdk_pixbuf_from_pixdata(&pixdata_bimpicon, FALSE, NULL),
 		"copyright", PLUG_IN_COPYRIGHT,
