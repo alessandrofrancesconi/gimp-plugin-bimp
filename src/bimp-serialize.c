@@ -323,10 +323,10 @@ static manipulation read_color(GKeyFile* file)
 		man = manipulation_color_new();
 		color_settings settings = ((color_settings)man->settings);
 		
-		if (g_key_file_has_key(file, group_name, "flip_h", NULL)) 
+		if (g_key_file_has_key(file, group_name, "brightness", NULL)) 
 			settings->brightness = g_key_file_get_integer(file, group_name, "brightness", NULL);
 			
-		if (g_key_file_has_key(file, group_name, "flip_v", NULL)) 
+		if (g_key_file_has_key(file, group_name, "contrast", NULL)) 
 			settings->contrast = g_key_file_get_integer(file, group_name, "contrast", NULL);
 			
 		if (g_key_file_has_key(file, group_name, "levels_auto", NULL)) 
