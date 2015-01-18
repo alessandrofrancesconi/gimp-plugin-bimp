@@ -75,16 +75,16 @@ gboolean bimp_list_contains_manip(manipulation_type search)
 
 gboolean bimp_list_contains_savingplugin() 
 {
-	gboolean find = FALSE;
+	gboolean found = FALSE;
 	GSList *iterator = NULL;
 	manipulation man;
 	
-	for (iterator = bimp_selected_manipulations; iterator && find == FALSE; iterator = iterator->next) {
+	for (iterator = bimp_selected_manipulations; iterator && found == FALSE; iterator = iterator->next) {
 		man = (manipulation)(iterator->data);
-		if (man->type == MANIP_USERDEF && strstr(((userdef_settings)(man->settings))->procedure, "-save") != NULL) find = TRUE;
+		if (man->type == MANIP_USERDEF && strstr(((userdef_settings)(man->settings))->procedure, "-save") != NULL) found = TRUE;
 	}
 
-	return find;
+	return found;
 }
 
 /* get a subset of the manipulation list composed by the selected saving plugins (for example file-dds-save) 
@@ -94,12 +94,9 @@ gboolean bimp_list_get_savingprocedures()
 	GSList *iterator = NULL;
 	manipulation_type elem_type;
 	
-	for (iterator = bimp_selected_manipulations; iterator && find == FALSE; iterator = iterator->next) {
-		elem_type = ((manipulation)(iterator->data))->type;
-		if (elem_type == search) find = TRUE;
-	}
+	// TODO
 
-	return find;
+	return sublist;
 }*/
 
 /* get the first occurrence of manipulation of type 'search' from the selected ones */

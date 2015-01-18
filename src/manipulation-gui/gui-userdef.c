@@ -366,8 +366,8 @@ static void update_procedure_box(userdef_settings settings)
 		GtkWidget *label_widget_desc, *hbox_paramrow;
 		
 		const char *error;
-		int   erroffset;
-		pcre* reg_comp_combobox =  pcre_compile("([A-Z\\d-]+)\\s\\(\\d+\\)", PCRE_DOTALL, &error, &erroffset, 0);
+		int erroffset;
+		pcre* reg_comp_combobox =  pcre_compile("([A-Z\\d-]+)\\s\\((\\d+)\\)", PCRE_DOTALL, &error, &erroffset, 0);
 		// (0 = aaaa, 1 = bbbbb, ...) => \((?:\s?\d+\s?=\s?([\w\s]+),?)\) under construction....
 		pcre* reg_comp_minmax =  pcre_compile("(?:(-?[\\d,\\.]+)\\s([<|>|=]{1,2})\\s)?([\\w|-]+)\\s([<|>|=]{1,2})\\s(-?[\\d,\\.]+)", PCRE_DOTALL, &error, &erroffset, 0);
 		int ovector[186];
@@ -391,15 +391,46 @@ static void update_procedure_box(userdef_settings settings)
 						} else {
 							offset = 0;
 							desclen = strlen(param_info.description);
-							int i = 1, rc = pcre_exec(reg_comp_combobox, 0, param_info.description, desclen, offset, 0, ovector, 186);
+							int rc = pcre_exec(reg_comp_combobox, 0, param_info.description, desclen, offset, 0, ovector, 186);
 							if (rc >= 0) {
-								param_widget[param_i] = gtk_combo_box_new_text();
+								GtkTreeIter selected;
+								GtkListStore* combo_store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
+								
 								do {
-									gtk_combo_box_append_text(GTK_COMBO_BOX(param_widget[param_i]), g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]));
+									GtkTreeIter iter;
+									gtk_list_store_append (combo_store, &iter);
+									
+									const char* name;
+									pcre_get_substring(param_info.description, ovector, rc, 0, &name);
+									
+									int id = 0;
+									const char* id_str;
+									pcre_get_substring(param_info.description, ovector, rc, 2, &id_str);
+									if (strlen(id_str) > 0) id = atoi(id_str);
+									
+									gtk_list_store_set (combo_store, &iter,
+										0, name,
+										1, id,
+										-1
+									);
+									
+									if (id == (settings->params[param_i]).data.d_int32) {
+										selected = iter;
+									}
+									
 									offset = ovector[1];
 								}
 								while (offset < desclen && (rc = pcre_exec(reg_comp_combobox, 0, param_info.description, desclen, offset, 0, ovector, 186)) >= 0);
-								gtk_combo_box_set_active(GTK_COMBO_BOX(param_widget[param_i]), ((settings->params[param_i]).data.d_int32));
+								
+								param_widget[param_i] = gtk_combo_box_new_with_model(GTK_TREE_MODEL(combo_store));
+								g_object_unref(G_OBJECT(combo_store));
+								
+								GtkCellRenderer* cell = gtk_cell_renderer_text_new();
+								gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(param_widget[param_i]), cell, TRUE );
+								gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(param_widget[param_i]), cell, "text", 0, NULL );
+								
+								gtk_combo_box_set_active_iter(GTK_COMBO_BOX(param_widget[param_i]), &selected);
+								
 							}
 							else {
 								param_widget[param_i] = gtk_spin_button_new (NULL, 1, 0);
@@ -604,7 +635,16 @@ void bimp_userdef_save(userdef_settings orig_settings)
 		switch(orig_settings->params[param_i].type) {
 			case GIMP_PDB_INT32:
 				if (param_widget[param_i] != NULL && strcmp(g_type_name(G_OBJECT_TYPE(param_widget[param_i])), "GtkComboBox") == 0) {
-					(orig_settings->params[param_i]).data.d_int32 = (gint32)gtk_combo_box_get_active(GTK_COMBO_BOX(param_widget[param_i]));
+					
+					GtkComboBox* combo = GTK_COMBO_BOX(param_widget[param_i]);
+					GtkTreeIter iter;
+					int selected = 0;
+					if( gtk_combo_box_get_active_iter(combo, &iter)) {
+						GtkTreeModel* model = gtk_combo_box_get_model(combo);
+						gtk_tree_model_get(model, &iter, 1, &selected, -1);
+					}
+					
+					(orig_settings->params[param_i]).data.d_int32 = (gint32)selected;
 				}
 				else if (strcmp(param_info.name, "run-mode") == 0) {
 					(orig_settings->params[param_i]).data.d_int32 = (gint32)GIMP_RUN_NONINTERACTIVE;

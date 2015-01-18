@@ -17,6 +17,7 @@
 #include "plugin-intl.h"
 
 static gboolean process_image(gpointer);
+
 static gboolean apply_manipulation(manipulation, image_output);
 static gboolean apply_resize(resize_settings, image_output);
 static gboolean apply_crop(crop_settings, image_output);
@@ -26,6 +27,7 @@ static gboolean apply_sharpblur(sharpblur_settings, image_output);
 static gboolean apply_watermark(watermark_settings, image_output);
 static gboolean apply_userdef(userdef_settings, image_output);
 static gboolean apply_rename(rename_settings, image_output, char*);
+
 static gboolean image_save(format_type, image_output, format_params);
 static gboolean image_save_bmp(image_output);
 static gboolean image_save_gif(image_output, gboolean);
@@ -34,6 +36,7 @@ static gboolean image_save_jpeg(image_output, float, float, gboolean, gboolean, 
 static gboolean image_save_png(image_output, gboolean, int, gboolean, gboolean, gboolean, gboolean, gboolean, gboolean, gboolean);
 static gboolean image_save_tga(image_output, gboolean, int);
 static gboolean image_save_tiff(image_output, int);
+
 static int overwrite_result(char*, GtkWidget*);
 
 char* current_datetime;
