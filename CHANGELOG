@@ -4,6 +4,12 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+1.13
+ - Fixed calling errors for procedure 'gimp-image-convert-indexed'
+ - Color correction not correctly readed from file
+ - Spanish translation (thanks to Damián Blanco)
+ - Updated French translation
+
 1.12
  - New layout for add/remove files buttons
  - "Add all opened images" feature (#57)
