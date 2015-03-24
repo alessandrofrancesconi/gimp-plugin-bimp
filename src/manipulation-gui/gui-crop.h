@@ -6,6 +6,8 @@
 
 #define LABEL_CROP_W 85
 #define LABEL_CROP_H 25
+#define LABEL_ANCHOR_W 100
+#define LABEL_ANCHOR_H 25
 
 GtkWidget* bimp_crop_gui_new(crop_settings);
 void bimp_crop_save(crop_settings);

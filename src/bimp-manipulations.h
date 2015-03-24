@@ -44,15 +44,15 @@ typedef enum crop_preset {
 	CROP_PRESET_END
 } crop_preset;
 static const short int crop_preset_ratio[][2] = {
-	{1,1},		/* CROP_PRESET_11 */
-	{3,2},		/* CROP_PRESET_32 */
-	{4,3},		/* CROP_PRESET_43 */
-	{16,9},		/* CROP_PRESET_169 */
-	{16,10},	/* CROP_PRESET_1610 */
-	{7,9},		/* CROP_PRESET_EUPORT */
-	{2,3},		/* CROP_PRESET_PHONE */
-	{40,71},	/* CROP_PRESET_TALLPHONE */
-	{3,4}		/* CROP_PRESET_TABLET */
+	{ 1, 1 },		/* CROP_PRESET_11 */
+	{ 3, 2 },		/* CROP_PRESET_32 */
+	{ 4, 3 },		/* CROP_PRESET_43 */
+	{ 16, 9 },		/* CROP_PRESET_169 */
+	{ 16, 10 },	/* CROP_PRESET_1610 */
+	{ 7, 9 },		/* CROP_PRESET_EUPORT */
+	{ 2, 3 },		/* CROP_PRESET_PHONE */
+	{ 40, 71 },	/* CROP_PRESET_TALLPHONE */
+	{ 3, 4 }		/* CROP_PRESET_TABLET */
 };
 
 typedef enum format_type {
@@ -66,13 +66,13 @@ typedef enum format_type {
 	FORMAT_END
 } format_type;
 static const char* format_type_string[][2] = {
-	{"bmp", "Bitmap (.bmp)"},							/* FORMAT_BMP */
-	{"gif", "Gif (.gif)"},								/* FORMAT_GIF */
-	{"ico", "Icon (.ico)"},								/* FORMAT_ICON */
-	{"jpg", "Jpeg (.jpeg)"},							/* FORMAT_JPEG */
-	{"png", "Portable Network Graphics (.png)"},		/* FORMAT_PNG */
-	{"tga", "Targa (.tga)"},							/* FORMAT_TGA */
-	{"tiff", "Tagged Image File Format (.tiff)"}		/* FORMAT_TIFF */
+	{ "bmp", "Bitmap (.bmp)" },							/* FORMAT_BMP */
+	{ "gif", "Gif (.gif)" },								/* FORMAT_GIF */
+	{ "ico", "Icon (.ico)" },								/* FORMAT_ICON */
+	{ "jpg", "Jpeg (.jpeg)" },							/* FORMAT_JPEG */
+	{ "png", "Portable Network Graphics (.png)" },		/* FORMAT_PNG */
+	{ "tga", "Targa (.tga)" },							/* FORMAT_TGA */
+	{ "tiff", "Tagged Image File Format (.tiff)" }		/* FORMAT_TIFF */
 };
 
 typedef enum watermark_position {
@@ -114,8 +114,11 @@ typedef struct manip_resize_set {
 } *resize_settings;
 
 typedef struct manip_crop_set {
+	gint anchor_x;
+	gint anchor_y;
 	gint new_w;
 	gint new_h;
+	gboolean custom_anchor;
 	gboolean manual;
 	crop_preset ratio;
 	float custom_ratio1;
@@ -137,7 +140,7 @@ typedef struct manip_color_set {
 	char* curve_file;
 } *color_settings;
 
-typedef struct manip_sharpblur_set { 
+typedef struct manip_sharpblur_set {
 	int amount;
 } *sharpblur_settings;
 
@@ -215,10 +218,10 @@ manipulation manipulation_resize_new(void);
 manipulation manipulation_crop_new(void);
 manipulation manipulation_fliprotate_new(void);
 manipulation manipulation_color_new(void);
-manipulation manipulation_watermark_new(void); 
-manipulation manipulation_changeformat_new(void); 
-manipulation manipulation_rename_new(void); 
-manipulation manipulation_userdef_new(void); 
+manipulation manipulation_watermark_new(void);
+manipulation manipulation_changeformat_new(void);
+manipulation manipulation_rename_new(void);
+manipulation manipulation_userdef_new(void);
 
 GSList* bimp_selected_manipulations; /* Manipulations selected by user */
 
