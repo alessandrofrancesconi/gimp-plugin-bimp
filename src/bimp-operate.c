@@ -349,9 +349,8 @@ void bimp_apply_drawable_manipulations(image_output imageout, gchar* orig_filena
 	// LOAD ERROR CHECK HERE 
 	g_print("Image ID is %d\n", imageout->image_id);
 	
-	imageout->drawable_id = gimp_image_merge_visible_layers(imageout->image_id, GIMP_CLIP_TO_IMAGE); // merge levels and get drawable id 
-	gimp_layer_add_alpha (imageout->drawable_id);
-	g_print("Drawable ID is %d\n", imageout->drawable_id);
+	imageout->drawable_ids = gimp_image_get_layers(imageout->image_id, &imageout->drawable_count); // get all drawables
+	g_print("Total drawables count: %d\n", imageout->drawable_count);
 	
 	// apply all the intermediate manipulations 
 	g_slist_foreach(bimp_selected_manipulations, (GFunc)apply_manipulation, imageout);
@@ -584,31 +583,38 @@ static gboolean apply_color(color_settings settings, image_output out)
 {
 	gboolean success = TRUE;
 	
+    int default_drawable = out->drawable_ids[0];
 	if (settings->brightness != 0 || settings->contrast != 0) {
 		// brightness or contrast have been modified, apply the manipulation 
 		
-		if (!gimp_drawable_is_rgb(out->drawable_id)) {
-			gimp_image_convert_rgb(out->image_id);
-		}
-	
-		success = gimp_brightness_contrast(
-			out->drawable_id, 
-			settings->brightness, 
-			settings->contrast
-		);
+        if (!gimp_drawable_is_rgb(default_drawable)) {
+            gimp_image_convert_rgb(out->image_id);
+        }
+        
+        int i;
+        for (i = 0; i < out->drawable_count; i++) {
+            success = gimp_brightness_contrast(
+                out->drawable_ids[i], 
+                settings->brightness, 
+                settings->contrast
+            );
+        }
 	}
 	
-	if (settings->grayscale && !gimp_drawable_is_gray(out->drawable_id)) {
+	if (settings->grayscale && !gimp_drawable_is_gray(default_drawable)) {
 		// do grayscale conversion 
-		success = gimp_image_convert_grayscale(out->image_id);
+        success = gimp_image_convert_grayscale(out->image_id);
 	}
 	
 	if (settings->levels_auto) {
 		// do levels correction 
-		success = gimp_levels_stretch(out->drawable_id);
+        int i;
+        for (i = 0; i < out->drawable_count; i++) {
+            success = gimp_levels_stretch(out->drawable_ids[i]);
+        }
 	}
 	
-	if (settings->curve_file != NULL && !gimp_drawable_is_indexed(out->drawable_id)) {
+	if (settings->curve_file != NULL && !gimp_drawable_is_indexed(default_drawable)) {
 		// apply curve 
 		
 		if (!colorcurve_init) { // read from the curve file only the first time
@@ -627,25 +633,28 @@ static gboolean apply_color(color_settings settings, image_output out)
 		
 		if (success) {
 			
-			if (colorcurve_num_points_v >= 4 && colorcurve_num_points_v <= 34) {
-				success = gimp_curves_spline(out->drawable_id, GIMP_HISTOGRAM_VALUE, colorcurve_num_points_v, colorcurve_ctr_points_v);
-			}
-			
-			if (colorcurve_num_points_r >= 4 && colorcurve_num_points_r <= 34) {
-				success = gimp_curves_spline(out->drawable_id, GIMP_HISTOGRAM_RED, colorcurve_num_points_r, colorcurve_ctr_points_r);
-			}
-			
-			if (colorcurve_num_points_g >= 4 && colorcurve_num_points_g <= 34) {
-				success = gimp_curves_spline(out->drawable_id, GIMP_HISTOGRAM_GREEN, colorcurve_num_points_g, colorcurve_ctr_points_g);
-			}
-			
-			if (colorcurve_num_points_b >= 4 && colorcurve_num_points_b <= 34) {
-				success = gimp_curves_spline(out->drawable_id, GIMP_HISTOGRAM_BLUE, colorcurve_num_points_b, colorcurve_ctr_points_b);
-			}
-			
-			if (colorcurve_num_points_a >= 4 && colorcurve_num_points_a <= 34) {
-				success = gimp_curves_spline(out->drawable_id, GIMP_HISTOGRAM_ALPHA, colorcurve_num_points_a, colorcurve_ctr_points_a);
-			}
+            int i;
+            for (i = 0; i < out->drawable_count; i++) {
+                if (colorcurve_num_points_v >= 4 && colorcurve_num_points_v <= 34) {
+                    success = gimp_curves_spline(out->drawable_ids[i], GIMP_HISTOGRAM_VALUE, colorcurve_num_points_v, colorcurve_ctr_points_v);
+                }
+                
+                if (colorcurve_num_points_r >= 4 && colorcurve_num_points_r <= 34) {
+                    success = gimp_curves_spline(out->drawable_ids[i], GIMP_HISTOGRAM_RED, colorcurve_num_points_r, colorcurve_ctr_points_r);
+                }
+                
+                if (colorcurve_num_points_g >= 4 && colorcurve_num_points_g <= 34) {
+                    success = gimp_curves_spline(out->drawable_ids[i], GIMP_HISTOGRAM_GREEN, colorcurve_num_points_g, colorcurve_ctr_points_g);
+                }
+                
+                if (colorcurve_num_points_b >= 4 && colorcurve_num_points_b <= 34) {
+                    success = gimp_curves_spline(out->drawable_ids[i], GIMP_HISTOGRAM_BLUE, colorcurve_num_points_b, colorcurve_ctr_points_b);
+                }
+                
+                if (colorcurve_num_points_a >= 4 && colorcurve_num_points_a <= 34) {
+                    success = gimp_curves_spline(out->drawable_ids[i], GIMP_HISTOGRAM_ALPHA, colorcurve_num_points_a, colorcurve_ctr_points_a);
+                }
+            }
 		}
 	}
 	
@@ -659,30 +668,37 @@ static gboolean apply_sharpblur(sharpblur_settings settings, image_output out)
 	
 	if (settings->amount < 0) {
 		// do sharp 
-		GimpParam *return_vals = gimp_run_procedure(
-			"plug_in_sharpen", // could use plug_in_unsharp_mask, but there's a datatype bug in 2.6.x version 
-			&nreturn_vals,
-			GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
-			GIMP_PDB_IMAGE, out->image_id,
-			GIMP_PDB_DRAWABLE, out->drawable_id,
-			GIMP_PDB_INT32, -(settings->amount),
-			GIMP_PDB_END
-		);
+        int i;
+        for (i = 0; i < out->drawable_count; i++) {
+            GimpParam *return_vals = gimp_run_procedure(
+                "plug_in_sharpen", // could use plug_in_unsharp_mask, but there's a datatype bug in 2.6.x version 
+                &nreturn_vals,
+                GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
+                GIMP_PDB_IMAGE, out->image_id,
+                GIMP_PDB_DRAWABLE, out->drawable_ids[i],
+                GIMP_PDB_INT32, -(settings->amount),
+                GIMP_PDB_END
+            );
+        }
 	} else if (settings->amount > 0){
 		// do blur 
 		float minsize = min(gimp_image_width(out->image_id)/4, gimp_image_height(out->image_id)/4);
 		float radius = (minsize / 100) * settings->amount;
-		GimpParam *return_vals = gimp_run_procedure(
-			"plug_in_gauss",
-			&nreturn_vals,
-			GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
-			GIMP_PDB_IMAGE, out->image_id,
-			GIMP_PDB_DRAWABLE, out->drawable_id,
-			GIMP_PDB_FLOAT, radius,
-			GIMP_PDB_FLOAT, radius,
-			GIMP_PDB_INT32, 0,
-			GIMP_PDB_END
-		);
+        
+        int i;
+        for (i = 0; i < out->drawable_count; i++) {
+            GimpParam *return_vals = gimp_run_procedure(
+                "plug_in_gauss",
+                &nreturn_vals,
+                GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
+                GIMP_PDB_IMAGE, out->image_id,
+                GIMP_PDB_DRAWABLE, out->drawable_ids[i],
+                GIMP_PDB_FLOAT, radius,
+                GIMP_PDB_FLOAT, radius,
+                GIMP_PDB_INT32, 0,
+                GIMP_PDB_END
+            );
+        }
 	}
 	
 	return success;
@@ -850,7 +866,9 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 		);   
 	}
 	
-	out->drawable_id = gimp_image_merge_visible_layers(out->image_id, GIMP_CLIP_TO_IMAGE);
+    // refresh all drawables
+    g_free(out->drawable_ids);
+    out->drawable_ids = gimp_image_get_layers(out->image_id, &out->drawable_count);
 	
 	return success;
 }
@@ -862,6 +880,9 @@ static gboolean apply_userdef(userdef_settings settings, image_output out)
 	int param_i;
 	GimpParamDef param_info;
 	gboolean saving_function = (strstr(settings->procedure, "-save") != NULL);
+    
+    int single_drawable = gimp_image_merge_visible_layers(out->image_id, GIMP_CLIP_TO_IMAGE);
+    
 	for (param_i = 0; param_i < settings->num_params; param_i++) {
 		switch((settings->params[param_i]).type) {
 			case GIMP_PDB_IMAGE: 
@@ -869,7 +890,7 @@ static gboolean apply_userdef(userdef_settings settings, image_output out)
 				break;
 			
 			case GIMP_PDB_DRAWABLE:
-				(settings->params[param_i]).data.d_drawable = out->drawable_id;
+				(settings->params[param_i]).data.d_drawable = single_drawable;
 				break;
 				
 			case GIMP_PDB_STRING:
@@ -882,6 +903,10 @@ static gboolean apply_userdef(userdef_settings settings, image_output out)
 						(settings->params[param_i]).data.d_string = g_strdup(out->filename);
 					}
 				}
+				break;
+				
+			case GIMP_PDB_ITEM:
+				(settings->params[param_i]).data.d_item = single_drawable;
 				break;
 			
 			default: break;
@@ -896,8 +921,11 @@ static gboolean apply_userdef(userdef_settings settings, image_output out)
 		settings->params
 	);
 	
-	if (!saving_function) out->drawable_id = gimp_image_merge_visible_layers(out->image_id, GIMP_CLIP_TO_IMAGE);
-	
+    gimp_image_merge_visible_layers(out->image_id, GIMP_CLIP_TO_IMAGE);
+    
+    g_free(out->drawable_ids);
+    out->drawable_ids = gimp_image_get_layers(out->image_id, &out->drawable_count);
+    
 	return success;
 }
 
@@ -979,14 +1007,14 @@ static gboolean image_save(format_type type, image_output imageout, format_param
 	}
 	else {
 		// save in the original format
-		
+		int final_drawable = gimp_image_merge_visible_layers(imageout->image_id, GIMP_CLIP_TO_IMAGE);
 		// but first check if the images was a GIF and it's palette has changed during the process
-		if (file_has_extension(imageout->filename, ".gif") && gimp_drawable_is_rgb(imageout->drawable_id)) {
+		if (file_has_extension(imageout->filename, ".gif") && gimp_drawable_is_rgb(final_drawable)) {
 			gimp_image_convert_indexed(
 				imageout->image_id,
 				GIMP_FS_DITHER,
 				GIMP_MAKE_PALETTE,
-				gimp_drawable_has_alpha (imageout->drawable_id) ? 255 : 256,
+				gimp_drawable_has_alpha (final_drawable) ? 255 : 256,
 				TRUE,
 				FALSE,
 				""
@@ -996,7 +1024,7 @@ static gboolean image_save(format_type type, image_output imageout, format_param
 		result = gimp_file_save(
 			GIMP_RUN_NONINTERACTIVE, 
 			imageout->image_id, 
-			imageout->drawable_id, 
+			final_drawable, 
 			imageout->filepath, 
 			imageout->filename
 		);
@@ -1008,12 +1036,14 @@ static gboolean image_save(format_type type, image_output imageout, format_param
 static gboolean image_save_bmp(image_output out) 
 {
 	gint nreturn_vals;
+    int final_drawable = gimp_image_merge_visible_layers(out->image_id, GIMP_CLIP_TO_IMAGE);
+    
 	GimpParam *return_vals = gimp_run_procedure(
 		"file_bmp_save",
 		&nreturn_vals,
 		GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
 		GIMP_PDB_IMAGE, out->image_id,
-		GIMP_PDB_DRAWABLE, out->drawable_id,
+		GIMP_PDB_DRAWABLE, final_drawable,
 		GIMP_PDB_STRING, out->filepath,
 		GIMP_PDB_STRING, out->filename,
 		GIMP_PDB_END
@@ -1025,13 +1055,13 @@ static gboolean image_save_bmp(image_output out)
 static gboolean image_save_gif(image_output out, gboolean interlace) 
 {
 	gint nreturn_vals;
-	
+    
 	// first, convert to indexed-256 color mode 
 	gimp_image_convert_indexed(
 		out->image_id,
 		GIMP_FS_DITHER,
 		GIMP_MAKE_PALETTE,
-		gimp_drawable_has_alpha (out->drawable_id) ? 255 : 256,
+		gimp_drawable_has_alpha (out->drawable_ids[0]) ? 255 : 256,
 		TRUE,
 		FALSE,
 		""
@@ -1042,7 +1072,7 @@ static gboolean image_save_gif(image_output out, gboolean interlace)
 		&nreturn_vals,
 		GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
 		GIMP_PDB_IMAGE, out->image_id,
-		GIMP_PDB_DRAWABLE, out->drawable_id,
+		GIMP_PDB_DRAWABLE, 0, // drawable is ignored
 		GIMP_PDB_STRING, out->filepath,
 		GIMP_PDB_STRING, out->filename,
 		GIMP_PDB_INT32, interlace ? 1 : 0,	// Try to save as interlaced 
@@ -1058,12 +1088,14 @@ static gboolean image_save_gif(image_output out, gboolean interlace)
 static gboolean image_save_icon(image_output out) 
 {
 	gint nreturn_vals;
+    int final_drawable = gimp_image_merge_visible_layers(out->image_id, GIMP_CLIP_TO_IMAGE);
+    
 	GimpParam *return_vals = gimp_run_procedure(
 		"file_ico_save",
 		&nreturn_vals,
 		GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
 		GIMP_PDB_IMAGE, out->image_id,
-		GIMP_PDB_DRAWABLE, out->drawable_id,
+		GIMP_PDB_DRAWABLE, final_drawable,
 		GIMP_PDB_STRING, out->filepath,
 		GIMP_PDB_STRING, out->filename,
 		GIMP_PDB_END
@@ -1075,9 +1107,10 @@ static gboolean image_save_icon(image_output out)
 static gboolean image_save_jpeg(image_output out, float quality, float smoothing, gboolean entropy, gboolean progressive, gchar* comment, int subsampling, gboolean baseline, int markers, int dct) 
 {
 	gint nreturn_vals;
-	
+	int final_drawable = gimp_image_merge_visible_layers(out->image_id, GIMP_CLIP_TO_IMAGE);
+    
 	// image needs to be RGB 
-	if (!gimp_drawable_is_rgb(out->drawable_id)) {
+	if (!gimp_drawable_is_rgb(final_drawable)) {
 		gimp_image_convert_rgb(out->image_id);
 	}
 	
@@ -1086,7 +1119,7 @@ static gboolean image_save_jpeg(image_output out, float quality, float smoothing
 		&nreturn_vals,
 		GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
 		GIMP_PDB_IMAGE, out->image_id,
-		GIMP_PDB_DRAWABLE, out->drawable_id,
+		GIMP_PDB_DRAWABLE, final_drawable,
 		GIMP_PDB_STRING, out->filepath,
 		GIMP_PDB_STRING, out->filename,
 		GIMP_PDB_FLOAT, quality >= 3 ? quality/100 : 0.03,	// Quality of saved image (0 <= quality <= 1) + small fix because final image doesn't change when quality < 3 
@@ -1107,12 +1140,14 @@ static gboolean image_save_jpeg(image_output out, float quality, float smoothing
 static gboolean image_save_png(image_output out, gboolean interlace, int compression, gboolean savebgc, gboolean savegamma, gboolean saveoff, gboolean savephys, gboolean savetime, gboolean savecomm, gboolean savetrans) 
 {	
 	gint nreturn_vals;
+    int final_drawable = gimp_image_merge_visible_layers(out->image_id, GIMP_CLIP_TO_IMAGE);
+    
 	GimpParam *return_vals = gimp_run_procedure(
 		"file_png_save2",
 		&nreturn_vals,
 		GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
 		GIMP_PDB_IMAGE, out->image_id,
-		GIMP_PDB_DRAWABLE, out->drawable_id,
+		GIMP_PDB_DRAWABLE, final_drawable,
 		GIMP_PDB_STRING, out->filepath,
 		GIMP_PDB_STRING, out->filename,
 		GIMP_PDB_INT32, interlace? 1 : 0,	// Use Adam7 interlacing? 
@@ -1133,12 +1168,14 @@ static gboolean image_save_png(image_output out, gboolean interlace, int compres
 static gboolean image_save_tga(image_output out, gboolean rle, int origin) 
 {
 	gint nreturn_vals;
+    int final_drawable = gimp_image_merge_visible_layers(out->image_id, GIMP_CLIP_TO_IMAGE);
+    
 	GimpParam *return_vals = gimp_run_procedure(
 		"file_tga_save",
 		&nreturn_vals,
 		GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
 		GIMP_PDB_IMAGE, out->image_id,
-		GIMP_PDB_DRAWABLE, out->drawable_id,
+		GIMP_PDB_DRAWABLE, final_drawable,
 		GIMP_PDB_STRING, out->filepath,
 		GIMP_PDB_STRING, out->filename,
 		GIMP_PDB_INT32, rle? 1 : 0,	// Use RLE compression 
@@ -1152,12 +1189,14 @@ static gboolean image_save_tga(image_output out, gboolean rle, int origin)
 static gboolean image_save_tiff(image_output out, int compression) 
 {
 	gint nreturn_vals;
+    int final_drawable = gimp_image_merge_visible_layers(out->image_id, GIMP_CLIP_TO_IMAGE);
+    
 	GimpParam *return_vals = gimp_run_procedure(
 		"file_tiff_save",
 		&nreturn_vals,
 		GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
 		GIMP_PDB_IMAGE, out->image_id,
-		GIMP_PDB_DRAWABLE, out->drawable_id,
+		GIMP_PDB_DRAWABLE, final_drawable,
 		GIMP_PDB_STRING, out->filepath,
 		GIMP_PDB_STRING, out->filename,
 		GIMP_PDB_INT32, compression,	// Compression type: { NONE (0), LZW (1), PACKBITS (2), DEFLATE (3), JPEG (4) } 

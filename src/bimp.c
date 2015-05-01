@@ -241,6 +241,7 @@ static gboolean pdb_proc_has_compatible_params(gchar* proc_name)
 			param.type == GIMP_PDB_STRING ||
 			param.type == GIMP_PDB_COLOR ||
 			param.type == GIMP_PDB_DRAWABLE ||
+			param.type == GIMP_PDB_ITEM ||
 			param.type == GIMP_PDB_IMAGE
 			) {
 			compatible = TRUE;

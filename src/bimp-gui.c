@@ -479,13 +479,14 @@ static void show_preview (GtkTreeView *tree_view, gpointer data)
 		image_output imageout_final = (image_output)g_malloc(sizeof(struct imageout_str));
 		
 		imageout_orig->image_id = gimp_file_load(GIMP_RUN_NONINTERACTIVE, (gchar*)selected_str, (gchar*)selected_str);
-		imageout_orig->drawable_id = gimp_image_merge_visible_layers(imageout_orig->image_id, GIMP_CLIP_TO_IMAGE); 
+		int imageout_orig_drawable = gimp_image_merge_visible_layers(imageout_orig->image_id, GIMP_CLIP_TO_IMAGE); 
 		
 		bimp_init_batch();
 		bimp_apply_drawable_manipulations(imageout_final, (gchar*)selected_str, (gchar*)selected_str);
+        int imageout_final_drawable = gimp_image_merge_visible_layers(imageout_final->image_id, GIMP_CLIP_TO_IMAGE); 
 		
-		pixbuf_orig = gimp_drawable_get_thumbnail(imageout_orig->drawable_id, PREVIEW_IMG_W, PREVIEW_IMG_H, GIMP_PIXBUF_KEEP_ALPHA);
-		pixbuf_final = gimp_drawable_get_thumbnail(imageout_final->drawable_id, PREVIEW_IMG_W, PREVIEW_IMG_H, GIMP_PIXBUF_KEEP_ALPHA);
+		pixbuf_orig = gimp_drawable_get_thumbnail(imageout_orig_drawable, PREVIEW_IMG_W, PREVIEW_IMG_H, GIMP_PIXBUF_KEEP_ALPHA);
+		pixbuf_final = gimp_drawable_get_thumbnail(imageout_final_drawable, PREVIEW_IMG_W, PREVIEW_IMG_H, GIMP_PIXBUF_KEEP_ALPHA);
 		
 		dialog_preview = gtk_dialog_new_with_buttons (
 			_("Preview"),

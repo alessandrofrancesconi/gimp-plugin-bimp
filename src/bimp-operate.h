@@ -5,7 +5,8 @@
 
 typedef struct imageout_str {
 	gint32 image_id;
-	gint32 drawable_id;
+	gint* drawable_ids;
+    gint drawable_count;
 	char* filepath;
 	char* filename;
 } *image_output;
