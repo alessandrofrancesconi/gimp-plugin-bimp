@@ -414,8 +414,8 @@ gboolean parse_curve_file(
 				if (!token) goto err;
 				pY = atof(token);
 				
-				if (pX > 0 && pY >= 0 &&
-					pX <= 1 && pY <= 1) 
+				if (pX >= 0 && pX <= 1 &&
+					pY >= 0 && pY <= 1) 
 				{
 					// save X and Y
 					ctr_points_temp = (guint8*)g_realloc(ctr_points_temp, sizeof(guint8) * (p_count + 2)); // add one element to the array
