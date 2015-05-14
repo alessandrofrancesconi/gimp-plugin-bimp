@@ -890,6 +890,7 @@ static gboolean apply_userdef(userdef_settings settings, image_output out)
 				break;
 			
 			case GIMP_PDB_DRAWABLE:
+			case GIMP_PDB_ITEM:
 				(settings->params[param_i]).data.d_drawable = single_drawable;
 				break;
 				
@@ -903,10 +904,6 @@ static gboolean apply_userdef(userdef_settings settings, image_output out)
 						(settings->params[param_i]).data.d_string = g_strdup(out->filename);
 					}
 				}
-				break;
-				
-			case GIMP_PDB_ITEM:
-				(settings->params[param_i]).data.d_item = single_drawable;
 				break;
 			
 			default: break;
@@ -1109,8 +1106,8 @@ static gboolean image_save_jpeg(image_output out, float quality, float smoothing
 	gint nreturn_vals;
 	int final_drawable = gimp_image_merge_visible_layers(out->image_id, GIMP_CLIP_TO_IMAGE);
     
-	// image needs to be RGB 
-	if (!gimp_drawable_is_rgb(final_drawable)) {
+	// "file_jpeg_save" doesn't support indexed images
+	if (gimp_drawable_is_indexed(final_drawable)) {
 		gimp_image_convert_rgb(out->image_id);
 	}
 	

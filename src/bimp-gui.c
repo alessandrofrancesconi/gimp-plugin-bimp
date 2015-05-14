@@ -360,9 +360,18 @@ static void add_opened_files()
 	gint num_images = 0;
 	int* image_ids = gimp_image_list (&num_images);
 	int i;
+	gboolean missing = FALSE;
 	for (i = 0; i < num_images; i++) {
-		gchar* path = g_filename_from_uri(gimp_image_get_uri(image_ids[i]), NULL, NULL);
-		if (path != NULL) add_input_file (path);
+		gchar* uri = gimp_image_get_uri(image_ids[i]);
+		if (uri != NULL) {
+			gchar* path = g_filename_from_uri(uri, NULL, NULL);
+			if (path != NULL) add_input_file (path);
+		}
+		else missing = TRUE;
+	}
+	
+	if (missing) {
+		bimp_show_error_dialog(g_strdup_printf(_("Some images were not imported because they have not been saved on filesystem yet.")), bimp_window_main);
 	}
 	
 	g_free(image_ids);
