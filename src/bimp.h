@@ -5,11 +5,11 @@
 
 #define PLUG_IN_FULLNAME "Batch Image Manipulation Plugin"
 #define PLUG_IN_DESCRIPTION "Applies GIMP manipulations on groups of images"
-#define PLUG_IN_COPYRIGHT "(C) 2014 - Alessandro Francesconi"
+#define PLUG_IN_COPYRIGHT "(C) 2015 - Alessandro Francesconi"
 #define PLUG_IN_WEBSITE "http://www.alessandrofrancesconi.it/projects/bimp"
 #define PLUG_IN_BINARY "bimp"
 #define PLUG_IN_PROC "plug-in-bimp"
-#define PLUG_IN_VERSION "1.13"
+#define PLUG_IN_VERSION "1.14"
 
 #define BIMP_RESULT_OK 1
 #define BIMP_RESULT_WARNING 0

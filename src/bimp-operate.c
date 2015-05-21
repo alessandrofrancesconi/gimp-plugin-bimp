@@ -500,16 +500,15 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 static gboolean apply_crop(crop_settings settings, image_output out) 
 {
 	gboolean success = TRUE;
-	gint newWidth, newHeight, oldWidth, oldHeight, posX, posY;
-	
+	gint newWidth, newHeight, oldWidth, oldHeight, posX = 0, posY = 0;
+	gboolean keepX = FALSE, keepY = FALSE;
+    
 	oldWidth = gimp_image_width(out->image_id);
 	oldHeight = gimp_image_height(out->image_id);
-	
+    
 	if (settings->manual) {
-		newWidth = settings->new_w;
-		newHeight = settings->new_h;
-		posX = (oldWidth - newWidth) / 2;
-		posY = (oldHeight - newHeight) / 2;
+		newWidth = min(oldWidth, settings->new_w);
+		newHeight = min(oldHeight, settings->new_h);
 	}
 	else {
 		float ratio1, ratio2;
@@ -526,16 +525,41 @@ static gboolean apply_crop(crop_settings settings, image_output out)
 			// crop along the width 
 			newHeight = oldHeight;
 			newWidth = round(( ratio1 * (float)newHeight ) / ratio2);
-			posX = (oldWidth - newWidth) / 2;
-			posY = 0;
+            keepY = TRUE;
 		} else { 
 			// crop along the height 
 			newWidth = oldWidth;
 			newHeight = round(( ratio2 * (float)newWidth) / ratio1);
-			posX = 0;
-			posY = (oldHeight - newHeight) / 2;
+            keepX = TRUE;
 		}
 	}
+    
+    switch (settings->start_pos) {
+        case CROP_START_TL: 
+            posX = 0;
+            posY = 0;
+            break;
+            
+        case CROP_START_TR: 
+            posX = (oldWidth - newWidth);
+            posY = 0;
+            break;
+            
+        case CROP_START_BL: 
+            posX = 0;
+            posY = (oldHeight - newHeight);
+            break;
+            
+        case CROP_START_BR: 
+            posX = (oldWidth - newWidth);
+            posY = (oldHeight - newHeight);
+            break;
+        
+        default: 
+            if (!keepX) posX = (oldWidth - newWidth) / 2;
+            if (!keepY) posY = (oldHeight - newHeight) / 2;
+            break;
+    }
 	
 	success = gimp_image_crop (
 		out->image_id,

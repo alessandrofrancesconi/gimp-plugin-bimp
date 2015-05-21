@@ -150,6 +150,7 @@ manipulation manipulation_crop_new()
 	((crop_settings)crop->settings)->ratio = CROP_PRESET_11;
 	((crop_settings)crop->settings)->custom_ratio1 = 1.0;
 	((crop_settings)crop->settings)->custom_ratio2 = 1.0;
+    ((crop_settings)crop->settings)->start_pos = CROP_START_CC;
 	
 	return crop;
 }

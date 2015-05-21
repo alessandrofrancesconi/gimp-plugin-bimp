@@ -55,6 +55,16 @@ static const short int crop_preset_ratio[][2] = {
 	{3,4}		/* CROP_PRESET_TABLET */
 };
 
+typedef enum crop_start_position {
+	CROP_START_CC = 0,
+	CROP_START_TL,
+	CROP_START_TR,
+	CROP_START_BL,
+	CROP_START_BR,
+    CROP_START_XY,
+	CROP_START_END
+} crop_start_position;
+
 typedef enum format_type {
 	FORMAT_BMP = 0,
 	FORMAT_GIF,
@@ -120,6 +130,7 @@ typedef struct manip_crop_set {
 	crop_preset ratio;
 	float custom_ratio1;
 	float custom_ratio2;
+    crop_start_position start_pos;
 } *crop_settings;
 
 typedef struct manip_fliprotate_set {

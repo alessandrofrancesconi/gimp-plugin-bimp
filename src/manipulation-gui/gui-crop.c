@@ -12,11 +12,12 @@ GtkWidget *hbox_ratio, *vbox_manual, *hbox_customratio;
 GtkWidget *radio_stratio, *radio_manual;
 GtkWidget *combo_ratio, *spin_ratio1, *spin_ratio2;
 GtkWidget *spin_width, *spin_height;
-	
+GtkWidget *hbox_startpos, *combo_startpos;
+
 GtkWidget* bimp_crop_gui_new(crop_settings settings)
 {
 	GtkWidget *gui, *hbox_manual_width, *hbox_manual_height;
-	GtkWidget *label_manual_width, *label_manual_height, *label_manual_ratio;
+	GtkWidget *label_manual_width, *label_manual_height, *label_manual_ratio, *label_startpos;
 	GtkWidget *align_radio_stratio, *align_radio_manual;
 	
 	gui = gtk_vbox_new(FALSE, 5);
@@ -63,6 +64,26 @@ GtkWidget* bimp_crop_gui_new(crop_settings settings)
 	gtk_widget_set_size_request (label_manual_height, LABEL_CROP_W, LABEL_CROP_H);
 	spin_height = gtk_spin_button_new(GTK_ADJUSTMENT(gtk_adjustment_new (settings->new_h, 1, 40960, 1, 1, 0)), 1, 0);
 	
+    hbox_startpos = gtk_hbox_new(FALSE, 5);
+	label_startpos = gtk_label_new(g_strconcat(_("Start from"), ":", NULL));
+	combo_startpos = gtk_combo_box_new_text();
+    gtk_combo_box_append_text(GTK_COMBO_BOX(combo_startpos), _("Center"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(combo_startpos), _("Top-left"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(combo_startpos), _("Top-right"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(combo_startpos), _("Bottom-left"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(combo_startpos), _("Bottom-right"));
+    
+    int active_index;
+	switch(settings->start_pos) {
+        case CROP_START_CC: active_index = 0; break;
+        case CROP_START_TL: active_index = 1; break;
+        case CROP_START_TR: active_index = 2; break;
+        case CROP_START_BL: active_index = 3; break;
+        case CROP_START_BR: active_index = 4; break;
+        default: active_index = 0; break;
+    }
+	gtk_combo_box_set_active(GTK_COMBO_BOX(combo_startpos), active_index);
+    
 	gtk_box_pack_start(GTK_BOX(gui), radio_stratio, FALSE, FALSE, 0);
 	
 	gtk_box_pack_start(GTK_BOX(hbox_ratio), combo_ratio, FALSE, FALSE, 0);
@@ -81,6 +102,10 @@ GtkWidget* bimp_crop_gui_new(crop_settings settings)
 	gtk_box_pack_start(GTK_BOX(vbox_manual), hbox_manual_height, FALSE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(align_radio_manual), vbox_manual);
 	gtk_box_pack_start(GTK_BOX(gui), align_radio_manual, FALSE, FALSE, 0);
+    
+    gtk_box_pack_start(GTK_BOX(hbox_startpos), label_startpos, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox_startpos), combo_startpos, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(gui), hbox_startpos, FALSE, FALSE, 0);
 	
 	toggle_group(NULL, NULL);
 	set_customratio(NULL, NULL);
@@ -146,6 +171,7 @@ void bimp_crop_save(crop_settings orig_settings)
 	orig_settings->ratio = gtk_combo_box_get_active(GTK_COMBO_BOX(combo_ratio));
 	orig_settings->custom_ratio1 = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_ratio1));
 	orig_settings->custom_ratio2 = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin_ratio2));
+    orig_settings->start_pos = gtk_combo_box_get_active(GTK_COMBO_BOX(combo_startpos));
 }
 
 

@@ -235,6 +235,7 @@ static void write_crop(crop_settings settings, GKeyFile* file)
 	g_key_file_set_integer(file, group_name, "ratio", settings->ratio);
 	g_key_file_set_double(file, group_name, "custom_ratio1", settings->custom_ratio1);
 	g_key_file_set_double(file, group_name, "custom_ratio2", settings->custom_ratio2);
+    g_key_file_set_double(file, group_name, "start_pos", settings->start_pos);
 }
 
 static manipulation read_crop(GKeyFile* file) 
@@ -263,6 +264,9 @@ static manipulation read_crop(GKeyFile* file)
 			
 		if (g_key_file_has_key(file, group_name, "custom_ratio2", NULL)) 
 			settings->custom_ratio2 = g_key_file_get_integer(file, group_name, "custom_ratio2", NULL);
+            
+        if (g_key_file_has_key(file, group_name, "start_pos", NULL)) 
+			settings->start_pos = g_key_file_get_integer(file, group_name, "start_pos", NULL);
 	}
 	
 	return man;

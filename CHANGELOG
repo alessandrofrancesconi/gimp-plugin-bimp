@@ -4,6 +4,14 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+1.14
+ - Added start position chooser for Crop (issue #81, thanks to @thief425)
+ - Added support to ITEM datatype in "Other GIMP procedure" (issue #74)
+ - JPEG conversion always set the image to RGB (issue #88)
+ - Alpha channel is no more added by default during process
+ - Fixed error when importing an opened GIMP image that was not yet saved on file system
+ - Updated German translation (thanks to Christian Kühnemund)
+ 
 1.13
  - Fixed calling errors for procedure 'gimp-image-convert-indexed'
  - Color correction not correctly readed from file
