@@ -33,7 +33,6 @@
 #include "plugin-intl.h"
 
 static void query (void);
-static GSList* get_supported_procedures(void);
 static gboolean pdb_proc_has_compatible_params (gchar*);
 
 static void run (
@@ -107,7 +106,6 @@ static void run (
 	switch (run_mode) {
 		case GIMP_RUN_INTERACTIVE:
 		case GIMP_RUN_WITH_LAST_VALS:
-			bimp_supported_procedures = get_supported_procedures();
 			bimp_show_gui();
 			break;
 
@@ -123,11 +121,12 @@ static void run (
  * Used by userdef gui, filters the full list of GIMP procedures:
  *  - by ignoring system's procedures 
  *  - by ignoring procedures that contains non-compatible datatypes (like FLOATARRAY, PATH, ...). */
-static GSList* get_supported_procedures()
+void init_supported_procedures()
 {
+    if (bimp_supported_procedures != NULL) return;
+    
 	gint proc_count;
 	gchar** results;
-	GSList* compatible_list = NULL;
 	
 	gimp_procedural_db_query (
 		"^(?!.*(?:"
@@ -190,13 +189,11 @@ static GSList* get_supported_procedures()
 	for (i = 0; i < proc_count; i++) {
 		/* check each parameter for compatibility and sort it alphabetically */
 		if (pdb_proc_has_compatible_params(results[i])) {
-			compatible_list = g_slist_insert_sorted(compatible_list, results[i], glib_strcmpi);
+			bimp_supported_procedures = g_slist_insert_sorted(bimp_supported_procedures, results[i], glib_strcmpi);
 		}
 	}
 	
 	free (results);
-	
-	return compatible_list;
 }
 
 static gboolean pdb_proc_has_compatible_params(gchar* proc_name) 

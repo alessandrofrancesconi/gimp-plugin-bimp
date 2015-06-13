@@ -9,7 +9,7 @@ make:
 	
 install: 
 	gimptool-2.0 --install-bin ./bin/bimp
-	cp -Rf ./bin/win32/bimp-locale/ $(USER_INSTALL_DIR)
+	cp -Rf ./bimp-locale/ $(USER_INSTALL_DIR)
 	
 uninstall: 
 	gimptool-2.0 --uninstall-bin bimp
@@ -17,7 +17,7 @@ uninstall:
 
 install-admin:
 	gimptool-2.0 --install-admin-bin ./bin/bimp
-	cp -Rf ./bin/win32/bimp-locale/ $(SYSTEM_INSTALL_DIR)
+	cp -Rf ./bimp-locale/ $(SYSTEM_INSTALL_DIR)
 
 uninstall-admin:
 	gimptool-2.0 --uninstall-admin-bin bimp

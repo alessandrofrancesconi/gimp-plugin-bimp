@@ -157,7 +157,9 @@ static int fill_procedure_list(char* search, char* selection)
 	}
 	
 	int finalcount = 0, selected_i = -1;
-	for(iter = bimp_supported_procedures; iter; iter = iter->next) {
+    
+    init_supported_procedures();
+    for(iter = bimp_supported_procedures; iter; iter = iter->next) {
 		gchar** procedure_name = iter->data;
 		if (search == NULL || (search != NULL && str_contains_cins((char*)procedure_name, search))) {
 			store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(treeview_procedures)));

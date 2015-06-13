@@ -30,7 +30,7 @@ gboolean bimp_opt_keepdates;
 gboolean bimp_is_busy;
 
 GSList *bimp_supported_procedures;
-
+void init_supported_procedures(void);
 
 #endif
 
