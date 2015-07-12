@@ -4,6 +4,11 @@ http://www.alessandrofrancesconi.it/projects/bimp
 
 Changelog:
 
+1.15
+ - BIMP finally has an official installer for Windows!
+ - Faster startup
+ - Added Japanese translation
+
 1.14
  - Added start position chooser for Crop (issue #81, thanks to @thief425)
  - Added support to ITEM datatype in "Other GIMP procedure" (issue #74)

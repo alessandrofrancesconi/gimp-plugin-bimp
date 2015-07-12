@@ -5,11 +5,22 @@ With BIMP you can apply a set of GIMP manipulations on groups of images.
 Documentation @ http://www.alessandrofrancesconi.it/projects/bimp
 
 
-Compiling and installing under Linux/Unix
+Installing on Windows
+---------------------
+
+BIMP can be easily installed on your Windows 32/64bit machine with the 
+official installer: https://github.com/alessandrofrancesconi/gimp-plugin-bimp/releases/latest/
+then download `gimp-plugin-bimp_win32.exe`
+
+Instead... to remove BIMP... if you really want... just go to GIMP's plugins directory and remove 
+`bimp.exe` and `bimp-locale` folder.
+
+
+Compiling and installing on Linux
 -----------------------------------------
 
-You must install libgimp2.0-dev and libpcre3-dev packages in order to have 
-the full set of libraries and dependences to compile BIMP.
+You must install `libgimp2.0-dev` and `libpcre3-dev` packages in order to have 
+the full set of libraries and dependences to compile BIMP (names can differ depending on the distro).
 Then:
 
 	make && make install
@@ -20,24 +31,13 @@ Or:
 
 to make and install for every user in the system (needs root privileges).
 
-1.	Make sure that the "bimp-locale" folder is copied in the plug-in directory too! If not, you can do it manually by copying it from ./bin/win32.
-2.	Don't mind the warnings...
-
-
-Installing under Windows
--------------------------
-
-BIMP plugin for Windows is already compiled and it's saved in bin/win32 directory.
-Just copy bimp.exe, pcre3.dll and bimp-locale into the default GIMP-plugins folder:
-`<Programs-dir>\<GIMP-folder>\lib\gimp\<version>\plug-ins`
-or
-`<User-dir>\.gimp<version>\plug-ins`
-
 
 For Mac OSX users
 -----------------
-There's no need to install or compile BIMP on Mac, because the default native build of GIMP for Mac OSX 10.8 made by Simone from http://gimp.lisanet.de/Website/Download.html already includes BIMP!
+There's no need to install or compile BIMP on Mac, because the default native build of GIMP for Mac OSX 10.8 
+made by Simone from http://gimp.lisanet.de/Website/Download.html already includes BIMP!
 (however, it's not guaranteed to be the very latest version)
+
 
 Support this project
 --------------------
