@@ -1,8 +1,8 @@
 BIMP. Batch Image Manipulation Plugin for GIMP.
-http://www.alessandrofrancesconi.it/projects/bimp
-------------------------------------------------
+===============================================
 
-Changelog:
+Changelog
+---------
 
 1.15
  - BIMP finally has an official installer for Windows!
