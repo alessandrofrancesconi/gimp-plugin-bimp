@@ -30,6 +30,13 @@ typedef enum resize_mode {
 	RESIZE_END
 } resize_mode;
 
+typedef enum stretch_mode {
+	STRETCH_ALLOW = 0,
+	STRETCH_ASPECT,
+	STRETCH_PADDED,
+	STRETCH_END
+} stretch_mode;
+
 typedef enum crop_preset {
 	CROP_PRESET_11 = 0,
 	CROP_PRESET_32,
@@ -116,7 +123,9 @@ typedef struct manip_resize_set {
 	gint new_w_px;
 	gint new_h_px;
 	resize_mode resize_mode;
-	gboolean aspect_ratio;
+    stretch_mode stretch_mode;
+    GdkColor padding_color;
+    guint16 padding_color_alpha;
 	GimpInterpolationType interpolation;
 	gboolean change_res;
 	gdouble new_res_x;

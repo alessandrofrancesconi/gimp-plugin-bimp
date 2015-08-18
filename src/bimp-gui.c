@@ -1000,7 +1000,8 @@ static void open_about()
 	const gchar *auth[] = { 
 		"Alessandro Francesconi <alessandrofrancesconi@live.it>", 
 		"Thomas Mevel <thomas.prog@mevtho.com>", 
-		"Walt9Z",
+		"Walt9Z <https://github.com/Walt9Z>",
+        "KHam0425 <https://github.com/KHam0425>",
 		NULL };
 	const gchar *license = 
 		"This program is free software; you can redistribute it and/or modify "

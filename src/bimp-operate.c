@@ -16,6 +16,8 @@
 #include "bimp-serialize.h"
 #include "plugin-intl.h"
 
+#define USE_API26 (_WIN32 || (!defined _WIN32 && (GIMP_MAJOR_VERSION == 2) && (GIMP_MINOR_VERSION <= 6)))
+
 static gboolean process_image(gpointer);
 
 static gboolean apply_manipulation(manipulation, image_output);
@@ -397,7 +399,7 @@ static gboolean apply_manipulation(manipulation man, image_output out)
 static gboolean apply_resize(resize_settings settings, image_output out) 
 {
 	gboolean success = FALSE;
-	gint final_w, final_h;
+	gint orig_w, orig_h, final_w, final_h, view_w, view_h;
 	gdouble orig_res_x, orig_res_y;
 	
 	if (settings->change_res) {
@@ -416,83 +418,176 @@ static gboolean apply_resize(resize_settings settings, image_output out)
 			);
 		}
 	}
-	
-	
-	if (settings->resize_mode == RESIZE_PERCENT) {
-		// user selected a percentage of the original size 
-		final_w = round((gimp_image_width(out->image_id) * settings->new_w_pc) / 100.0);
-		final_h = round((gimp_image_height(out->image_id) * settings->new_h_pc) / 100.0);
-	}
-	else {
-		// user typed exact pixel size 
-		if (settings->resize_mode == RESIZE_PIXEL_WIDTH) {
-			// width only 
-			final_w = settings->new_w_px;
-			if (settings->aspect_ratio) {
-				// and maintain aspect ratio 
-				final_h = round(((float)settings->new_w_px * gimp_image_height(out->image_id)) / gimp_image_width(out->image_id));
-			}
-			else {
-				final_h = gimp_image_height(out->image_id);
-			}
-		}
-		else if (settings->resize_mode == RESIZE_PIXEL_HEIGHT) {
-			// height only 
-			final_h = settings->new_h_px;
-			if (settings->aspect_ratio) {
-				// and maintain aspect ratio 
-				final_w = round(((float)settings->new_h_px * gimp_image_width(out->image_id)) / gimp_image_height(out->image_id));
-			}
-			else {
-				final_w = gimp_image_width(out->image_id);
-			}
-		}
-		else {
-			// both dimensions are defined 
-			if (settings->aspect_ratio) {
-				// Find which new dimension is the smallest percentage of the existing image dimension
-				gdouble newwpct = (float)settings->new_w_px / (float)gimp_image_width(out->image_id);
-				gdouble newhpct = (float)settings->new_h_px / (float)gimp_image_height(out->image_id);
-				gdouble newpct = (newwpct < newhpct) ? newwpct : newhpct;
 
-				final_w = round((float)gimp_image_width(out->image_id) * newpct);
-				final_h = round((float)gimp_image_height(out->image_id) * newpct);
-			}
-			else {
-				final_w = settings->new_w_px;
-				final_h = settings->new_h_px;
-			}
-		}
-	}
-	
-	// do resize 
-	#if defined _WIN32 || (!defined _WIN32 && (GIMP_MAJOR_VERSION == 2) && (GIMP_MINOR_VERSION <= 6))
-	
-		success = gimp_image_scale_full (
-			out->image_id, 
-			final_w, 
-			final_h, 
-			settings->interpolation
+    orig_w = gimp_image_width(out->image_id);
+    orig_h = gimp_image_height(out->image_id);
+    
+    if (settings->resize_mode == RESIZE_PERCENT) {
+        
+        if (settings->stretch_mode == STRETCH_ASPECT) {
+            gdouble newpct = min(settings->new_w_pc, settings->new_h_pc);
+            
+            final_w = view_w = round((orig_w * newpct) / 100.0);
+            final_h = view_h = round((orig_h * newpct) / 100.0);
+        }
+        else if (settings->stretch_mode == STRETCH_PADDED) {
+            gdouble newpct = min(settings->new_w_pc, settings->new_h_pc);
+            
+            final_w = round((orig_w * newpct) / 100.0);
+            final_h = round((orig_h * newpct) / 100.0);
+            view_w = round((orig_w * settings->new_w_pc) / 100.0);
+            view_h = round((orig_h * settings->new_h_pc) / 100.0);
+        }
+        else {
+            final_w = view_w = round((orig_w * settings->new_w_pc) / 100.0);
+            final_h = view_h = round((orig_h * settings->new_h_pc) / 100.0);
+        }
+    }
+    else {
+        // user typed exact pixel size 
+        if (settings->resize_mode == RESIZE_PIXEL_WIDTH) {
+            view_w = settings->new_w_px; // width is fixed 
+            
+            if (settings->stretch_mode == STRETCH_ASPECT) {
+                final_w = view_w;
+                final_h = view_h = round(((float)final_w * orig_h) / orig_w);
+            }
+            else if (settings->stretch_mode == STRETCH_PADDED) {
+                final_w = min(view_w, orig_w);
+                final_h = round(((float)final_w * orig_h) / orig_w);
+                view_h = max(orig_h, final_h);
+            }
+            else {
+                final_w = view_w;
+                final_h = view_h = orig_h;
+            }
+        }
+        else if (settings->resize_mode == RESIZE_PIXEL_HEIGHT) {
+            view_h = settings->new_h_px; // height is fixed
+            
+            if (settings->stretch_mode == STRETCH_ASPECT) {
+                final_h = view_h;
+                final_w = view_w = round(((float)final_h * orig_w) / orig_h);
+            }
+            else if (settings->stretch_mode == STRETCH_PADDED) {
+                final_h = min(view_h, orig_h);
+                final_w = round(((float)final_h * orig_w) / orig_h);
+                view_w = max(orig_w, final_w);
+            }
+            else {
+                final_h = view_h;
+                final_w = view_w = orig_w;
+            }
+        }
+        else {
+            // both dimensions are defined 
+            if (settings->stretch_mode == STRETCH_ASPECT) {
+                // Find which new dimension is the smallest percentage of the existing image dimension
+                gdouble newwpct = (float)settings->new_w_px / (float)orig_w;
+                gdouble newhpct = (float)settings->new_h_px / (float)orig_h;
+                gdouble newpct = min(newwpct, newhpct);
+
+                final_w = view_w = round(orig_w * newpct);
+                final_h = view_h = round(orig_h * newpct);
+            }
+            else if (settings->stretch_mode == STRETCH_PADDED) {
+                // Find which new dimension is the smallest percentage of the existing image dimension
+                gdouble newwpct = (float)settings->new_w_px / (float)orig_w;
+                gdouble newhpct = (float)settings->new_h_px / (float)orig_h;
+                gdouble newpct = min(newwpct, newhpct);
+                
+                final_w = round(orig_w * newpct);
+                final_h = round(orig_h * newpct);
+                view_w = round(orig_w * newwpct);
+                view_h = round(orig_h * newhpct);
+            }
+            else {
+                final_w = view_w = settings->new_w_px;
+                final_h = view_h = settings->new_h_px;
+            }
+        }
+    }
+    
+    // do resize 
+    #if USE_API26
+    
+        success = gimp_image_scale_full (
+            out->image_id, 
+            final_w, 
+            final_h, 
+            settings->interpolation
+        );
+        
+    #else
+    
+        // starting from 2.8, gimp_image_scale_full is deprecated. 
+        // use gimp_image_scale instead
+        GimpInterpolationType old_interpolation;
+        old_interpolation = gimp_context_get_interpolation();
+        
+        success = gimp_context_set_interpolation (settings->interpolation);
+        
+        success = gimp_image_scale (
+            out->image_id, 
+            final_w, 
+            final_h
+        );
+        
+        success = gimp_context_set_interpolation (old_interpolation);
+    
+    #endif
+    
+    // add a padding if requested
+    if (settings->stretch_mode == STRETCH_PADDED) {
+        
+        // the padding will be drawn using a coloured layer at the bottom of the image
+        gint32 layerId = gimp_layer_new(
+			out->image_id,
+            "padding_layer",
+            view_w, view_h,
+            GIMP_RGBA_IMAGE,
+            (settings->padding_color_alpha / (float)G_MAXUINT16) * 100,
+            GIMP_NORMAL_MODE
 		);
 		
-	#else
-	
-		/* starting from 2.8, gimp_image_scale_full is deprecated. 
-		* use gimp_image_scale instead  */
-		GimpInterpolationType oldInterpolation;
-		oldInterpolation = gimp_context_get_interpolation();
+		#if USE_API26
 		
-		success = gimp_context_set_interpolation (settings->interpolation);
+			gimp_image_add_layer (
+				out->image_id,
+				layerId,
+				0
+			);
+            
+            gimp_image_lower_layer_to_bottom(out->image_id, layerId);
 		
-		success = gimp_image_scale (
-			out->image_id, 
-			final_w, 
-			final_h
-		);
-		
-		success = gimp_context_set_interpolation (oldInterpolation);
-	
-	#endif
+		#else
+            
+			gimp_image_insert_layer(
+				out->image_id,
+				layerId,
+				0,
+				0
+			);
+			
+            gimp_image_lower_item_to_bottom(out->image_id, layerId);
+            
+		#endif
+        
+        // fill it with the selected color
+        GimpRGB old_background, new_background;
+            
+        gimp_context_get_background(&old_background);
+        gimp_rgb_parse_hex (&new_background, gdk_color_to_string(&(settings->padding_color)), strlen(gdk_color_to_string(&(settings->padding_color))));
+        gimp_context_set_background(&new_background);
+        gimp_drawable_fill(layerId, GIMP_BACKGROUND_FILL);
+        gimp_context_set_background(&old_background);
+        
+        // move it to the center
+        gimp_layer_translate(layerId, -abs(view_w - final_w) / 2, -abs(view_h - final_h) / 2);
+        
+        // finish changing the canvas size accordingly
+        success = gimp_image_resize_to_layers(out->image_id);
+    }
 	
 	return success;
 }
@@ -825,7 +920,7 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 		wmwidth = gimp_drawable_width(layerId);
 		wmheight = gimp_drawable_height(layerId);
 		
-		#if defined _WIN32 || (!defined _WIN32 && (GIMP_MAJOR_VERSION == 2) && (GIMP_MINOR_VERSION <= 6))
+		#if USE_API26
 		
 			gimp_image_add_layer(
 				out->image_id,
@@ -835,8 +930,8 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
 		
 		#else
 		
-			/* starting from 2.8, gimp_image_add_layer is deprecated. 
-			* use gimp_image_insert_layer instead */
+			// starting from 2.8, gimp_image_add_layer is deprecated. 
+			// use gimp_image_insert_layer instead
 			gimp_image_insert_layer(
 				out->image_id,
 				layerId,

@@ -22,11 +22,11 @@
 
 void bimp_open_editwindow(manipulation man, gboolean first_time) 
 {
-	GtkWidget* window, *vbox, *label_title;
+	GtkWidget* window, *vbox;
 	GtkWidget* gui;
 	gint result;
 	
-	void (*save)(manipulation_settings) = NULL; /* Pointer to the proper setting saving function */
+	void (*save)(manipulation_settings) = NULL; // pointer to the proper setting saving function
 	
 	window = gtk_dialog_new_with_buttons(
 		bimp_manip_get_string(man->type),
@@ -43,10 +43,6 @@ void bimp_open_editwindow(manipulation man, gboolean first_time)
 	
 	vbox = gtk_vbox_new(FALSE, 10);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
-	label_title = gtk_label_new(NULL);
-	gchar* titletext = g_strconcat("<big><b>", bimp_manip_get_string(man->type), "</b></big>", NULL); /* dialog title */
-	gtk_label_set_markup (GTK_LABEL (label_title), titletext);
-	gtk_box_pack_start(GTK_BOX(vbox), label_title, FALSE, FALSE, 0);
 	
 	if (man->type == MANIP_RESIZE) {
 		gui = bimp_resize_gui_new((resize_settings)(man->settings));
@@ -94,8 +90,8 @@ void bimp_open_editwindow(manipulation man, gboolean first_time)
 	
 	gtk_widget_show_all(window);
 	result = gtk_dialog_run (GTK_DIALOG (window));
-	/* if the users clicks on 'OK', the proper saving function for this manipulation is called.
-	 * but if the users clicks 'CANCEL' and it was the first time the users selected this manipulation, it will be removed from the list */
+	// if the users clicks on 'OK', the proper saving function for this manipulation is called.
+	// but if the users clicks 'CANCEL' and it was the first time the users selected this manipulation, it will be removed from the list
 	if (result == GTK_RESPONSE_ACCEPT) {
 		save(man->settings);
 	}

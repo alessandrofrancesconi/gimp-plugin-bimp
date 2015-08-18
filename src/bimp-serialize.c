@@ -174,7 +174,9 @@ static void write_resize(resize_settings settings, GKeyFile* file)
 	g_key_file_set_integer(file, group_name, "new_w_px", settings->new_w_px);
 	g_key_file_set_integer(file, group_name, "new_h_px", settings->new_h_px);
 	g_key_file_set_integer(file, group_name, "resize_mode", settings->resize_mode);
-	g_key_file_set_boolean(file, group_name, "aspect_ratio", settings->aspect_ratio);
+	g_key_file_set_integer(file, group_name, "stretch_mode", settings->stretch_mode);
+    g_key_file_set_string(file, group_name, "padding_color", gdk_color_to_string(&(settings->padding_color)));
+    g_key_file_set_integer(file, group_name, "padding_color_alpha", settings->padding_color_alpha);
 	g_key_file_set_integer(file, group_name, "interpolation", settings->interpolation);
 	g_key_file_set_boolean(file, group_name, "change_res", settings->change_res);
 	g_key_file_set_integer(file, group_name, "new_res_x", settings->new_res_x);
@@ -206,9 +208,15 @@ static manipulation read_resize(GKeyFile* file)
 		if (g_key_file_has_key(file, group_name, "resize_mode", NULL)) 
 			settings->resize_mode = g_key_file_get_integer(file, group_name, "resize_mode", NULL);
 			
-		if (g_key_file_has_key(file, group_name, "aspect_ratio", NULL)) 
-			settings->aspect_ratio = g_key_file_get_boolean(file, group_name, "aspect_ratio", NULL);
-			
+		if (g_key_file_has_key(file, group_name, "stretch_mode", NULL)) 
+			settings->stretch_mode = g_key_file_get_integer(file, group_name, "stretch_mode", NULL);
+		
+        if (g_key_file_has_key(file, group_name, "padding_color", NULL)) 
+            gdk_color_parse(g_key_file_get_string(file, group_name, "padding_color", NULL), &(settings->padding_color));
+		
+        if (g_key_file_has_key(file, group_name, "padding_color_alpha", NULL)) 
+			settings->padding_color_alpha = (guint16)g_key_file_get_integer(file, group_name, "padding_color_alpha", NULL);
+		
 		if (g_key_file_has_key(file, group_name, "interpolation", NULL)) 
 			settings->interpolation = g_key_file_get_integer(file, group_name, "interpolation", NULL);
 			

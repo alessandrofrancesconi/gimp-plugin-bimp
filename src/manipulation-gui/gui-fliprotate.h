@@ -7,9 +7,6 @@
 #define BUTTON_FLIP_W 100
 #define BUTTON_FLIP_H 55
 
-#define COMBO_ROTATE_W 100
-#define COMBO_ROTATE_H 30
-
 GtkWidget* bimp_fliprotate_gui_new(fliprotate_settings);
 void bimp_fliprotate_save(fliprotate_settings);
 

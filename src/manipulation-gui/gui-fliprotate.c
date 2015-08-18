@@ -40,7 +40,6 @@ GtkWidget* bimp_fliprotate_gui_new(fliprotate_settings settings)
 	gtk_combo_box_append_text(GTK_COMBO_BOX(combo_rotate), "90°");
 	gtk_combo_box_append_text(GTK_COMBO_BOX(combo_rotate), "180°");
 	gtk_combo_box_append_text(GTK_COMBO_BOX(combo_rotate), "270°");
-	gtk_widget_set_size_request (combo_rotate, COMBO_ROTATE_W, COMBO_ROTATE_H);
 	
 	int active_index;
 	if(!settings->rotate) {

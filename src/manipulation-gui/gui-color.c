@@ -14,6 +14,7 @@ GtkWidget* bimp_color_gui_new(color_settings settings)
 {
 	GtkWidget *gui, *hbox_brightness, *hbox_contrast;
 	GtkWidget *label_bright, *label_contrast;
+    GtkWidget *align_choosercurve;
 	
 	gui = gtk_vbox_new(FALSE, 5);
 	
@@ -39,6 +40,10 @@ GtkWidget* bimp_color_gui_new(color_settings settings)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_autolevels), settings->levels_auto);
 	
 	check_curve = gtk_check_button_new_with_label(_("Change color curve from settings file:"));
+    
+    align_choosercurve = gtk_alignment_new(0, 0, 0, 0);
+	gtk_alignment_set_padding(GTK_ALIGNMENT(align_choosercurve), 0, 5, 20, 0);
+    
 	chooser_curve = gtk_file_chooser_button_new(_("Select GIMP Curve file"), GTK_FILE_CHOOSER_ACTION_OPEN);
 	if (settings->curve_file != NULL) {
 		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(chooser_curve), settings->curve_file);
@@ -48,7 +53,8 @@ GtkWidget* bimp_color_gui_new(color_settings settings)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_curve), FALSE);
 	}
 	gtk_widget_set_size_request (chooser_curve, INPUT_W, INPUT_H);
-	
+	gtk_container_add(GTK_CONTAINER(align_choosercurve), chooser_curve);
+    
 	gtk_box_pack_start(GTK_BOX(hbox_brightness), label_bright, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox_brightness), scale_bright, FALSE, FALSE, 0);
 	
@@ -60,7 +66,7 @@ GtkWidget* bimp_color_gui_new(color_settings settings)
 	gtk_box_pack_start(GTK_BOX(gui), check_grayscale, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(gui), check_autolevels, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(gui), check_curve, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(gui), chooser_curve, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(gui), align_choosercurve, FALSE, FALSE, 0);
 	
 	toggle_curve(NULL, NULL);
 	g_signal_connect(G_OBJECT(check_curve), "toggled", G_CALLBACK(toggle_curve), NULL);
