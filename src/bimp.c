@@ -36,85 +36,85 @@ static void query (void);
 static gboolean pdb_proc_has_compatible_params (gchar*);
 
 static void run (
-	const gchar *name,
-	gint nparams,
-	const GimpParam *param,
-	gint *nreturn_vals,
-	GimpParam **return_vals
-	);
+    const gchar *name,
+    gint nparams,
+    const GimpParam *param,
+    gint *nreturn_vals,
+    GimpParam **return_vals
+    );
 
 const GimpPlugInInfo PLUG_IN_INFO = {
-	NULL,  /* init_proc  */
-	NULL,  /* quit_proc  */
-	query, /* query_proc */
-	run,   /* run_proc   */
+    NULL,  /* init_proc  */
+    NULL,  /* quit_proc  */
+    query, /* query_proc */
+    run,   /* run_proc   */
 };
 
 MAIN ()
 
 static void query (void)
 {
-	static GimpParamDef args[] = {
-		{ GIMP_PDB_INT32, "run-mode", "Run mode" }
-	};
-	
-	gimp_plugin_domain_register (GETTEXT_PACKAGE, get_bimp_localedir());
+    static GimpParamDef args[] = {
+        { GIMP_PDB_INT32, "run-mode", "Run mode" }
+    };
+    
+    gimp_plugin_domain_register (GETTEXT_PACKAGE, get_bimp_localedir());
 
-	gimp_install_procedure (
-		PLUG_IN_PROC,
-		PLUG_IN_FULLNAME,
-		_("Applies GIMP manipulations on groups of images"),
-		"Alessandro Francesconi <alessandrofrancesconi@live.it>",
-		"Copyright (C) Alessandro Francesconi\n"
-		"http://www.alessandrofrancesconi.it/projects/bimp",
-		"2014",
-		"Batch Image Manipulation...",
-		"",
-		GIMP_PLUGIN,
-		G_N_ELEMENTS (args),
-		0,
-		args, 
-		0
-	);
+    gimp_install_procedure (
+        PLUG_IN_PROC,
+        PLUG_IN_FULLNAME,
+        _("Applies GIMP manipulations on groups of images"),
+        "Alessandro Francesconi <alessandrofrancesconi@live.it>",
+        "Copyright (C) Alessandro Francesconi\n"
+        "http://www.alessandrofrancesconi.it/projects/bimp",
+        "2014",
+        "Batch Image Manipulation...",
+        "",
+        GIMP_PLUGIN,
+        G_N_ELEMENTS (args),
+        0,
+        args, 
+        0
+    );
 
-	gimp_plugin_menu_register (PLUG_IN_PROC, "<Image>/File/Open"); 
+    gimp_plugin_menu_register (PLUG_IN_PROC, "<Image>/File/Open"); 
 }
 
 static void run (
-	const gchar *name,
-	gint nparams,
-	const GimpParam *param,
-	gint *nreturn_vals,
-	GimpParam **return_vals)
+    const gchar *name,
+    gint nparams,
+    const GimpParam *param,
+    gint *nreturn_vals,
+    GimpParam **return_vals)
 {
-	static GimpParam  values[1];
-	GimpPDBStatusType status = GIMP_PDB_SUCCESS;
-	GimpRunMode run_mode;
-	
-	*nreturn_vals = 1;
-	*return_vals  = values;
+    static GimpParam  values[1];
+    GimpPDBStatusType status = GIMP_PDB_SUCCESS;
+    GimpRunMode run_mode;
+    
+    *nreturn_vals = 1;
+    *return_vals  = values;
 
-	bindtextdomain (GETTEXT_PACKAGE, get_bimp_localedir());
-	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-	textdomain (GETTEXT_PACKAGE);
+    bindtextdomain (GETTEXT_PACKAGE, get_bimp_localedir());
+    bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+    textdomain (GETTEXT_PACKAGE);
   
-	values[0].type = GIMP_PDB_STATUS;
-	values[0].data.d_status = status;
-	
-	run_mode = param[0].data.d_int32;
-	
-	switch (run_mode) {
-		case GIMP_RUN_INTERACTIVE:
-		case GIMP_RUN_WITH_LAST_VALS:
-			bimp_show_gui();
-			break;
+    values[0].type = GIMP_PDB_STATUS;
+    values[0].data.d_status = status;
+    
+    run_mode = param[0].data.d_int32;
+    
+    switch (run_mode) {
+        case GIMP_RUN_INTERACTIVE:
+        case GIMP_RUN_WITH_LAST_VALS:
+            bimp_show_gui();
+            break;
 
-		case GIMP_RUN_NONINTERACTIVE:
-		default:
-			g_error("Bimp can't run in non-interactive mode. At least for now...");
-			values[0].data.d_status = GIMP_PDB_CALLING_ERROR;
-			break;
-	}
+        case GIMP_RUN_NONINTERACTIVE:
+        default:
+            g_error("Bimp can't run in non-interactive mode. At least for now...");
+            values[0].data.d_status = GIMP_PDB_CALLING_ERROR;
+            break;
+    }
 }
 
 /*
@@ -125,128 +125,128 @@ void init_supported_procedures()
 {
     if (bimp_supported_procedures != NULL) return;
     
-	gint proc_count;
-	gchar** results;
-	
-	gimp_procedural_db_query (
-		"^(?!.*(?:"
-			"plug-in-bimp|"
-			"extension-|"
-			"-get-|"
-			"-set-|"
-			"-is-|"
-			"-has-|"
-			"-get-|"
-			"-print-|"
-			"file-glob|"
-			"twain-acquire|"
-			"-load|"
-			"-save|" // TODO: remove it for next feature "enable saving plugins"
-			"-select|"
-			"-free|"
-			"-help|"
-			"-temp|"
-			"-undo|"
-			"-copy|"
-			"-paste|"
-			"-cut|"
-			"-channel|"
-			"-buffer|"
-			"-register|"
-			"-metadata|"
-			"-layer|"
-			"-selection|"
-			"-brush|"
-			"-gradient|"
-			"-guide|"
-			"-parasite|"
-			"gimp-online|"
-			"gimp-progress|"
-			"gimp-procedural|"
-			"gimp-display|"
-			"gimp-context|"
-			"gimp-fonts|"
-			"gimp-palette|"
-			"gimp-path|"
-			"gimp-pattern|"
-			"gimp-vectors|"
-			"gimp-quit|"
-			"gimp-plugins|"
-			"gimp-gimprc|"
-			"temp-procedure"
-		")).*",
-		".*",
-		".*",
-		".*",
-		".*",
-		".*",
-		".*",
-		&proc_count,
-		&results
-	);
-	
-	int i;
-	for (i = 0; i < proc_count; i++) {
-		/* check each parameter for compatibility and sort it alphabetically */
-		if (pdb_proc_has_compatible_params(results[i])) {
-			bimp_supported_procedures = g_slist_insert_sorted(bimp_supported_procedures, results[i], glib_strcmpi);
-		}
-	}
-	
-	free (results);
+    gint proc_count;
+    gchar** results;
+    
+    gimp_procedural_db_query (
+        "^(?!.*(?:"
+            "plug-in-bimp|"
+            "extension-|"
+            "-get-|"
+            "-set-|"
+            "-is-|"
+            "-has-|"
+            "-get-|"
+            "-print-|"
+            "file-glob|"
+            "twain-acquire|"
+            "-load|"
+            "-save|" // TODO: remove it for next feature "enable saving plugins"
+            "-select|"
+            "-free|"
+            "-help|"
+            "-temp|"
+            "-undo|"
+            "-copy|"
+            "-paste|"
+            "-cut|"
+            "-channel|"
+            "-buffer|"
+            "-register|"
+            "-metadata|"
+            "-layer|"
+            "-selection|"
+            "-brush|"
+            "-gradient|"
+            "-guide|"
+            "-parasite|"
+            "gimp-online|"
+            "gimp-progress|"
+            "gimp-procedural|"
+            "gimp-display|"
+            "gimp-context|"
+            "gimp-fonts|"
+            "gimp-palette|"
+            "gimp-path|"
+            "gimp-pattern|"
+            "gimp-vectors|"
+            "gimp-quit|"
+            "gimp-plugins|"
+            "gimp-gimprc|"
+            "temp-procedure"
+        ")).*",
+        ".*",
+        ".*",
+        ".*",
+        ".*",
+        ".*",
+        ".*",
+        &proc_count,
+        &results
+    );
+    
+    int i;
+    for (i = 0; i < proc_count; i++) {
+        /* check each parameter for compatibility and sort it alphabetically */
+        if (pdb_proc_has_compatible_params(results[i])) {
+            bimp_supported_procedures = g_slist_insert_sorted(bimp_supported_procedures, results[i], glib_strcmpi);
+        }
+    }
+    
+    free (results);
 }
 
 static gboolean pdb_proc_has_compatible_params(gchar* proc_name) 
 {
-	gchar* proc_blurb;
-	gchar* proc_help;
-	gchar* proc_author;
-	gchar* proc_copyright;
-	gchar* proc_date;
-	GimpPDBProcType proc_type;
-	gint num_params;
-	gint num_values;
-	GimpParamDef *params;
-	GimpParamDef *return_vals;
-	
-	gimp_procedural_db_proc_info (
-		proc_name,
-		&proc_blurb,
-		&proc_help,
-		&proc_author,
-		&proc_copyright,
-		&proc_date,
-		&proc_type,
-		&num_params,
-		&num_values,
-		&params,
-		&return_vals
-	);
-	
-	int i;
-	GimpParamDef param;
-	gboolean compatible = TRUE;
-	for (i = 0; (i < num_params) && compatible; i++) {
-		param = pdb_proc_get_param_info(proc_name, i);
-		
-		if (
-			param.type == GIMP_PDB_INT32 ||
-			param.type == GIMP_PDB_INT16 ||
-			param.type == GIMP_PDB_INT8 ||
-			param.type == GIMP_PDB_FLOAT ||
-			//(param.type == GIMP_PDB_STRING && strstr(param.name, "filename") == NULL) ||
-			param.type == GIMP_PDB_STRING ||
-			param.type == GIMP_PDB_COLOR ||
-			param.type == GIMP_PDB_DRAWABLE ||
-			param.type == GIMP_PDB_ITEM ||
-			param.type == GIMP_PDB_IMAGE
-			) {
-			compatible = TRUE;
-		} else {
-			compatible = FALSE;
-		}
-	}
-	
-	return (compatible && num_params > 0);
+    gchar* proc_blurb;
+    gchar* proc_help;
+    gchar* proc_author;
+    gchar* proc_copyright;
+    gchar* proc_date;
+    GimpPDBProcType proc_type;
+    gint num_params;
+    gint num_values;
+    GimpParamDef *params;
+    GimpParamDef *return_vals;
+    
+    gimp_procedural_db_proc_info (
+        proc_name,
+        &proc_blurb,
+        &proc_help,
+        &proc_author,
+        &proc_copyright,
+        &proc_date,
+        &proc_type,
+        &num_params,
+        &num_values,
+        &params,
+        &return_vals
+    );
+    
+    int i;
+    GimpParamDef param;
+    gboolean compatible = TRUE;
+    for (i = 0; (i < num_params) && compatible; i++) {
+        param = pdb_proc_get_param_info(proc_name, i);
+        
+        if (
+            param.type == GIMP_PDB_INT32 ||
+            param.type == GIMP_PDB_INT16 ||
+            param.type == GIMP_PDB_INT8 ||
+            param.type == GIMP_PDB_FLOAT ||
+            //(param.type == GIMP_PDB_STRING && strstr(param.name, "filename") == NULL) ||
+            param.type == GIMP_PDB_STRING ||
+            param.type == GIMP_PDB_COLOR ||
+            param.type == GIMP_PDB_DRAWABLE ||
+            param.type == GIMP_PDB_ITEM ||
+            param.type == GIMP_PDB_IMAGE
+            ) {
+            compatible = TRUE;
+        } else {
+            compatible = FALSE;
+        }
+    }
+    
+    return (compatible && num_params > 0);
 }
 

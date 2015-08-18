@@ -4,11 +4,11 @@
 #include <gtk/gtk.h>
 
 typedef struct imageout_str {
-	gint32 image_id;
-	gint* drawable_ids;
+    gint32 image_id;
+    gint* drawable_ids;
     gint drawable_count;
-	char* filepath;
-	char* filename;
+    char* filepath;
+    char* filename;
 } *image_output;
 
 void bimp_start_batch(gpointer);
