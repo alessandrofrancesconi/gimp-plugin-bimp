@@ -1,0 +1,716 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: gimp-plugin-bimp\n"
+"POT-Creation-Date: 2015-08-11 18:31+0100\n"
+"PO-Revision-Date: 2015-08-11 18:35+0100\n"
+"Last-Translator: gimproject <gimp_project@yahoo.co.jp>\n"
+"Language-Team: gimproject <gimp_project@yahoo.co.jp>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: \n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-Basepath: ..\\..\\..\\..\\..\\src\\\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: .\\manipulation-gui\n"
+
+#: .\manipulation-gui/gui-changeformat.c:37
+#: manipulation-gui/gui-changeformat.c:37
+msgid "Format settings"
+msgstr "設定"
+
+#: .\manipulation-gui/gui-changeformat.c:58
+#: manipulation-gui/gui-changeformat.c:58
+msgid "Interlaced"
+msgstr "インターレース"
+
+#: .\manipulation-gui/gui-changeformat.c:78
+#: .\manipulation-gui/gui-changeformat.c:118
+#: manipulation-gui/gui-changeformat.c:78
+#: manipulation-gui/gui-changeformat.c:118
+msgid "Quality"
+msgstr "品質"
+
+#: .\manipulation-gui/gui-changeformat.c:84
+#: .\manipulation-gui/gui-changeformat.c:213
+#: manipulation-gui/gui-changeformat.c:84
+#: manipulation-gui/gui-changeformat.c:213
+msgid "Advanced params"
+msgstr "詳細設定"
+
+#: .\manipulation-gui/gui-changeformat.c:88
+#: manipulation-gui/gui-changeformat.c:88
+msgid "Smoothing"
+msgstr "スムージング"
+
+#: .\manipulation-gui/gui-changeformat.c:95
+#: manipulation-gui/gui-changeformat.c:95
+msgid "Optimize"
+msgstr "最適化"
+
+#: .\manipulation-gui/gui-changeformat.c:96
+#: manipulation-gui/gui-changeformat.c:96
+msgid "Progressive"
+msgstr "プログレッシブ"
+
+#: .\manipulation-gui/gui-changeformat.c:97
+#: manipulation-gui/gui-changeformat.c:97
+msgid "Save baseline"
+msgstr "ベースライン"
+
+#: .\manipulation-gui/gui-changeformat.c:100
+#: manipulation-gui/gui-changeformat.c:100
+msgid "Comment"
+msgstr "コメント"
+
+#: .\manipulation-gui/gui-changeformat.c:107
+#: manipulation-gui/gui-changeformat.c:107
+msgid "Markers rows"
+msgstr "リスタートマーカー"
+
+#: .\manipulation-gui/gui-changeformat.c:112
+#: manipulation-gui/gui-changeformat.c:112
+msgid "Subsampling"
+msgstr "サブサンプリング"
+
+#: .\manipulation-gui/gui-changeformat.c:116
+#: manipulation-gui/gui-changeformat.c:116
+msgid "Small size"
+msgstr "低品質"
+
+#: .\manipulation-gui/gui-changeformat.c:123
+#: manipulation-gui/gui-changeformat.c:123
+msgid "DCT algorithm"
+msgstr "DCT 変換方法"
+
+#: .\manipulation-gui/gui-changeformat.c:127
+#: manipulation-gui/gui-changeformat.c:127
+msgid "Integer"
+msgstr "整数"
+
+#: .\manipulation-gui/gui-changeformat.c:128
+#: manipulation-gui/gui-changeformat.c:128
+msgid "Fast integer"
+msgstr "高速整数"
+
+#: .\manipulation-gui/gui-changeformat.c:129
+#: manipulation-gui/gui-changeformat.c:129
+msgid "Float"
+msgstr "浮動小数"
+
+#: .\manipulation-gui/gui-changeformat.c:205
+#: manipulation-gui/gui-changeformat.c:205
+msgid "Interlace (Adam7)"
+msgstr "インターレース (Adam7)"
+
+#: .\manipulation-gui/gui-changeformat.c:207
+#: .\manipulation-gui/gui-changeformat.c:303
+#: manipulation-gui/gui-changeformat.c:207
+#: manipulation-gui/gui-changeformat.c:303
+msgid "Compression"
+msgstr "圧縮レベル"
+
+#: .\manipulation-gui/gui-changeformat.c:216
+#: manipulation-gui/gui-changeformat.c:216
+msgid "Save background color"
+msgstr "背景色を保存"
+
+#: .\manipulation-gui/gui-changeformat.c:217
+#: manipulation-gui/gui-changeformat.c:217
+msgid "Save gamma"
+msgstr "ガンマ値を保存"
+
+#: .\manipulation-gui/gui-changeformat.c:218
+#: manipulation-gui/gui-changeformat.c:218
+msgid "Save layer offset"
+msgstr "レイヤーオフセットを保存"
+
+#: .\manipulation-gui/gui-changeformat.c:219
+#: manipulation-gui/gui-changeformat.c:219
+msgid "Save resolution"
+msgstr "解像度を保存"
+
+#: .\manipulation-gui/gui-changeformat.c:220
+#: manipulation-gui/gui-changeformat.c:220
+msgid "Save creation date"
+msgstr "作成日時を保存"
+
+#: .\manipulation-gui/gui-changeformat.c:221
+#: manipulation-gui/gui-changeformat.c:221
+msgid "Save comments"
+msgstr "コメントを保存"
+
+#: .\manipulation-gui/gui-changeformat.c:222
+#: manipulation-gui/gui-changeformat.c:222
+msgid "Save color from transparent pixels"
+msgstr "透明ピクセルの色の値を保存"
+
+#: .\manipulation-gui/gui-changeformat.c:270
+#: manipulation-gui/gui-changeformat.c:270
+msgid "RLE compression"
+msgstr "RLE 圧縮"
+
+#: .\manipulation-gui/gui-changeformat.c:273
+#: manipulation-gui/gui-changeformat.c:273
+msgid "Image origin"
+msgstr "ビットマップ起点"
+
+#: .\manipulation-gui/gui-changeformat.c:278
+#: .\manipulation-gui/gui-watermark.c:241
+#: manipulation-gui/gui-changeformat.c:278
+#: manipulation-gui/gui-watermark.c:241
+msgid "Top-left"
+msgstr "左上"
+
+#: .\manipulation-gui/gui-changeformat.c:279
+#: .\manipulation-gui/gui-watermark.c:259
+#: manipulation-gui/gui-changeformat.c:279
+#: manipulation-gui/gui-watermark.c:259
+msgid "Bottom-left"
+msgstr "左下"
+
+#: .\manipulation-gui/gui-changeformat.c:308
+#: .\manipulation-gui/gui-fliprotate.c:40
+#: manipulation-gui/gui-changeformat.c:308
+#: manipulation-gui/gui-fliprotate.c:40
+msgid "None"
+msgstr "なし"
+
+#: .\manipulation-gui/gui-changeformat.c:309
+#: manipulation-gui/gui-changeformat.c:309
+msgid "LZW"
+msgstr "LZW"
+
+#: .\manipulation-gui/gui-changeformat.c:310
+#: manipulation-gui/gui-changeformat.c:310
+msgid "Pack bits"
+msgstr "Pack bits"
+
+#: .\manipulation-gui/gui-changeformat.c:311
+#: manipulation-gui/gui-changeformat.c:311
+msgid "Deflate"
+msgstr "Deflate"
+
+#: .\manipulation-gui/gui-changeformat.c:312
+#: manipulation-gui/gui-changeformat.c:312
+msgid "JPEG"
+msgstr "JPEG"
+
+#: .\manipulation-gui/gui-changeformat.c:313
+#: manipulation-gui/gui-changeformat.c:313
+msgid "CCITT G3 Fax"
+msgstr "CCITT G3 Fax"
+
+#: .\manipulation-gui/gui-changeformat.c:314
+#: manipulation-gui/gui-changeformat.c:314
+msgid "CCITT G4 Fax"
+msgstr "CCITT G4 Fax"
+
+#: .\manipulation-gui/gui-changeformat.c:329
+#: manipulation-gui/gui-changeformat.c:329
+msgid "This format has no params"
+msgstr "このファイル形式には設定項目はありません。"
+
+#: .\manipulation-gui/gui-color.c:21 manipulation-gui/gui-color.c:21
+msgid "Brightness"
+msgstr "明るさ"
+
+#: .\manipulation-gui/gui-color.c:29 manipulation-gui/gui-color.c:29
+msgid "Contrast"
+msgstr "コントラスト"
+
+#: .\manipulation-gui/gui-color.c:36 manipulation-gui/gui-color.c:36
+msgid "Convert to grayscale"
+msgstr "グレースケールに変換"
+
+#: .\manipulation-gui/gui-color.c:38 manipulation-gui/gui-color.c:38
+msgid "Automatic color levels correction"
+msgstr "自動レベル補正"
+
+#: .\manipulation-gui/gui-color.c:41 manipulation-gui/gui-color.c:41
+msgid "Change color curve from settings file:"
+msgstr "トーンカーブのプリセットを使用:"
+
+#: .\manipulation-gui/gui-color.c:42 manipulation-gui/gui-color.c:42
+msgid "Select GIMP Curve file"
+msgstr "トーンカーブのプリセットを読み込む"
+
+#: .\manipulation-gui/gui-crop.c:27 manipulation-gui/gui-crop.c:27
+msgid "Crop to a standard aspect ratio"
+msgstr "選択したアスペクト比で切り抜き"
+
+#: .\manipulation-gui/gui-crop.c:53 manipulation-gui/gui-crop.c:53
+msgid "Manual crop (pixel values)"
+msgstr "サイズを指定して切り抜き (ピクセル値)"
+
+#: .\manipulation-gui/gui-crop.c:58 .\manipulation-gui/gui-resize.c:63
+#: manipulation-gui/gui-crop.c:58 manipulation-gui/gui-resize.c:63
+msgid "Width"
+msgstr "幅"
+
+#: .\manipulation-gui/gui-crop.c:62 .\manipulation-gui/gui-resize.c:65
+#: manipulation-gui/gui-crop.c:62 manipulation-gui/gui-resize.c:65
+msgid "Height"
+msgstr "高さ"
+
+#: .\manipulation-gui/gui-crop.c:108 manipulation-gui/gui-crop.c:108
+msgid "One-to-one"
+msgstr "正方形"
+
+#: .\manipulation-gui/gui-crop.c:111 manipulation-gui/gui-crop.c:111
+msgid "Classic 35 mm film"
+msgstr "35mmフィルム"
+
+#: .\manipulation-gui/gui-crop.c:114 manipulation-gui/gui-crop.c:114
+msgid "Standard VGA monitor"
+msgstr "VGAモニター"
+
+#: .\manipulation-gui/gui-crop.c:117 manipulation-gui/gui-crop.c:117
+msgid "Widescreen"
+msgstr "ワイドスクリーン"
+
+#: .\manipulation-gui/gui-crop.c:120 manipulation-gui/gui-crop.c:120
+msgid "Widescreen extended"
+msgstr "ワイドスクリーン拡大"
+
+#: .\manipulation-gui/gui-crop.c:123 manipulation-gui/gui-crop.c:123
+msgid "EU Passport portrait"
+msgstr "EUパスポート"
+
+#: .\manipulation-gui/gui-crop.c:126 manipulation-gui/gui-crop.c:126
+msgid "Classic smartphone screen"
+msgstr "スマートフォン画面"
+
+#: .\manipulation-gui/gui-crop.c:129 manipulation-gui/gui-crop.c:129
+msgid "Tall smartphone screen"
+msgstr "Tallスマートフォン画面"
+
+#: .\manipulation-gui/gui-crop.c:132 manipulation-gui/gui-crop.c:132
+msgid "Classic tablet screen"
+msgstr "タブレット画面"
+
+#: .\manipulation-gui/gui-crop.c:135 manipulation-gui/gui-crop.c:135
+msgid "Custom ratio"
+msgstr "カスタム比率"
+
+#: .\manipulation-gui/gui-fliprotate.c:19 manipulation-gui/gui-fliprotate.c:19
+msgid "Flip"
+msgstr "反転"
+
+#: .\manipulation-gui/gui-fliprotate.c:23 manipulation-gui/gui-fliprotate.c:23
+msgid "Horizontally"
+msgstr "水平反転"
+
+#: .\manipulation-gui/gui-fliprotate.c:29 manipulation-gui/gui-fliprotate.c:29
+msgid "Vertically"
+msgstr "垂直反転"
+
+#: .\manipulation-gui/gui-fliprotate.c:37 manipulation-gui/gui-fliprotate.c:37
+msgid "Rotation"
+msgstr "回転"
+
+#: .\manipulation-gui/gui-rename.c:26 manipulation-gui/gui-rename.c:26
+msgid "Keywords"
+msgstr "命名規則"
+
+#: .\manipulation-gui/gui-rename.c:30 manipulation-gui/gui-rename.c:30
+msgid "Original filename (without extension)"
+msgstr "オリジナルファイル名 (拡張子なし)"
+
+#: .\manipulation-gui/gui-rename.c:31 manipulation-gui/gui-rename.c:31
+msgid "Incremental number"
+msgstr "連番を付加"
+
+#: .\manipulation-gui/gui-rename.c:32 manipulation-gui/gui-rename.c:32
+msgid "Date and time (YYYY-MM-DD_hh-mm)"
+msgstr "日付と時刻 (YYYY-MM-DD_hh-mm)"
+
+#: .\manipulation-gui/gui-rename.c:52 manipulation-gui/gui-rename.c:52
+#, c-format
+msgid ""
+"Can't save!\n"
+"'%s' or '%s' symbol must be present."
+msgstr ""
+"保存できません！\n"
+"%s' か '%s' の、どちらかの命名規則は必ず必要です。"
+
+#: .\manipulation-gui/gui-rename.c:64 manipulation-gui/gui-rename.c:64
+msgid ""
+"Can't save!\n"
+"Pattern contains invalid characters."
+msgstr ""
+"保存できません！\n"
+"無効な文字が含まれています。"
+
+#: .\manipulation-gui/gui-resize.c:37 manipulation-gui/gui-resize.c:37
+msgid "Set to a percentage of the original"
+msgstr "パーセントで設定"
+
+#: .\manipulation-gui/gui-resize.c:39 manipulation-gui/gui-resize.c:39
+msgid "Set exact size in pixel"
+msgstr "ピクセル値で設定"
+
+#: .\manipulation-gui/gui-resize.c:45 manipulation-gui/gui-resize.c:45
+msgid "For both dimensions"
+msgstr "幅と高さを指定"
+
+#: .\manipulation-gui/gui-resize.c:47 manipulation-gui/gui-resize.c:47
+msgid "Set width only"
+msgstr "幅だけを指定"
+
+#: .\manipulation-gui/gui-resize.c:49 manipulation-gui/gui-resize.c:49
+msgid "Set height only"
+msgstr "高さだけを指定"
+
+#: .\manipulation-gui/gui-resize.c:52 manipulation-gui/gui-resize.c:52
+msgid "Preserve aspect ratio"
+msgstr "アスペクト比を維持"
+
+#: .\manipulation-gui/gui-resize.c:56 manipulation-gui/gui-resize.c:56
+msgid "Interpolation quality"
+msgstr "補完方法"
+
+#: .\manipulation-gui/gui-resize.c:69 manipulation-gui/gui-resize.c:69
+msgid "Change resolution"
+msgstr "解像度の変更"
+
+#: .\manipulation-gui/gui-resize.c:74 manipulation-gui/gui-resize.c:74
+msgid "X axis"
+msgstr "水平解像度"
+
+#: .\manipulation-gui/gui-resize.c:77 manipulation-gui/gui-resize.c:77
+msgid "Y axis"
+msgstr "垂直解像度"
+
+#: .\manipulation-gui/gui-sharpblur.c:17 manipulation-gui/gui-sharpblur.c:17
+msgid "More sharpen"
+msgstr "シャープにする"
+
+#: .\manipulation-gui/gui-sharpblur.c:23 manipulation-gui/gui-sharpblur.c:23
+msgid "More blurred"
+msgstr "ぼかす"
+
+#: .\manipulation-gui/gui-userdef.c:49 manipulation-gui/gui-userdef.c:49
+msgid ""
+"Choose a supported GIMP procedure from the list on the left\n"
+"and define its parameters on the right."
+msgstr ""
+"左のリストから使用するツールやフィルターを選んでください\n"
+"右でそのツールやフィルターのパラメータを設定してください。"
+
+#: .\manipulation-gui/gui-userdef.c:61 manipulation-gui/gui-userdef.c:61
+msgid "Search"
+msgstr "検索"
+
+#: .\manipulation-gui/gui-userdef.c:303 manipulation-gui/gui-userdef.c:303
+msgid ""
+"Can't save because\n"
+"no procedure has been selected"
+msgstr ""
+"保存することができません\n"
+"何の手順も選択されていません"
+
+#: .\manipulation-gui/gui-userdef.c:349 manipulation-gui/gui-userdef.c:349
+msgid "Author"
+msgstr "著者"
+
+#: .\manipulation-gui/gui-userdef.c:570 manipulation-gui/gui-userdef.c:570
+msgid "This procedure takes no editable params"
+msgstr "この手順では編集可能なparamsを取りません"
+
+#: .\manipulation-gui/gui-watermark.c:32 manipulation-gui/gui-watermark.c:32
+msgid "Text watermark"
+msgstr "透かし文字"
+
+#: .\manipulation-gui/gui-watermark.c:36 manipulation-gui/gui-watermark.c:36
+msgid "Text"
+msgstr "テキスト"
+
+#: .\manipulation-gui/gui-watermark.c:45 manipulation-gui/gui-watermark.c:45
+msgid "Font"
+msgstr "フォント"
+
+#: .\manipulation-gui/gui-watermark.c:51 manipulation-gui/gui-watermark.c:51
+msgid "Color"
+msgstr "文字色"
+
+#: .\manipulation-gui/gui-watermark.c:58 manipulation-gui/gui-watermark.c:58
+msgid "Image watermark"
+msgstr "透かし画像"
+
+#: .\manipulation-gui/gui-watermark.c:62 manipulation-gui/gui-watermark.c:62
+msgid "Select image"
+msgstr "画像を選択"
+
+#: .\manipulation-gui/gui-watermark.c:67 bimp-gui.c:601
+#: manipulation-gui/gui-watermark.c:67
+msgid "All supported types"
+msgstr "すべてのサポートタイプ"
+
+#: .\manipulation-gui/gui-watermark.c:112 manipulation-gui/gui-watermark.c:112
+msgid "Opacity"
+msgstr "不透明度"
+
+#: .\manipulation-gui/gui-watermark.c:122 manipulation-gui/gui-watermark.c:122
+msgid "Position on the image"
+msgstr "透かしを入れる位置"
+
+#: .\manipulation-gui/gui-watermark.c:244 manipulation-gui/gui-watermark.c:244
+msgid "Top-center"
+msgstr "中央上"
+
+#: .\manipulation-gui/gui-watermark.c:247 manipulation-gui/gui-watermark.c:247
+msgid "Top-right"
+msgstr "右上"
+
+#: .\manipulation-gui/gui-watermark.c:250 manipulation-gui/gui-watermark.c:250
+msgid "Center-left"
+msgstr "中央左"
+
+#: .\manipulation-gui/gui-watermark.c:253 manipulation-gui/gui-watermark.c:253
+msgid "Center"
+msgstr "画像中央"
+
+#: .\manipulation-gui/gui-watermark.c:256 manipulation-gui/gui-watermark.c:256
+msgid "Center-right"
+msgstr "中央右"
+
+#: .\manipulation-gui/gui-watermark.c:262 manipulation-gui/gui-watermark.c:262
+msgid "Bottom-center"
+msgstr "中央下"
+
+#: .\manipulation-gui/gui-watermark.c:265 manipulation-gui/gui-watermark.c:265
+msgid "Bottom-right"
+msgstr "右下"
+
+#: bimp-gui.c:129 bimp-gui.c:897
+msgid "The manipulations set is empty!"
+msgstr "バッチ操作セットが空です！"
+
+#: bimp-gui.c:132
+msgid "The file list is empty!"
+msgstr "ファイルリストが空です！"
+
+#: bimp-gui.c:162
+msgid "Manipulation set"
+msgstr "バッチ操作セット"
+
+#: bimp-gui.c:192
+msgid "Input files and options"
+msgstr "入力ファイルとオプション"
+
+#: bimp-gui.c:214
+msgid "Add images"
+msgstr "画像を追加"
+
+#: bimp-gui.c:216
+msgid "Remove images"
+msgstr "画像を除去"
+
+#: bimp-gui.c:224
+msgid "Output folder"
+msgstr "保存フォルダ"
+
+#: bimp-gui.c:238
+msgid "Use the selected file's location as the output"
+msgstr "元画像と同じフォルダに保存"
+
+#: bimp-gui.c:246
+msgid "Keep folder hierarchy"
+msgstr "フォルダ構造を保持"
+
+#: bimp-gui.c:251
+msgid "Delete original file when done"
+msgstr "元画像を削除"
+
+#: bimp-gui.c:255
+msgid "Keep the modification dates"
+msgstr "元ファイルの作成日時を保持 (上書きの場合)"
+
+#: bimp-gui.c:261
+msgid "Click for preview"
+msgstr "クリックでプレビューを表示"
+
+#: bimp-gui.c:354
+#, c-format
+msgid "Couldn't read into \"%s\" directory."
+msgstr " \"%s\" ディレクトリを読むことができませんでした。"
+
+#: bimp-gui.c:464
+msgid "Can't show a preview because the manipulations set is empty"
+msgstr "バッチ操作セットが空なのでプレビュー表示ができません"
+
+#: bimp-gui.c:491
+msgid "Preview"
+msgstr "プレビュー"
+
+#: bimp-gui.c:503
+msgid "This is how the selected image will look like after the batch process"
+msgstr "バッチ操作処理後のプレビュー画像"
+
+#: bimp-gui.c:592
+msgid "Select images"
+msgstr "画像を選択"
+
+#: bimp-gui.c:665
+msgid "Select folders containing images"
+msgstr "画像のあるフォルダを選択"
+
+#: bimp-gui.c:674
+msgid "Add files from the whole hierarchy"
+msgstr "すべての階層のファイルを追加"
+
+#: bimp-gui.c:691
+msgid "Select output folder"
+msgstr "保存フォルダを選択"
+
+#: bimp-gui.c:748 bimp-gui.c:903
+msgid "Save this set..."
+msgstr "バッチ操作セットを保存..."
+
+#: bimp-gui.c:752 bimp-gui.c:958
+msgid "Load set..."
+msgstr "バッチ操作セットを読み込み..."
+
+#: bimp-gui.c:763
+msgid "Edit properties..."
+msgstr "この操作を編集..."
+
+#: bimp-gui.c:766
+msgid "Remove this manipulation"
+msgstr "この操作を削除"
+
+#: bimp-gui.c:773
+msgid "Add single images..."
+msgstr "ファイルを追加..."
+
+#: bimp-gui.c:776
+msgid "Add folders..."
+msgstr "フォルダを追加..."
+
+#: bimp-gui.c:779
+msgid "Add all opened images"
+msgstr "GIMPで開かれている画像をすべて追加"
+
+#: bimp-gui.c:786
+msgid "Remove selected"
+msgstr "選択したファイルをリストから除去"
+
+#: bimp-gui.c:789
+msgid "Remove all"
+msgstr "すべてのファイルをリストから除去"
+
+#: bimp-gui.c:833
+msgid "Can't add another manipulation of this kind. Only one is permitted!"
+msgstr "この操作はすでに存在します。同じ種類の操作を追加することはできません。"
+
+#: bimp-gui.c:924 bimp-gui.c:975
+msgid "An error occured when importing a saved batch file :("
+msgstr "保存したバッチファイルをインポートするときにエラーが発生しました。"
+
+#: bimp-gui.c:946
+msgid "This will overwrite current manipulations set. Continue?"
+msgstr "現在のバッチ操作セットに上書きします。 続けますか？"
+
+#: bimp-gui.c:1013 bimp.c:67
+msgid "Applies GIMP manipulations on groups of images"
+msgstr "複数のファイルにGIMP操作を適用して一括変換します"
+
+#: bimp-gui.c:1020
+msgid "translator-name <translator-email>"
+msgstr "GIMP2を使おう管理人 <gimp_project@yahoo.co.jp>"
+
+#: bimp-manipulations.c:275
+msgid "Resize"
+msgstr "拡大縮小 (リサイズ)"
+
+#: bimp-manipulations.c:278
+msgid "Crop"
+msgstr "切り抜き (トリミング)"
+
+#: bimp-manipulations.c:281
+msgid "Flip or Rotate"
+msgstr "反転　回転"
+
+#: bimp-manipulations.c:284
+msgid "Color correction"
+msgstr "明るさ　コントラスト"
+
+#: bimp-manipulations.c:287
+msgid "Sharp or Blur"
+msgstr "シャープ　ぼかし"
+
+#: bimp-manipulations.c:290
+msgid "Add a Watermark"
+msgstr "透かし (ウォーターマーク)"
+
+#: bimp-manipulations.c:293
+msgid "Change format and compression"
+msgstr "保存ファイル形式の選択と設定"
+
+#: bimp-manipulations.c:296
+msgid "Rename with a pattern"
+msgstr "リネーム"
+
+#: bimp-manipulations.c:299
+msgid "Other GIMP procedure..."
+msgstr "GIMPのフィルターを使用..."
+
+#: bimp-operate.c:171
+#, c-format
+msgid ""
+"Can't save image \"%s\": input file has no extension.\n"
+"You can solve this error by adding a \"Change format or compression\" step"
+msgstr ""
+"画像を保存できません \"%s\": 入力ファイルには拡張子がありません。\n"
+"このエラーを解決するために \"フォーマットまたは圧縮レベルを変更\" してください。"
+
+#: bimp-operate.c:177
+#, c-format
+msgid ""
+"GIMP can't save %s back to its original SVG format.\n"
+"You can solve this error by adding a \"Change format or compression\" step"
+msgstr ""
+"保存できません %s SVG形式の保存設定をやり直してください。\n"
+"このエラーを解決するために \"フォーマットまたは圧縮レベルを変更\" してください。"
+
+#: bimp-operate.c:183
+#, c-format
+msgid "Working on file \"%s\"..."
+msgstr "ファイルを処理中 \"%s\"..."
+
+#: bimp-operate.c:323
+msgid "Operations stopped"
+msgstr "処理を中止"
+
+#: bimp-operate.c:330
+#, c-format
+msgid "End, all files have been processed with %d errors"
+msgstr "すべてのファイルの処理が終了しました。( %d 個のエラー)"
+
+#: bimp-operate.c:1165
+#, c-format
+msgid "File %s already exists, overwrite it?"
+msgstr "%s がすでに存在します。上書きしますか？"
+
+#: bimp-operate.c:1170
+msgid "Always apply this decision"
+msgstr "常に上書き"
+
+#: bimp-operate.c:1182
+msgid "Overwrite?"
+msgstr "上書きしますか？"
+
+#~ msgid "Alert when overwriting existing files"
+#~ msgstr "既存のファイルを上書きするときに警告する"
+
+#~ msgid "Yes, don't ask again"
+#~ msgstr "はい、再度質問を表示しません"
+
+#~ msgid "Save this set"
+#~ msgstr "セットを保存"
+
+#~ msgid "Load set"
+#~ msgstr "セットの読み込み"
