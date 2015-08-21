@@ -4,6 +4,7 @@ BIMP. Batch Image Manipulation Plugin for GIMP.
 With BIMP you can apply a set of GIMP manipulations on groups of images.
 Documentation @ http://www.alessandrofrancesconi.it/projects/bimp
 
+![A screenshot of BIMP](http://www.alessandrofrancesconi.it/projects/bimp/images/bimp-main.jpg)
 
 Installing on Windows
 ---------------------
