@@ -1,0 +1,717 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: gimp-plugin-bimp\n"
+"POT-Creation-Date: 2014-11-30 12:34+0300\n"
+"PO-Revision-Date: 2015-09-02 19:51+0100\n"
+"Language-Team: Xavier Beà <xbea@xtec.cat>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-Basepath: ../../../../../src\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Last-Translator: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: ca\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: ./manipulation-gui\n"
+
+#: .\manipulation-gui/gui-changeformat.c:37
+#: manipulation-gui/gui-changeformat.c:37
+msgid "Format settings"
+msgstr "Paràmetres de format"
+
+#: .\manipulation-gui/gui-changeformat.c:58
+#: manipulation-gui/gui-changeformat.c:58
+msgid "Interlaced"
+msgstr "Entrellaçat"
+
+#: .\manipulation-gui/gui-changeformat.c:78
+#: .\manipulation-gui/gui-changeformat.c:118
+#: manipulation-gui/gui-changeformat.c:78
+#: manipulation-gui/gui-changeformat.c:118
+msgid "Quality"
+msgstr "Qualitat"
+
+#: .\manipulation-gui/gui-changeformat.c:84
+#: .\manipulation-gui/gui-changeformat.c:213
+#: manipulation-gui/gui-changeformat.c:84
+#: manipulation-gui/gui-changeformat.c:213
+msgid "Advanced params"
+msgstr "Paràmetres avançats"
+
+#: .\manipulation-gui/gui-changeformat.c:88
+#: manipulation-gui/gui-changeformat.c:88
+msgid "Smoothing"
+msgstr "Suavitzat"
+
+#: .\manipulation-gui/gui-changeformat.c:95
+#: manipulation-gui/gui-changeformat.c:95
+msgid "Optimize"
+msgstr "Optimitza"
+
+#: .\manipulation-gui/gui-changeformat.c:96
+#: manipulation-gui/gui-changeformat.c:96
+msgid "Progressive"
+msgstr "Progressiu"
+
+#: .\manipulation-gui/gui-changeformat.c:97
+#: manipulation-gui/gui-changeformat.c:97
+msgid "Save baseline"
+msgstr "Desa la línia base"
+
+#: .\manipulation-gui/gui-changeformat.c:100
+#: manipulation-gui/gui-changeformat.c:100
+msgid "Comment"
+msgstr "Comentari"
+
+#: .\manipulation-gui/gui-changeformat.c:107
+#: manipulation-gui/gui-changeformat.c:107
+msgid "Markers rows"
+msgstr "Marcadors de files"
+
+#: .\manipulation-gui/gui-changeformat.c:112
+#: manipulation-gui/gui-changeformat.c:112
+msgid "Subsampling"
+msgstr "Submostratge"
+
+#: .\manipulation-gui/gui-changeformat.c:116
+#: manipulation-gui/gui-changeformat.c:116
+msgid "Small size"
+msgstr "Mida petita"
+
+#: .\manipulation-gui/gui-changeformat.c:123
+#: manipulation-gui/gui-changeformat.c:123
+msgid "DCT algorithm"
+msgstr "Algoritme DCT"
+
+#: .\manipulation-gui/gui-changeformat.c:127
+#: manipulation-gui/gui-changeformat.c:127
+msgid "Integer"
+msgstr "Integrat"
+
+#: .\manipulation-gui/gui-changeformat.c:128
+#: manipulation-gui/gui-changeformat.c:128
+msgid "Fast integer"
+msgstr "Integrat ràpid"
+
+#: .\manipulation-gui/gui-changeformat.c:129
+#: manipulation-gui/gui-changeformat.c:129
+msgid "Float"
+msgstr "Flotant"
+
+#: .\manipulation-gui/gui-changeformat.c:205
+#: manipulation-gui/gui-changeformat.c:205
+msgid "Interlace (Adam7)"
+msgstr "Entrellaçat (Adam7)"
+
+#: .\manipulation-gui/gui-changeformat.c:207
+#: .\manipulation-gui/gui-changeformat.c:303
+#: manipulation-gui/gui-changeformat.c:207
+#: manipulation-gui/gui-changeformat.c:303
+msgid "Compression"
+msgstr "Compressió"
+
+#: .\manipulation-gui/gui-changeformat.c:216
+#: manipulation-gui/gui-changeformat.c:216
+msgid "Save background color"
+msgstr "Desa el color de fons"
+
+#: .\manipulation-gui/gui-changeformat.c:217
+#: manipulation-gui/gui-changeformat.c:217
+msgid "Save gamma"
+msgstr "Desa la gamma"
+
+#: .\manipulation-gui/gui-changeformat.c:218
+#: manipulation-gui/gui-changeformat.c:218
+msgid "Save layer offset"
+msgstr "Desa el desplaçament de capa"
+
+#: .\manipulation-gui/gui-changeformat.c:219
+#: manipulation-gui/gui-changeformat.c:219
+msgid "Save resolution"
+msgstr "Desa la resolució"
+
+#: .\manipulation-gui/gui-changeformat.c:220
+#: manipulation-gui/gui-changeformat.c:220
+msgid "Save creation date"
+msgstr "Desa la data de creació"
+
+#: .\manipulation-gui/gui-changeformat.c:221
+#: manipulation-gui/gui-changeformat.c:221
+msgid "Save comments"
+msgstr "Desa els comentaris"
+
+#: .\manipulation-gui/gui-changeformat.c:222
+#: manipulation-gui/gui-changeformat.c:222
+msgid "Save color from transparent pixels"
+msgstr "Desa el color dels píxels transparents"
+
+#: .\manipulation-gui/gui-changeformat.c:270
+#: manipulation-gui/gui-changeformat.c:270
+msgid "RLE compression"
+msgstr "Compressió RLE"
+
+#: .\manipulation-gui/gui-changeformat.c:273
+#: manipulation-gui/gui-changeformat.c:273
+msgid "Image origin"
+msgstr "Imatge original"
+
+#: .\manipulation-gui/gui-changeformat.c:278
+#: .\manipulation-gui/gui-watermark.c:241
+#: manipulation-gui/gui-changeformat.c:278
+#: manipulation-gui/gui-watermark.c:241
+msgid "Top-left"
+msgstr "Superior-esquerre"
+
+#: .\manipulation-gui/gui-changeformat.c:279
+#: .\manipulation-gui/gui-watermark.c:259
+#: manipulation-gui/gui-changeformat.c:279
+#: manipulation-gui/gui-watermark.c:259
+msgid "Bottom-left"
+msgstr "Inferior-dret"
+
+#: .\manipulation-gui/gui-changeformat.c:308
+#: .\manipulation-gui/gui-fliprotate.c:40
+#: manipulation-gui/gui-changeformat.c:308
+#: manipulation-gui/gui-fliprotate.c:40
+msgid "None"
+msgstr "Cap"
+
+#: .\manipulation-gui/gui-changeformat.c:309
+#: manipulation-gui/gui-changeformat.c:309
+msgid "LZW"
+msgstr "LZW"
+
+#: .\manipulation-gui/gui-changeformat.c:310
+#: manipulation-gui/gui-changeformat.c:310
+msgid "Pack bits"
+msgstr "Empaca els bits"
+
+#: .\manipulation-gui/gui-changeformat.c:311
+#: manipulation-gui/gui-changeformat.c:311
+msgid "Deflate"
+msgstr "Desinfla"
+
+#: .\manipulation-gui/gui-changeformat.c:312
+#: manipulation-gui/gui-changeformat.c:312
+msgid "JPEG"
+msgstr "JPEG"
+
+#: .\manipulation-gui/gui-changeformat.c:313
+#: manipulation-gui/gui-changeformat.c:313
+msgid "CCITT G3 Fax"
+msgstr "CCITT G3 Fax"
+
+#: .\manipulation-gui/gui-changeformat.c:314
+#: manipulation-gui/gui-changeformat.c:314
+msgid "CCITT G4 Fax"
+msgstr "CCITT G4 Fax"
+
+#: .\manipulation-gui/gui-changeformat.c:329
+#: manipulation-gui/gui-changeformat.c:329
+msgid "This format has no params"
+msgstr "Aquest format no té paràmetres"
+
+#: .\manipulation-gui/gui-color.c:21 manipulation-gui/gui-color.c:21
+msgid "Brightness"
+msgstr "Brillantor"
+
+#: .\manipulation-gui/gui-color.c:29 manipulation-gui/gui-color.c:29
+msgid "Contrast"
+msgstr "Contrast"
+
+#: .\manipulation-gui/gui-color.c:36 manipulation-gui/gui-color.c:36
+msgid "Convert to grayscale"
+msgstr "Converteix a escala de grisos"
+
+#: .\manipulation-gui/gui-color.c:38 manipulation-gui/gui-color.c:38
+msgid "Automatic color levels correction"
+msgstr "Correcció de nivells de color automàtica"
+
+#: .\manipulation-gui/gui-color.c:41 manipulation-gui/gui-color.c:41
+msgid "Change color curve from settings file:"
+msgstr "Canvia la corba de color des del fitxer de paràmetres:"
+
+#: .\manipulation-gui/gui-color.c:42 manipulation-gui/gui-color.c:42
+msgid "Select GIMP Curve file"
+msgstr "Selecciona un fitxer de corba GIMP"
+
+#: .\manipulation-gui/gui-crop.c:27 manipulation-gui/gui-crop.c:27
+msgid "Crop to a standard aspect ratio"
+msgstr "Escapça a una relació d'aspecte estàndard"
+
+#: .\manipulation-gui/gui-crop.c:53 manipulation-gui/gui-crop.c:53
+msgid "Manual crop (pixel values)"
+msgstr "Escapçat manual (valors de píxel)"
+
+#: .\manipulation-gui/gui-crop.c:58 .\manipulation-gui/gui-resize.c:63
+#: manipulation-gui/gui-crop.c:58 manipulation-gui/gui-resize.c:63
+msgid "Width"
+msgstr "Amplada"
+
+#: .\manipulation-gui/gui-crop.c:62 .\manipulation-gui/gui-resize.c:65
+#: manipulation-gui/gui-crop.c:62 manipulation-gui/gui-resize.c:65
+msgid "Height"
+msgstr "Alçada"
+
+#: .\manipulation-gui/gui-crop.c:108 manipulation-gui/gui-crop.c:108
+msgid "One-to-one"
+msgstr "Un a un"
+
+#: .\manipulation-gui/gui-crop.c:111 manipulation-gui/gui-crop.c:111
+msgid "Classic 35 mm film"
+msgstr "Pel·lícula clàssica de 35mm"
+
+#: .\manipulation-gui/gui-crop.c:114 manipulation-gui/gui-crop.c:114
+msgid "Standard VGA monitor"
+msgstr "Monitor VGA estàndard"
+
+#: .\manipulation-gui/gui-crop.c:117 manipulation-gui/gui-crop.c:117
+msgid "Widescreen"
+msgstr "Pantalla ampla"
+
+#: .\manipulation-gui/gui-crop.c:120 manipulation-gui/gui-crop.c:120
+msgid "Widescreen extended"
+msgstr "Pantalla ampla estesa"
+
+#: .\manipulation-gui/gui-crop.c:123 manipulation-gui/gui-crop.c:123
+msgid "EU Passport portrait"
+msgstr "Passaport d'EU apaisat"
+
+#: .\manipulation-gui/gui-crop.c:126 manipulation-gui/gui-crop.c:126
+msgid "Classic smartphone screen"
+msgstr "Pantalla d'smartphone clàssica"
+
+#: .\manipulation-gui/gui-crop.c:129 manipulation-gui/gui-crop.c:129
+msgid "Tall smartphone screen"
+msgstr "Pantalla d'smartphone alta"
+
+#: .\manipulation-gui/gui-crop.c:132 manipulation-gui/gui-crop.c:132
+msgid "Classic tablet screen"
+msgstr "Pantalla de tauleta clàssica"
+
+#: .\manipulation-gui/gui-crop.c:135 manipulation-gui/gui-crop.c:135
+msgid "Custom ratio"
+msgstr "Relació d'aspecte personalitzat"
+
+#: .\manipulation-gui/gui-fliprotate.c:19 manipulation-gui/gui-fliprotate.c:19
+msgid "Flip"
+msgstr "Capgira"
+
+#: .\manipulation-gui/gui-fliprotate.c:23 manipulation-gui/gui-fliprotate.c:23
+msgid "Horizontally"
+msgstr "Horitzontalment"
+
+#: .\manipulation-gui/gui-fliprotate.c:29 manipulation-gui/gui-fliprotate.c:29
+msgid "Vertically"
+msgstr "Verticalment"
+
+#: .\manipulation-gui/gui-fliprotate.c:37 manipulation-gui/gui-fliprotate.c:37
+msgid "Rotation"
+msgstr "Gira"
+
+#: .\manipulation-gui/gui-rename.c:26 manipulation-gui/gui-rename.c:26
+msgid "Keywords"
+msgstr "Paraules clau"
+
+#: .\manipulation-gui/gui-rename.c:30 manipulation-gui/gui-rename.c:30
+msgid "Original filename (without extension)"
+msgstr "Nom del fitxer original (sense extensió)"
+
+#: .\manipulation-gui/gui-rename.c:31 manipulation-gui/gui-rename.c:31
+msgid "Incremental number"
+msgstr "Nombre incremental"
+
+#: .\manipulation-gui/gui-rename.c:32 manipulation-gui/gui-rename.c:32
+msgid "Date and time (YYYY-MM-DD_hh-mm)"
+msgstr "Data i hora (AAAA-MM-DD_hh-mm)"
+
+#: .\manipulation-gui/gui-rename.c:52 manipulation-gui/gui-rename.c:52
+#, c-format
+msgid ""
+"Can't save!\n"
+"'%s' or '%s' symbol must be present."
+msgstr ""
+"No es pot desar\n"
+"'%s' o ha de ser present el símbol '%s'."
+
+#: .\manipulation-gui/gui-rename.c:64 manipulation-gui/gui-rename.c:64
+msgid ""
+"Can't save!\n"
+"Pattern contains invalid characters."
+msgstr ""
+"No es pot desar\n"
+"El patró conté caràcters invàlids."
+
+#: .\manipulation-gui/gui-resize.c:37 manipulation-gui/gui-resize.c:37
+msgid "Set to a percentage of the original"
+msgstr "Defineix un percentatge de l'original"
+
+#: .\manipulation-gui/gui-resize.c:39 manipulation-gui/gui-resize.c:39
+msgid "Set exact size in pixel"
+msgstr "Defineix la mida exacta en píxels"
+
+#: .\manipulation-gui/gui-resize.c:45 manipulation-gui/gui-resize.c:45
+msgid "For both dimensions"
+msgstr "Per ambdues dimensions"
+
+#: .\manipulation-gui/gui-resize.c:47 manipulation-gui/gui-resize.c:47
+msgid "Set width only"
+msgstr "Defineix només l'amplada"
+
+#: .\manipulation-gui/gui-resize.c:49 manipulation-gui/gui-resize.c:49
+msgid "Set height only"
+msgstr "Defineix només l'alçada"
+
+#: .\manipulation-gui/gui-resize.c:52 manipulation-gui/gui-resize.c:52
+msgid "Preserve aspect ratio"
+msgstr "Preserva la relació d'aspecte"
+
+#: .\manipulation-gui/gui-resize.c:56 manipulation-gui/gui-resize.c:56
+msgid "Interpolation quality"
+msgstr "Qualitat d'interpolació"
+
+#: .\manipulation-gui/gui-resize.c:69 manipulation-gui/gui-resize.c:69
+msgid "Change resolution"
+msgstr "Canvia la resolució"
+
+#: .\manipulation-gui/gui-resize.c:74 manipulation-gui/gui-resize.c:74
+msgid "X axis"
+msgstr "Eix X"
+
+#: .\manipulation-gui/gui-resize.c:77 manipulation-gui/gui-resize.c:77
+msgid "Y axis"
+msgstr "Eix Y"
+
+#: .\manipulation-gui/gui-sharpblur.c:17 manipulation-gui/gui-sharpblur.c:17
+msgid "More sharpen"
+msgstr "Més realçat"
+
+#: .\manipulation-gui/gui-sharpblur.c:23 manipulation-gui/gui-sharpblur.c:23
+msgid "More blurred"
+msgstr "Més difuminat"
+
+#: .\manipulation-gui/gui-userdef.c:49 manipulation-gui/gui-userdef.c:49
+msgid ""
+"Choose a supported GIMP procedure from the list on the left\n"
+"and define its parameters on the right."
+msgstr ""
+"Trieu un procediment suportat del GIMP de la llista de l'esquerra\n"
+"i definiu els seus paràmetres a la dreta."
+
+#: .\manipulation-gui/gui-userdef.c:61 manipulation-gui/gui-userdef.c:61
+msgid "Search"
+msgstr "Cerca"
+
+#: .\manipulation-gui/gui-userdef.c:303 manipulation-gui/gui-userdef.c:303
+msgid ""
+"Can't save because\n"
+"no procedure has been selected"
+msgstr ""
+"No es pot desar ja que\n"
+"no s'ha seleccionat cap procediment"
+
+#: .\manipulation-gui/gui-userdef.c:349 manipulation-gui/gui-userdef.c:349
+msgid "Author"
+msgstr "Autor:"
+
+#: .\manipulation-gui/gui-userdef.c:570 manipulation-gui/gui-userdef.c:570
+msgid "This procedure takes no editable params"
+msgstr "Aquest procediment no disposa de cap paràmetre editable"
+
+#: .\manipulation-gui/gui-watermark.c:32 manipulation-gui/gui-watermark.c:32
+msgid "Text watermark"
+msgstr "Marca d'aigua de text"
+
+#: .\manipulation-gui/gui-watermark.c:36 manipulation-gui/gui-watermark.c:36
+msgid "Text"
+msgstr "Text"
+
+#: .\manipulation-gui/gui-watermark.c:45 manipulation-gui/gui-watermark.c:45
+msgid "Font"
+msgstr "Tipografia"
+
+#: .\manipulation-gui/gui-watermark.c:51 manipulation-gui/gui-watermark.c:51
+msgid "Color"
+msgstr "Color"
+
+#: .\manipulation-gui/gui-watermark.c:58 manipulation-gui/gui-watermark.c:58
+msgid "Image watermark"
+msgstr "Marca d'aigua d'imatge"
+
+#: .\manipulation-gui/gui-watermark.c:62 manipulation-gui/gui-watermark.c:62
+msgid "Select image"
+msgstr "Seleccioneu el fitxer d'imatge"
+
+#: .\manipulation-gui/gui-watermark.c:67 bimp-gui.c:601
+#: manipulation-gui/gui-watermark.c:67
+msgid "All supported types"
+msgstr "Tots els tipus suportats"
+
+#: .\manipulation-gui/gui-watermark.c:112 manipulation-gui/gui-watermark.c:112
+msgid "Opacity"
+msgstr "Opacitat"
+
+#: .\manipulation-gui/gui-watermark.c:122 manipulation-gui/gui-watermark.c:122
+msgid "Position on the image"
+msgstr "Posició en la imatge"
+
+#: .\manipulation-gui/gui-watermark.c:244 manipulation-gui/gui-watermark.c:244
+msgid "Top-center"
+msgstr "Superior-centre"
+
+#: .\manipulation-gui/gui-watermark.c:247 manipulation-gui/gui-watermark.c:247
+msgid "Top-right"
+msgstr "Superior-dreta"
+
+#: .\manipulation-gui/gui-watermark.c:250 manipulation-gui/gui-watermark.c:250
+msgid "Center-left"
+msgstr "Centre-esquerra"
+
+#: .\manipulation-gui/gui-watermark.c:253 manipulation-gui/gui-watermark.c:253
+msgid "Center"
+msgstr "Centre"
+
+#: .\manipulation-gui/gui-watermark.c:256 manipulation-gui/gui-watermark.c:256
+msgid "Center-right"
+msgstr "Centre-dreta"
+
+#: .\manipulation-gui/gui-watermark.c:262 manipulation-gui/gui-watermark.c:262
+msgid "Bottom-center"
+msgstr "Inferior-centre"
+
+#: .\manipulation-gui/gui-watermark.c:265 manipulation-gui/gui-watermark.c:265
+msgid "Bottom-right"
+msgstr "Inferior-dreta"
+
+#: bimp-gui.c:129 bimp-gui.c:897
+msgid "The manipulations set is empty!"
+msgstr "El paràmetre de processament és buid"
+
+#: bimp-gui.c:132
+msgid "The file list is empty!"
+msgstr "La llista de fitxers és buida"
+
+#: bimp-gui.c:162
+msgid "Manipulation set"
+msgstr "Paràmetre de processament"
+
+#: bimp-gui.c:192
+msgid "Input files and options"
+msgstr "Fitxers i opcions d'entrada"
+
+#: bimp-gui.c:214
+msgid "Add images"
+msgstr "Afegeix imatges"
+
+#: bimp-gui.c:216
+msgid "Remove images"
+msgstr "Suprimeix imatges"
+
+#: bimp-gui.c:224
+msgid "Output folder"
+msgstr "Carpeta de sortida"
+
+#: bimp-gui.c:238
+msgid "Use the selected file's location as the output"
+msgstr "Usa la ubicació dels fitxers seleccionats com a sortida"
+
+#: bimp-gui.c:246
+msgid "Keep folder hierarchy"
+msgstr "Conserva la jerarquia de carpetes"
+
+#: bimp-gui.c:251
+msgid "Delete original file when done"
+msgstr "Esborra el fitxer original en acabat"
+
+#: bimp-gui.c:255
+msgid "Keep the modification dates"
+msgstr "Conserva les dates de modificació"
+
+#: bimp-gui.c:261
+msgid "Click for preview"
+msgstr "Feu clic per la previsualització"
+
+#: bimp-gui.c:354
+#, c-format
+msgid "Couldn't read into \"%s\" directory."
+msgstr "No s'ha pogut llegir dins el directori \"%s\"."
+
+#: bimp-gui.c:464
+msgid "Can't show a preview because the manipulations set is empty"
+msgstr "No es pot mostrar una previsualització ja que el paràmetre de processament és buit"
+
+#: bimp-gui.c:491
+msgid "Preview"
+msgstr "Previsualització"
+
+#: bimp-gui.c:503
+msgid "This is how the selected image will look like after the batch process"
+msgstr "Així és com es veurà la imatge seleccionada després del processament per lots"
+
+#: bimp-gui.c:592
+msgid "Select images"
+msgstr "Selecciona les imatges"
+
+#: bimp-gui.c:665
+msgid "Select folders containing images"
+msgstr "Selecciona les carpetes que contenen les imateges"
+
+#: bimp-gui.c:674
+msgid "Add files from the whole hierarchy"
+msgstr "Afegeix el fitxers de tota la jerarquia"
+
+#: bimp-gui.c:691
+msgid "Select output folder"
+msgstr "Seleccioneu la carpeta de sortida"
+
+#: bimp-gui.c:748 bimp-gui.c:903
+msgid "Save this set..."
+msgstr "Desa aquest paràmetre..."
+
+#: bimp-gui.c:752 bimp-gui.c:958
+msgid "Load set..."
+msgstr "Carrega el paràmetre..."
+
+#: bimp-gui.c:763
+msgid "Edit properties..."
+msgstr "Edita les propietats..."
+
+#: bimp-gui.c:766
+msgid "Remove this manipulation"
+msgstr "Suprimeix aquest processament"
+
+#: bimp-gui.c:773
+msgid "Add single images..."
+msgstr "Afegeix imatges simples..."
+
+#: bimp-gui.c:776
+msgid "Add folders..."
+msgstr "Afegeix carpetes..."
+
+#: bimp-gui.c:779
+msgid "Add all opened images"
+msgstr "Afegeix  totes les imatges obertes"
+
+#: bimp-gui.c:786
+msgid "Remove selected"
+msgstr "Suprimeix les seleccionades"
+
+#: bimp-gui.c:789
+msgid "Remove all"
+msgstr "Suprimeix-ho tot"
+
+#: bimp-gui.c:833
+msgid "Can't add another manipulation of this kind. Only one is permitted!"
+msgstr "No es pot afegir un altre processament d'aquest tipus. Només se'n permet un."
+
+#: bimp-gui.c:924 bimp-gui.c:975
+msgid "An error occured when importing a saved batch file :("
+msgstr "S'ha produït un error en importar un fitxer de procesament per lots desat"
+
+#: bimp-gui.c:946
+msgid "This will overwrite current manipulations set. Continue?"
+msgstr "Aixó sobreescriurà els paràmetres de processament actual. Voleu continuar?"
+
+#: bimp-gui.c:1013 bimp.c:67
+msgid "Applies GIMP manipulations on groups of images"
+msgstr "Aplica els processaments del GIMP en grups d'imatges"
+
+#: bimp-gui.c:1020
+msgid "translator-name <translator-email>"
+msgstr "Xavier Beà<xbea@xtec.cat>"
+
+#: bimp-manipulations.c:275
+msgid "Resize"
+msgstr "Escala"
+
+#: bimp-manipulations.c:278
+msgid "Crop"
+msgstr "Escapça"
+
+#: bimp-manipulations.c:281
+msgid "Flip or Rotate"
+msgstr "Capgira o gira"
+
+#: bimp-manipulations.c:284
+msgid "Color correction"
+msgstr "Correcció de color"
+
+#: bimp-manipulations.c:287
+msgid "Sharp or Blur"
+msgstr "Realça o difumina"
+
+#: bimp-manipulations.c:290
+msgid "Add a Watermark"
+msgstr "Afegeix una marca d'aigua"
+
+#: bimp-manipulations.c:293
+msgid "Change format and compression"
+msgstr "Canvia el format i la compressió"
+
+#: bimp-manipulations.c:296
+msgid "Rename with a pattern"
+msgstr "Reanomena amb un patró"
+
+#: bimp-manipulations.c:299
+msgid "Other GIMP procedure..."
+msgstr "Un altre procediment del GIMP..."
+
+#: bimp-operate.c:171
+#, c-format
+msgid ""
+"Can't save image \"%s\": input file has no extension.\n"
+"You can solve this error by adding a \"Change format or compression\" step"
+msgstr ""
+"No es pot desar la imatge \"%s\": el fitxer d'entrada no té extensió.\n"
+"Podeu solventar aquest error afegint el pas \"Canvia format i compressió\""
+
+#: bimp-operate.c:177
+#, c-format
+msgid ""
+"GIMP can't save %s back to its original SVG format.\n"
+"You can solve this error by adding a \"Change format or compression\" step"
+msgstr ""
+"El GIMP no pot desar %s. Es torna al seu format SVG original.\n"
+"Podeu resoldre aquest error afegint el pas \"Canvia format i compressió\""
+
+#: bimp-operate.c:183
+#, c-format
+msgid "Working on file \"%s\"..."
+msgstr "S'està treballant en el fitxer \"%s\"..."
+
+#: bimp-operate.c:323
+msgid "Operations stopped"
+msgstr "S'han aturat les operacions"
+
+#: bimp-operate.c:330
+#, c-format
+msgid "End, all files have been processed with %d errors"
+msgstr "Fi, tots els fitxers han estat processats amb %d errors"
+
+#: bimp-operate.c:1165
+#, c-format
+msgid "File %s already exists, overwrite it?"
+msgstr "El fitxer «%s» ja existeix, el voleu sobreescriure?"
+
+#: bimp-operate.c:1170
+msgid "Always apply this decision"
+msgstr "Aplica sempre aquesta decisió"
+
+#: bimp-operate.c:1182
+msgid "Overwrite?"
+msgstr "Voleu sobreescriure?"
+
+msgid "Alert when overwriting existing files"
+msgstr "Avisa en sobreescriure fitxers existents"
+
+msgid "Yes, don't ask again"
+msgstr "Sí, no ho preguntis de nou"
+
+msgid "Save this set"
+msgstr "Desa aquest paràmetre"
+
+msgid "Load set"
+msgstr "Carrega el paràmetre"
