@@ -25,8 +25,7 @@ the full set of libraries and dependences to compile BIMP (names can differ depe
 
 For Ubuntu / Linux Mint:
 
-	sudo apt-get install libgimp2.0-dev
-	sudo apt-get install libpcre3-dev
+	sudo apt-get install libgimp2.0-dev libpcre3-dev
 
 Extract the archive containing the BIMP's sources and get into the extracted folder with `cd`. Then:
 
