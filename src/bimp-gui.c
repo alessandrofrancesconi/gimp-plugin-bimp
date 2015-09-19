@@ -65,6 +65,7 @@ GtkWidget *button_preview, *button_outfolder, *button_samefolder;
 GtkWidget* progressbar_visible;
 
 char* selected_source_folder;
+char* last_input_location;
 const gchar* progressbar_data;
 
 enum /* TreeView stuff... */
@@ -606,6 +607,7 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
         GTK_STOCK_ADD, GTK_RESPONSE_ACCEPT, NULL
     );
     gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(file_chooser), TRUE);
+    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(file_chooser), last_input_location);
     
     filter_all = gtk_file_filter_new();
     gtk_file_filter_set_name(filter_all,_("All supported types"));
@@ -660,6 +662,10 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
     /* show dialog */
     if (gtk_dialog_run (GTK_DIALOG(file_chooser)) == GTK_RESPONSE_ACCEPT) {
         selection = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(file_chooser));
+        
+        g_free(last_input_location);
+        last_input_location = gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(file_chooser));
+        
         g_slist_foreach(selection, (GFunc)add_input_file, NULL);
     }
     
@@ -684,10 +690,15 @@ static void open_folder_chooser(GtkWidget *widget, gpointer data)
     GtkWidget* with_subdirs = gtk_check_button_new_with_label(_("Add files from the whole hierarchy"));
     gtk_widget_show (with_subdirs);
     gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(folder_chooser), GTK_WIDGET(with_subdirs));
+    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(folder_chooser), last_input_location);
     
     /* show dialog */
     if (gtk_dialog_run (GTK_DIALOG(folder_chooser)) == GTK_RESPONSE_ACCEPT) {
         selection = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(folder_chooser));
+        
+        g_free(last_input_location);
+        last_input_location = gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(folder_chooser));
+        
         include_subdirs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(with_subdirs));
         g_slist_foreach(selection, (GFunc)add_input_folder, GINT_TO_POINTER(include_subdirs));
     }
