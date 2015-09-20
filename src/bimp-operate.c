@@ -913,14 +913,16 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
         wmheight = gimp_drawable_height(layerId);
         if (settings->image_sizemode != WM_IMG_NOSIZE) {
             if (settings->image_sizemode == WM_IMG_SIZEW) {
-                int wmwidth_ = round((imgwidth * settings->image_size_percent) / 100.0);
-                wmheight = round(((float)wmwidth_ * wmwidth) / wmheight);
-                wmwidth = wmwidth_;
+                float wmwidth_ = (imgwidth * settings->image_size_percent) / 100.0;
+                float diff = (wmwidth_ / wmwidth) * 100;
+                wmheight = round((wmheight * diff) / 100.0);
+                wmwidth = round(wmwidth_);
             }
             else if (settings->image_sizemode == WM_IMG_SIZEH) {
-                int wmheight_ = round((imgheight * settings->image_size_percent) / 100.0);
-                wmwidth = round(((float)wmheight_ * wmheight) / wmwidth);
-                wmheight = wmheight_;
+                float wmheight_ = (imgheight * settings->image_size_percent) / 100.0;
+                float diff = (wmheight_ / wmheight) * 100;
+                wmwidth = round((wmwidth * diff) / 100.0);
+                wmheight = round(wmheight_);
             }
             
             // resize wm
