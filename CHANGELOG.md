@@ -4,6 +4,15 @@ BIMP. Batch Image Manipulation Plugin for GIMP.
 Changelog
 ---------
 
+1.16 (aka "I'm expecting 100.000 donations for this")
+ - Changed layout and added "Fill with padding" option in Resize manipulation (issue #62, #85)
+ - Changed layout and added "Adaptive size" (issue #90) and "Distance to edge" options in Watermark manipulation
+ - Remember last selected folder in file chooser (issue #96)
+ - Small performance improvements when using Resize
+ - Removed title from manipulation windows (redundant with system's GUI)
+ - Updated Win32 installer with optimization for silent mode and other checks
+ - Added Catalan translation (thanks to Xavier Beà) and Chinese translation (thanks to kissbug8720)
+
 1.15
  - BIMP finally has an official installer for Windows!
  - Faster startup
