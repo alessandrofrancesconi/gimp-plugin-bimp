@@ -27,6 +27,7 @@ static gboolean apply_fliprotate(fliprotate_settings, image_output);
 static gboolean apply_color(color_settings, image_output);
 static gboolean apply_sharpblur(sharpblur_settings, image_output);
 static gboolean apply_watermark(watermark_settings, image_output);
+static void calc_watermark_xy (int, int, int, int, watermark_position, int, gdouble*, gdouble*);
 static gboolean apply_userdef(userdef_settings, image_output);
 static gboolean apply_rename(rename_settings, image_output, char*);
 
@@ -526,13 +527,11 @@ static gboolean apply_resize(resize_settings settings, image_output out)
         old_interpolation = gimp_context_get_interpolation();
         
         success = gimp_context_set_interpolation (settings->interpolation);
-        
         success = gimp_image_scale (
             out->image_id, 
             final_w, 
             final_h
         );
-        
         success = gimp_context_set_interpolation (old_interpolation);
     
     #endif
@@ -830,6 +829,9 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
     gdouble posX, posY;
     gint wmwidth, wmheight, wmasc, wmdesc;
     
+    gint imgwidth = gimp_image_width(out->image_id);
+    gint imgheight = gimp_image_height(out->image_id);
+    
     if (settings->mode) {
         if (strlen(settings->text) == 0) {
             return TRUE;
@@ -851,43 +853,13 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
             &wmasc,
             &wmdesc
         );
-
-        if (settings->position == WM_POS_TL) {
-            posX = 10;
-            posY = 5;
-        }
-        else if (settings->position == WM_POS_TC) {
-            posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);
-            posY = 5;
-        }
-        else if (settings->position == WM_POS_TR) {
-            posX = gimp_image_width(out->image_id) - wmwidth - 10;
-            posY = 5;
-        }
-        else if (settings->position == WM_POS_BL) {
-            posX = 10;
-            posY = gimp_image_height(out->image_id) - wmheight - 5;
-        }
-        else if (settings->position == WM_POS_BC) {
-            posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);
-            posY = gimp_image_height(out->image_id) - wmheight - 5;
-        }
-        else if (settings->position == WM_POS_BR) {
-            posX = gimp_image_width(out->image_id) - wmwidth - 10;
-            posY = gimp_image_height(out->image_id) - wmheight - 5;
-        }
-        else if (settings->position == WM_POS_CL) {
-            posX = 10;
-            posY = (gimp_image_height(out->image_id) / 2) - (wmheight / 2);
-        }
-        else if (settings->position == WM_POS_CR) {
-            posX = gimp_image_width(out->image_id) - wmwidth - 10;
-            posY = (gimp_image_height(out->image_id) / 2) - (wmheight / 2);
-        }
-        else {
-            posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);
-            posY = (gimp_image_height(out->image_id) / 2) - (wmheight / 2);
-        }
+        
+        calc_watermark_xy (
+            imgwidth, imgheight,
+            wmwidth, wmheight, 
+            settings->position, 
+            settings->edge_distance, 
+            &posX, &posY);
         
         layerId = gimp_text_fontname(
             out->image_id,
@@ -905,7 +877,7 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
         gimp_layer_set_opacity(layerId, settings->opacity);
     }
     else {
-        if (!g_file_test(settings->image_file, G_FILE_TEST_IS_REGULAR)) {//((access(settings->image_file, R_OK) == -1)) {
+        if (!g_file_test(settings->image_file, G_FILE_TEST_IS_REGULAR)) {
             // error, can't access image file
             return TRUE;
         }
@@ -915,10 +887,6 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
             out->image_id,
             settings->image_file
         );
-        
-        gimp_layer_set_opacity(layerId, settings->opacity);
-        wmwidth = gimp_drawable_width(layerId);
-        wmheight = gimp_drawable_height(layerId);
         
         #if USE_API26
         
@@ -941,42 +909,56 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
             
         #endif
         
-        if (settings->position == WM_POS_TL) {
-            posX = 10;
-            posY = 10;
+        wmwidth = gimp_drawable_width(layerId);
+        wmheight = gimp_drawable_height(layerId);
+        if (settings->image_sizemode != WM_IMG_NOSIZE) {
+            if (settings->image_sizemode == WM_IMG_SIZEW) {
+                int wmwidth_ = round((imgwidth * settings->image_size_percent) / 100.0);
+                wmheight = round(((float)wmwidth_ * wmwidth) / wmheight);
+                wmwidth = wmwidth_;
+            }
+            else if (settings->image_sizemode == WM_IMG_SIZEH) {
+                int wmheight_ = round((imgheight * settings->image_size_percent) / 100.0);
+                wmwidth = round(((float)wmheight_ * wmheight) / wmwidth);
+                wmheight = wmheight_;
+            }
+            
+            // resize wm
+            #if USE_API26
+            
+                success = gimp_layer_scale_full (
+                    layerId, 
+                    wmwidth, 
+                    wmheight, 
+                    TRUE,
+                    GIMP_INTERPOLATION_CUBIC
+                );
+                
+            #else
+                
+                GimpInterpolationType old_interpolation;
+                old_interpolation = gimp_context_get_interpolation();
+                
+                success = gimp_context_set_interpolation (GIMP_INTERPOLATION_CUBIC);
+                success = gimp_layer_scale (
+                    layerId, 
+                    wmwidth, 
+                    wmheight,
+                    TRUE
+                );
+                success = gimp_context_set_interpolation (old_interpolation);
+            
+            #endif
         }
-        else if (settings->position == WM_POS_TC) {
-            posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);
-            posY = 10;
-        }
-        else if (settings->position == WM_POS_TR) {
-            posX = gimp_image_width(out->image_id) - wmwidth - 10;
-            posY = 10;
-        }
-        else if (settings->position == WM_POS_BL) {
-            posX = 10;
-            posY = gimp_image_height(out->image_id) - wmheight - 10;
-        }
-        else if (settings->position == WM_POS_BC) {
-            posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);
-            posY = gimp_image_height(out->image_id) - wmheight - 10;
-        }
-        else if (settings->position == WM_POS_BR) {
-            posX = gimp_image_width(out->image_id) - wmwidth - 10;
-            posY = gimp_image_height(out->image_id) - wmheight - 10;
-        }
-        else if (settings->position == WM_POS_CL) {
-            posX = 10;
-            posY = (gimp_image_height(out->image_id) / 2) - (wmheight / 2);
-        }
-        else if (settings->position == WM_POS_CR) {
-            posX = gimp_image_width(out->image_id) - wmwidth - 10;
-            posY = (gimp_image_height(out->image_id) / 2) - (wmheight / 2);
-        }
-        else {
-            posX = (gimp_image_width(out->image_id) / 2) - (wmwidth / 2);
-            posY = (gimp_image_height(out->image_id) / 2) - (wmheight / 2);
-        }
+        
+        gimp_layer_set_opacity(layerId, settings->opacity);
+                
+        calc_watermark_xy (
+            imgwidth, imgheight, 
+            wmwidth, wmheight, 
+            settings->position, 
+            settings->edge_distance, 
+            &posX, &posY);
         
         gimp_layer_set_offsets(
             layerId,
@@ -990,6 +972,45 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
     out->drawable_ids = gimp_image_get_layers(out->image_id, &out->drawable_count);
     
     return success;
+}
+
+static void calc_watermark_xy (int imgwidth, int imgheight, int wmwidth, int wmheight, watermark_position position, int edge, gdouble* posX, gdouble* posY) {
+    if (position == WM_POS_TL) {
+        *posX = edge;
+        *posY = edge;
+    }
+    else if (position == WM_POS_TC) {
+        *posX = (imgwidth / 2) - (wmwidth / 2);
+        *posY = edge;
+    }
+    else if (position == WM_POS_TR) {
+        *posX = imgwidth - wmwidth - edge;
+        *posY = edge;
+    }
+    else if (position == WM_POS_BL) {
+        *posX = edge;
+        *posY = imgheight - wmheight - edge;
+    }
+    else if (position == WM_POS_BC) {
+        *posX = (imgwidth / 2) - (wmwidth / 2);
+        *posY = imgheight - wmheight - edge;
+    }
+    else if (position == WM_POS_BR) {
+        *posX = imgwidth - wmwidth - edge;
+        *posY = imgheight - wmheight - edge;
+    }
+    else if (position == WM_POS_CL) {
+        *posX = edge;
+        *posY = (imgheight / 2) - (wmheight / 2);
+    }
+    else if (position == WM_POS_CR) {
+        *posX = imgwidth - wmwidth - edge;
+        *posY = (imgheight / 2) - (wmheight / 2);
+    }
+    else {
+        *posX = (imgwidth / 2) - (wmwidth / 2);
+        *posY = (imgheight / 2) - (wmheight / 2);
+    }
 }
 
 static gboolean apply_userdef(userdef_settings settings, image_output out) 

@@ -214,7 +214,10 @@ manipulation manipulation_watermark_new()
     gdk_color_parse("black", &(((watermark_settings)watermark->settings)->color));
     gdk_colormap_alloc_color(gdk_colormap_get_system(), &(((watermark_settings)watermark->settings)->color), TRUE, TRUE);
     ((watermark_settings)watermark->settings)->image_file = NULL;
+    ((watermark_settings)watermark->settings)->image_sizemode = WM_IMG_NOSIZE;
+    ((watermark_settings)watermark->settings)->image_size_percent = 25.0;
     ((watermark_settings)watermark->settings)->opacity = 100.0;
+    ((watermark_settings)watermark->settings)->edge_distance = 0;
     ((watermark_settings)watermark->settings)->position = WM_POS_BR;
     
     return watermark;

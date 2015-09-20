@@ -105,6 +105,13 @@ typedef enum watermark_position {
     WM_POS_END
 } watermark_position;
 
+typedef enum watermark_image_sizemode {
+    WM_IMG_NOSIZE = 0,
+    WM_IMG_SIZEW,
+    WM_IMG_SIZEH,
+    WM_IMG_END
+} watermark_image_sizemode;
+
 typedef void *manipulation_settings;
 typedef void *format_params;
 
@@ -167,7 +174,10 @@ typedef struct manip_watermark_set {
     PangoFontDescription* font;
     GdkColor color;
     char* image_file;
+    watermark_image_sizemode image_sizemode;
+    float image_size_percent;
     float opacity;
+    int edge_distance;
     watermark_position position;
 } *watermark_settings;
 

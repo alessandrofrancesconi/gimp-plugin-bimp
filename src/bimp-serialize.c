@@ -529,7 +529,10 @@ static void write_watermark(watermark_settings settings, GKeyFile* file)
     g_key_file_set_string(file, group_name, "font", pango_font_description_to_string(settings->font));
     g_key_file_set_string(file, group_name, "color", gdk_color_to_string(&(settings->color)));
     if (settings->image_file != NULL) g_key_file_set_string(file, group_name, "image_file", settings->image_file);
+    g_key_file_set_integer(file, group_name, "image_sizemode", settings->image_sizemode);
+    g_key_file_set_double(file, group_name, "image_size_percent", settings->image_size_percent);
     g_key_file_set_integer(file, group_name, "opacity", settings->opacity);
+    g_key_file_set_integer(file, group_name, "edge_distance", settings->edge_distance);
     g_key_file_set_integer(file, group_name, "position", settings->position);
 }
 
@@ -557,9 +560,18 @@ static manipulation read_watermark(GKeyFile* file)
         if (g_key_file_has_key(file, group_name, "image_file", NULL)) 
             settings->image_file = g_key_file_get_string(file, group_name, "image_file", NULL);
             
+        if (g_key_file_has_key(file, group_name, "image_sizemode", NULL)) 
+            settings->image_sizemode = g_key_file_get_integer(file, group_name, "image_sizemode", NULL);
+        
+        if (g_key_file_has_key(file, group_name, "image_size_percent", NULL)) 
+            settings->image_size_percent = g_key_file_get_double(file, group_name, "image_size_percent", NULL);
+        
         if (g_key_file_has_key(file, group_name, "opacity", NULL)) 
             settings->opacity = g_key_file_get_integer(file, group_name, "opacity", NULL);
-
+        
+        if (g_key_file_has_key(file, group_name, "edge_distance", NULL)) 
+            settings->edge_distance = g_key_file_get_integer(file, group_name, "edge_distance", NULL);
+        
         if (g_key_file_has_key(file, group_name, "position", NULL)) 
             settings->position = g_key_file_get_integer(file, group_name, "position", NULL);
     }
