@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gimp-plugin-bimp\n"
-"POT-Creation-Date: 2015-09-20 13:22+0200\n"
-"PO-Revision-Date: 2015-09-20 13:22+0200\n"
+"POT-Creation-Date: 2015-09-20 15:30+0200\n"
+"PO-Revision-Date: 2015-09-20 15:30+0200\n"
 "Last-Translator: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language: zh\n"
@@ -326,15 +326,15 @@ msgstr "长宽都设置"
 
 #: manipulation-gui/gui-resize.c:53
 msgid "Width only"
-msgstr ""
+msgstr "仅设置宽度"
 
 #: manipulation-gui/gui-resize.c:54
 msgid "Height only"
-msgstr ""
+msgstr "仅设置高度"
 
 #: manipulation-gui/gui-resize.c:64
 msgid "Allow stretching"
-msgstr ""
+msgstr "允许拉伸"
 
 #: manipulation-gui/gui-resize.c:66
 msgid "Preserve aspect ratio"
@@ -342,7 +342,7 @@ msgstr "保持长宽比"
 
 #: manipulation-gui/gui-resize.c:68
 msgid "Fill with padding"
-msgstr ""
+msgstr "填充"
 
 #: manipulation-gui/gui-resize.c:92
 msgid "Interpolation quality"
@@ -422,12 +422,12 @@ msgstr "选择图片"
 
 #: manipulation-gui/gui-watermark.c:73
 msgid "Adaptive size"
-msgstr ""
+msgstr "自适应尺寸"
 
 #: manipulation-gui/gui-watermark.c:77
 #, c-format
 msgid "% of"
-msgstr ""
+msgstr "% of"
 
 #: manipulation-gui/gui-watermark.c:87 bimp-gui.c:613
 msgid "All supported types"
@@ -439,7 +439,7 @@ msgstr "不透明度"
 
 #: manipulation-gui/gui-watermark.c:142
 msgid "Distance to edge"
-msgstr ""
+msgstr "到边缘的距离"
 
 #: manipulation-gui/gui-watermark.c:146
 msgid "Position on the image"
@@ -447,19 +447,19 @@ msgstr "水印添加位置"
 
 #: manipulation-gui/gui-watermark.c:304
 msgid "Top-center"
-msgstr ""
+msgstr "上部居中"
 
 #: manipulation-gui/gui-watermark.c:310
 msgid "Center-left"
-msgstr ""
+msgstr "左侧居中"
 
 #: manipulation-gui/gui-watermark.c:316
 msgid "Center-right"
-msgstr ""
+msgstr "右侧居中"
 
 #: manipulation-gui/gui-watermark.c:322
 msgid "Bottom-center"
-msgstr ""
+msgstr "底部居中"
 
 #: bimp-gui.c:130 bimp-gui.c:918
 msgid "The manipulations set is empty!"
@@ -672,16 +672,16 @@ msgstr "操作停止"
 msgid "End, all files have been processed with %d errors"
 msgstr "所有的文件都发生了 %d 错误"
 
-#: bimp-operate.c:1364
+#: bimp-operate.c:1366
 #, c-format
 msgid "File %s already exists, overwrite it?"
 msgstr "文件 %s 已经存在，覆盖它吗?"
 
-#: bimp-operate.c:1369
+#: bimp-operate.c:1371
 msgid "Always apply this decision"
 msgstr "总是应用这个设定"
 
-#: bimp-operate.c:1381
+#: bimp-operate.c:1383
 msgid "Overwrite?"
 msgstr "覆盖?"
 
