@@ -74,7 +74,7 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_image_adaptsize), settings->image_sizemode != WM_IMG_NOSIZE);
     hbox_image_size = gtk_hbox_new(FALSE, 5);
     spin_image_sizepercent = gtk_spin_button_new(GTK_ADJUSTMENT(gtk_adjustment_new (settings->image_size_percent, 0.1, 100.0, 0.1, 1, 0)), 1, 1);
-    label_percentof = gtk_label_new(g_strconcat(_("% of"), NULL));
+    label_percentof = gtk_label_new(g_strconcat(_("%% of"), NULL));
     
     combo_image_sizemode = gtk_combo_box_new_text();
     gtk_combo_box_append_text(GTK_COMBO_BOX(combo_image_sizemode), _("Width"));
