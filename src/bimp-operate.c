@@ -540,11 +540,19 @@ static gboolean apply_resize(resize_settings settings, image_output out)
     if (settings->stretch_mode == STRETCH_PADDED) {
         
         // the padding will be drawn using a coloured layer at the bottom of the image
+        int imageType = gimp_image_base_type(out->image_id);
+        int layerType;
+        if (imageType == 2) layerType = 4; // see http://oldhome.schmorp.de/marc/pdb/gimp_layer_new.html
+        else if (imageType == 1) layerType = 2;
+        else layerType = 0;
+        
+        if (gimp_drawable_has_alpha(out->drawable_ids[0])) layerType ++;
+        
         gint32 layerId = gimp_layer_new(
             out->image_id,
             "padding_layer",
             view_w, view_h,
-            GIMP_RGBA_IMAGE,
+            layerType,
             (settings->padding_color_alpha / (float)G_MAXUINT16) * 100,
             GIMP_NORMAL_MODE
         );

@@ -1,0 +1,522 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: gimp-plugin-bimp\n"
+"POT-Creation-Date: 2015-05-21 22:12+0100\n"
+"PO-Revision-Date: 2015-10-23 11:14+0300\n"
+"Last-Translator: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
+"Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.6\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ../../../../../src\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: ./manipulation-gui\n"
+
+msgid "% of"
+msgstr "% от"
+
+msgid "Adaptive size"
+msgstr "Адаптивный размер"
+
+msgid "Add a Watermark"
+msgstr "Добавление водяного знака"
+
+msgid "Add all opened images"
+msgstr "Добавить все открытые изображения"
+
+msgid "Add files from the whole hierarchy"
+msgstr "Добавить файлы из всех подпапок"
+
+msgid "Add folders..."
+msgstr "Добавить папки ..."
+
+msgid "Add images"
+msgstr "Добавить изображения"
+
+msgid "Add single images..."
+msgstr "Добавить одиночные изображения ..."
+
+msgid "Advanced params"
+msgstr "Дополнительные параметры"
+
+msgid "Alert when overwriting existing files"
+msgstr "Предупреждать при перезаписи существующих файлов"
+
+msgid "All supported types"
+msgstr "Все поддерживаемые типы"
+
+msgid "Allow stretching"
+msgstr "Разрешить растяжение"
+
+msgid "Always apply this decision"
+msgstr "Всегда применять данный выбор"
+
+msgid "An error occured when importing a saved batch file :("
+msgstr "Произошла ошибка при импорте сохраненного файла :( "
+
+msgid "Applies GIMP manipulations on groups of images"
+msgstr "Применение преобразований GIMP к группам изображений"
+
+msgid "Author"
+msgstr "Автор"
+
+msgid "Automatic color levels correction"
+msgstr "Автоматическая коррекция цветовых уровней"
+
+msgid "Bottom-center"
+msgstr "Внизу по центру"
+
+msgid "Bottom-left"
+msgstr "Внизу слева"
+
+msgid "Bottom-right"
+msgstr "Внизу справа"
+
+msgid "Brightness"
+msgstr "Яркость"
+
+msgid "CCITT G3 Fax"
+msgstr "CCITT G3 Факс"
+
+msgid "CCITT G4 Fax"
+msgstr "CCITT G4 Факс"
+
+msgid "Can't add another manipulation of this kind. Only one is permitted!"
+msgstr ""
+"Невозможно добавить другое преобразование данного типа. Разрешается только "
+"одно!"
+
+msgid ""
+"Can't save because\n"
+"no procedure has been selected"
+msgstr ""
+"Невозможно сохранить,\n"
+" т.к. не была выбрана процедура"
+
+msgid ""
+"Can't save!\n"
+"'%s' or '%s' symbol must be present."
+msgstr ""
+"Нвозможно сохранить!\n"
+"Должен присутствовать символ «%s» или «%s»."
+
+msgid ""
+"Can't save!\n"
+"Pattern contains invalid characters."
+msgstr ""
+"Невозможно сохранить!\n"
+"Шаблон содержит недопустимые символы."
+
+msgid "Can't show a preview because the manipulations set is empty"
+msgstr ""
+"Невозможно показать предварительный просмотр, потому что список "
+"преобразований пуст"
+
+msgid "Center"
+msgstr "Центр"
+
+msgid "Center-left"
+msgstr "Слева по центру"
+
+msgid "Center-right"
+msgstr "Справа по центру"
+
+msgid "Change color curve from settings file:"
+msgstr "Применить цветовую кривую из файла настроек"
+
+msgid "Change format and compression"
+msgstr "Изменение формата и сжатия"
+
+msgid "Change resolution"
+msgstr "Сменить разрешение"
+
+msgid ""
+"Choose a supported GIMP procedure from the list on the left\n"
+"and define its parameters on the right."
+msgstr ""
+"Выберите поддерживаемую функцию GIMP из списка слева и задайте ее параметры "
+"справа."
+
+msgid "Classic 35 mm film"
+msgstr "Стандартная фотопленка 35 мм"
+
+msgid "Classic smartphone screen"
+msgstr "Стандартный экран смартфона"
+
+msgid "Classic tablet screen"
+msgstr "Стандартный экран планшета"
+
+msgid "Click for preview"
+msgstr "Нажмите для предварительного просмотра"
+
+msgid "Color"
+msgstr "Цвет"
+
+msgid "Color correction"
+msgstr "Цветовая коррекция"
+
+msgid "Comment"
+msgstr "Комментарий"
+
+msgid "Compression"
+msgstr "Сжатие"
+
+msgid "Contrast"
+msgstr "Контраст"
+
+msgid "Convert to grayscale"
+msgstr "Преобразовать в оттенки серого"
+
+msgid "Couldn't read into \"%s\" directory."
+msgstr "Не удалось открыть файлы из папки \"%s\"."
+
+msgid "Crop"
+msgstr "Обрезка"
+
+msgid "Crop to a standard aspect ratio"
+msgstr "Обрезать со стандартными пропорциями"
+
+msgid "Custom ratio"
+msgstr "Произвольные пропорции"
+
+msgid "DCT algorithm"
+msgstr "DCT алгоритм"
+
+msgid "Date and time (YYYY-MM-DD_hh-mm)"
+msgstr "Дата и время (YYYY-MM-DD_hh-mm)"
+
+msgid "Deflate"
+msgstr "Дефляция"
+
+msgid "Delete original file when done"
+msgstr "Удалить исходный файл после завершения"
+
+msgid "Distance to edge"
+msgstr "Расстояние от края"
+
+msgid "EU Passport portrait"
+msgstr "Фото на европаспорт"
+
+msgid "Edit properties..."
+msgstr "Редактировать параметры ..."
+
+msgid "End, all files have been processed with %d errors"
+msgstr "Завершено, все файлы обработаны, ошибок %d"
+
+msgid "Fast integer"
+msgstr "Быстрый целочисленный"
+
+msgid "File %s already exists, overwrite it?"
+msgstr "Файл %s существует.  Перезаписать?"
+
+msgid "Fill with padding"
+msgstr "Залить цветом"
+
+msgid "Flip"
+msgstr "Отражение"
+
+msgid "Flip or Rotate"
+msgstr "Отражение и поворот"
+
+msgid "Float"
+msgstr "С плавающей запятой"
+
+msgid "Font"
+msgstr "Шрифт"
+
+msgid "For both dimensions"
+msgstr "Оба размера"
+
+msgid "Format settings"
+msgstr "Параметры формата"
+
+msgid "Height"
+msgstr "Высота"
+
+msgid "Height only"
+msgstr "Только высота"
+
+msgid "Horizontally"
+msgstr "Горизонтально"
+
+msgid "Image origin"
+msgstr "Исходная точка"
+
+msgid "Image watermark"
+msgstr "Графический водяной знак"
+
+msgid "Incremental number"
+msgstr "Порядковый номер"
+
+msgid "Input files and options"
+msgstr "Входные файлы и параметры"
+
+msgid "Integer"
+msgstr "Целочисленный"
+
+msgid "Interlace (Adam7)"
+msgstr "Чересстрочный (Adam7)"
+
+msgid "Interlaced"
+msgstr "Чересстрочный"
+
+msgid "Interpolation quality"
+msgstr "Качество интерполяции"
+
+msgid "JPEG"
+msgstr "JPEG"
+
+msgid "Keep folder hierarchy"
+msgstr "Сохранить структуру подпапок"
+
+msgid "Keep the modification dates"
+msgstr "Сохранить даты изменения"
+
+msgid "Keywords"
+msgstr "Ключевые слова"
+
+msgid "LZW"
+msgstr "LZW"
+
+msgid "Load set..."
+msgstr "Загрузить список..."
+
+msgid "Manipulation set"
+msgstr "Список преобразований"
+
+msgid "Manual crop (pixel values)"
+msgstr "Ручная обрезка (значения в пикселях)"
+
+msgid "Markers rows"
+msgstr "Маркерн.строки"
+
+msgid "More blurred"
+msgstr "Более размытое"
+
+msgid "More sharpen"
+msgstr "Более резкое"
+
+msgid "None"
+msgstr "Нет"
+
+msgid "One-to-one"
+msgstr "Один к одному"
+
+msgid "Opacity"
+msgstr "Непрозрачность"
+
+msgid "Operations stopped"
+msgstr "Выполнение прекращено"
+
+msgid "Optimize"
+msgstr "Оптимизация"
+
+msgid "Original filename (without extension)"
+msgstr "Исходное имя файла (без расширения)"
+
+msgid "Other GIMP procedure..."
+msgstr "Другая процедура GIMP..."
+
+msgid "Output folder"
+msgstr "Выходная папка"
+
+msgid "Overwrite?"
+msgstr "Перезаписать?"
+
+msgid "Pack bits"
+msgstr "Побитная упаковка"
+
+msgid "Position on the image"
+msgstr "Позиция на изображении"
+
+msgid "Preserve aspect ratio"
+msgstr "Сохранить пропорции"
+
+msgid "Preview"
+msgstr "Предпросмотр"
+
+msgid "Progressive"
+msgstr "Прогрессивн."
+
+msgid "Quality"
+msgstr "Качество"
+
+msgid "RLE compression"
+msgstr "Сжатие RLE"
+
+msgid "Remove all"
+msgstr "Удалить все"
+
+msgid "Remove images"
+msgstr "Удалить изображения"
+
+msgid "Remove selected"
+msgstr "Удалить выбранные"
+
+msgid "Remove this manipulation"
+msgstr "Удалить это преобразование"
+
+msgid "Rename with a pattern"
+msgstr "Переименование по образцу"
+
+msgid "Resize"
+msgstr "Изменение размера"
+
+msgid "Rotation"
+msgstr "Поворот"
+
+msgid "Save background color"
+msgstr "Сохранить цвет фона"
+
+msgid "Save baseline"
+msgstr ""
+"Сохр. базов.\n"
+" режим"
+
+msgid "Save color from transparent pixels"
+msgstr "Сохранить цвета от прозрачных пикселов"
+
+msgid "Save comments"
+msgstr "Сохранить комментарии"
+
+msgid "Save creation date"
+msgstr "Сохранить дату создания"
+
+msgid "Save gamma"
+msgstr "Сохранить гамму"
+
+msgid "Save layer offset"
+msgstr "Сохранить смещение слоя"
+
+msgid "Save resolution"
+msgstr "Сохранить разрешение"
+
+msgid "Save this set..."
+msgstr "Сохранить этот список ..."
+
+msgid "Search"
+msgstr "Поиск"
+
+msgid "Select folders containing images"
+msgstr "Выберите папки, содержащие изображения"
+
+msgid "Select GIMP Curve file"
+msgstr "Выберите файл GIMP с кривой"
+
+msgid "Select image"
+msgstr "Выбрать изображение"
+
+msgid "Select images"
+msgstr "Выбрать изображения"
+
+msgid "Select output folder"
+msgstr "Выбрать папку вывода"
+
+msgid "Set exact size in pixel"
+msgstr "Задание точного размера в пикселях"
+
+msgid "Set height only"
+msgstr "Задание только высоты"
+
+msgid "Set to a percentage of the original"
+msgstr "Задание в процентах от оригинала"
+
+msgid "Set width only"
+msgstr "Задание только ширины"
+
+msgid "Sharp or Blur"
+msgstr "Увеличение резкости или размытие"
+
+msgid "Small size"
+msgstr "Малый размер"
+
+msgid "Smoothing"
+msgstr "Сглаживание"
+
+msgid ""
+"Some images were not imported because they have not been saved on filesystem "
+"yet."
+msgstr ""
+"Некоторые изображения не были импортированы, потому что они  еще не "
+"сохранены."
+
+msgid "Standard VGA monitor"
+msgstr "Стандартный монитор VGA"
+
+msgid "Start from"
+msgstr "Исходн.точка"
+
+msgid "Subsampling"
+msgstr "Семплирование"
+
+msgid "Tall smartphone screen"
+msgstr "Высокий экран смартфона"
+
+msgid "Text"
+msgstr "Текст"
+
+msgid "Text watermark"
+msgstr "Текстовый водяной знак"
+
+msgid "The file list is empty!"
+msgstr "Список файлов пуст!"
+
+msgid "The manipulations set is empty!"
+msgstr "Список преобразований пуст!"
+
+msgid "This format has no params"
+msgstr "У этого формата нет параметров"
+
+msgid "This is how the selected image will look like after the batch process"
+msgstr "Так выбранное изображение будет выглядеть после пакетной обработки"
+
+msgid "This procedure takes no editable params"
+msgstr "У данной процедуры нет параметров"
+
+msgid "This will overwrite current manipulations set. Continue?"
+msgstr "Текущий список преобразований будет перезаписан. Продолжить?"
+
+msgid "Top-center"
+msgstr "Сверху по центру"
+
+msgid "Top-left"
+msgstr "Сверху слева"
+
+msgid "Top-right"
+msgstr "Сверху справа"
+
+msgid "Use the selected file's location as the output"
+msgstr "Использовать местоположение выбранного файла для выходных файлов"
+
+msgid "Vertically"
+msgstr "Вертикально"
+
+msgid "Widescreen"
+msgstr "Широкий экран"
+
+msgid "Widescreen extended"
+msgstr "Расширенный экран"
+
+msgid "Width"
+msgstr "Ширина"
+
+msgid "Width only"
+msgstr "Только ширина"
+
+msgid "Working on file \"%s\"..."
+msgstr "Обработка файла \"%s\"..."
+
+msgid "X axis"
+msgstr "Ось X"
+
+msgid "Y axis"
+msgstr "Ось Y"
+
+msgid "translator-name <translator-email>"
+msgstr "Yuri Krasilnikov <ydkras@gmail.com>"
