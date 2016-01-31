@@ -1,0 +1,717 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: gimp-plugin-bimp\n"
+"POT-Creation-Date: 2015-09-20 15:30+0200\n"
+"PO-Revision-Date: 2016-01-31 20:28+0800\n"
+"Last-Translator: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
+"Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.4\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-Basepath: ../../../src\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: ./manipulation-gui\n"
+
+#: manipulation-gui/gui-changeformat.c:37
+msgid "Format settings"
+msgstr "格式設定"
+
+#: manipulation-gui/gui-changeformat.c:58
+msgid "Interlaced"
+msgstr "交錯"
+
+#: manipulation-gui/gui-changeformat.c:78
+#: manipulation-gui/gui-changeformat.c:118
+msgid "Quality"
+msgstr "品質"
+
+#: manipulation-gui/gui-changeformat.c:84
+#: manipulation-gui/gui-changeformat.c:213
+msgid "Advanced params"
+msgstr "更多參數"
+
+#: manipulation-gui/gui-changeformat.c:88
+msgid "Smoothing"
+msgstr "平滑化"
+
+#: manipulation-gui/gui-changeformat.c:95
+msgid "Optimize"
+msgstr "最佳化"
+
+#: manipulation-gui/gui-changeformat.c:96
+msgid "Progressive"
+msgstr "漸進"
+
+#: manipulation-gui/gui-changeformat.c:97
+msgid "Save baseline"
+msgstr "儲存基線"
+
+#: manipulation-gui/gui-changeformat.c:100
+msgid "Comment"
+msgstr "註解"
+
+#: manipulation-gui/gui-changeformat.c:107
+msgid "Markers rows"
+msgstr "標記行數"
+
+#: manipulation-gui/gui-changeformat.c:112
+msgid "Subsampling"
+msgstr "取樣"
+
+#: manipulation-gui/gui-changeformat.c:116
+msgid "Small size"
+msgstr "小尺寸"
+
+#: manipulation-gui/gui-changeformat.c:123
+msgid "DCT algorithm"
+msgstr "DCT 演算法"
+
+#: manipulation-gui/gui-changeformat.c:127
+msgid "Integer"
+msgstr "整數"
+
+#: manipulation-gui/gui-changeformat.c:128
+msgid "Fast integer"
+msgstr "快速整數"
+
+#: manipulation-gui/gui-changeformat.c:129
+msgid "Float"
+msgstr "浮點數"
+
+#: manipulation-gui/gui-changeformat.c:205
+msgid "Interlace (Adam7)"
+msgstr "交錯 (Adam7)"
+
+#: manipulation-gui/gui-changeformat.c:207
+#: manipulation-gui/gui-changeformat.c:303
+msgid "Compression"
+msgstr "壓縮"
+
+#: manipulation-gui/gui-changeformat.c:216
+msgid "Save background color"
+msgstr "儲存背景顏色"
+
+#: manipulation-gui/gui-changeformat.c:217
+msgid "Save gamma"
+msgstr "儲存 Gamma"
+
+#: manipulation-gui/gui-changeformat.c:218
+msgid "Save layer offset"
+msgstr "儲存圖層偏移"
+
+#: manipulation-gui/gui-changeformat.c:219
+msgid "Save resolution"
+msgstr "儲存解析度"
+
+#: manipulation-gui/gui-changeformat.c:220
+msgid "Save creation date"
+msgstr "儲存建立日期"
+
+#: manipulation-gui/gui-changeformat.c:221
+msgid "Save comments"
+msgstr "儲存註解"
+
+#: manipulation-gui/gui-changeformat.c:222
+msgid "Save color from transparent pixels"
+msgstr "儲存透明像素中的顏色"
+
+#: manipulation-gui/gui-changeformat.c:270
+msgid "RLE compression"
+msgstr "RLE 壓縮"
+
+#: manipulation-gui/gui-changeformat.c:273
+msgid "Image origin"
+msgstr "影像來源"
+
+#: manipulation-gui/gui-changeformat.c:278 manipulation-gui/gui-crop.c:71
+#: manipulation-gui/gui-watermark.c:301
+msgid "Top-left"
+msgstr "左上角"
+
+#: manipulation-gui/gui-changeformat.c:279 manipulation-gui/gui-crop.c:73
+#: manipulation-gui/gui-watermark.c:319
+msgid "Bottom-left"
+msgstr "左下角"
+
+#: manipulation-gui/gui-changeformat.c:308
+#: manipulation-gui/gui-fliprotate.c:39
+msgid "None"
+msgstr "不旋轉"
+
+#: manipulation-gui/gui-changeformat.c:309
+msgid "LZW"
+msgstr "LZW"
+
+#: manipulation-gui/gui-changeformat.c:310
+msgid "Pack bits"
+msgstr "Pack Bits"
+
+#: manipulation-gui/gui-changeformat.c:311
+msgid "Deflate"
+msgstr "Deflate 壓縮"
+
+#: manipulation-gui/gui-changeformat.c:312
+msgid "JPEG"
+msgstr "JPEG"
+
+#: manipulation-gui/gui-changeformat.c:313
+msgid "CCITT G3 Fax"
+msgstr "CCITT G3 傳真"
+
+#: manipulation-gui/gui-changeformat.c:314
+msgid "CCITT G4 Fax"
+msgstr "CCITT G4 傳真"
+
+#: manipulation-gui/gui-changeformat.c:329
+msgid "This format has no params"
+msgstr "此格式沒有參數"
+
+#: manipulation-gui/gui-color.c:22
+msgid "Brightness"
+msgstr "亮度"
+
+#: manipulation-gui/gui-color.c:30
+msgid "Contrast"
+msgstr "對比度"
+
+#: manipulation-gui/gui-color.c:37
+msgid "Convert to grayscale"
+msgstr "轉換為灰階"
+
+#: manipulation-gui/gui-color.c:39
+msgid "Automatic color levels correction"
+msgstr "自動色階調整"
+
+#: manipulation-gui/gui-color.c:42
+msgid "Change color curve from settings file:"
+msgstr "從設定檔調整色彩曲線: "
+
+#: manipulation-gui/gui-color.c:47
+msgid "Select GIMP Curve file"
+msgstr "選擇 GIMP 曲線檔案"
+
+#: manipulation-gui/gui-crop.c:28
+msgid "Crop to a standard aspect ratio"
+msgstr "裁切成標準長寬比"
+
+#: manipulation-gui/gui-crop.c:54
+msgid "Manual crop (pixel values)"
+msgstr "手動裁切 (px)"
+
+#: manipulation-gui/gui-crop.c:59 manipulation-gui/gui-resize.c:82
+#: manipulation-gui/gui-watermark.c:80
+msgid "Width"
+msgstr "寬度"
+
+#: manipulation-gui/gui-crop.c:63 manipulation-gui/gui-resize.c:85
+#: manipulation-gui/gui-watermark.c:81
+msgid "Height"
+msgstr "高度"
+
+#: manipulation-gui/gui-crop.c:68
+msgid "Start from"
+msgstr "起始位置"
+
+#: manipulation-gui/gui-crop.c:70 manipulation-gui/gui-watermark.c:313
+msgid "Center"
+msgstr "中心"
+
+#: manipulation-gui/gui-crop.c:72 manipulation-gui/gui-watermark.c:307
+msgid "Top-right"
+msgstr "右上角"
+
+#: manipulation-gui/gui-crop.c:74 manipulation-gui/gui-watermark.c:325
+msgid "Bottom-right"
+msgstr "右下角"
+
+#: manipulation-gui/gui-crop.c:133
+msgid "One-to-one"
+msgstr "1:1"
+
+#: manipulation-gui/gui-crop.c:136
+msgid "Classic 35 mm film"
+msgstr "35 毫米膠片"
+
+#: manipulation-gui/gui-crop.c:139
+msgid "Standard VGA monitor"
+msgstr "標準 VGA 螢幕"
+
+#: manipulation-gui/gui-crop.c:142
+msgid "Widescreen"
+msgstr "寬螢幕"
+
+#: manipulation-gui/gui-crop.c:145
+msgid "Widescreen extended"
+msgstr "延伸寬螢幕"
+
+#: manipulation-gui/gui-crop.c:148
+msgid "EU Passport portrait"
+msgstr "歐洲護照相片"
+
+#: manipulation-gui/gui-crop.c:151
+msgid "Classic smartphone screen"
+msgstr "智慧型手機螢幕 (一般)"
+
+#: manipulation-gui/gui-crop.c:154
+msgid "Tall smartphone screen"
+msgstr "智慧型手機螢幕 (較長)"
+
+#: manipulation-gui/gui-crop.c:157
+msgid "Classic tablet screen"
+msgstr "平板電腦螢幕 (一般)"
+
+#: manipulation-gui/gui-crop.c:160
+msgid "Custom ratio"
+msgstr "自訂比例"
+
+#: manipulation-gui/gui-fliprotate.c:19
+msgid "Flip"
+msgstr "翻轉"
+
+#: manipulation-gui/gui-fliprotate.c:23
+msgid "Horizontally"
+msgstr "水平翻轉"
+
+#: manipulation-gui/gui-fliprotate.c:29
+msgid "Vertically"
+msgstr "垂直翻轉"
+
+#: manipulation-gui/gui-fliprotate.c:37
+msgid "Rotation"
+msgstr "旋轉角度"
+
+#: manipulation-gui/gui-rename.c:26
+msgid "Keywords"
+msgstr "關鍵字"
+
+#: manipulation-gui/gui-rename.c:30
+msgid "Original filename (without extension)"
+msgstr "原始檔案名稱 (無副檔名)"
+
+#: manipulation-gui/gui-rename.c:31
+msgid "Incremental number"
+msgstr "遞增數字"
+
+#: manipulation-gui/gui-rename.c:32
+msgid "Date and time (YYYY-MM-DD_hh-mm)"
+msgstr "日期/時間 (YYYY-MM-DD_hh-mm)"
+
+#: manipulation-gui/gui-rename.c:52
+#, c-format
+msgid ""
+"Can't save!\n"
+"'%s' or '%s' symbol must be present."
+msgstr ""
+"無法儲存！\n"
+"必須設定 '%s' 或 '%s' 符號。"
+
+#: manipulation-gui/gui-rename.c:64
+msgid ""
+"Can't save!\n"
+"Pattern contains invalid characters."
+msgstr ""
+"無法儲存！\n"
+"模式中含有無效字元。"
+
+#: manipulation-gui/gui-resize.c:43
+msgid "Set to a percentage of the original"
+msgstr "依據原始影像的百分比"
+
+#: manipulation-gui/gui-resize.c:45
+msgid "Set exact size in pixel"
+msgstr "依據像素"
+
+#: manipulation-gui/gui-resize.c:52
+msgid "For both dimensions"
+msgstr "對長寬"
+
+#: manipulation-gui/gui-resize.c:53
+msgid "Width only"
+msgstr "僅設定寬度"
+
+#: manipulation-gui/gui-resize.c:54
+msgid "Height only"
+msgstr "緊設定高度"
+
+#: manipulation-gui/gui-resize.c:64
+msgid "Allow stretching"
+msgstr "允許伸展"
+
+#: manipulation-gui/gui-resize.c:66
+msgid "Preserve aspect ratio"
+msgstr "保持長寬比"
+
+#: manipulation-gui/gui-resize.c:68
+msgid "Fill with padding"
+msgstr "填滿"
+
+#: manipulation-gui/gui-resize.c:92
+msgid "Interpolation quality"
+msgstr "插值品質"
+
+#: manipulation-gui/gui-resize.c:101
+msgid "Change resolution"
+msgstr "更改解析度"
+
+#: manipulation-gui/gui-resize.c:107
+msgid "X axis"
+msgstr "X 軸"
+
+#: manipulation-gui/gui-resize.c:111
+msgid "Y axis"
+msgstr "Y 軸"
+
+#: manipulation-gui/gui-sharpblur.c:17
+msgid "More sharpen"
+msgstr "更加銳利"
+
+#: manipulation-gui/gui-sharpblur.c:23
+msgid "More blurred"
+msgstr "更加模糊"
+
+#: manipulation-gui/gui-userdef.c:49
+msgid ""
+"Choose a supported GIMP procedure from the list on the left\n"
+"and define its parameters on the right."
+msgstr ""
+"在左側列表選擇一個支援的 GIMP 指令\n"
+"然後在右側區域定義參數。"
+
+#: manipulation-gui/gui-userdef.c:61
+msgid "Search"
+msgstr "搜尋"
+
+#: manipulation-gui/gui-userdef.c:305
+msgid ""
+"Can't save because\n"
+"no procedure has been selected"
+msgstr ""
+"無法儲存\n"
+"尚未選擇指令"
+
+#: manipulation-gui/gui-userdef.c:351
+msgid "Author"
+msgstr "作者"
+
+#: manipulation-gui/gui-userdef.c:603
+msgid "This procedure takes no editable params"
+msgstr "本指令沒有可以編輯的參數"
+
+#: manipulation-gui/gui-watermark.c:41
+msgid "Text watermark"
+msgstr "文字浮水印"
+
+#: manipulation-gui/gui-watermark.c:45
+msgid "Text"
+msgstr "文字"
+
+#: manipulation-gui/gui-watermark.c:54
+msgid "Font"
+msgstr "字型"
+
+#: manipulation-gui/gui-watermark.c:60
+msgid "Color"
+msgstr "顏色"
+
+#: manipulation-gui/gui-watermark.c:67
+msgid "Image watermark"
+msgstr "影像浮水印"
+
+#: manipulation-gui/gui-watermark.c:71
+msgid "Select image"
+msgstr "選擇影像"
+
+#: manipulation-gui/gui-watermark.c:73
+msgid "Adaptive size"
+msgstr "自適應大小"
+
+#: manipulation-gui/gui-watermark.c:77
+#, c-format
+msgid "% of"
+msgstr "% of"
+
+#: manipulation-gui/gui-watermark.c:87 bimp-gui.c:613
+msgid "All supported types"
+msgstr "所有支援檔案類型"
+
+#: manipulation-gui/gui-watermark.c:133
+msgid "Opacity"
+msgstr "不透明度"
+
+#: manipulation-gui/gui-watermark.c:142
+msgid "Distance to edge"
+msgstr "到邊緣的距離"
+
+#: manipulation-gui/gui-watermark.c:146
+msgid "Position on the image"
+msgstr "在影像上的位置"
+
+#: manipulation-gui/gui-watermark.c:304
+msgid "Top-center"
+msgstr "上緣中央"
+
+#: manipulation-gui/gui-watermark.c:310
+msgid "Center-left"
+msgstr "左緣中央"
+
+#: manipulation-gui/gui-watermark.c:316
+msgid "Center-right"
+msgstr "右緣中央"
+
+#: manipulation-gui/gui-watermark.c:322
+msgid "Bottom-center"
+msgstr "下緣中央"
+
+#: bimp-gui.c:130 bimp-gui.c:918
+msgid "The manipulations set is empty!"
+msgstr "操作列表空白！"
+
+#: bimp-gui.c:133
+msgid "The file list is empty!"
+msgstr "檔案列表空白！"
+
+#: bimp-gui.c:163
+msgid "Manipulation set"
+msgstr "操作列表"
+
+#: bimp-gui.c:193
+msgid "Input files and options"
+msgstr "檔案列表與選項"
+
+#: bimp-gui.c:215
+msgid "Add images"
+msgstr "加入影像"
+
+#: bimp-gui.c:217
+msgid "Remove images"
+msgstr "移除影像"
+
+#: bimp-gui.c:225
+msgid "Output folder"
+msgstr "輸出目錄"
+
+#: bimp-gui.c:239
+msgid "Use the selected file's location as the output"
+msgstr "用選擇檔案位置做為輸出"
+
+#: bimp-gui.c:247
+msgid "Keep folder hierarchy"
+msgstr "維持目錄結構"
+
+#: bimp-gui.c:252
+msgid "Delete original file when done"
+msgstr "完成後刪除原始檔案"
+
+#: bimp-gui.c:256
+msgid "Keep the modification dates"
+msgstr "維持影像修改日期"
+
+#: bimp-gui.c:262
+msgid "Click for preview"
+msgstr "點擊預覽"
+
+#: bimp-gui.c:355
+#, c-format
+msgid "Couldn't read into \"%s\" directory."
+msgstr "無法讀取目錄 \"%s\"。"
+
+#: bimp-gui.c:375
+msgid ""
+"Some images were not imported because they have not been saved on filesystem "
+"yet."
+msgstr "有些影像無法匯入，因為他們尚未被儲存。"
+
+#: bimp-gui.c:474
+msgid "Can't show a preview because the manipulations set is empty"
+msgstr "因為操作列表空白，無法預覽"
+
+#: bimp-gui.c:502
+msgid "Preview"
+msgstr "預覽"
+
+#: bimp-gui.c:514
+msgid "This is how the selected image will look like after the batch process"
+msgstr "這是選擇的影像經過批次操作後的樣子"
+
+#: bimp-gui.c:603
+msgid "Select images"
+msgstr "選擇影像"
+
+#: bimp-gui.c:681
+msgid "Select folders containing images"
+msgstr "選擇包含影像的資料夾"
+
+#: bimp-gui.c:690
+msgid "Add files from the whole hierarchy"
+msgstr "從子目錄中加入檔案"
+
+#: bimp-gui.c:712
+msgid "Select output folder"
+msgstr "選擇輸出目錄"
+
+#: bimp-gui.c:769 bimp-gui.c:924
+msgid "Save this set..."
+msgstr "儲存這個配置..."
+
+#: bimp-gui.c:773 bimp-gui.c:979
+msgid "Load set..."
+msgstr "載入配置..."
+
+#: bimp-gui.c:784
+msgid "Edit properties..."
+msgstr "修改屬性..."
+
+#: bimp-gui.c:787
+msgid "Remove this manipulation"
+msgstr "移除操作"
+
+#: bimp-gui.c:794
+msgid "Add single images..."
+msgstr "加入單個影像..."
+
+#: bimp-gui.c:797
+msgid "Add folders..."
+msgstr "加入資料夾..."
+
+#: bimp-gui.c:800
+msgid "Add all opened images"
+msgstr "加入所有在 GIMP 中開啟的影像"
+
+#: bimp-gui.c:807
+msgid "Remove selected"
+msgstr "移除選定的影像"
+
+#: bimp-gui.c:810
+msgid "Remove all"
+msgstr "移除全部"
+
+#: bimp-gui.c:854
+msgid "Can't add another manipulation of this kind. Only one is permitted!"
+msgstr "同類型的操作只能新增一個！"
+
+#: bimp-gui.c:945 bimp-gui.c:996
+msgid "An error occured when importing a saved batch file :("
+msgstr "匯入批次檔案時發生錯誤 :("
+
+#: bimp-gui.c:967
+msgid "This will overwrite current manipulations set. Continue?"
+msgstr "這會覆蓋目前的操作組合，是否要繼續？"
+
+#: bimp-gui.c:1035 bimp.c:66
+msgid "Applies GIMP manipulations on groups of images"
+msgstr "在影像上套用 GIMP 操作"
+
+#: bimp-gui.c:1042
+msgid "translator-name <translator-email>"
+msgstr "Andy Pan <andypan@ntuosc.org>"
+
+#: bimp-manipulations.c:279
+msgid "Resize"
+msgstr "調整大小"
+
+#: bimp-manipulations.c:282
+msgid "Crop"
+msgstr "裁剪"
+
+#: bimp-manipulations.c:285
+msgid "Flip or Rotate"
+msgstr "翻轉或旋轉"
+
+#: bimp-manipulations.c:288
+msgid "Color correction"
+msgstr "色彩校正"
+
+#: bimp-manipulations.c:291
+msgid "Sharp or Blur"
+msgstr "銳化或模糊"
+
+#: bimp-manipulations.c:294
+msgid "Add a Watermark"
+msgstr "增加浮水印"
+
+#: bimp-manipulations.c:297
+msgid "Change format and compression"
+msgstr "更改格式與壓縮比"
+
+#: bimp-manipulations.c:300
+msgid "Rename with a pattern"
+msgstr "用模式重新命名"
+
+#: bimp-manipulations.c:303
+msgid "Other GIMP procedure..."
+msgstr "其它 GIMP 操作..."
+
+#: bimp-operate.c:177
+#, c-format
+msgid ""
+"Can't save image \"%s\": input file has no extension.\n"
+"You can solve this error by adding a \"Change format or compression\" step"
+msgstr ""
+"無法儲存影像 \"%s\": 输入檔案沒有副檔名。\n"
+"你可以增加「更改格式與壓縮比」操作來解決這個問題"
+
+#: bimp-operate.c:183
+#, c-format
+msgid ""
+"GIMP can't save %s back to its original SVG format.\n"
+"You can solve this error by adding a \"Change format or compression\" step"
+msgstr ""
+"GIMP 不能將 %s 儲存回原始的 SVG 格式\n"
+"你可以增加「更改格式與壓縮比」操作來解決這個問題"
+
+#: bimp-operate.c:189
+#, c-format
+msgid "Working on file \"%s\"..."
+msgstr "正在處理檔案 \"%s\"..."
+
+#: bimp-operate.c:329
+msgid "Operations stopped"
+msgstr "操作已停止"
+
+#: bimp-operate.c:336
+#, c-format
+msgid "End, all files have been processed with %d errors"
+msgstr "結束，所有檔案均處理，共 %d 個錯誤"
+
+#: bimp-operate.c:1366
+#, c-format
+msgid "File %s already exists, overwrite it?"
+msgstr "檔案 %s 已經存在，是否覆蓋？"
+
+#: bimp-operate.c:1371
+msgid "Always apply this decision"
+msgstr "總是套用這個決定"
+
+#: bimp-operate.c:1383
+msgid "Overwrite?"
+msgstr "覆蓋？"
+
+#~ msgid "Set width only"
+#~ msgstr "只设置宽度"
+
+#~ msgid "Set height only"
+#~ msgstr "只设置高度"
+
+#~ msgid "Add folders"
+#~ msgstr "Hinzufügen von Ordnern"
+
+#~ msgid "Alert when overwriting existing files"
+#~ msgstr "Warnen wenn vorhandene Dateien überschrieben werden"
+
+#~ msgid ""
+#~ "Can't save image %s: input file has no extension.\n"
+#~ "You can solve this error by adding a \"Change format or compression\" step"
+#~ msgstr ""
+#~ "image %s kann nicht gespeichert werden: Eingabedatei hat keine Endung.\n"
+#~ "Sie können diesen Fehler durch hinzufügen einer \"Format oder Kompression "
+#~ "ändern\" Aufgabe beheben."
+
+#~ msgid "Working on file %s..."
+#~ msgstr "File %s in Bearbeitung..."
+
+#~ msgid "Yes, don't ask again"
+#~ msgstr "Ja, nicht wieder nachfragen"
