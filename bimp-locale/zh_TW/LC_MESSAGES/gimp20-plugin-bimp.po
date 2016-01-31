@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gimp-plugin-bimp\n"
 "POT-Creation-Date: 2015-09-20 15:30+0200\n"
-"PO-Revision-Date: 2016-01-31 18:41+0800\n"
+"PO-Revision-Date: 2016-01-31 19:02+0800\n"
 "Last-Translator: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language: zh\n"
@@ -419,11 +419,11 @@ msgstr "顏色"
 
 #: manipulation-gui/gui-watermark.c:67
 msgid "Image watermark"
-msgstr "圖片浮水印"
+msgstr "影像浮水印"
 
 #: manipulation-gui/gui-watermark.c:71
 msgid "Select image"
-msgstr "選擇圖片"
+msgstr "選擇影像"
 
 #: manipulation-gui/gui-watermark.c:73
 msgid "Adaptive size"
@@ -500,7 +500,7 @@ msgstr "用選擇檔案位置做為輸出"
 
 #: bimp-gui.c:247
 msgid "Keep folder hierarchy"
-msgstr "保持目錄結構"
+msgstr "維持目錄結構"
 
 #: bimp-gui.c:252
 msgid "Delete original file when done"
@@ -571,7 +571,7 @@ msgstr "移除操作"
 
 #: bimp-gui.c:794
 msgid "Add single images..."
-msgstr "加入一張圖片..."
+msgstr "加入一個影像..."
 
 #: bimp-gui.c:797
 msgid "Add folders..."
@@ -579,7 +579,7 @@ msgstr "加入資料夾..."
 
 #: bimp-gui.c:800
 msgid "Add all opened images"
-msgstr "增加在 GIMP 中開啟的影像"
+msgstr "加入所有在 GIMP 中開啟的影像"
 
 #: bimp-gui.c:807
 msgid "Remove selected"
@@ -666,7 +666,7 @@ msgstr ""
 #: bimp-operate.c:189
 #, c-format
 msgid "Working on file \"%s\"..."
-msgstr "正在處理圖片 \"%s\"..."
+msgstr "正在處理檔案 \"%s\"..."
 
 #: bimp-operate.c:329
 msgid "Operations stopped"
