@@ -352,6 +352,9 @@ void bimp_apply_drawable_manipulations(image_output imageout, gchar* orig_filena
     // LOAD ERROR CHECK HERE 
     g_print("Image ID is %d\n", imageout->image_id);
     
+    // stop saving the undo steps for this session
+    gimp_image_undo_freeze(imageout->image_id);
+    
     imageout->drawable_ids = gimp_image_get_layers(imageout->image_id, &imageout->drawable_count); // get all drawables
     g_print("Total drawables count: %d\n", imageout->drawable_count);
     
@@ -363,6 +366,9 @@ void bimp_apply_drawable_manipulations(image_output imageout, gchar* orig_filena
         g_print("Applying WATERMARK...\n");
         apply_watermark((watermark_settings)(bimp_list_get_manip(MANIP_WATERMARK))->settings, imageout);
     }
+    
+    // re-enable undo 
+    gimp_image_undo_thaw(imageout->image_id);
 }
 
 static gboolean apply_manipulation(manipulation man, image_output out) 
