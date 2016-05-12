@@ -58,7 +58,7 @@ For those interested in remaining on the cutting edge, the instructions are as f
 cp ./bin/bimp /Users/NAME/Library/Application Support/GIMP/2.8/plug-ins
 cp: target 'Support/GIMP/2.8/plug-ins' is not a directory
 ```
-    Then you need to do `cp ./bin/bimp "/Users/NAME/Library/Application Support/GIMP/2.8/plug-ins"`.
+then you need to do `cp ./bin/bimp "/Users/NAME/Library/Application Support/GIMP/2.8/plug-ins"`.
 
 *Note:* Even though you have to install GIMP from MacPorts in order to build the binaries for BIMP, they should work just fine with the self-contained GIMP build from gimp.org.  In fact, you could probably uninstall the MacPorts version once the binaries are built, but you'll need to reinstall it each time you want to update BIMP.
 
