@@ -8,16 +8,18 @@ make:
 	gcc -o ./bin/bimp -Wall -O2 -Wno-unused-variable -Wno-pointer-sign -Wno-parentheses src/*.c src/manipulation-gui/*.c $(GIMPARGS) $(PCREARGS) -lm -DGIMP_DISABLE_DEPRECATED
 	
 install: 
+	mkdir -p "$(USER_INSTALL_DIR)"
 	gimptool-2.0 --install-bin ./bin/bimp
-	cp -Rf ./bimp-locale/ $(USER_INSTALL_DIR)
+	cp -Rf ./bimp-locale/ "$(USER_INSTALL_DIR)"
 	
 uninstall: 
 	gimptool-2.0 --uninstall-bin bimp
 	rm -R $(USER_INSTALL_DIR)/bimp-locale
 
 install-admin:
+	mkdir -p "$(SYSTEM_INSTALL_DIR)"
 	gimptool-2.0 --install-admin-bin ./bin/bimp
-	cp -Rf ./bimp-locale/ $(SYSTEM_INSTALL_DIR)
+	cp -Rf ./bimp-locale/ "$(SYSTEM_INSTALL_DIR)"
 
 uninstall-admin:
 	gimptool-2.0 --uninstall-admin-bin bimp
