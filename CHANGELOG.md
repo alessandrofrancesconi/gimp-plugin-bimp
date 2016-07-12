@@ -4,6 +4,12 @@ BIMP. Batch Image Manipulation Plugin for GIMP.
 Changelog
 ---------
 
+1.17
+ - Fixed error when parsing "Other GIMP procedure" parameters that contains only a "=" sign (like Despeckle plugin) (thanks Daniel B Shak)
+ - Disable "undo" during processing for better performances
+ - Fixed error when using "Fill with Padding" on an indexed image
+ - Korean translation (thank to Jun Park) and Chinese Traditional translation (thanks to @andy0130tw)
+
 1.16 (aka "I'm expecting 100.000 donations for this")
  - Changed layout and added "Fill with padding" option in Resize manipulation (issue #62, #85)
  - Changed layout and added "Adaptive size" (issue #90) and "Distance to edge" options in Watermark manipulation
