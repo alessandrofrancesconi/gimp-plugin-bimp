@@ -1,0 +1,713 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: gimp-plugin-bimp\n"
+"POT-Creation-Date: 2016-07-06 18:54+0100\n"
+"PO-Revision-Date: 2016-07-12 21:54+0200\n"
+"Last-Translator: JJangfree < jjangfree@gmail.com>\n"
+"Language-Team: JJangfree <jjangfree@gmail.com>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.8\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-Basepath: ../../../src\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: ./manipulation-gui\n"
+
+#: .\manipulation-gui/gui-changeformat.c:37
+#: manipulation-gui/gui-changeformat.c:37
+msgid "Format settings"
+msgstr "설정"
+
+#: .\manipulation-gui/gui-changeformat.c:58
+#: manipulation-gui/gui-changeformat.c:58
+msgid "Interlaced"
+msgstr "인터레이스"
+
+#: .\manipulation-gui/gui-changeformat.c:78
+#: .\manipulation-gui/gui-changeformat.c:118
+#: manipulation-gui/gui-changeformat.c:78
+#: manipulation-gui/gui-changeformat.c:118
+msgid "Quality"
+msgstr "품질"
+
+#: .\manipulation-gui/gui-changeformat.c:84
+#: .\manipulation-gui/gui-changeformat.c:213
+#: manipulation-gui/gui-changeformat.c:84
+#: manipulation-gui/gui-changeformat.c:213
+msgid "Advanced params"
+msgstr "세부설정"
+
+#: .\manipulation-gui/gui-changeformat.c:88
+#: manipulation-gui/gui-changeformat.c:88
+msgid "Smoothing"
+msgstr "부드럽게"
+
+#: .\manipulation-gui/gui-changeformat.c:95
+#: manipulation-gui/gui-changeformat.c:95
+msgid "Optimize"
+msgstr "최적화"
+
+#: .\manipulation-gui/gui-changeformat.c:96
+#: manipulation-gui/gui-changeformat.c:96
+msgid "Progressive"
+msgstr "프로그레시브"
+
+#: .\manipulation-gui/gui-changeformat.c:97
+#: manipulation-gui/gui-changeformat.c:97
+msgid "Save baseline"
+msgstr "베이스라인 저장"
+
+#: .\manipulation-gui/gui-changeformat.c:100
+#: manipulation-gui/gui-changeformat.c:100
+msgid "Comment"
+msgstr "코멘트"
+
+#: .\manipulation-gui/gui-changeformat.c:107
+#: manipulation-gui/gui-changeformat.c:107
+msgid "Markers rows"
+msgstr "Markers rows"
+
+#: .\manipulation-gui/gui-changeformat.c:112
+#: manipulation-gui/gui-changeformat.c:112
+msgid "Subsampling"
+msgstr "Subsampling"
+
+#: .\manipulation-gui/gui-changeformat.c:116
+#: manipulation-gui/gui-changeformat.c:116
+msgid "Small size"
+msgstr "저품질"
+
+#: .\manipulation-gui/gui-changeformat.c:123
+#: manipulation-gui/gui-changeformat.c:123
+msgid "DCT algorithm"
+msgstr "DCT 알고리즘"
+
+#: .\manipulation-gui/gui-changeformat.c:127
+#: manipulation-gui/gui-changeformat.c:127
+msgid "Integer"
+msgstr "Integer"
+
+#: .\manipulation-gui/gui-changeformat.c:128
+#: manipulation-gui/gui-changeformat.c:128
+msgid "Fast integer"
+msgstr "Fast integer"
+
+#: .\manipulation-gui/gui-changeformat.c:129
+#: manipulation-gui/gui-changeformat.c:129
+msgid "Float"
+msgstr "Float"
+
+#: .\manipulation-gui/gui-changeformat.c:205
+#: manipulation-gui/gui-changeformat.c:205
+msgid "Interlace (Adam7)"
+msgstr "Interlace (Adam7)"
+
+#: .\manipulation-gui/gui-changeformat.c:207
+#: .\manipulation-gui/gui-changeformat.c:303
+#: manipulation-gui/gui-changeformat.c:207
+#: manipulation-gui/gui-changeformat.c:303
+msgid "Compression"
+msgstr "압축"
+
+#: .\manipulation-gui/gui-changeformat.c:216
+#: manipulation-gui/gui-changeformat.c:216
+msgid "Save background color"
+msgstr "배경색 저장"
+
+#: .\manipulation-gui/gui-changeformat.c:217
+#: manipulation-gui/gui-changeformat.c:217
+msgid "Save gamma"
+msgstr "감마 저장"
+
+#: .\manipulation-gui/gui-changeformat.c:218
+#: manipulation-gui/gui-changeformat.c:218
+msgid "Save layer offset"
+msgstr "레이어 오프셋 저장"
+
+#: .\manipulation-gui/gui-changeformat.c:219
+#: manipulation-gui/gui-changeformat.c:219
+msgid "Save resolution"
+msgstr "해상도 저장"
+
+#: .\manipulation-gui/gui-changeformat.c:220
+#: manipulation-gui/gui-changeformat.c:220
+msgid "Save creation date"
+msgstr "만든 날짜 저장"
+
+#: .\manipulation-gui/gui-changeformat.c:221
+#: manipulation-gui/gui-changeformat.c:221
+msgid "Save comments"
+msgstr "코멘트 저장"
+
+#: .\manipulation-gui/gui-changeformat.c:222
+#: manipulation-gui/gui-changeformat.c:222
+msgid "Save color from transparent pixels"
+msgstr "투명픽셀에서 색상 저장"
+
+#: .\manipulation-gui/gui-changeformat.c:270
+#: manipulation-gui/gui-changeformat.c:270
+msgid "RLE compression"
+msgstr "RLE 압축"
+
+#: .\manipulation-gui/gui-changeformat.c:273
+#: manipulation-gui/gui-changeformat.c:273
+msgid "Image origin"
+msgstr "Image origin"
+
+#: .\manipulation-gui/gui-changeformat.c:278
+#: .\manipulation-gui/gui-watermark.c:241
+#: manipulation-gui/gui-changeformat.c:278 manipulation-gui/gui-watermark.c:241
+msgid "Top-left"
+msgstr "좌측상단"
+
+#: .\manipulation-gui/gui-changeformat.c:279
+#: .\manipulation-gui/gui-watermark.c:259
+#: manipulation-gui/gui-changeformat.c:279 manipulation-gui/gui-watermark.c:259
+msgid "Bottom-left"
+msgstr "좌측하단"
+
+#: .\manipulation-gui/gui-changeformat.c:308
+#: .\manipulation-gui/gui-fliprotate.c:40
+#: manipulation-gui/gui-changeformat.c:308 manipulation-gui/gui-fliprotate.c:40
+msgid "None"
+msgstr "없음"
+
+#: .\manipulation-gui/gui-changeformat.c:309
+#: manipulation-gui/gui-changeformat.c:309
+msgid "LZW"
+msgstr "LZW"
+
+#: .\manipulation-gui/gui-changeformat.c:310
+#: manipulation-gui/gui-changeformat.c:310
+msgid "Pack bits"
+msgstr "Pack bits"
+
+#: .\manipulation-gui/gui-changeformat.c:311
+#: manipulation-gui/gui-changeformat.c:311
+msgid "Deflate"
+msgstr "Deflate"
+
+#: .\manipulation-gui/gui-changeformat.c:312
+#: manipulation-gui/gui-changeformat.c:312
+msgid "JPEG"
+msgstr "JPEG"
+
+#: .\manipulation-gui/gui-changeformat.c:313
+#: manipulation-gui/gui-changeformat.c:313
+msgid "CCITT G3 Fax"
+msgstr "CCITT G3 Fax"
+
+#: .\manipulation-gui/gui-changeformat.c:314
+#: manipulation-gui/gui-changeformat.c:314
+msgid "CCITT G4 Fax"
+msgstr "CCITT G4 Fax"
+
+#: .\manipulation-gui/gui-changeformat.c:329
+#: manipulation-gui/gui-changeformat.c:329
+msgid "This format has no params"
+msgstr "이 형식은 파라미터가 없습니다."
+
+#: .\manipulation-gui/gui-color.c:21 manipulation-gui/gui-color.c:21
+msgid "Brightness"
+msgstr "밝기"
+
+#: .\manipulation-gui/gui-color.c:29 manipulation-gui/gui-color.c:29
+msgid "Contrast"
+msgstr "대비"
+
+#: .\manipulation-gui/gui-color.c:36 manipulation-gui/gui-color.c:36
+msgid "Convert to grayscale"
+msgstr "그레이스케일로 변환"
+
+#: .\manipulation-gui/gui-color.c:38 manipulation-gui/gui-color.c:38
+msgid "Automatic color levels correction"
+msgstr "자동레벨"
+
+#: .\manipulation-gui/gui-color.c:41 manipulation-gui/gui-color.c:41
+msgid "Change color curve from settings file:"
+msgstr "색상커브 변경할 설정파일:"
+
+#: .\manipulation-gui/gui-color.c:42 manipulation-gui/gui-color.c:42
+msgid "Select GIMP Curve file"
+msgstr "Gimp 커브 파일 선택"
+
+#: .\manipulation-gui/gui-crop.c:27 manipulation-gui/gui-crop.c:27
+msgid "Crop to a standard aspect ratio"
+msgstr "고정비율로 잘라내기"
+
+#: .\manipulation-gui/gui-crop.c:53 manipulation-gui/gui-crop.c:53
+msgid "Manual crop (pixel values)"
+msgstr "픽셀 지정 잘라내기"
+
+#: .\manipulation-gui/gui-crop.c:58 .\manipulation-gui/gui-resize.c:63
+#: manipulation-gui/gui-crop.c:58 manipulation-gui/gui-resize.c:63
+msgid "Width"
+msgstr "가로"
+
+#: .\manipulation-gui/gui-crop.c:62 .\manipulation-gui/gui-resize.c:65
+#: manipulation-gui/gui-crop.c:62 manipulation-gui/gui-resize.c:65
+msgid "Height"
+msgstr "세로"
+
+#: .\manipulation-gui/gui-crop.c:108 manipulation-gui/gui-crop.c:108
+msgid "One-to-one"
+msgstr "1:1(비율고정)"
+
+#: .\manipulation-gui/gui-crop.c:111 manipulation-gui/gui-crop.c:111
+msgid "Classic 35 mm film"
+msgstr "고전 35mm 필름"
+
+#: .\manipulation-gui/gui-crop.c:114 manipulation-gui/gui-crop.c:114
+msgid "Standard VGA monitor"
+msgstr "표준 VGA 모니터"
+
+#: .\manipulation-gui/gui-crop.c:117 manipulation-gui/gui-crop.c:117
+msgid "Widescreen"
+msgstr "넓은화면"
+
+#: .\manipulation-gui/gui-crop.c:120 manipulation-gui/gui-crop.c:120
+msgid "Widescreen extended"
+msgstr "더 넓은화면"
+
+#: .\manipulation-gui/gui-crop.c:123 manipulation-gui/gui-crop.c:123
+msgid "EU Passport portrait"
+msgstr "EU Passport portrait"
+
+#: .\manipulation-gui/gui-crop.c:126 manipulation-gui/gui-crop.c:126
+msgid "Classic smartphone screen"
+msgstr "스마트폰 화면"
+
+#: .\manipulation-gui/gui-crop.c:129 manipulation-gui/gui-crop.c:129
+msgid "Tall smartphone screen"
+msgstr "긴 스마트폰 화면"
+
+#: .\manipulation-gui/gui-crop.c:132 manipulation-gui/gui-crop.c:132
+msgid "Classic tablet screen"
+msgstr "타블렛 화면"
+
+#: .\manipulation-gui/gui-crop.c:135 manipulation-gui/gui-crop.c:135
+msgid "Custom ratio"
+msgstr "커스텀 비율"
+
+#: .\manipulation-gui/gui-fliprotate.c:19 manipulation-gui/gui-fliprotate.c:19
+msgid "Flip"
+msgstr "상하반전"
+
+#: .\manipulation-gui/gui-fliprotate.c:23 manipulation-gui/gui-fliprotate.c:23
+msgid "Horizontally"
+msgstr "수평"
+
+#: .\manipulation-gui/gui-fliprotate.c:29 manipulation-gui/gui-fliprotate.c:29
+msgid "Vertically"
+msgstr "수직"
+
+#: .\manipulation-gui/gui-fliprotate.c:37 manipulation-gui/gui-fliprotate.c:37
+msgid "Rotation"
+msgstr "회전"
+
+#: .\manipulation-gui/gui-rename.c:26 manipulation-gui/gui-rename.c:26
+msgid "Keywords"
+msgstr "키워드"
+
+#: .\manipulation-gui/gui-rename.c:30 manipulation-gui/gui-rename.c:30
+msgid "Original filename (without extension)"
+msgstr "원본 파일명(확장자 없이)"
+
+#: .\manipulation-gui/gui-rename.c:31 manipulation-gui/gui-rename.c:31
+msgid "Incremental number"
+msgstr "숫자 일련번호"
+
+#: .\manipulation-gui/gui-rename.c:32 manipulation-gui/gui-rename.c:32
+msgid "Date and time (YYYY-MM-DD_hh-mm)"
+msgstr "날짜와시간 (YYYY-MM-DD_hh-mm)"
+
+#: .\manipulation-gui/gui-rename.c:52 manipulation-gui/gui-rename.c:52
+#, c-format
+msgid ""
+"Can't save!\n"
+"'%s' or '%s' symbol must be present."
+msgstr ""
+"저장할 수 없습니다!\n"
+"%s' 나 '%s' 가 있어야 합니다. "
+
+#: .\manipulation-gui/gui-rename.c:64 manipulation-gui/gui-rename.c:64
+msgid ""
+"Can't save!\n"
+"Pattern contains invalid characters."
+msgstr ""
+"저장할 수 없습니다! \n"
+"패턴부분에 무효한 문자가 있습니다."
+
+#: .\manipulation-gui/gui-resize.c:37 manipulation-gui/gui-resize.c:37
+msgid "Set to a percentage of the original"
+msgstr "원본 비율로 설정"
+
+#: .\manipulation-gui/gui-resize.c:39 manipulation-gui/gui-resize.c:39
+msgid "Set exact size in pixel"
+msgstr "같은 크기(픽셀)로 설정"
+
+#: .\manipulation-gui/gui-resize.c:45 manipulation-gui/gui-resize.c:45
+msgid "For both dimensions"
+msgstr "양쪽 모두"
+
+#: .\manipulation-gui/gui-resize.c:47 manipulation-gui/gui-resize.c:47
+msgid "Set width only"
+msgstr "가로만 지정"
+
+#: .\manipulation-gui/gui-resize.c:49 manipulation-gui/gui-resize.c:49
+msgid "Set height only"
+msgstr "높이만 지정"
+
+#: .\manipulation-gui/gui-resize.c:52 manipulation-gui/gui-resize.c:52
+msgid "Preserve aspect ratio"
+msgstr "원본비율 고정"
+
+#: .\manipulation-gui/gui-resize.c:56 manipulation-gui/gui-resize.c:56
+msgid "Interpolation quality"
+msgstr "보간 품질"
+
+#: .\manipulation-gui/gui-resize.c:69 manipulation-gui/gui-resize.c:69
+msgid "Change resolution"
+msgstr "해상도 변경"
+
+#: .\manipulation-gui/gui-resize.c:74 manipulation-gui/gui-resize.c:74
+msgid "X axis"
+msgstr "X 축"
+
+#: .\manipulation-gui/gui-resize.c:77 manipulation-gui/gui-resize.c:77
+msgid "Y axis"
+msgstr "Y 축"
+
+#: .\manipulation-gui/gui-sharpblur.c:17 manipulation-gui/gui-sharpblur.c:17
+msgid "More sharpen"
+msgstr "선명하게"
+
+#: .\manipulation-gui/gui-sharpblur.c:23 manipulation-gui/gui-sharpblur.c:23
+msgid "More blurred"
+msgstr "흐리게"
+
+#: .\manipulation-gui/gui-userdef.c:49 manipulation-gui/gui-userdef.c:49
+msgid ""
+"Choose a supported GIMP procedure from the list on the left\n"
+"and define its parameters on the right."
+msgstr ""
+"왼쪽 목록에서, 처리할 Gimp필터를 선택하고\n"
+"우측에 변수를 지정합니다."
+
+#: .\manipulation-gui/gui-userdef.c:61 manipulation-gui/gui-userdef.c:61
+msgid "Search"
+msgstr "검색"
+
+#: .\manipulation-gui/gui-userdef.c:303 manipulation-gui/gui-userdef.c:303
+msgid ""
+"Can't save because\n"
+"no procedure has been selected"
+msgstr ""
+"저장할 수 없습니다. \n"
+"왼쪽에서 처리할 필터를, 선택하지 않았습니다."
+
+#: .\manipulation-gui/gui-userdef.c:349 manipulation-gui/gui-userdef.c:349
+msgid "Author"
+msgstr "저작자"
+
+#: .\manipulation-gui/gui-userdef.c:570 manipulation-gui/gui-userdef.c:570
+msgid "This procedure takes no editable params"
+msgstr "이 Gimp 필터는, 수정할 변수가 없습니다."
+
+#: .\manipulation-gui/gui-watermark.c:32 manipulation-gui/gui-watermark.c:32
+msgid "Text watermark"
+msgstr "문자 워터마크"
+
+#: .\manipulation-gui/gui-watermark.c:36 manipulation-gui/gui-watermark.c:36
+msgid "Text"
+msgstr "문자"
+
+#: .\manipulation-gui/gui-watermark.c:45 manipulation-gui/gui-watermark.c:45
+msgid "Font"
+msgstr "폰트"
+
+#: .\manipulation-gui/gui-watermark.c:51 manipulation-gui/gui-watermark.c:51
+msgid "Color"
+msgstr "글자색"
+
+#: .\manipulation-gui/gui-watermark.c:58 manipulation-gui/gui-watermark.c:58
+msgid "Image watermark"
+msgstr "이미지 워터마크"
+
+#: .\manipulation-gui/gui-watermark.c:62 manipulation-gui/gui-watermark.c:62
+msgid "Select image"
+msgstr "이미지 선택"
+
+#: .\manipulation-gui/gui-watermark.c:67 bimp-gui.c:601
+#: manipulation-gui/gui-watermark.c:67
+msgid "All supported types"
+msgstr "지원되는 모든 형식"
+
+#: .\manipulation-gui/gui-watermark.c:112 manipulation-gui/gui-watermark.c:112
+msgid "Opacity"
+msgstr "불투명도"
+
+#: .\manipulation-gui/gui-watermark.c:122 manipulation-gui/gui-watermark.c:122
+msgid "Position on the image"
+msgstr "이미지에서의 위치"
+
+#: .\manipulation-gui/gui-watermark.c:244 manipulation-gui/gui-watermark.c:244
+msgid "Top-center"
+msgstr "상단-가운데"
+
+#: .\manipulation-gui/gui-watermark.c:247 manipulation-gui/gui-watermark.c:247
+msgid "Top-right"
+msgstr "우측-상단 "
+
+#: .\manipulation-gui/gui-watermark.c:250 manipulation-gui/gui-watermark.c:250
+msgid "Center-left"
+msgstr "좌측-가운데"
+
+#: .\manipulation-gui/gui-watermark.c:253 manipulation-gui/gui-watermark.c:253
+msgid "Center"
+msgstr "가운데"
+
+#: .\manipulation-gui/gui-watermark.c:256 manipulation-gui/gui-watermark.c:256
+msgid "Center-right"
+msgstr "우측-가운데"
+
+#: .\manipulation-gui/gui-watermark.c:262 manipulation-gui/gui-watermark.c:262
+msgid "Bottom-center"
+msgstr "하단-가운데"
+
+#: .\manipulation-gui/gui-watermark.c:265 manipulation-gui/gui-watermark.c:265
+msgid "Bottom-right"
+msgstr "우측-아래"
+
+#: bimp-gui.c:129 bimp-gui.c:897
+msgid "The manipulations set is empty!"
+msgstr "이 manipulations set 이 비어있습니다!"
+
+#: bimp-gui.c:132
+msgid "The file list is empty!"
+msgstr "파일목록이 비어있습니다!"
+
+#: bimp-gui.c:162
+msgid "Manipulation set"
+msgstr "배치처리 세트"
+
+#: bimp-gui.c:192
+msgid "Input files and options"
+msgstr "파일과 옵션"
+
+#: bimp-gui.c:214
+msgid "Add images"
+msgstr "이미지 추가"
+
+#: bimp-gui.c:216
+msgid "Remove images"
+msgstr "이미지 제거"
+
+#: bimp-gui.c:224
+msgid "Output folder"
+msgstr "저장 폴더"
+
+#: bimp-gui.c:238
+msgid "Use the selected file's location as the output"
+msgstr "선택된 파일 위치로, 저장"
+
+#: bimp-gui.c:246
+msgid "Keep folder hierarchy"
+msgstr "폴더 계층 보존"
+
+#: bimp-gui.c:251
+msgid "Delete original file when done"
+msgstr "처리 후, 원본 제거"
+
+#: bimp-gui.c:255
+msgid "Keep the modification dates"
+msgstr "수정된 날짜로 저장"
+
+#: bimp-gui.c:261
+msgid "Click for preview"
+msgstr "미리보기"
+
+#: bimp-gui.c:354
+#, c-format
+msgid "Couldn't read into \"%s\" directory."
+msgstr " \"%s\" 디렉토리로 읽을 수 없습니다"
+
+#: bimp-gui.c:464
+msgid "Can't show a preview because the manipulations set is empty"
+msgstr "처리대상 목록이 비어있어서, 미리보기 되지 않습니다."
+
+#: bimp-gui.c:491
+msgid "Preview"
+msgstr "미리보기"
+
+#: bimp-gui.c:503
+msgid "This is how the selected image will look like after the batch process"
+msgstr "배치처리 했을 때의, 미리보기"
+
+#: bimp-gui.c:592
+msgid "Select images"
+msgstr "이미지 선택"
+
+#: bimp-gui.c:665
+msgid "Select folders containing images"
+msgstr "이미지 있는 폴더 선택"
+
+#: bimp-gui.c:674
+msgid "Add files from the whole hierarchy"
+msgstr "폴더에서, 파일 추가"
+
+#: bimp-gui.c:691
+msgid "Select output folder"
+msgstr "저장할 폴더 선택"
+
+#: bimp-gui.c:748 bimp-gui.c:903
+msgid "Save this set..."
+msgstr "이 세트 저장.."
+
+#: bimp-gui.c:752 bimp-gui.c:958
+msgid "Load set..."
+msgstr "세트 불러오기.."
+
+#: bimp-gui.c:763
+msgid "Edit properties..."
+msgstr "속성 편집.."
+
+#: bimp-gui.c:766
+msgid "Remove this manipulation"
+msgstr "이 처리 제거"
+
+#: bimp-gui.c:773
+msgid "Add single images..."
+msgstr "이미지 하나씩 추가.."
+
+#: bimp-gui.c:776
+msgid "Add folders..."
+msgstr "폴더째 추가.."
+
+#: bimp-gui.c:779
+msgid "Add all opened images"
+msgstr "GIMP에 열려진 모든 이미지 추가"
+
+#: bimp-gui.c:786
+msgid "Remove selected"
+msgstr "선택 삭제"
+
+#: bimp-gui.c:789
+msgid "Remove all"
+msgstr "모두 삭제"
+
+#: bimp-gui.c:833
+msgid "Can't add another manipulation of this kind. Only one is permitted!"
+msgstr "추가로 처리될 수 없습니다. 하나의 처리만 가능합니다."
+
+#: bimp-gui.c:924 bimp-gui.c:975
+msgid "An error occured when importing a saved batch file :("
+msgstr "저장된 배치파일 불러오기 에러 : ("
+
+#: bimp-gui.c:946
+msgid "This will overwrite current manipulations set. Continue?"
+msgstr "기존 처리를, 덮어쓰게 됩니다. 계속합니까?"
+
+#: bimp-gui.c:1013 bimp.c:67
+msgid "Applies GIMP manipulations on groups of images"
+msgstr "이미지 그룹을, 처리함"
+
+#: bimp-gui.c:1020
+msgid "translator-name <translator-email>"
+msgstr "번역자 <@gmail.com>"
+
+#: bimp-manipulations.c:275
+msgid "Resize"
+msgstr "크기조정"
+
+#: bimp-manipulations.c:278
+msgid "Crop"
+msgstr "잘라내기"
+
+#: bimp-manipulations.c:281
+msgid "Flip or Rotate"
+msgstr "상하반전 or 좌우미러"
+
+#: bimp-manipulations.c:284
+msgid "Color correction"
+msgstr "색상 보정"
+
+#: bimp-manipulations.c:287
+msgid "Sharp or Blur"
+msgstr "선명하게 / 흐리게"
+
+#: bimp-manipulations.c:290
+msgid "Add a Watermark"
+msgstr "워터마크 삽입"
+
+#: bimp-manipulations.c:293
+msgid "Change format and compression"
+msgstr "형식과 압축비율 변경"
+
+#: bimp-manipulations.c:296
+msgid "Rename with a pattern"
+msgstr "패턴으로, 파일명 변경"
+
+#: bimp-manipulations.c:299
+msgid "Other GIMP procedure..."
+msgstr "다른 GIMP필터 사용.."
+
+#: bimp-operate.c:171
+#, c-format
+msgid ""
+"Can't save image \"%s\": input file has no extension.\n"
+"You can solve this error by adding a \"Change format or compression\" step"
+msgstr ""
+"이미지 저장 실패 \"%s\": 입력파일에 확장자가 없습니다.\n"
+" \"형식과 압축비율 변경\" 부분을, 설정해 주십시오."
+
+#: bimp-operate.c:177
+#, c-format
+msgid ""
+"GIMP can't save %s back to its original SVG format.\n"
+"You can solve this error by adding a \"Change format or compression\" step"
+msgstr ""
+"Gimp는 %s 을, 원래의 SVG 형식으로 저장할 수 없습니다. \n"
+"\"형식과 압축비율 변경\" 부분을, 설정해 주십시오."
+
+#: bimp-operate.c:183
+#, c-format
+msgid "Working on file \"%s\"..."
+msgstr "처리 중 : \"%s\"..."
+
+#: bimp-operate.c:323
+msgid "Operations stopped"
+msgstr "처리 중지"
+
+#: bimp-operate.c:330
+#, c-format
+msgid "End, all files have been processed with %d errors"
+msgstr "처리완료, 모든 파일이 처리되었습니다! ( 에러발생 : %d 개)"
+
+#: bimp-operate.c:1165
+#, c-format
+msgid "File %s already exists, overwrite it?"
+msgstr "%s 파일은 이미 존재합니다. 덮어쓸까요?"
+
+#: bimp-operate.c:1170
+msgid "Always apply this decision"
+msgstr "덮어쓰기 설정 저장"
+
+#: bimp-operate.c:1182
+msgid "Overwrite?"
+msgstr "덮어쓸까요?"
+
+#~ msgid "Alert when overwriting existing files"
+#~ msgstr "기존 파일 덮어쓸 때, 경고?"
+
+#~ msgid "Yes, don't ask again"
+#~ msgstr "네, 다시 묻지 않습니다"
+
+#~ msgid "Save this set"
+#~ msgstr "이 세트 저장"
+
+#~ msgid "Load set"
+#~ msgstr "세트 불러오기"
