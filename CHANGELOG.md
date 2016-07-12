@@ -5,7 +5,7 @@ Changelog
 ---------
 
 1.17
- - Fixed error when parsing "Other GIMP procedure" parameters that contains only a "=" sign (like Despeckle plugin) (thanks Daniel B Shak)
+ - Fixed an error when parsing "Other GIMP procedure" parameters that contain only a "=" sign (like Despeckle plugin) (thanks Daniel B Shak)
  - Disable "undo" during processing for better performances
  - Fixed error when using "Fill with Padding" on an indexed image
  - Korean translation (thank to Jun Park) and Chinese Traditional translation (thanks to @andy0130tw)
