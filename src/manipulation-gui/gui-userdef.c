@@ -371,7 +371,7 @@ static void update_procedure_box(userdef_settings settings)
         int erroffset;
         pcre* reg_comp_combobox =  pcre_compile("([A-Z\\d-]+)\\s\\((\\d+)\\)", PCRE_DOTALL, &error, &erroffset, 0);
         // (0 = aaaa, 1 = bbbbb, ...) => \((?:\s?\d+\s?=\s?([\w\s]+),?)\) under construction....
-        pcre* reg_comp_minmax =  pcre_compile("(?:(-?[\\d,\\.]+)\\s([<|>|=]{1,2})\\s)?([\\w|-]+)\\s([<|>|=]{1,2})\\s(-?[\\d,\\.]+)", PCRE_DOTALL, &error, &erroffset, 0);
+        pcre* reg_comp_minmax =  pcre_compile("(?:(-?[\\d,\\.]+)\\s([<|>]{1}=?)\\s)?([\\w|-]+)\\s([<|>]{1}=?)\\s(-?[\\d,\\.]+)", PCRE_DOTALL, &error, &erroffset, 0);
         int ovector[186];
         unsigned int offset = 0;
         unsigned int desclen = 0;
