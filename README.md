@@ -16,8 +16,8 @@ then download `gimp-plugin-bimp_win32.exe`
 Instead... to remove BIMP... if you really want... just go to GIMP's plugins directory and remove 
 `bimp.exe` and `bimp-locale` folder.
 
-*A note for GIMP Portable users: if you experience strange things like missing buttons or totally white windows, 
-first ensure you have installed the latest version of the GTK+ runtime (download it from [here](https://sourceforge.net/projects/gtk-win/files/latest/download?source=files)).*
+*Note for GIMP Portable users:* If you experience strange things like missing buttons or totally white windows, 
+first ensure you have installed the latest version of the GTK+ runtime (download it from [here](https://sourceforge.net/projects/gtk-win/files/latest/download?source=files)).
 
 Compiling and installing on Linux
 -----------------------------------------
