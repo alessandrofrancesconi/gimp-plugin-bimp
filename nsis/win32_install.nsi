@@ -4,7 +4,10 @@
 !include "MUI2.nsh"
 !include "nsDialogs.nsh"
 
-Name "Batch Image Manipulation Plugin for GIMP"
+!define APPNAME "Batch Image Manipulation Plugin for GIMP"
+!define APPID "gimp-plugin-bimp"
+
+Name "${APPNAME}"
 OutFile "gimp-plugin-bimp_win32.exe"
 RequestExecutionLevel admin
 ShowInstDetails show
@@ -35,6 +38,16 @@ Page custom finishDialog
     ${EndIf}
     FileWrite $0 "${Str}"
 !macroend 
+
+!macro VerifyUserIsAdmin
+UserInfo::GetAccountType
+pop $0
+${If} $0 != "admin" ;Require admin rights on NT4+
+        messageBox mb_iconstop "Administrator rights required!"
+        setErrorLevel 740 ;ERROR_ELEVATION_REQUIRED
+        quit
+${EndIf}
+!macroend
 
 # Before start, check for GIMP installation existence (for both 32 and 64 machines)
 Function .onInit
@@ -114,6 +127,21 @@ Section "File copy" SecInstall
     
     File ..\bin\win32\bimp.exe
     File /r /x *.po ..\bimp-locale
+
+    # create uninstaller
+    writeUninstaller "$INSTDIR\bimp-uninstall.exe"
+
+    # Registry information for add/remove programs
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "DisplayName" "${APPNAME}"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "UninstallString" "$\"$INSTDIR\bimp-uninstall.exe$\""
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "QuietUninstallString" "$\"$INSTDIR\bimp-uninstall.exe$\" /S"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "InstallLocation" "$\"$INSTDIR$\""
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "Publisher" "Alessandro Francesconi"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "HelpLink" "http://www.alessandrofrancesconi.it/projects/bimp"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "URLInfoAbout" "http://www.alessandrofrancesconi.it/projects/bimp"
+	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "NoModify" 1
+	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "NoRepair" 1
+
 SectionEnd
 
 # BIMP needs pcre3 DLL to be registered on the system
@@ -125,3 +153,28 @@ Section "Register DLLs" SecRegisterDLL
     
     ExecWait "regsvr32.exe /s $WINDIR\System32\pcre3.dll"
 SectionEnd
+
+# Uninstaller
+
+function un.onInit
+	SetShellVarContext all
+ 
+	# verify the uninstaller - last chance to back out
+	MessageBox MB_OKCANCEL "Remove ${APPNAME}?" IDOK next
+		Abort
+	next:
+	!insertmacro VerifyUserIsAdmin
+functionEnd
+
+section "uninstall"
+ 
+	# Remove files
+	delete $INSTDIR\bimp.exe
+	RMDir /r $INSTDIR\bimp-locale
+ 
+	# Always delete uninstaller as the last action
+	delete $INSTDIR\bimp-uninstall.exe
+ 
+	# Remove uninstaller information from the registry
+	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}"
+sectionEnd
