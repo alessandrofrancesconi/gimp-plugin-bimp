@@ -597,7 +597,7 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
 {
     GSList *selection;
     
-    GtkFileFilter *filter_all, *supported[7];
+    GtkFileFilter *filter_all, *supported[9];
 
     GtkWidget* file_chooser = gtk_file_chooser_dialog_new(
         _("Select images"), 
@@ -637,25 +637,35 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
     gtk_file_filter_add_pattern (filter_all, "*.[pP][nN][gG]");
     
     supported[4] = gtk_file_filter_new();
-    gtk_file_filter_set_name(supported[4], "Scalable Vector Graphics (*.svg)");
-    gtk_file_filter_add_pattern (supported[4], "*.[sS][vV][gG]");
+    gtk_file_filter_set_name(supported[4], "Icon (*.ico)");
+    gtk_file_filter_add_pattern (supported[4], "*.[iI][cC][oO]");
+    gtk_file_filter_add_pattern (filter_all, "*.[iI][cC][oO]");
+    
+    supported[5] = gtk_file_filter_new();
+    gtk_file_filter_set_name(supported[5], "Scalable Vector Graphics (*.svg)");
+    gtk_file_filter_add_pattern (supported[5], "*.[sS][vV][gG]");
     gtk_file_filter_add_pattern (filter_all, "*.[sS][vV][gG]");
 
-    supported[5] = gtk_file_filter_new();
-    gtk_file_filter_set_name(supported[5], "TIFF (*tif, *.tiff)");
-    gtk_file_filter_add_pattern (supported[5], "*.[tT][iI][fF][fF]");
-    gtk_file_filter_add_pattern (supported[5], "*.[tT][iI][fF]");
+    supported[6] = gtk_file_filter_new();
+    gtk_file_filter_set_name(supported[6], "TIFF (*tif, *.tiff)");
+    gtk_file_filter_add_pattern (supported[6], "*.[tT][iI][fF][fF]");
+    gtk_file_filter_add_pattern (supported[6], "*.[tT][iI][fF]");
     gtk_file_filter_add_pattern (filter_all, "*.[tT][iI][fF][fF]");
     gtk_file_filter_add_pattern (filter_all, "*.[tT][iI][fF]");
+    
+    supported[7] = gtk_file_filter_new();
+    gtk_file_filter_set_name(supported[7], "Targa (*.tga)");
+    gtk_file_filter_add_pattern (supported[7], "*.[tT][gG][aA]");
+    gtk_file_filter_add_pattern (filter_all, "*.[tT][gG][aA]");
 
-    supported[6] = gtk_file_filter_new();
-    gtk_file_filter_set_name(supported[6], "GIMP XCF (*.xcf)");
-    gtk_file_filter_add_pattern (supported[6], "*.[xX][cC][fF]");
+    supported[8] = gtk_file_filter_new();
+    gtk_file_filter_set_name(supported[8], "GIMP XCF (*.xcf)");
+    gtk_file_filter_add_pattern (supported[8], "*.[xX][cC][fF]");
     gtk_file_filter_add_pattern (filter_all, "*.[xX][cC][fF]");
         
     gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_chooser), filter_all);
-    int i;
-    for(i = 0; i < 7; i++) {
+    size_t i;
+    for(i = 0; i < 9; i++) {
         gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_chooser), supported[i]);
     }
     
