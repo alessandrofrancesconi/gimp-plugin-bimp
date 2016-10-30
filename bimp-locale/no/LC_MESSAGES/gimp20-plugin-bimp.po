@@ -1,182 +1,181 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gimp-plugin-bimp\n"
-"POT-Creation-Date: 2014-11-30 12:34+0300\n"
-"PO-Revision-Date:"
-"Last-Translator: Damián Blanco <blanco.damian@gmail.com>\n"
-"Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
-"Language: es\n"
+"POT-Creation-Date: 2015-05-21 22:12+0100\n"
+"PO-Revision-Date: 2016-10-30 12:55+0100\n"
+"Last-Translator: Kolbjørn Stuestøl <kolbjoern@stuestoel.no>\n"
+"Language-Team: Norwegian nynorsk <i18n-nn@lister.ping.uio.no>\n"
+"Language: nn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: \n"
+"X-Generator: Poedit 1.8.11\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
-"X-Poedit-Basepath: ..\\..\\..\\src\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ../../../src\n"
 "X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPath-1: .\\manipulation-gui\n"
+"X-Poedit-SearchPath-1: ./manipulation-gui\n"
 
 #: .\manipulation-gui/gui-changeformat.c:37
 #: manipulation-gui/gui-changeformat.c:37
 msgid "Format settings"
-msgstr "Configurar formato"
+msgstr "Formatinnstillingar"
 
 #: .\manipulation-gui/gui-changeformat.c:58
 #: manipulation-gui/gui-changeformat.c:58
 msgid "Interlaced"
-msgstr "Entrelazado"
+msgstr "Fletta"
 
 #: .\manipulation-gui/gui-changeformat.c:78
 #: .\manipulation-gui/gui-changeformat.c:118
 #: manipulation-gui/gui-changeformat.c:78
 #: manipulation-gui/gui-changeformat.c:118
 msgid "Quality"
-msgstr "Calidad"
+msgstr "Kvalitet"
 
 #: .\manipulation-gui/gui-changeformat.c:84
 #: .\manipulation-gui/gui-changeformat.c:213
 #: manipulation-gui/gui-changeformat.c:84
 #: manipulation-gui/gui-changeformat.c:213
 msgid "Advanced params"
-msgstr "Parámetros avanzados"
+msgstr "Avanserte parametrar"
 
 #: .\manipulation-gui/gui-changeformat.c:88
 #: manipulation-gui/gui-changeformat.c:88
 msgid "Smoothing"
-msgstr "Suavizar"
+msgstr "Utglatting"
 
 #: .\manipulation-gui/gui-changeformat.c:95
 #: manipulation-gui/gui-changeformat.c:95
 msgid "Optimize"
-msgstr "Optimizar"
+msgstr "Optimer"
 
 #: .\manipulation-gui/gui-changeformat.c:96
 #: manipulation-gui/gui-changeformat.c:96
 msgid "Progressive"
-msgstr "Progresivo"
+msgstr "Progressiv"
 
 #: .\manipulation-gui/gui-changeformat.c:97
 #: manipulation-gui/gui-changeformat.c:97
 msgid "Save baseline"
-msgstr "Salvar miniatura"
+msgstr "Lagra baselinje"
 
 #: .\manipulation-gui/gui-changeformat.c:100
 #: manipulation-gui/gui-changeformat.c:100
 msgid "Comment"
-msgstr "Comentario"
+msgstr "Kommentar"
 
 #: .\manipulation-gui/gui-changeformat.c:107
 #: manipulation-gui/gui-changeformat.c:107
 msgid "Markers rows"
-msgstr "Marcadores\nde filas"
+msgstr "Merk rader"
 
 #: .\manipulation-gui/gui-changeformat.c:112
 #: manipulation-gui/gui-changeformat.c:112
 msgid "Subsampling"
-msgstr "Submuestreo"
+msgstr "Subsampling"
 
 #: .\manipulation-gui/gui-changeformat.c:116
 #: manipulation-gui/gui-changeformat.c:116
 msgid "Small size"
-msgstr "Tamaño pequeño"
+msgstr "Liten storleik"
 
 #: .\manipulation-gui/gui-changeformat.c:123
 #: manipulation-gui/gui-changeformat.c:123
 msgid "DCT algorithm"
-msgstr "Algoritmo DCT"
+msgstr "DCT-algoritme"
 
 #: .\manipulation-gui/gui-changeformat.c:127
 #: manipulation-gui/gui-changeformat.c:127
 msgid "Integer"
-msgstr "Entero"
+msgstr "Heiltaal"
 
 #: .\manipulation-gui/gui-changeformat.c:128
 #: manipulation-gui/gui-changeformat.c:128
 msgid "Fast integer"
-msgstr "Entero rápido"
+msgstr "Raske heiltal"
 
 #: .\manipulation-gui/gui-changeformat.c:129
 #: manipulation-gui/gui-changeformat.c:129
 msgid "Float"
-msgstr "Flotante"
+msgstr "Desimaltal"
 
 #: .\manipulation-gui/gui-changeformat.c:205
 #: manipulation-gui/gui-changeformat.c:205
 msgid "Interlace (Adam7)"
-msgstr "Entrelazado (Adam7)"
+msgstr "Interlacing (Adam7)"
 
 #: .\manipulation-gui/gui-changeformat.c:207
 #: .\manipulation-gui/gui-changeformat.c:303
 #: manipulation-gui/gui-changeformat.c:207
 #: manipulation-gui/gui-changeformat.c:303
 msgid "Compression"
-msgstr "Compresión"
+msgstr "Kompresjon"
 
 #: .\manipulation-gui/gui-changeformat.c:216
 #: manipulation-gui/gui-changeformat.c:216
 msgid "Save background color"
-msgstr "Guardar color de fondo"
+msgstr "Lagra bakgrunnsfarge"
 
 #: .\manipulation-gui/gui-changeformat.c:217
 #: manipulation-gui/gui-changeformat.c:217
 msgid "Save gamma"
-msgstr "Guardar gamma"
+msgstr "Lagra gamma"
 
 #: .\manipulation-gui/gui-changeformat.c:218
 #: manipulation-gui/gui-changeformat.c:218
 msgid "Save layer offset"
-msgstr "Guardar desplazamiento de capas"
+msgstr "Lagra lagforskyvinga"
 
 #: .\manipulation-gui/gui-changeformat.c:219
 #: manipulation-gui/gui-changeformat.c:219
 msgid "Save resolution"
-msgstr "Guardar resolución"
+msgstr "Lagra oppløysinga"
 
 #: .\manipulation-gui/gui-changeformat.c:220
 #: manipulation-gui/gui-changeformat.c:220
 msgid "Save creation date"
-msgstr "Guardar día de creación"
+msgstr "Lagra opprettingsdatoen"
 
 #: .\manipulation-gui/gui-changeformat.c:221
 #: manipulation-gui/gui-changeformat.c:221
 msgid "Save comments"
-msgstr "Guardar comentario"
+msgstr "Lagra merknadar"
 
 #: .\manipulation-gui/gui-changeformat.c:222
 #: manipulation-gui/gui-changeformat.c:222
 msgid "Save color from transparent pixels"
-msgstr "Guardar valores de colores\nde los pixeles transparentes"
+msgstr "Lagra farge frå gjennomsiktige pikslar"
 
 #: .\manipulation-gui/gui-changeformat.c:270
 #: manipulation-gui/gui-changeformat.c:270
 msgid "RLE compression"
-msgstr "Compresión RLE"
+msgstr "RLE-komprimering"
 
 #: .\manipulation-gui/gui-changeformat.c:273
 #: manipulation-gui/gui-changeformat.c:273
 msgid "Image origin"
-msgstr "Imagen original"
+msgstr "Original"
 
-#: .\manipulation-gui/gui-changeformat.c:278
+#: .\manipulation-gui/gui-changeformat.c:278 .\manipulation-gui/gui-crop.c:71
 #: .\manipulation-gui/gui-watermark.c:241
-#: manipulation-gui/gui-changeformat.c:278
+#: manipulation-gui/gui-changeformat.c:278 manipulation-gui/gui-crop.c:71
 #: manipulation-gui/gui-watermark.c:241
 msgid "Top-left"
-msgstr "Arriba-Izquierda"
+msgstr "Oppe-venstre"
 
-#: .\manipulation-gui/gui-changeformat.c:279
+#: .\manipulation-gui/gui-changeformat.c:279 .\manipulation-gui/gui-crop.c:73
 #: .\manipulation-gui/gui-watermark.c:259
-#: manipulation-gui/gui-changeformat.c:279
+#: manipulation-gui/gui-changeformat.c:279 manipulation-gui/gui-crop.c:73
 #: manipulation-gui/gui-watermark.c:259
 msgid "Bottom-left"
-msgstr "Abajo-Izquierda"
+msgstr "Nede-venstre"
 
 #: .\manipulation-gui/gui-changeformat.c:308
-#: .\manipulation-gui/gui-fliprotate.c:40
-#: manipulation-gui/gui-changeformat.c:308
-#: manipulation-gui/gui-fliprotate.c:40
+#: .\manipulation-gui/gui-fliprotate.c:39
+#: manipulation-gui/gui-changeformat.c:308 manipulation-gui/gui-fliprotate.c:39
 msgid "None"
-msgstr "Nada"
+msgstr "Ingen"
 
 #: .\manipulation-gui/gui-changeformat.c:309
 #: manipulation-gui/gui-changeformat.c:309
@@ -186,12 +185,12 @@ msgstr "LZW"
 #: .\manipulation-gui/gui-changeformat.c:310
 #: manipulation-gui/gui-changeformat.c:310
 msgid "Pack bits"
-msgstr "Paquete de bits"
+msgstr "Pakk bits"
 
 #: .\manipulation-gui/gui-changeformat.c:311
 #: manipulation-gui/gui-changeformat.c:311
 msgid "Deflate"
-msgstr "Desinflar"
+msgstr "Deflate"
 
 #: .\manipulation-gui/gui-changeformat.c:312
 #: manipulation-gui/gui-changeformat.c:312
@@ -201,532 +200,540 @@ msgstr "JPEG"
 #: .\manipulation-gui/gui-changeformat.c:313
 #: manipulation-gui/gui-changeformat.c:313
 msgid "CCITT G3 Fax"
-msgstr "Fax CCITT Grupo 3"
+msgstr "CCITT G3 faks"
 
 #: .\manipulation-gui/gui-changeformat.c:314
 #: manipulation-gui/gui-changeformat.c:314
 msgid "CCITT G4 Fax"
-msgstr "Fax CCITT Grupo 4"
+msgstr "CCITT G4 faks"
 
 #: .\manipulation-gui/gui-changeformat.c:329
 #: manipulation-gui/gui-changeformat.c:329
 msgid "This format has no params"
-msgstr "Este formato no requiere parámetros"
+msgstr "Dette formatet har ingen parametrar"
 
 #: .\manipulation-gui/gui-color.c:21 manipulation-gui/gui-color.c:21
 msgid "Brightness"
-msgstr "Brillo"
+msgstr "Lysstyrke"
 
 #: .\manipulation-gui/gui-color.c:29 manipulation-gui/gui-color.c:29
 msgid "Contrast"
-msgstr "Contraste"
+msgstr "Kontrast"
 
 #: .\manipulation-gui/gui-color.c:36 manipulation-gui/gui-color.c:36
 msgid "Convert to grayscale"
-msgstr "Convertir a escala de grises"
+msgstr "Konverter til gråtoner"
 
 #: .\manipulation-gui/gui-color.c:38 manipulation-gui/gui-color.c:38
 msgid "Automatic color levels correction"
-msgstr "Corregir automáticamente los niveles de color"
+msgstr "Automatisk korrigering av fargenivå"
 
 #: .\manipulation-gui/gui-color.c:41 manipulation-gui/gui-color.c:41
 msgid "Change color curve from settings file:"
-msgstr "Cambiar la curva de color desde un archivo externo:"
+msgstr "Endra fargekurve frå innstillingsfila"
 
 #: .\manipulation-gui/gui-color.c:42 manipulation-gui/gui-color.c:42
 msgid "Select GIMP Curve file"
-msgstr "Seleccionar un archivo de Ajustes de Curva de GIMP"
+msgstr "Vel GIMP kurvefil"
 
-#: .\manipulation-gui/gui-crop.c:27 manipulation-gui/gui-crop.c:27
+#: .\manipulation-gui/gui-crop.c:28 manipulation-gui/gui-crop.c:28
 msgid "Crop to a standard aspect ratio"
-msgstr "Cortar a una relación de aspecto estándar"
+msgstr "Klipp til eit standard sideforhold"
 
-#: .\manipulation-gui/gui-crop.c:53 manipulation-gui/gui-crop.c:53
+#: .\manipulation-gui/gui-crop.c:54 manipulation-gui/gui-crop.c:54
 msgid "Manual crop (pixel values)"
-msgstr "Recorte manual (valor en pixel)"
+msgstr "Manuell klipping (pikselverdiar)"
 
-#: .\manipulation-gui/gui-crop.c:58 .\manipulation-gui/gui-resize.c:63
-#: manipulation-gui/gui-crop.c:58 manipulation-gui/gui-resize.c:63
+#: .\manipulation-gui/gui-crop.c:59 .\manipulation-gui/gui-resize.c:63
+#: manipulation-gui/gui-crop.c:59 manipulation-gui/gui-resize.c:63
 msgid "Width"
-msgstr "Ancho"
+msgstr "Breidd"
 
-#: .\manipulation-gui/gui-crop.c:62 .\manipulation-gui/gui-resize.c:65
-#: manipulation-gui/gui-crop.c:62 manipulation-gui/gui-resize.c:65
+#: .\manipulation-gui/gui-crop.c:63 .\manipulation-gui/gui-resize.c:65
+#: manipulation-gui/gui-crop.c:63 manipulation-gui/gui-resize.c:65
 msgid "Height"
-msgstr "Alto"
+msgstr "Høgd"
 
+#: .\manipulation-gui/gui-crop.c:68 manipulation-gui/gui-crop.c:68
 msgid "Start from"
-msgstr "Comenzar desde"
+msgstr "Byrja frå"
 
-#: .\manipulation-gui/gui-crop.c:108 manipulation-gui/gui-crop.c:108
+#: .\manipulation-gui/gui-crop.c:70 .\manipulation-gui/gui-watermark.c:253
+#: manipulation-gui/gui-crop.c:70 manipulation-gui/gui-watermark.c:253
+msgid "Center"
+msgstr "Midten"
+
+#: .\manipulation-gui/gui-crop.c:72 .\manipulation-gui/gui-watermark.c:247
+#: manipulation-gui/gui-crop.c:72 manipulation-gui/gui-watermark.c:247
+msgid "Top-right"
+msgstr "Øvst-høgre"
+
+#: .\manipulation-gui/gui-crop.c:74 .\manipulation-gui/gui-watermark.c:265
+#: manipulation-gui/gui-crop.c:74 manipulation-gui/gui-watermark.c:265
+msgid "Bottom-right"
+msgstr "Botnen-høgre"
+
+#: .\manipulation-gui/gui-crop.c:133 manipulation-gui/gui-crop.c:133
 msgid "One-to-one"
-msgstr "Uno a uno"
+msgstr "1:1"
 
-#: .\manipulation-gui/gui-crop.c:111 manipulation-gui/gui-crop.c:111
+#: .\manipulation-gui/gui-crop.c:136 manipulation-gui/gui-crop.c:136
 msgid "Classic 35 mm film"
-msgstr "Película 35 mm clásica"
+msgstr "Klassisk 35 mm-film"
 
-#: .\manipulation-gui/gui-crop.c:114 manipulation-gui/gui-crop.c:114
+#: .\manipulation-gui/gui-crop.c:139 manipulation-gui/gui-crop.c:139
 msgid "Standard VGA monitor"
-msgstr "Monitor VGA estándar"
+msgstr "VGA standardskjerm"
 
-#: .\manipulation-gui/gui-crop.c:117 manipulation-gui/gui-crop.c:117
+#: .\manipulation-gui/gui-crop.c:142 manipulation-gui/gui-crop.c:142
 msgid "Widescreen"
-msgstr "Widescreen"
+msgstr "Breibiletformat"
 
-#: .\manipulation-gui/gui-crop.c:120 manipulation-gui/gui-crop.c:120
+#: .\manipulation-gui/gui-crop.c:145 manipulation-gui/gui-crop.c:145
 msgid "Widescreen extended"
-msgstr "Widescreen extendido"
+msgstr "Breibiletformat utvida"
 
-#: .\manipulation-gui/gui-crop.c:123 manipulation-gui/gui-crop.c:123
+#: .\manipulation-gui/gui-crop.c:148 manipulation-gui/gui-crop.c:148
 msgid "EU Passport portrait"
-msgstr "Pasaporte de la UE"
+msgstr "Passfoto for EU-pass"
 
-#: .\manipulation-gui/gui-crop.c:126 manipulation-gui/gui-crop.c:126
+#: .\manipulation-gui/gui-crop.c:151 manipulation-gui/gui-crop.c:151
 msgid "Classic smartphone screen"
-msgstr "Pantalla de smartphone clásica"
+msgstr "Klassisk skjerm for smarttelefon"
 
-#: .\manipulation-gui/gui-crop.c:129 manipulation-gui/gui-crop.c:129
+#: .\manipulation-gui/gui-crop.c:154 manipulation-gui/gui-crop.c:154
 msgid "Tall smartphone screen"
-msgstr "Largo de pantalla de smartphone"
+msgstr "Stor smarttelefonskjerm"
 
-#: .\manipulation-gui/gui-crop.c:132 manipulation-gui/gui-crop.c:132
+#: .\manipulation-gui/gui-crop.c:157 manipulation-gui/gui-crop.c:157
 msgid "Classic tablet screen"
-msgstr "Pantalla de table clásica"
+msgstr "Klassisk nettbrettskjerm"
 
-#: .\manipulation-gui/gui-crop.c:135 manipulation-gui/gui-crop.c:135
+#: .\manipulation-gui/gui-crop.c:160 manipulation-gui/gui-crop.c:160
 msgid "Custom ratio"
-msgstr "Ratio personalizado"
+msgstr "Tilpassa sideforhold"
 
 #: .\manipulation-gui/gui-fliprotate.c:19 manipulation-gui/gui-fliprotate.c:19
 msgid "Flip"
-msgstr "Reflejar"
+msgstr "Spegelvend"
 
 #: .\manipulation-gui/gui-fliprotate.c:23 manipulation-gui/gui-fliprotate.c:23
 msgid "Horizontally"
-msgstr "Horizontal"
+msgstr "Vassrett"
 
 #: .\manipulation-gui/gui-fliprotate.c:29 manipulation-gui/gui-fliprotate.c:29
 msgid "Vertically"
-msgstr "Vertical"
+msgstr "Loddrett"
 
 #: .\manipulation-gui/gui-fliprotate.c:37 manipulation-gui/gui-fliprotate.c:37
 msgid "Rotation"
-msgstr "Rotar"
+msgstr "Rotering"
 
 #: .\manipulation-gui/gui-rename.c:26 manipulation-gui/gui-rename.c:26
 msgid "Keywords"
-msgstr "Palabra clave"
+msgstr "Nøkkelord"
 
 #: .\manipulation-gui/gui-rename.c:30 manipulation-gui/gui-rename.c:30
 msgid "Original filename (without extension)"
-msgstr "Nombre original (sin extensión)"
+msgstr "Opphavleg filnamn (utan utviding)"
 
 #: .\manipulation-gui/gui-rename.c:31 manipulation-gui/gui-rename.c:31
 msgid "Incremental number"
-msgstr "Número incremental"
+msgstr "Tal for auke"
 
 #: .\manipulation-gui/gui-rename.c:32 manipulation-gui/gui-rename.c:32
 msgid "Date and time (YYYY-MM-DD_hh-mm)"
-msgstr "Día y hora (AAAA-MM-DD_hh-mm)"
+msgstr "Dato og klokkeslett  (ÅÅÅÅ-MM-DD_tt-mm)"
 
 #: .\manipulation-gui/gui-rename.c:52 manipulation-gui/gui-rename.c:52
 #, c-format
 msgid ""
 "Can't save!\n"
 "'%s' or '%s' symbol must be present."
-msgstr ""
-"No se puede guardar!\n"
-"Debe estar presente el símbolo '%s' o '%s'."
+msgstr "Kan ikkje lagra. Symbola «%s» eller «%s» må vera med."
 
 #: .\manipulation-gui/gui-rename.c:64 manipulation-gui/gui-rename.c:64
 msgid ""
 "Can't save!\n"
 "Pattern contains invalid characters."
 msgstr ""
-"No se puede guardar!\n"
-"El patrón contiene caracteres no válidos."
+"Kan ikkje lagra.\n"
+"Mønsteret inneheld ugyldige teikn."
 
 #: .\manipulation-gui/gui-resize.c:37 manipulation-gui/gui-resize.c:37
 msgid "Set to a percentage of the original"
-msgstr "Ajuste por porcentaje"
+msgstr "Set til ein prosent av originalen"
 
 #: .\manipulation-gui/gui-resize.c:39 manipulation-gui/gui-resize.c:39
 msgid "Set exact size in pixel"
-msgstr "Establecer tamaño exacto en píxeles"
+msgstr "Set nøyaktig storleik i pikslar"
 
 #: .\manipulation-gui/gui-resize.c:45 manipulation-gui/gui-resize.c:45
 msgid "For both dimensions"
-msgstr "Para ambas dimensiones"
+msgstr "For breidd og høgd"
 
 #: .\manipulation-gui/gui-resize.c:47 manipulation-gui/gui-resize.c:47
-msgid "Width only"
-msgstr "Solo ancho"
+msgid "Set width only"
+msgstr "Set berre breidd"
 
 #: .\manipulation-gui/gui-resize.c:49 manipulation-gui/gui-resize.c:49
-msgid "Height only"
-msgstr "Solo alto"
-
-msgid "Allow stretching"
-msgstr "Permitir expansión"
+msgid "Set height only"
+msgstr "Set berre høgd"
 
 #: .\manipulation-gui/gui-resize.c:52 manipulation-gui/gui-resize.c:52
 msgid "Preserve aspect ratio"
-msgstr "Preservar la proporción"
-
-msgid "Fill with padding"
-msgstr "Rellenar con"
+msgstr "Behald sideforholdet"
 
 #: .\manipulation-gui/gui-resize.c:56 manipulation-gui/gui-resize.c:56
 msgid "Interpolation quality"
-msgstr "Calidad de interpolación"
+msgstr "Interpoleringskvalitet"
 
 #: .\manipulation-gui/gui-resize.c:69 manipulation-gui/gui-resize.c:69
 msgid "Change resolution"
-msgstr "Cambia la resolución"
+msgstr "Endra oppløysinga"
 
 #: .\manipulation-gui/gui-resize.c:74 manipulation-gui/gui-resize.c:74
 msgid "X axis"
-msgstr "Eje X"
+msgstr "X-akse"
 
 #: .\manipulation-gui/gui-resize.c:77 manipulation-gui/gui-resize.c:77
 msgid "Y axis"
-msgstr "Eje Y"
+msgstr "Y-akse"
 
 #: .\manipulation-gui/gui-sharpblur.c:17 manipulation-gui/gui-sharpblur.c:17
 msgid "More sharpen"
-msgstr "Mayor nitidez"
+msgstr "Gjer skarpare"
 
 #: .\manipulation-gui/gui-sharpblur.c:23 manipulation-gui/gui-sharpblur.c:23
 msgid "More blurred"
-msgstr "Más borrosa"
+msgstr "Gjer meir sløra"
 
 #: .\manipulation-gui/gui-userdef.c:49 manipulation-gui/gui-userdef.c:49
 msgid ""
 "Choose a supported GIMP procedure from the list on the left\n"
 "and define its parameters on the right."
 msgstr ""
-"Elegir un procedimiento GIMP apoyado en la lista de la izquierda\n"
-"y definir sus parámetros a la derecha."
+"Vel ein GIMP-prosedyre frå lista til venstre\n"
+"og definer innstillingane til høgre."
 
 #: .\manipulation-gui/gui-userdef.c:61 manipulation-gui/gui-userdef.c:61
 msgid "Search"
-msgstr "Buscar"
+msgstr "Søk"
 
 #: .\manipulation-gui/gui-userdef.c:303 manipulation-gui/gui-userdef.c:303
 msgid ""
 "Can't save because\n"
 "no procedure has been selected"
 msgstr ""
-"No se puede salvar porque\n"
-"ningún procedimiento ha sido seleccionado"
+"Kan ikkje lagra fordi\n"
+"ingen prosedyre er vald."
 
 #: .\manipulation-gui/gui-userdef.c:349 manipulation-gui/gui-userdef.c:349
 msgid "Author"
-msgstr "Autor"
+msgstr "Forfattar"
 
-#: .\manipulation-gui/gui-userdef.c:570 manipulation-gui/gui-userdef.c:570
+#: .\manipulation-gui/gui-userdef.c:601 manipulation-gui/gui-userdef.c:601
 msgid "This procedure takes no editable params"
-msgstr ""
-"Este procedimiento no requiere\n"
-"parámetros editables"
+msgstr "Denne prosedyren har ingen valbare innstillingar"
 
 #: .\manipulation-gui/gui-watermark.c:32 manipulation-gui/gui-watermark.c:32
 msgid "Text watermark"
-msgstr "Marca de agua - Texto"
+msgstr "Bruk tekst som vassmerke"
 
 #: .\manipulation-gui/gui-watermark.c:36 manipulation-gui/gui-watermark.c:36
 msgid "Text"
-msgstr "Texto"
+msgstr "Tekst"
 
 #: .\manipulation-gui/gui-watermark.c:45 manipulation-gui/gui-watermark.c:45
 msgid "Font"
-msgstr "Fuente"
+msgstr "Skrifttype"
 
 #: .\manipulation-gui/gui-watermark.c:51 manipulation-gui/gui-watermark.c:51
 msgid "Color"
-msgstr "Color"
+msgstr "Farge"
 
 #: .\manipulation-gui/gui-watermark.c:58 manipulation-gui/gui-watermark.c:58
 msgid "Image watermark"
-msgstr "Marca de agua - Imagen"
+msgstr "Bruk bilete som vassmerke"
 
 #: .\manipulation-gui/gui-watermark.c:62 manipulation-gui/gui-watermark.c:62
 msgid "Select image"
-msgstr "Seleccionar imagen"
+msgstr "Vel bilete"
 
-#: .\manipulation-gui/gui-watermark.c:67 bimp-gui.c:601
+#: .\manipulation-gui/gui-watermark.c:67 bimp-gui.c:611
 #: manipulation-gui/gui-watermark.c:67
 msgid "All supported types"
-msgstr "Todos los tipos soportados"
+msgstr "Alle støtta format"
 
 #: .\manipulation-gui/gui-watermark.c:112 manipulation-gui/gui-watermark.c:112
 msgid "Opacity"
-msgstr "Opacidad"
-
-msgid "Distance to edge"
-msgstr "Distancia al borde"
+msgstr "Dekkevne"
 
 #: .\manipulation-gui/gui-watermark.c:122 manipulation-gui/gui-watermark.c:122
 msgid "Position on the image"
-msgstr "Posición en la imagen"
+msgstr "Plassering av biletet"
 
 #: .\manipulation-gui/gui-watermark.c:244 manipulation-gui/gui-watermark.c:244
 msgid "Top-center"
-msgstr "Arriba-Centro"
-
-#: .\manipulation-gui/gui-watermark.c:247 manipulation-gui/gui-watermark.c:247
-msgid "Top-right"
-msgstr "Arriba-Derecha"
+msgstr "Oppe-midtstilt"
 
 #: .\manipulation-gui/gui-watermark.c:250 manipulation-gui/gui-watermark.c:250
 msgid "Center-left"
-msgstr "Centro-Izquierda"
-
-#: .\manipulation-gui/gui-watermark.c:253 manipulation-gui/gui-watermark.c:253
-msgid "Center"
-msgstr "Centro"
+msgstr "Midtstilt-venstre"
 
 #: .\manipulation-gui/gui-watermark.c:256 manipulation-gui/gui-watermark.c:256
 msgid "Center-right"
-msgstr "Centro-Derecha"
+msgstr "Midtstilt-høgre"
 
 #: .\manipulation-gui/gui-watermark.c:262 manipulation-gui/gui-watermark.c:262
 msgid "Bottom-center"
-msgstr "Abajo-Centro"
+msgstr "Nede-midtstilt"
 
-#: .\manipulation-gui/gui-watermark.c:265 manipulation-gui/gui-watermark.c:265
-msgid "Bottom-right"
-msgstr "Abajo-Derecha"
-
-#: bimp-gui.c:129 bimp-gui.c:897
+#: bimp-gui.c:129 bimp-gui.c:907
 msgid "The manipulations set is empty!"
-msgstr "El set de manipulaciones está vacío!"
+msgstr "Oppgåvesettet er tomt."
 
 #: bimp-gui.c:132
 msgid "The file list is empty!"
-msgstr "La lista de archivos está vacía!"
+msgstr "Fillista er tom."
 
 #: bimp-gui.c:162
 msgid "Manipulation set"
-msgstr "Set de manipulación"
+msgstr "Oppgåvesettet"
 
 #: bimp-gui.c:192
 msgid "Input files and options"
-msgstr "Archivos de entrada y opciones"
+msgstr "Inndatafiler og innstillingar"
 
 #: bimp-gui.c:214
 msgid "Add images"
-msgstr "Agregar imágenes"
+msgstr "Legg til bilete"
 
 #: bimp-gui.c:216
 msgid "Remove images"
-msgstr "Remover imágenes"
+msgstr "Fjern bilete"
 
 #: bimp-gui.c:224
 msgid "Output folder"
-msgstr "Carpeta de salida"
+msgstr "Mappe for lagring"
 
 #: bimp-gui.c:238
 msgid "Use the selected file's location as the output"
-msgstr "Utilice la ubicación del archivo seleccionado como la salida"
+msgstr "Bruk den merkte filadressa som utgang"
 
 #: bimp-gui.c:246
 msgid "Keep folder hierarchy"
-msgstr "Mantener la jerarquía de carpetas"
+msgstr "Behald mappehierakiet"
 
 #: bimp-gui.c:251
 msgid "Delete original file when done"
-msgstr "Eliminar archivo original al terminar"
+msgstr "Slett den opphavlege fila når ferdig"
 
 #: bimp-gui.c:255
 msgid "Keep the modification dates"
-msgstr "Mantener las fechas de modificación"
+msgstr "Behald dato for endring"
 
 #: bimp-gui.c:261
 msgid "Click for preview"
-msgstr "Clic para vista previa"
+msgstr "Klikk for førehandsvising"
 
 #: bimp-gui.c:354
 #, c-format
 msgid "Couldn't read into \"%s\" directory."
-msgstr "No se pudo leer la carpeta \"%s\""
+msgstr "Kunne ikkje lesa «%s» i mappa."
 
-#: bimp-gui.c:464
+#: bimp-gui.c:374
+msgid ""
+"Some images were not imported because they have not been saved on filesystem "
+"yet."
+msgstr ""
+"Nokre bilete vart ikkje importerte fordi dei ikkje er lagra på filsystemet."
+
+#: bimp-gui.c:473
 msgid "Can't show a preview because the manipulations set is empty"
 msgstr ""
-"No se puede mostrar una vista previa\n"
-"porque el set de manipulaciones está vacío"
+"Kan ikkje førehandsvisa fordi det er ikkje opplyst kva som skal gjerast"
 
-#: bimp-gui.c:491
+#: bimp-gui.c:501
 msgid "Preview"
-msgstr "Vista previa"
+msgstr "Førehandsvising"
 
-#: bimp-gui.c:503
+#: bimp-gui.c:513
 msgid "This is how the selected image will look like after the batch process"
-msgstr "Así es como se verá la imagen seleccionada después de que el proceso de edición"
+msgstr "Slik vil det valde biletet sjå ut etter bearbeidinga"
 
-#: bimp-gui.c:592
+#: bimp-gui.c:602
 msgid "Select images"
-msgstr "Seleccionar imágenes"
+msgstr "Vel bilete"
 
-#: bimp-gui.c:665
+#: bimp-gui.c:675
 msgid "Select folders containing images"
-msgstr "Seleccione las carpetas que contienen imágenes"
+msgstr "Vel mappa med bilete"
 
-#: bimp-gui.c:674
+#: bimp-gui.c:684
 msgid "Add files from the whole hierarchy"
-msgstr "Agregar las carpetas dentro"
+msgstr "Legg til filer frå heile hierakiet"
 
-#: bimp-gui.c:691
+#: bimp-gui.c:701
 msgid "Select output folder"
-msgstr "Seleccionar carpeta de salida"
+msgstr "Vel lagringsmappe"
 
-#: bimp-gui.c:748 bimp-gui.c:903
+#: bimp-gui.c:758 bimp-gui.c:913
 msgid "Save this set..."
-msgstr "Guardar conjunto..."
+msgstr "Lagra dette oppgåvesettet …"
 
-#: bimp-gui.c:752 bimp-gui.c:958
+#: bimp-gui.c:762 bimp-gui.c:968
 msgid "Load set..."
-msgstr "Cargar conjunto..."
-
-#: bimp-gui.c:763
-msgid "Edit properties..."
-msgstr "Editar propiedades..."
-
-#: bimp-gui.c:766
-msgid "Remove this manipulation"
-msgstr "Remover esta manipulación"
+msgstr "Lasta inn oppgåvesettet …"
 
 #: bimp-gui.c:773
-msgid "Add single images..."
-msgstr "Agregar imágenes individuales..."
+msgid "Edit properties..."
+msgstr "Rediger innstillingane …"
 
 #: bimp-gui.c:776
-msgid "Add folders..."
-msgstr "Agregar carpetas..."
+msgid "Remove this manipulation"
+msgstr "Fjern denne manipuleringa"
 
-#: bimp-gui.c:779
-msgid "Add all opened images"
-msgstr "Agregar todas las imágenes abiertas"
+#: bimp-gui.c:783
+msgid "Add single images..."
+msgstr "Legg til enkeltbilete"
 
 #: bimp-gui.c:786
-msgid "Remove selected"
-msgstr "Eliminar seleccionadas"
+msgid "Add folders..."
+msgstr "Legg til mapper …"
 
 #: bimp-gui.c:789
+msgid "Add all opened images"
+msgstr "Legg til alle opna bilete"
+
+#: bimp-gui.c:796
+msgid "Remove selected"
+msgstr "Fjern merkte bilete"
+
+#: bimp-gui.c:799
 msgid "Remove all"
-msgstr "Eliminar todo"
+msgstr "Fjern alle"
 
-#: bimp-gui.c:833
+#: bimp-gui.c:843
 msgid "Can't add another manipulation of this kind. Only one is permitted!"
-msgstr "No se puede agregar otra manipulación de este tipo. Sólo una se permite!"
+msgstr ""
+"Kan ikkje leggja til fleire oppgåver av denne typen. Berre éi er tillate."
 
-#: bimp-gui.c:924 bimp-gui.c:975
+#: bimp-gui.c:934 bimp-gui.c:985
 msgid "An error occured when importing a saved batch file :("
-msgstr "Se produjo un error al importar un archivo por lotes guardado :("
+msgstr "Det oppstod ein feil ved importen av den lagra satsfila: ("
 
-#: bimp-gui.c:946
+#: bimp-gui.c:956
 msgid "This will overwrite current manipulations set. Continue?"
-msgstr "Esto sobrescribirá el conjunto actual de cambios. ¿Desea continuar?"
+msgstr "Dette vil overskriva det gjeldande oppgåvesettet. Hald fram likevel?"
 
-#: bimp-gui.c:1013 bimp.c:67
+#: bimp-gui.c:1023 bimp.c:67
 msgid "Applies GIMP manipulations on groups of images"
-msgstr "Aplicar cambios a grupos de imágenes GIMP"
+msgstr "Utfører GIMP-handteringar på grupper av bilete"
 
-#: bimp-gui.c:1020
+#: bimp-gui.c:1030
 msgid "translator-name <translator-email>"
-msgstr "Damián Blanco"
+msgstr "Kolbjørn Stuestøl <kolbjoern@stuestoel.no>"
 
-#: bimp-manipulations.c:275
+#: bimp-manipulations.c:273
 msgid "Resize"
-msgstr "Redimensionar"
+msgstr "Endra storleik"
 
-#: bimp-manipulations.c:278
+#: bimp-manipulations.c:276
 msgid "Crop"
-msgstr "Recortar"
+msgstr "Klipp"
 
-#: bimp-manipulations.c:281
+#: bimp-manipulations.c:279
 msgid "Flip or Rotate"
-msgstr "Voltear o Girar"
+msgstr "Spegelvend eller roter"
 
-#: bimp-manipulations.c:284
+#: bimp-manipulations.c:282
 msgid "Color correction"
-msgstr "Corrección de color"
+msgstr "Fargekorrigering"
 
-#: bimp-manipulations.c:287
+#: bimp-manipulations.c:285
 msgid "Sharp or Blur"
-msgstr "Nítido o borroso"
+msgstr "Skjerp eller slør"
 
-#: bimp-manipulations.c:290
+#: bimp-manipulations.c:288
 msgid "Add a Watermark"
-msgstr "Agregar marca de agua"
+msgstr "Legg til vassmerke"
 
-#: bimp-manipulations.c:293
+#: bimp-manipulations.c:291
 msgid "Change format and compression"
-msgstr "Cambiar formato de compresión"
+msgstr "Endra format og komprimering"
 
-#: bimp-manipulations.c:296
+#: bimp-manipulations.c:294
 msgid "Rename with a pattern"
-msgstr "Renombrar con un patrón"
+msgstr "Gjev nytt namn etter eit mønster"
 
-#: bimp-manipulations.c:299
+#: bimp-manipulations.c:297
 msgid "Other GIMP procedure..."
-msgstr "Otro procedimiento GIMP..."
+msgstr "Andre GIMP-funksjonar …"
 
-#: bimp-operate.c:171
+#: bimp-operate.c:174
 #, c-format
 msgid ""
 "Can't save image \"%s\": input file has no extension.\n"
 "You can solve this error by adding a \"Change format or compression\" step"
 msgstr ""
-"No se puede guardar la imagen \"%s\": el archivo original no tiene extensión.\n"
-"Puede solucionar este problema agregando un paso \"Cambiar el formato o la compresión\"."
+"Kan ikkje lagra biletet «%s»: Manglar filutviding.\n"
+"Du kan omgå denne feilen ved å føye til steget «Endra format eller "
+"komprimering»"
 
-#: bimp-operate.c:177
+#: bimp-operate.c:180
 #, c-format
 msgid ""
 "GIMP can't save %s back to its original SVG format.\n"
 "You can solve this error by adding a \"Change format or compression\" step"
 msgstr ""
-"GIMP no puede guardar %s con su formato original SVG.\n"
-"Puede solucionar este problema agregando un paso \"Cambiar el formato o la compresión\"."
+"GIMP kan ikkje lagra %s tilbake til SVG-format.\n"
+"Du kan omgå denne feilen ved å føye til steget «Endra format eller "
+"komprimering»"
 
-#: bimp-operate.c:183
+#: bimp-operate.c:186
 #, c-format
 msgid "Working on file \"%s\"..."
-msgstr "Trabajando en el archivo \"%s\"..."
+msgstr "Arbeider med fila «%s» …"
 
-#: bimp-operate.c:323
+#: bimp-operate.c:326
 msgid "Operations stopped"
-msgstr "Operación frenada"
+msgstr "Operasjonen stoppa"
 
-#: bimp-operate.c:330
+#: bimp-operate.c:333
 #, c-format
 msgid "End, all files have been processed with %d errors"
-msgstr "Fin, todos los archivos se han procesado con %d errores"
+msgstr "Ferdig. Alle filene er handsama med %d feil"
 
-#: bimp-operate.c:1165
+#: bimp-operate.c:1248
 #, c-format
 msgid "File %s already exists, overwrite it?"
-msgstr "El archivo %s ya existe, ¿Desea sobrescribirlo?"
+msgstr "Fila %s finst frå før. Skal ho overskrivast?"
 
-#: bimp-operate.c:1170
+#: bimp-operate.c:1253
 msgid "Always apply this decision"
-msgstr "Siempre aplique esta decisión"
+msgstr "Legg alltid til endringsdatoen"
 
-#: bimp-operate.c:1182
+#: bimp-operate.c:1265
 msgid "Overwrite?"
-msgstr "¿Desea sobrescribirlo?"
+msgstr "Overskriva?"
+
+#~ msgid "Add folders"
+#~ msgstr "Hinzufügen von Ordnern"
 
 #~ msgid "Alert when overwriting existing files"
-#~ msgstr "Avvisa se si sovrascrivono file esistenti"
+#~ msgstr "Warnen wenn vorhandene Dateien überschrieben werden"
+
+#~ msgid ""
+#~ "Can't save image %s: input file has no extension.\n"
+#~ "You can solve this error by adding a \"Change format or compression\" step"
+#~ msgstr ""
+#~ "image %s kann nicht gespeichert werden: Eingabedatei hat keine Endung.\n"
+#~ "Sie können diesen Fehler durch hinzufügen einer \"Format oder Kompression "
+#~ "ändern\" Aufgabe beheben."
+
+#~ msgid "Working on file %s..."
+#~ msgstr "File %s in Bearbeitung..."
 
 #~ msgid "Yes, don't ask again"
-#~ msgstr "Si, non chiedermelo più"
-
-#~ msgid "Save this set"
-#~ msgstr "Salva questo set"
-
-#~ msgid "Load set"
-#~ msgstr "Carica set"
+#~ msgstr "Ja, nicht wieder nachfragen"
