@@ -1,111 +1,550 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gimp-plugin-bimp\n"
-"POT-Creation-Date: 2015-05-21 22:12+0100\n"
-"PO-Revision-Date: 2015-10-23 11:14+0300\n"
+"POT-Creation-Date: 2016-11-19 11:50+0400\n"
+"PO-Revision-Date: 2016-11-19 13:16+0400\n"
 "Last-Translator: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Poedit 1.7.4\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-Basepath: ../../../../../src\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-Basepath: ../../../src\n"
 "X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPath-1: ./manipulation-gui\n"
 
-msgid "% of"
-msgstr "% от"
+#: bimp-gui.c:130 bimp-gui.c:928
+msgid "The manipulations set is empty!"
+msgstr "Список преобразований пуст!"
 
-msgid "Adaptive size"
-msgstr "Адаптивный размер"
+#: bimp-gui.c:133
+msgid "The file list is empty!"
+msgstr "Список файлов пуст!"
 
-msgid "Add a Watermark"
-msgstr "Добавление водяного знака"
+#: bimp-gui.c:163
+msgid "Manipulation set"
+msgstr "Список преобразований"
 
-msgid "Add all opened images"
-msgstr "Добавить все открытые изображения"
+#: bimp-gui.c:193
+msgid "Input files and options"
+msgstr "Входные файлы и параметры"
 
-msgid "Add files from the whole hierarchy"
-msgstr "Добавить файлы из всех подпапок"
-
-msgid "Add folders..."
-msgstr "Добавить папки ..."
-
+#: bimp-gui.c:215
 msgid "Add images"
 msgstr "Добавить изображения"
 
-msgid "Add single images..."
-msgstr "Добавить одиночные изображения ..."
+#: bimp-gui.c:217
+msgid "Remove images"
+msgstr "Удалить изображения"
 
-msgid "Advanced params"
-msgstr "Дополнительные параметры"
+#: bimp-gui.c:225
+msgid "Output folder"
+msgstr "Выходная папка"
 
-msgid "Alert when overwriting existing files"
-msgstr "Предупреждать при перезаписи существующих файлов"
+#: bimp-gui.c:239
+msgid "Use the selected file's location as the output"
+msgstr "Использовать местоположение выбранного файла для выходных файлов"
 
+#: bimp-gui.c:247
+msgid "Keep folder hierarchy"
+msgstr "Сохранить структуру подпапок"
+
+#: bimp-gui.c:252
+msgid "Delete original file when done"
+msgstr "Удалить исходный файл после завершения"
+
+#: bimp-gui.c:256
+msgid "Keep the modification dates"
+msgstr "Сохранить даты изменения"
+
+#: bimp-gui.c:262
+msgid "Click for preview"
+msgstr "Нажмите для предварительного просмотра"
+
+#: bimp-gui.c:355
+#, c-format
+msgid "Couldn't read into \"%s\" directory."
+msgstr "Не удалось открыть файлы из папки \"%s\"."
+
+#: bimp-gui.c:375
+msgid ""
+"Some images were not imported because they have not been saved on filesystem "
+"yet."
+msgstr ""
+"Некоторые изображения не были импортированы, потому что они еще не сохранены."
+
+#: bimp-gui.c:474
+msgid "Can't show a preview because the manipulations set is empty"
+msgstr ""
+"Невозможно показать предварительный просмотр, потому что список "
+"преобразований пуст"
+
+#: bimp-gui.c:502
+msgid "Preview"
+msgstr "Предпросмотр"
+
+#: bimp-gui.c:514
+msgid "This is how the selected image will look like after the batch process"
+msgstr "Так выбранное изображение будет выглядеть после пакетной обработки"
+
+#: bimp-gui.c:603
+msgid "Select images"
+msgstr "Выбрать изображения"
+
+#: bimp-gui.c:613 manipulation-gui/gui-watermark.c:87
 msgid "All supported types"
 msgstr "Все поддерживаемые типы"
 
-msgid "Allow stretching"
-msgstr "Разрешить растяжение"
+#: bimp-gui.c:691
+msgid "Select folders containing images"
+msgstr "Выберите папки, содержащие изображения"
 
-msgid "Always apply this decision"
-msgstr "Всегда применять данный выбор"
+#: bimp-gui.c:700
+msgid "Add files from the whole hierarchy"
+msgstr "Добавить файлы из всех подпапок"
 
-msgid "An error occured when importing a saved batch file :("
-msgstr "Произошла ошибка при импорте сохраненного файла :( "
+#: bimp-gui.c:722
+msgid "Select output folder"
+msgstr "Выбрать папку вывода"
 
-msgid "Applies GIMP manipulations on groups of images"
-msgstr "Применение преобразований GIMP к группам изображений"
+#: bimp-gui.c:779 bimp-gui.c:934
+msgid "Save this set..."
+msgstr "Сохранить этот список ..."
 
-msgid "Author"
-msgstr "Автор"
+#: bimp-gui.c:783 bimp-gui.c:989
+msgid "Load set..."
+msgstr "Загрузить список..."
 
-msgid "Automatic color levels correction"
-msgstr "Автоматическая коррекция цветовых уровней"
+#: bimp-gui.c:794
+msgid "Edit properties..."
+msgstr "Редактировать параметры ..."
 
-msgid "Bottom-center"
-msgstr "Внизу по центру"
+#: bimp-gui.c:797
+msgid "Remove this manipulation"
+msgstr "Удалить это преобразование"
 
-msgid "Bottom-left"
-msgstr "Внизу слева"
+#: bimp-gui.c:804
+msgid "Add single images..."
+msgstr "Добавить одиночные изображения ..."
 
-msgid "Bottom-right"
-msgstr "Внизу справа"
+#: bimp-gui.c:807
+msgid "Add folders..."
+msgstr "Добавить папки ..."
 
-msgid "Brightness"
-msgstr "Яркость"
+#: bimp-gui.c:810
+msgid "Add all opened images"
+msgstr "Добавить все открытые изображения"
 
-msgid "CCITT G3 Fax"
-msgstr "CCITT G3 Факс"
+#: bimp-gui.c:817
+msgid "Remove selected"
+msgstr "Удалить выбранные"
 
-msgid "CCITT G4 Fax"
-msgstr "CCITT G4 Факс"
+#: bimp-gui.c:820
+msgid "Remove all"
+msgstr "Удалить все"
 
+#: bimp-gui.c:864
 msgid "Can't add another manipulation of this kind. Only one is permitted!"
 msgstr ""
 "Невозможно добавить другое преобразование данного типа. Разрешается только "
 "одно!"
 
-msgid ""
-"Can't save because\n"
-"no procedure has been selected"
-msgstr ""
-"Невозможно сохранить,\n"
-" т.к. не была выбрана процедура"
+#: bimp-gui.c:955 bimp-gui.c:1006
+msgid "An error occured when importing a saved batch file :("
+msgstr "Произошла ошибка при импорте сохраненного файла :( "
 
+#: bimp-gui.c:977
+msgid "This will overwrite current manipulations set. Continue?"
+msgstr "Текущий список преобразований будет перезаписан. Продолжить?"
+
+#: bimp-gui.c:1045 bimp.c:66
+msgid "Applies GIMP manipulations on groups of images"
+msgstr "Применение преобразований GIMP к группам изображений"
+
+#: bimp-gui.c:1052
+msgid "translator-name <translator-email>"
+msgstr "Yuri Krasilnikov <ydkras@gmail.com>"
+
+#: bimp-manipulations.c:279
+msgid "Resize"
+msgstr "Изменение размера"
+
+#: bimp-manipulations.c:282
+msgid "Crop"
+msgstr "Обрезка"
+
+#: bimp-manipulations.c:285
+msgid "Flip or Rotate"
+msgstr "Отражение и поворот"
+
+#: bimp-manipulations.c:288
+msgid "Color correction"
+msgstr "Цветовая коррекция"
+
+#: bimp-manipulations.c:291
+msgid "Sharp or Blur"
+msgstr "Увеличение резкости или размытие"
+
+#: bimp-manipulations.c:294
+msgid "Add a Watermark"
+msgstr "Добавление водяного знака"
+
+#: bimp-manipulations.c:297
+msgid "Change format and compression"
+msgstr "Изменение формата и сжатия"
+
+#: bimp-manipulations.c:300
+msgid "Rename with a pattern"
+msgstr "Переименование по образцу"
+
+#: bimp-manipulations.c:303
+msgid "Other GIMP procedure..."
+msgstr "Другая процедура GIMP..."
+
+#: bimp-operate.c:177
+#, c-format
+msgid ""
+"Can't save image \"%s\": input file has no extension.\n"
+"You can solve this error by adding a \"Change format or compression\" step"
+msgstr ""
+"Невозможно сохранить изображение \"%s\": входной файл не имеет расширения.\n"
+"Добавьте шаг \"Изменение формата и сжатия\" чтобы исправить ошибку."
+
+#: bimp-operate.c:183
+#, c-format
+msgid ""
+"GIMP can't save %s back to its original SVG format.\n"
+"You can solve this error by adding a \"Change format or compression\" step"
+msgstr ""
+"GIMP не может сохранить %s обратно в исходный формат SVG.\n"
+"Добавьте шаг \"Изменение формата и сжатия\" чтобы исправить ошибку."
+
+#: bimp-operate.c:189
+#, c-format
+msgid "Working on file \"%s\"..."
+msgstr "Обработка файла \"%s\"..."
+
+#: bimp-operate.c:329
+msgid "Operations stopped"
+msgstr "Выполнение прекращено"
+
+#: bimp-operate.c:336
+#, c-format
+msgid "End, all files have been processed with %d errors"
+msgstr "Завершено, все файлы обработаны, ошибок %d"
+
+#: bimp-operate.c:1380
+#, c-format
+msgid "File %s already exists, overwrite it?"
+msgstr "Файл %s существует. Перезаписать?"
+
+#: bimp-operate.c:1385
+msgid "Always apply this decision"
+msgstr "Всегда применять данный выбор"
+
+#: bimp-operate.c:1397
+msgid "Overwrite?"
+msgstr "Перезаписать?"
+
+#: manipulation-gui/gui-changeformat.c:37
+msgid "Format settings"
+msgstr "Параметры формата"
+
+#: manipulation-gui/gui-changeformat.c:58
+msgid "Interlaced"
+msgstr "Чересстрочный"
+
+#: manipulation-gui/gui-changeformat.c:78
+#: manipulation-gui/gui-changeformat.c:118
+msgid "Quality"
+msgstr "Качество"
+
+#: manipulation-gui/gui-changeformat.c:84
+#: manipulation-gui/gui-changeformat.c:213
+msgid "Advanced params"
+msgstr "Дополнительные параметры"
+
+#: manipulation-gui/gui-changeformat.c:88
+msgid "Smoothing"
+msgstr "Сглаживание"
+
+#: manipulation-gui/gui-changeformat.c:95
+msgid "Optimize"
+msgstr "Оптимизация"
+
+#: manipulation-gui/gui-changeformat.c:96
+msgid "Progressive"
+msgstr "Прогрессивн."
+
+#: manipulation-gui/gui-changeformat.c:97
+msgid "Save baseline"
+msgstr ""
+"Сохр. базов.\n"
+" режим"
+
+#: manipulation-gui/gui-changeformat.c:100
+msgid "Comment"
+msgstr "Комментарий"
+
+#: manipulation-gui/gui-changeformat.c:107
+msgid "Markers rows"
+msgstr "Маркерн.строки"
+
+#: manipulation-gui/gui-changeformat.c:112 msgstr
+#: "Субдискретизация"
+msgid "Subsampling"
+msgstr "Семплирование"
+
+#: manipulation-gui/gui-changeformat.c:116
+msgid "Small size"
+msgstr "Малый размер"
+
+#: manipulation-gui/gui-changeformat.c:123
+msgid "DCT algorithm"
+msgstr "Алгоритм DCT"
+
+#: manipulation-gui/gui-changeformat.c:127
+msgid "Integer"
+msgstr "Целочисленный"
+
+#: manipulation-gui/gui-changeformat.c:128
+msgid "Fast integer"
+msgstr "Быстрый целочисленный"
+
+#: manipulation-gui/gui-changeformat.c:129
+msgid "Float"
+msgstr "С плавающей запятой"
+
+#: manipulation-gui/gui-changeformat.c:205
+msgid "Interlace (Adam7)"
+msgstr "Чересстрочный (Adam7)"
+
+#: manipulation-gui/gui-changeformat.c:207
+#: manipulation-gui/gui-changeformat.c:303
+msgid "Compression"
+msgstr "Сжатие"
+
+#: manipulation-gui/gui-changeformat.c:216
+msgid "Save background color"
+msgstr "Сохранить цвет фона"
+
+#: manipulation-gui/gui-changeformat.c:217
+msgid "Save gamma"
+msgstr "Сохранить гамму"
+
+#: manipulation-gui/gui-changeformat.c:218
+msgid "Save layer offset"
+msgstr "Сохранить смещение слоя"
+
+#: manipulation-gui/gui-changeformat.c:219
+msgid "Save resolution"
+msgstr "Сохранить разрешение"
+
+#: manipulation-gui/gui-changeformat.c:220
+msgid "Save creation date"
+msgstr "Сохранить дату создания"
+
+#: manipulation-gui/gui-changeformat.c:221
+msgid "Save comments"
+msgstr "Сохранить комментарии"
+
+#: manipulation-gui/gui-changeformat.c:222
+msgid "Save color from transparent pixels"
+msgstr "Сохранить цвет прозрачных пикселов"
+
+#: manipulation-gui/gui-changeformat.c:270
+msgid "RLE compression"
+msgstr "Сжатие RLE"
+
+#: manipulation-gui/gui-changeformat.c:273
+msgid "Image origin"
+msgstr "Исходная точка"
+
+#: manipulation-gui/gui-changeformat.c:278 manipulation-gui/gui-crop.c:71
+#: manipulation-gui/gui-watermark.c:301
+msgid "Top-left"
+msgstr "Сверху слева"
+
+#: manipulation-gui/gui-changeformat.c:279 manipulation-gui/gui-crop.c:73
+#: manipulation-gui/gui-watermark.c:319
+msgid "Bottom-left"
+msgstr "Внизу слева"
+
+#: manipulation-gui/gui-changeformat.c:308
+#: manipulation-gui/gui-fliprotate.c:39
+msgid "None"
+msgstr "Нет"
+
+#: manipulation-gui/gui-changeformat.c:309
+msgid "LZW"
+msgstr "LZW"
+
+#: manipulation-gui/gui-changeformat.c:310
+msgid "Pack bits"
+msgstr "Pack bits"
+
+#: manipulation-gui/gui-changeformat.c:311
+msgid "Deflate"
+msgstr "Deflate"
+
+#: manipulation-gui/gui-changeformat.c:312
+msgid "JPEG"
+msgstr "JPEG"
+
+#: manipulation-gui/gui-changeformat.c:313
+msgid "CCITT G3 Fax"
+msgstr "CCITT G3 Fax"
+
+#: manipulation-gui/gui-changeformat.c:314
+msgid "CCITT G4 Fax"
+msgstr "CCITT G4 Fax"
+
+#: manipulation-gui/gui-changeformat.c:329
+msgid "This format has no params"
+msgstr "У этого формата нет параметров"
+
+#: manipulation-gui/gui-color.c:22
+msgid "Brightness"
+msgstr "Яркость"
+
+#: manipulation-gui/gui-color.c:30
+msgid "Contrast"
+msgstr "Контраст"
+
+#: manipulation-gui/gui-color.c:37
+msgid "Convert to grayscale"
+msgstr "Преобразовать в оттенки серого"
+
+#: manipulation-gui/gui-color.c:39
+msgid "Automatic color levels correction"
+msgstr "Автоматическая коррекция цветовых уровней"
+
+#: manipulation-gui/gui-color.c:42
+msgid "Change color curve from settings file:"
+msgstr "Применить цветовую кривую из файла настроек"
+
+#: manipulation-gui/gui-color.c:47
+msgid "Select GIMP Curve file"
+msgstr "Выберите файл GIMP с кривой"
+
+#: manipulation-gui/gui-crop.c:28
+msgid "Crop to a standard aspect ratio"
+msgstr "Обрезать со стандартными пропорциями"
+
+#: manipulation-gui/gui-crop.c:54
+msgid "Manual crop (pixel values)"
+msgstr "Ручная обрезка (значения в пикселях)"
+
+#: manipulation-gui/gui-crop.c:59 manipulation-gui/gui-resize.c:82
+#: manipulation-gui/gui-watermark.c:80
+msgid "Width"
+msgstr "Ширина"
+
+#: manipulation-gui/gui-crop.c:63 manipulation-gui/gui-resize.c:85
+#: manipulation-gui/gui-watermark.c:81
+msgid "Height"
+msgstr "Высота"
+
+#: manipulation-gui/gui-crop.c:68
+msgid "Start from"
+msgstr "Исходн.точка"
+
+#: manipulation-gui/gui-crop.c:70 manipulation-gui/gui-watermark.c:313
+msgid "Center"
+msgstr "Центр"
+
+#: manipulation-gui/gui-crop.c:72 manipulation-gui/gui-watermark.c:307
+msgid "Top-right"
+msgstr "Сверху справа"
+
+#: manipulation-gui/gui-crop.c:74 manipulation-gui/gui-watermark.c:325
+msgid "Bottom-right"
+msgstr "Внизу справа"
+
+#: manipulation-gui/gui-crop.c:133
+msgid "One-to-one"
+msgstr "Один к одному"
+
+#: manipulation-gui/gui-crop.c:136
+msgid "Classic 35 mm film"
+msgstr "Стандартная фотопленка 35 мм"
+
+#: manipulation-gui/gui-crop.c:139
+msgid "Standard VGA monitor"
+msgstr "Стандартный монитор VGA"
+
+#: manipulation-gui/gui-crop.c:142
+msgid "Widescreen"
+msgstr "Широкий экран"
+
+#: manipulation-gui/gui-crop.c:145
+msgid "Widescreen extended"
+msgstr "Расширенный экран"
+
+#: manipulation-gui/gui-crop.c:148
+msgid "EU Passport portrait"
+msgstr "Фото на европаспорт"
+
+#: manipulation-gui/gui-crop.c:151
+msgid "Classic smartphone screen"
+msgstr "Стандартный экран смартфона"
+
+#: manipulation-gui/gui-crop.c:154
+msgid "Tall smartphone screen"
+msgstr "Высокий экран смартфона"
+
+#: manipulation-gui/gui-crop.c:157
+msgid "Classic tablet screen"
+msgstr "Стандартный экран планшета"
+
+#: manipulation-gui/gui-crop.c:160
+msgid "Custom ratio"
+msgstr "Произвольные пропорции"
+
+#: manipulation-gui/gui-fliprotate.c:19
+msgid "Flip"
+msgstr "Отражение"
+
+#: manipulation-gui/gui-fliprotate.c:23
+msgid "Horizontally"
+msgstr "Горизонтально"
+
+#: manipulation-gui/gui-fliprotate.c:29
+msgid "Vertically"
+msgstr "Вертикально"
+
+#: manipulation-gui/gui-fliprotate.c:37
+msgid "Rotation"
+msgstr "Поворот"
+
+#: manipulation-gui/gui-rename.c:26
+msgid "Keywords"
+msgstr "Ключевые слова"
+
+#: manipulation-gui/gui-rename.c:30
+msgid "Original filename (without extension)"
+msgstr "Исходное имя файла (без расширения)"
+
+#: manipulation-gui/gui-rename.c:31
+msgid "Incremental number"
+msgstr "Порядковый номер"
+
+#: manipulation-gui/gui-rename.c:32
+msgid "Date and time (YYYY-MM-DD_hh-mm)"
+msgstr "Дата и время (YYYY-MM-DD_hh-mm)"
+
+#: manipulation-gui/gui-rename.c:52
+#, c-format
 msgid ""
 "Can't save!\n"
 "'%s' or '%s' symbol must be present."
 msgstr ""
-"Нвозможно сохранить!\n"
-"Должен присутствовать символ «%s» или «%s»."
+"Невозможно сохранить!\n"
+"Должен присутствовать символ \"%s\" или \"%s\"."
 
+#: manipulation-gui/gui-rename.c:64
 msgid ""
 "Can't save!\n"
 "Pattern contains invalid characters."
@@ -113,410 +552,147 @@ msgstr ""
 "Невозможно сохранить!\n"
 "Шаблон содержит недопустимые символы."
 
-msgid "Can't show a preview because the manipulations set is empty"
-msgstr ""
-"Невозможно показать предварительный просмотр, потому что список "
-"преобразований пуст"
+#: manipulation-gui/gui-resize.c:43
+msgid "Set to a percentage of the original"
+msgstr "Задать в процентах от оригинала"
 
-msgid "Center"
-msgstr "Центр"
+#: manipulation-gui/gui-resize.c:45
+msgid "Set exact size in pixel"
+msgstr "Задать точный размер в пикселях"
 
-msgid "Center-left"
-msgstr "Слева по центру"
+#: manipulation-gui/gui-resize.c:52
+msgid "For both dimensions"
+msgstr "Оба размера"
 
-msgid "Center-right"
-msgstr "Справа по центру"
+#: manipulation-gui/gui-resize.c:53
+msgid "Width only"
+msgstr "Только ширина"
 
-msgid "Change color curve from settings file:"
-msgstr "Применить цветовую кривую из файла настроек"
+#: manipulation-gui/gui-resize.c:54
+msgid "Height only"
+msgstr "Только высота"
 
-msgid "Change format and compression"
-msgstr "Изменение формата и сжатия"
+#: manipulation-gui/gui-resize.c:64
+msgid "Allow stretching"
+msgstr "Разрешить растяжение"
 
+#: manipulation-gui/gui-resize.c:66
+msgid "Preserve aspect ratio"
+msgstr "Сохранить пропорции"
+
+#: manipulation-gui/gui-resize.c:68
+msgid "Fill with padding"
+msgstr "Залить цветом"
+
+#: manipulation-gui/gui-resize.c:92
+msgid "Interpolation quality"
+msgstr "Качество интерполяции"
+
+#: manipulation-gui/gui-resize.c:101
 msgid "Change resolution"
-msgstr "Сменить разрешение"
+msgstr "Изменить разрешение"
 
+#: manipulation-gui/gui-resize.c:107
+msgid "X axis"
+msgstr "Ось X"
+
+#: manipulation-gui/gui-resize.c:111
+msgid "Y axis"
+msgstr "Ось Y"
+
+#: manipulation-gui/gui-sharpblur.c:17
+msgid "More sharpen"
+msgstr "Более резкое"
+
+#: manipulation-gui/gui-sharpblur.c:23
+msgid "More blurred"
+msgstr "Более размытое"
+
+#: manipulation-gui/gui-userdef.c:49
 msgid ""
 "Choose a supported GIMP procedure from the list on the left\n"
 "and define its parameters on the right."
 msgstr ""
-"Выберите поддерживаемую функцию GIMP из списка слева и задайте ее параметры "
-"справа."
+"Выберите поддерживаемую функцию GIMP из списка слева и\n"
+"задайте ее параметры справа."
 
-msgid "Classic 35 mm film"
-msgstr "Стандартная фотопленка 35 мм"
-
-msgid "Classic smartphone screen"
-msgstr "Стандартный экран смартфона"
-
-msgid "Classic tablet screen"
-msgstr "Стандартный экран планшета"
-
-msgid "Click for preview"
-msgstr "Нажмите для предварительного просмотра"
-
-msgid "Color"
-msgstr "Цвет"
-
-msgid "Color correction"
-msgstr "Цветовая коррекция"
-
-msgid "Comment"
-msgstr "Комментарий"
-
-msgid "Compression"
-msgstr "Сжатие"
-
-msgid "Contrast"
-msgstr "Контраст"
-
-msgid "Convert to grayscale"
-msgstr "Преобразовать в оттенки серого"
-
-msgid "Couldn't read into \"%s\" directory."
-msgstr "Не удалось открыть файлы из папки \"%s\"."
-
-msgid "Crop"
-msgstr "Обрезка"
-
-msgid "Crop to a standard aspect ratio"
-msgstr "Обрезать со стандартными пропорциями"
-
-msgid "Custom ratio"
-msgstr "Произвольные пропорции"
-
-msgid "DCT algorithm"
-msgstr "DCT алгоритм"
-
-msgid "Date and time (YYYY-MM-DD_hh-mm)"
-msgstr "Дата и время (YYYY-MM-DD_hh-mm)"
-
-msgid "Deflate"
-msgstr "Дефляция"
-
-msgid "Delete original file when done"
-msgstr "Удалить исходный файл после завершения"
-
-msgid "Distance to edge"
-msgstr "Расстояние от края"
-
-msgid "EU Passport portrait"
-msgstr "Фото на европаспорт"
-
-msgid "Edit properties..."
-msgstr "Редактировать параметры ..."
-
-msgid "End, all files have been processed with %d errors"
-msgstr "Завершено, все файлы обработаны, ошибок %d"
-
-msgid "Fast integer"
-msgstr "Быстрый целочисленный"
-
-msgid "File %s already exists, overwrite it?"
-msgstr "Файл %s существует.  Перезаписать?"
-
-msgid "Fill with padding"
-msgstr "Залить цветом"
-
-msgid "Flip"
-msgstr "Отражение"
-
-msgid "Flip or Rotate"
-msgstr "Отражение и поворот"
-
-msgid "Float"
-msgstr "С плавающей запятой"
-
-msgid "Font"
-msgstr "Шрифт"
-
-msgid "For both dimensions"
-msgstr "Оба размера"
-
-msgid "Format settings"
-msgstr "Параметры формата"
-
-msgid "Height"
-msgstr "Высота"
-
-msgid "Height only"
-msgstr "Только высота"
-
-msgid "Horizontally"
-msgstr "Горизонтально"
-
-msgid "Image origin"
-msgstr "Исходная точка"
-
-msgid "Image watermark"
-msgstr "Графический водяной знак"
-
-msgid "Incremental number"
-msgstr "Порядковый номер"
-
-msgid "Input files and options"
-msgstr "Входные файлы и параметры"
-
-msgid "Integer"
-msgstr "Целочисленный"
-
-msgid "Interlace (Adam7)"
-msgstr "Чересстрочный (Adam7)"
-
-msgid "Interlaced"
-msgstr "Чересстрочный"
-
-msgid "Interpolation quality"
-msgstr "Качество интерполяции"
-
-msgid "JPEG"
-msgstr "JPEG"
-
-msgid "Keep folder hierarchy"
-msgstr "Сохранить структуру подпапок"
-
-msgid "Keep the modification dates"
-msgstr "Сохранить даты изменения"
-
-msgid "Keywords"
-msgstr "Ключевые слова"
-
-msgid "LZW"
-msgstr "LZW"
-
-msgid "Load set..."
-msgstr "Загрузить список..."
-
-msgid "Manipulation set"
-msgstr "Список преобразований"
-
-msgid "Manual crop (pixel values)"
-msgstr "Ручная обрезка (значения в пикселях)"
-
-msgid "Markers rows"
-msgstr "Маркерн.строки"
-
-msgid "More blurred"
-msgstr "Более размытое"
-
-msgid "More sharpen"
-msgstr "Более резкое"
-
-msgid "None"
-msgstr "Нет"
-
-msgid "One-to-one"
-msgstr "Один к одному"
-
-msgid "Opacity"
-msgstr "Непрозрачность"
-
-msgid "Operations stopped"
-msgstr "Выполнение прекращено"
-
-msgid "Optimize"
-msgstr "Оптимизация"
-
-msgid "Original filename (without extension)"
-msgstr "Исходное имя файла (без расширения)"
-
-msgid "Other GIMP procedure..."
-msgstr "Другая процедура GIMP..."
-
-msgid "Output folder"
-msgstr "Выходная папка"
-
-msgid "Overwrite?"
-msgstr "Перезаписать?"
-
-msgid "Pack bits"
-msgstr "Побитная упаковка"
-
-msgid "Position on the image"
-msgstr "Позиция на изображении"
-
-msgid "Preserve aspect ratio"
-msgstr "Сохранить пропорции"
-
-msgid "Preview"
-msgstr "Предпросмотр"
-
-msgid "Progressive"
-msgstr "Прогрессивн."
-
-msgid "Quality"
-msgstr "Качество"
-
-msgid "RLE compression"
-msgstr "Сжатие RLE"
-
-msgid "Remove all"
-msgstr "Удалить все"
-
-msgid "Remove images"
-msgstr "Удалить изображения"
-
-msgid "Remove selected"
-msgstr "Удалить выбранные"
-
-msgid "Remove this manipulation"
-msgstr "Удалить это преобразование"
-
-msgid "Rename with a pattern"
-msgstr "Переименование по образцу"
-
-msgid "Resize"
-msgstr "Изменение размера"
-
-msgid "Rotation"
-msgstr "Поворот"
-
-msgid "Save background color"
-msgstr "Сохранить цвет фона"
-
-msgid "Save baseline"
-msgstr ""
-"Сохр. базов.\n"
-" режим"
-
-msgid "Save color from transparent pixels"
-msgstr "Сохранить цвета от прозрачных пикселов"
-
-msgid "Save comments"
-msgstr "Сохранить комментарии"
-
-msgid "Save creation date"
-msgstr "Сохранить дату создания"
-
-msgid "Save gamma"
-msgstr "Сохранить гамму"
-
-msgid "Save layer offset"
-msgstr "Сохранить смещение слоя"
-
-msgid "Save resolution"
-msgstr "Сохранить разрешение"
-
-msgid "Save this set..."
-msgstr "Сохранить этот список ..."
-
+#: manipulation-gui/gui-userdef.c:61
 msgid "Search"
 msgstr "Поиск"
 
-msgid "Select folders containing images"
-msgstr "Выберите папки, содержащие изображения"
-
-msgid "Select GIMP Curve file"
-msgstr "Выберите файл GIMP с кривой"
-
-msgid "Select image"
-msgstr "Выбрать изображение"
-
-msgid "Select images"
-msgstr "Выбрать изображения"
-
-msgid "Select output folder"
-msgstr "Выбрать папку вывода"
-
-msgid "Set exact size in pixel"
-msgstr "Задание точного размера в пикселях"
-
-msgid "Set height only"
-msgstr "Задание только высоты"
-
-msgid "Set to a percentage of the original"
-msgstr "Задание в процентах от оригинала"
-
-msgid "Set width only"
-msgstr "Задание только ширины"
-
-msgid "Sharp or Blur"
-msgstr "Увеличение резкости или размытие"
-
-msgid "Small size"
-msgstr "Малый размер"
-
-msgid "Smoothing"
-msgstr "Сглаживание"
-
+#: manipulation-gui/gui-userdef.c:305
 msgid ""
-"Some images were not imported because they have not been saved on filesystem "
-"yet."
+"Can't save because\n"
+"no procedure has been selected"
 msgstr ""
-"Некоторые изображения не были импортированы, потому что они  еще не "
-"сохранены."
+"Невозможно сохранить,\n"
+" т.к. не была выбрана процедура"
 
-msgid "Standard VGA monitor"
-msgstr "Стандартный монитор VGA"
+#: manipulation-gui/gui-userdef.c:351
+msgid "Author"
+msgstr "Автор"
 
-msgid "Start from"
-msgstr "Исходн.точка"
-
-msgid "Subsampling"
-msgstr "Семплирование"
-
-msgid "Tall smartphone screen"
-msgstr "Высокий экран смартфона"
-
-msgid "Text"
-msgstr "Текст"
-
-msgid "Text watermark"
-msgstr "Текстовый водяной знак"
-
-msgid "The file list is empty!"
-msgstr "Список файлов пуст!"
-
-msgid "The manipulations set is empty!"
-msgstr "Список преобразований пуст!"
-
-msgid "This format has no params"
-msgstr "У этого формата нет параметров"
-
-msgid "This is how the selected image will look like after the batch process"
-msgstr "Так выбранное изображение будет выглядеть после пакетной обработки"
-
+#: manipulation-gui/gui-userdef.c:603
 msgid "This procedure takes no editable params"
 msgstr "У данной процедуры нет параметров"
 
-msgid "This will overwrite current manipulations set. Continue?"
-msgstr "Текущий список преобразований будет перезаписан. Продолжить?"
+#: manipulation-gui/gui-watermark.c:41
+msgid "Text watermark"
+msgstr "Текстовый водяной знак"
 
+#: manipulation-gui/gui-watermark.c:45
+msgid "Text"
+msgstr "Текст"
+
+#: manipulation-gui/gui-watermark.c:54
+msgid "Font"
+msgstr "Шрифт"
+
+#: manipulation-gui/gui-watermark.c:60
+msgid "Color"
+msgstr "Цвет"
+
+#: manipulation-gui/gui-watermark.c:67
+msgid "Image watermark"
+msgstr "Графический водяной знак"
+
+#: manipulation-gui/gui-watermark.c:71
+msgid "Select image"
+msgstr "Выбрать изображение"
+
+#: manipulation-gui/gui-watermark.c:73
+msgid "Adaptive size"
+msgstr "Адаптивный размер"
+
+#: manipulation-gui/gui-watermark.c:77
+#, c-format
+msgid "%% of"
+msgstr "%% от"
+
+#: manipulation-gui/gui-watermark.c:133
+msgid "Opacity"
+msgstr "Непрозрачность"
+
+#: manipulation-gui/gui-watermark.c:142
+msgid "Distance to edge"
+msgstr "Расстояние от края"
+
+#: manipulation-gui/gui-watermark.c:146
+msgid "Position on the image"
+msgstr "Позиция на изображении"
+
+#: manipulation-gui/gui-watermark.c:304
 msgid "Top-center"
 msgstr "Сверху по центру"
 
-msgid "Top-left"
-msgstr "Сверху слева"
+#: manipulation-gui/gui-watermark.c:310
+msgid "Center-left"
+msgstr "Слева по центру"
 
-msgid "Top-right"
-msgstr "Сверху справа"
+#: manipulation-gui/gui-watermark.c:316
+msgid "Center-right"
+msgstr "Справа по центру"
 
-msgid "Use the selected file's location as the output"
-msgstr "Использовать местоположение выбранного файла для выходных файлов"
-
-msgid "Vertically"
-msgstr "Вертикально"
-
-msgid "Widescreen"
-msgstr "Широкий экран"
-
-msgid "Widescreen extended"
-msgstr "Расширенный экран"
-
-msgid "Width"
-msgstr "Ширина"
-
-msgid "Width only"
-msgstr "Только ширина"
-
-msgid "Working on file \"%s\"..."
-msgstr "Обработка файла \"%s\"..."
-
-msgid "X axis"
-msgstr "Ось X"
-
-msgid "Y axis"
-msgstr "Ось Y"
-
-msgid "translator-name <translator-email>"
-msgstr "Yuri Krasilnikov <ydkras@gmail.com>"
+#: manipulation-gui/gui-watermark.c:322
+msgid "Bottom-center"
+msgstr "Внизу по центру"
