@@ -5,7 +5,7 @@ Changelog
 ---------
 
 1.18
- - Windows installer updated to better handle errors
+ - Windows installer updated to better handle errors (#131)
  - ICO and TGA added as image input (#126, #127) 
  - Added Norwegian translation (thanks to Kolbjørn Stuestøl)
  - Updated Spanish (thanks to Damián Blanco) and Russian (thanks to @Skif-off) languages
