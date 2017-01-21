@@ -61,19 +61,29 @@ Function .onInit
         ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GIMP-2_is1" InstallLocation
         
         StrCmp $0 "" 0 GimpFound
-        ; not found again, abort
-        MessageBox MB_OK|MB_ICONEXCLAMATION "GIMP installation was not found. Please install GIMP before running this installer." /SD IDOK
+        ; not found again, ask the user
+        MessageBox MB_OK|MB_ICONEXCLAMATION "The installer cannot find GIMP installation by itself. Please click OK and manually select the folder where GIMP is installed." /SD IDOK
+        
+        ; but if in Silent mode, abort everything
         !insertmacro PRINT_SILENT_OUT "GIMP installation was not found. Please install GIMP before running this installer.$\n"
+        IfSilent 0 +2
         Abort
-    
+
+        ; show the dialog
+        nsDialogs::SelectFolderDialog "Select GIMP directory, tipically is $\"C:\Program Files\GIMP 2$\"" "C:\Program Files"
+        Pop $0
+        ; check if user aborted it
+        StrCmp $0 "error" 0 GimpFound
+        Abort
+
     GimpFound: ; great!
     StrCpy $GIMP_dir $0
-    StrCpy $INSTDIR $GIMP_dir"lib\gimp\2.0\plug-ins" ; fill $INSTDIR with the plugin's directory
+    StrCpy $INSTDIR $GIMP_dir"\lib\gimp\2.0\plug-ins" ; fill $INSTDIR with the plugin's directory
     
     ; if $INSTDIR does not exists, don't let us continue
     IfFileExists $INSTDIR PathGood
-        MessageBox MB_OK|MB_ICONEXCLAMATION "Error: can't find folder $INSTDIR." /SD IDOK
-        !insertmacro PRINT_SILENT_OUT "Error: can't find folder $INSTDIR.$\n"
+        MessageBox MB_OK|MB_ICONEXCLAMATION "Error: invalid GIMP plugins folder $INSTDIR." /SD IDOK
+        !insertmacro PRINT_SILENT_OUT "Error: invalid GIMP plugins folder $INSTDIR.$\n"
         Abort
     PathGood:
     
