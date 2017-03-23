@@ -22,12 +22,16 @@ first ensure you have installed the latest version of the GTK+ runtime (download
 Compiling and installing on Linux
 -----------------------------------------
 
-You must install `libgimp2.0-dev` and `libpcre3-dev` packages in order to have 
-the full set of libraries and dependences to compile BIMP (names can differ depending on the distro).
+You must have gimptool and pcre-config installed in order to have the full set of libraries
+and dependences needed to compile BIMP (names can differ depending on the distro).
 
 For Ubuntu / Linux Mint:
 
 	sudo apt-get install libgimp2.0-dev libpcre3-dev
+
+For Fedora:
+
+	sudo dnf install gimp-devel-tools
 
 Extract the archive containing the BIMP's sources and get into the extracted folder with `cd`. Then:
 
