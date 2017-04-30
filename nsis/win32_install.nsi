@@ -15,6 +15,7 @@ ShowInstDetails show
 Var GIMP_dir
 Var GIMP_dir_usr28
 Var GIMP_dir_usr26
+Var UNINSTDIR
 
 !define MUI_ICON "icon.ico"
 
@@ -79,6 +80,7 @@ Function .onInit
     GimpFound: ; great!
     StrCpy $GIMP_dir $0
     StrCpy $INSTDIR $GIMP_dir"\lib\gimp\2.0\plug-ins" ; fill $INSTDIR with the plugin's directory
+    StrCpy $UNINSTDIR $GIMP_dir"\etc\gimp\2.0" ; fill $UNINSTDIR with the plugin's uninstaller
     
     ; if $INSTDIR does not exists, don't let us continue
     IfFileExists $INSTDIR PathGood
@@ -123,10 +125,15 @@ Section "Remove old files" SecRemOld
     !insertmacro PRINT_SILENT_OUT "Cleaning up old files...$\n"
     
     Delete $GIMP_dir_usr28\bimp.exe
+	Delete $GIMP_dir_usr28\bimp-uninstall.exe
     Delete $GIMP_dir_usr26\bimp.exe
+    Delete $GIMP_dir_usr26\bimp-uninstall.exe
+    Delete $INSTDIR\bimp.exe
+	Delete $INSTDIR\bimp-uninstall.exe
     
     RMDir /r $GIMP_dir_usr28\bimp-locale
     RMDir /r $GIMP_dir_usr26\bimp-locale
+    RMDir /r $INSTDIR\bimp-locale
 SectionEnd
 
 # This step will copy the necessary files on GIMP's plugin folder ($INSTDIR)
@@ -139,12 +146,12 @@ Section "File copy" SecInstall
     File /r /x *.po ..\bimp-locale
 
     # create uninstaller
-    writeUninstaller "$INSTDIR\bimp-uninstall.exe"
+    WriteUninstaller "$UNINSTDIR\bimp-uninstall.exe"
 
     # Registry information for add/remove programs
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "DisplayName" "${APPNAME}"
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "UninstallString" "$\"$INSTDIR\bimp-uninstall.exe$\""
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "QuietUninstallString" "$\"$INSTDIR\bimp-uninstall.exe$\" /S"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "UninstallString" "$\"$UNINSTDIR\bimp-uninstall.exe$\""
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "QuietUninstallString" "$\"$UNINSTDIR\bimp-uninstall.exe$\" /S"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "InstallLocation" "$\"$INSTDIR$\""
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "Publisher" "Alessandro Francesconi"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "HelpLink" "http://www.alessandrofrancesconi.it/projects/bimp"
@@ -179,11 +186,11 @@ functionEnd
 section "uninstall"
  
 	# Remove files
-	delete $INSTDIR\bimp.exe
+	Delete $INSTDIR\bimp.exe
 	RMDir /r $INSTDIR\bimp-locale
  
 	# Always delete uninstaller as the last action
-	delete $INSTDIR\bimp-uninstall.exe
+	Delete $UNINSTDIR\bimp-uninstall.exe
  
 	# Remove uninstaller information from the registry
 	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}"
