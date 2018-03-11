@@ -71,7 +71,7 @@ Function .onInit
         Abort
 
         ; show the dialog
-        nsDialogs::SelectFolderDialog "Select GIMP directory, tipically is $\"C:\Program Files\GIMP 2$\"" "C:\Program Files"
+        nsDialogs::SelectFolderDialog "Select GIMP directory, typically is $\"C:\Program Files\GIMP 2$\"" "C:\Program Files"
         Pop $0
         ; check if user aborted it
         StrCmp $0 "error" 0 GimpFound
