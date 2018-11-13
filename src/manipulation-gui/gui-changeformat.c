@@ -196,7 +196,7 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
         
         g_signal_connect(G_OBJECT(expander_advanced), "activate", G_CALLBACK(adv_expanded), combo_format);
     }
-    else if (selected_format == FORMAT_HEIF) {
+    /*else if (selected_format == FORMAT_HEIF) {
         GtkWidget *hbox_quality, *check_lossless, *label_quality;
 
         inner_widget = gtk_vbox_new(FALSE, 5);
@@ -227,7 +227,7 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
         gtk_box_pack_start(GTK_BOX(hbox_quality), label_quality, FALSE, FALSE, 0);
         gtk_box_pack_start(GTK_BOX(hbox_quality), scale_quality, FALSE, FALSE, 0);
         gtk_box_pack_start(GTK_BOX(inner_widget), hbox_quality, FALSE, FALSE, 0);
-    } 
+    }*/ 
     else if (selected_format == FORMAT_PNG) {
         GtkWidget *hbox_compression, *label_compression;
         GtkWidget *vbox_advanced;

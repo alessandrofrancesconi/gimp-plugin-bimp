@@ -77,7 +77,7 @@ typedef enum format_type {
     FORMAT_GIF,
     FORMAT_ICON,
     FORMAT_JPEG,
-    FORMAT_HEIF,
+    // FORMAT_HEIF,  - not yet ready
     FORMAT_PNG,
     FORMAT_TGA,
     FORMAT_TIFF,

@@ -1081,13 +1081,13 @@ static gboolean image_save(format_type type, image_output imageout, format_param
             ((format_params_jpeg)params)->dct
         );
     }
-    else if(type == FORMAT_HEIF) {
+    /*else if(type == FORMAT_HEIF) {
         result = image_save_heif(
             imageout, 
             ((format_params_heif)params)->quality,
             ((format_params_heif)params)->lossless
         );
-    }
+    }*/
     else if(type == FORMAT_PNG) {
         result = image_save_png(imageout, 
             ((format_params_png)params)->interlace, 

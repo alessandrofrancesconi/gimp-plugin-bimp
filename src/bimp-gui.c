@@ -685,7 +685,7 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
         
     gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_chooser), filter_all);
     size_t i;
-    for(i = 0; i < 9; i++) {
+    for(i = 0; i < 12; i++) {
         gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_chooser), supported[i]);
     }
     
