@@ -77,6 +77,7 @@ typedef enum format_type {
     FORMAT_GIF,
     FORMAT_ICON,
     FORMAT_JPEG,
+    FORMAT_HEIF,
     FORMAT_PNG,
     FORMAT_TGA,
     FORMAT_TIFF,
@@ -87,6 +88,7 @@ static const char* format_type_string[][2] = {
     {"gif", "Gif (.gif)"},                                /* FORMAT_GIF */
     {"ico", "Icon (.ico)"},                                /* FORMAT_ICON */
     {"jpg", "Jpeg (.jpeg)"},                            /* FORMAT_JPEG */
+    // {"heif", "Heif (.heif)"},                            /* FORMAT_HEIF - not yet ready */
     {"png", "Portable Network Graphics (.png)"},        /* FORMAT_PNG */
     {"tga", "Targa (.tga)"},                            /* FORMAT_TGA */
     {"tiff", "Tagged Image File Format (.tiff)"}        /* FORMAT_TIFF */
@@ -118,7 +120,7 @@ typedef void *format_params;
 /* Single manipulation struct */
 typedef struct manip_str {
     manipulation_type type;
-    GdkPixdata* icon;
+    char* icon;
     manipulation_settings settings; /* Pointer to one of the following settings structs */
 } *manipulation;
 
@@ -157,8 +159,8 @@ typedef struct manip_fliprotate_set {
 } *fliprotate_settings;
 
 typedef struct manip_color_set {
-    gint brightness;
-    gint contrast;
+    gdouble brightness;
+    gdouble contrast;
     gboolean levels_auto;
     gboolean grayscale;
     char* curve_file;
@@ -201,6 +203,11 @@ typedef struct changeformat_params_jpeg {
     int markers;
     int dct;
 } *format_params_jpeg;
+
+typedef struct changeformat_params_heif {
+    int quality;
+    gboolean lossless;
+} *format_params_heif;
 
 typedef struct changeformat_params_png {
     gboolean interlace;

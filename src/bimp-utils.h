@@ -18,6 +18,8 @@ gchar** get_path_folders (char*);
 char* get_datetime(void);
 time_t get_modification_time(char*);
 int set_modification_time(char*, time_t);
+GdkPixbuf* pixbuf_new_from_resource(const char*);
+GtkWidget* image_new_from_resource(const char*);
 
 #if defined _WIN32
 #define FILE_SEPARATOR '\\'

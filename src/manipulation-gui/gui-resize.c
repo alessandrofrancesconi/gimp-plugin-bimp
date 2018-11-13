@@ -280,7 +280,10 @@ void bimp_resize_save(resize_settings orig_settings)
         orig_settings->interpolation = GIMP_INTERPOLATION_CUBIC;
     }
     else if (interpolation == 3) {
-        orig_settings->interpolation = GIMP_INTERPOLATION_LANCZOS;
+        orig_settings->interpolation = GIMP_INTERPOLATION_NOHALO; // replaces LANCZOS
+    }
+    else if (interpolation == 4) {
+        orig_settings->interpolation = GIMP_INTERPOLATION_LOHALO;
     }
     else {
         orig_settings->interpolation = GIMP_INTERPOLATION_NONE;

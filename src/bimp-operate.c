@@ -16,8 +16,6 @@
 #include "bimp-serialize.h"
 #include "plugin-intl.h"
 
-#define USE_API26 (_WIN32 || (!defined _WIN32 && (GIMP_MAJOR_VERSION == 2) && (GIMP_MINOR_VERSION <= 6)))
-
 static gboolean process_image(gpointer);
 
 static gboolean apply_manipulation(manipulation, image_output);
@@ -36,6 +34,7 @@ static gboolean image_save_bmp(image_output);
 static gboolean image_save_gif(image_output, gboolean);
 static gboolean image_save_icon(image_output);
 static gboolean image_save_jpeg(image_output, float, float, gboolean, gboolean, gchar*, int, gboolean, int, int);
+static gboolean image_save_heif(image_output, int, gboolean);
 static gboolean image_save_png(image_output, gboolean, int, gboolean, gboolean, gboolean, gboolean, gboolean, gboolean, gboolean);
 static gboolean image_save_tga(image_output, gboolean, int);
 static gboolean image_save_tiff(image_output, int);
@@ -58,15 +57,15 @@ gboolean list_contains_savingplugin;
 // they are global so the batch process will read the source curve file once
 gboolean colorcurve_init;
 int colorcurve_num_points_v;
-guint8* colorcurve_ctr_points_v;
+gdouble* colorcurve_ctr_points_v;
 int colorcurve_num_points_r;
-guint8* colorcurve_ctr_points_r;
+gdouble* colorcurve_ctr_points_r;
 int colorcurve_num_points_g;
-guint8* colorcurve_ctr_points_g;
+gdouble* colorcurve_ctr_points_g;
 int colorcurve_num_points_b;
-guint8* colorcurve_ctr_points_b;
+gdouble* colorcurve_ctr_points_b;
 int colorcurve_num_points_a;
-guint8* colorcurve_ctr_points_a;
+gdouble* colorcurve_ctr_points_a;
 
 void bimp_start_batch(gpointer parent_dialog)
 {
@@ -515,32 +514,17 @@ static gboolean apply_resize(resize_settings settings, image_output out)
         }
     }
     
-    // do resize 
-    #if USE_API26
+    // use gimp_image_scale instead
+    GimpInterpolationType old_interpolation;
+    old_interpolation = gimp_context_get_interpolation();
     
-        success = gimp_image_scale_full (
-            out->image_id, 
-            final_w, 
-            final_h, 
-            settings->interpolation
-        );
-        
-    #else
-    
-        // starting from 2.8, gimp_image_scale_full is deprecated. 
-        // use gimp_image_scale instead
-        GimpInterpolationType old_interpolation;
-        old_interpolation = gimp_context_get_interpolation();
-        
-        success = gimp_context_set_interpolation (settings->interpolation);
-        success = gimp_image_scale (
-            out->image_id, 
-            final_w, 
-            final_h
-        );
-        success = gimp_context_set_interpolation (old_interpolation);
-    
-    #endif
+    success = gimp_context_set_interpolation (settings->interpolation);
+    success = gimp_image_scale (
+        out->image_id, 
+        final_w, 
+        final_h
+    );
+    success = gimp_context_set_interpolation (old_interpolation);
     
     // add a padding if requested
     if (settings->stretch_mode == STRETCH_PADDED) {
@@ -560,31 +544,17 @@ static gboolean apply_resize(resize_settings settings, image_output out)
             view_w, view_h,
             layerType,
             (settings->padding_color_alpha / (float)G_MAXUINT16) * 100,
-            GIMP_NORMAL_MODE
+            GIMP_LAYER_MODE_NORMAL_LEGACY
         );
         
-        #if USE_API26
+        gimp_image_insert_layer(
+            out->image_id,
+            layerId,
+            0,
+            0
+        );
         
-            gimp_image_add_layer (
-                out->image_id,
-                layerId,
-                0
-            );
-            
-            gimp_image_lower_layer_to_bottom(out->image_id, layerId);
-        
-        #else
-            
-            gimp_image_insert_layer(
-                out->image_id,
-                layerId,
-                0,
-                0
-            );
-            
-            gimp_image_lower_item_to_bottom(out->image_id, layerId);
-            
-        #endif
+        gimp_image_lower_item_to_bottom(out->image_id, layerId);
         
         // fill it with the selected color
         GimpRGB old_background, new_background;
@@ -592,11 +562,11 @@ static gboolean apply_resize(resize_settings settings, image_output out)
         gimp_context_get_background(&old_background);
         gimp_rgb_parse_hex (&new_background, gdk_color_to_string(&(settings->padding_color)), strlen(gdk_color_to_string(&(settings->padding_color))));
         gimp_context_set_background(&new_background);
-        gimp_drawable_fill(layerId, GIMP_BACKGROUND_FILL);
+        gimp_drawable_fill(layerId, GIMP_FILL_BACKGROUND);
         gimp_context_set_background(&old_background);
         
         // move it to the center
-        gimp_layer_translate(layerId, -abs(view_w - final_w) / 2, -abs(view_h - final_h) / 2);
+        gimp_item_transform_translate(layerId, -abs(view_w - final_w) / 2, -abs(view_h - final_h) / 2);
         
         // finish changing the canvas size accordingly
         success = gimp_image_resize_to_layers(out->image_id);
@@ -725,7 +695,7 @@ static gboolean apply_color(color_settings settings, image_output out)
         
         int i;
         for (i = 0; i < out->drawable_count; i++) {
-            success = gimp_brightness_contrast(
+            success = gimp_drawable_brightness_contrast(
                 out->drawable_ids[i], 
                 settings->brightness, 
                 settings->contrast
@@ -742,7 +712,7 @@ static gboolean apply_color(color_settings settings, image_output out)
         // do levels correction 
         int i;
         for (i = 0; i < out->drawable_count; i++) {
-            success = gimp_levels_stretch(out->drawable_ids[i]);
+            success = gimp_drawable_levels_stretch(out->drawable_ids[i]);
         }
     }
     
@@ -768,23 +738,23 @@ static gboolean apply_color(color_settings settings, image_output out)
             int i;
             for (i = 0; i < out->drawable_count; i++) {
                 if (colorcurve_num_points_v >= 4 && colorcurve_num_points_v <= 34) {
-                    success = gimp_curves_spline(out->drawable_ids[i], GIMP_HISTOGRAM_VALUE, colorcurve_num_points_v, colorcurve_ctr_points_v);
+                    success = gimp_drawable_curves_spline(out->drawable_ids[i], GIMP_HISTOGRAM_VALUE, colorcurve_num_points_v, colorcurve_ctr_points_v);
                 }
                 
                 if (colorcurve_num_points_r >= 4 && colorcurve_num_points_r <= 34) {
-                    success = gimp_curves_spline(out->drawable_ids[i], GIMP_HISTOGRAM_RED, colorcurve_num_points_r, colorcurve_ctr_points_r);
+                    success = gimp_drawable_curves_spline(out->drawable_ids[i], GIMP_HISTOGRAM_RED, colorcurve_num_points_r, colorcurve_ctr_points_r);
                 }
                 
                 if (colorcurve_num_points_g >= 4 && colorcurve_num_points_g <= 34) {
-                    success = gimp_curves_spline(out->drawable_ids[i], GIMP_HISTOGRAM_GREEN, colorcurve_num_points_g, colorcurve_ctr_points_g);
+                    success = gimp_drawable_curves_spline(out->drawable_ids[i], GIMP_HISTOGRAM_GREEN, colorcurve_num_points_g, colorcurve_ctr_points_g);
                 }
                 
                 if (colorcurve_num_points_b >= 4 && colorcurve_num_points_b <= 34) {
-                    success = gimp_curves_spline(out->drawable_ids[i], GIMP_HISTOGRAM_BLUE, colorcurve_num_points_b, colorcurve_ctr_points_b);
+                    success = gimp_drawable_curves_spline(out->drawable_ids[i], GIMP_HISTOGRAM_BLUE, colorcurve_num_points_b, colorcurve_ctr_points_b);
                 }
                 
                 if (colorcurve_num_points_a >= 4 && colorcurve_num_points_a <= 34) {
-                    success = gimp_curves_spline(out->drawable_ids[i], GIMP_HISTOGRAM_ALPHA, colorcurve_num_points_a, colorcurve_ctr_points_a);
+                    success = gimp_drawable_curves_spline(out->drawable_ids[i], GIMP_HISTOGRAM_ALPHA, colorcurve_num_points_a, colorcurve_ctr_points_a);
                 }
             }
         }
@@ -902,26 +872,12 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
             settings->image_file
         );
         
-        #if USE_API26
-        
-            gimp_image_add_layer(
-                out->image_id,
-                layerId,
-                0
-            );
-        
-        #else
-        
-            // starting from 2.8, gimp_image_add_layer is deprecated. 
-            // use gimp_image_insert_layer instead
-            gimp_image_insert_layer(
-                out->image_id,
-                layerId,
-                0,
-                0
-            );
-            
-        #endif
+        gimp_image_insert_layer(
+            out->image_id,
+            layerId,
+            0,
+            0
+        );
         
         wmwidth = gimp_drawable_width(layerId);
         wmheight = gimp_drawable_height(layerId);
@@ -939,32 +895,17 @@ static gboolean apply_watermark(watermark_settings settings, image_output out)
                 wmheight = round(wmheight_);
             }
             
-            // resize wm
-            #if USE_API26
+            GimpInterpolationType old_interpolation;
+            old_interpolation = gimp_context_get_interpolation();
             
-                success = gimp_layer_scale_full (
-                    layerId, 
-                    wmwidth, 
-                    wmheight, 
-                    TRUE,
-                    GIMP_INTERPOLATION_CUBIC
-                );
-                
-            #else
-                
-                GimpInterpolationType old_interpolation;
-                old_interpolation = gimp_context_get_interpolation();
-                
-                success = gimp_context_set_interpolation (GIMP_INTERPOLATION_CUBIC);
-                success = gimp_layer_scale (
-                    layerId, 
-                    wmwidth, 
-                    wmheight,
-                    TRUE
-                );
-                success = gimp_context_set_interpolation (old_interpolation);
-            
-            #endif
+            success = gimp_context_set_interpolation (GIMP_INTERPOLATION_CUBIC);
+            success = gimp_layer_scale (
+                layerId, 
+                wmwidth, 
+                wmheight,
+                TRUE
+            );
+            success = gimp_context_set_interpolation (old_interpolation);
         }
         
         gimp_layer_set_opacity(layerId, settings->opacity);
@@ -1140,6 +1081,13 @@ static gboolean image_save(format_type type, image_output imageout, format_param
             ((format_params_jpeg)params)->dct
         );
     }
+    else if(type == FORMAT_HEIF) {
+        result = image_save_heif(
+            imageout, 
+            ((format_params_heif)params)->quality,
+            ((format_params_heif)params)->lossless
+        );
+    }
     else if(type == FORMAT_PNG) {
         result = image_save_png(imageout, 
             ((format_params_png)params)->interlace, 
@@ -1166,8 +1114,8 @@ static gboolean image_save(format_type type, image_output imageout, format_param
         if (file_has_extension(imageout->filename, ".gif") && gimp_drawable_is_rgb(final_drawable)) {
             gimp_image_convert_indexed(
                 imageout->image_id,
-                GIMP_FS_DITHER,
-                GIMP_MAKE_PALETTE,
+                GIMP_CONVERT_DITHER_FS,
+                GIMP_CONVERT_PALETTE_GENERATE,
                 gimp_drawable_has_alpha (final_drawable) ? 255 : 256,
                 TRUE,
                 FALSE,
@@ -1213,8 +1161,8 @@ static gboolean image_save_gif(image_output out, gboolean interlace)
     // first, convert to indexed-256 color mode 
     gimp_image_convert_indexed(
         out->image_id,
-        GIMP_FS_DITHER,
-        GIMP_MAKE_PALETTE,
+        GIMP_CONVERT_DITHER_FS,
+        GIMP_CONVERT_PALETTE_GENERATE,
         gimp_drawable_has_alpha (out->drawable_ids[0]) ? 255 : 256,
         TRUE,
         FALSE,
@@ -1285,6 +1233,27 @@ static gboolean image_save_jpeg(image_output out, float quality, float smoothing
         GIMP_PDB_INT32, baseline ? 1 : 0,        // Force creation of a baseline JPEG (non-baseline JPEGs can't be read by all decoders) (0/1) 
         GIMP_PDB_INT32, markers,                // Frequency of restart markers (in rows, 0 = no restart markers) 
         GIMP_PDB_INT32, dct,                    // DCT algorithm to use (speed/quality tradeoff) 
+        GIMP_PDB_END
+    );
+    
+    return TRUE;
+}
+
+static gboolean image_save_heif(image_output out, int quality, gboolean lossless) 
+{
+    gint nreturn_vals;
+    int final_drawable = gimp_image_merge_visible_layers(out->image_id, GIMP_CLIP_TO_IMAGE);
+        
+    GimpParam *return_vals = gimp_run_procedure(
+        "file_heif_save",
+        &nreturn_vals,
+        GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
+        GIMP_PDB_IMAGE, out->image_id,
+        GIMP_PDB_DRAWABLE, final_drawable,
+        GIMP_PDB_STRING, out->filepath,
+        GIMP_PDB_STRING, out->filename,
+        GIMP_PDB_INT32, quality,            // Quality factor (range: 0-100. 0 = worst, 100 = best)
+        GIMP_PDB_INT32, lossless ? 1 : 0,   // Use lossless compression (0 = lossy, 1 = lossless)
         GIMP_PDB_END
     );
     

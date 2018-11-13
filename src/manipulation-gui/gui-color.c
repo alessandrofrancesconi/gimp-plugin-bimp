@@ -22,7 +22,7 @@ GtkWidget* bimp_color_gui_new(color_settings settings)
     label_bright = gtk_label_new(_("Brightness"));
     gtk_widget_set_size_request (label_bright, LABEL_BC_W, LABEL_BC_H);
     gtk_misc_set_alignment(GTK_MISC(label_bright), 0.5, 0.8);
-    scale_bright = gtk_hscale_new_with_range(-127, 127, 1);
+    scale_bright = gtk_hscale_new_with_range(-0.5, +0.5, 0.01);
     gtk_range_set_value(GTK_RANGE(scale_bright), settings->brightness);
     gtk_widget_set_size_request (scale_bright, SCALE_BC_W, SCALE_BC_H);
     
@@ -30,7 +30,7 @@ GtkWidget* bimp_color_gui_new(color_settings settings)
     label_contrast = gtk_label_new(_("Contrast"));
     gtk_widget_set_size_request (label_contrast, LABEL_BC_W, LABEL_BC_H);
     gtk_misc_set_alignment(GTK_MISC(label_contrast), 0.5, 0.8);
-    scale_contrast = gtk_hscale_new_with_range(-127, 127, 1);
+    scale_contrast = gtk_hscale_new_with_range(-0.5, +0.5, 0.01);
     gtk_range_set_value(GTK_RANGE(scale_contrast), settings->contrast);
     gtk_widget_set_size_request (scale_contrast, SCALE_BC_W, SCALE_BC_H);
     

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/gimp/plugin/bimp/icons">
+    <file preprocess="to-pixdata">bimp-icon.png</file>
+    <file preprocess="to-pixdata">pos-bc-icon.png</file>
+    <file preprocess="to-pixdata">pos-bl-icon.png</file>
+    <file preprocess="to-pixdata">pos-br-icon.png</file>
+    <file preprocess="to-pixdata">pos-cc-icon.png</file>
+    <file preprocess="to-pixdata">pos-cl-icon.png</file>
+    <file preprocess="to-pixdata">pos-cr-icon.png</file>
+    <file preprocess="to-pixdata">pos-tc-icon.png</file>
+    <file preprocess="to-pixdata">pos-tl-icon.png</file>
+    <file preprocess="to-pixdata">pos-tr-icon.png</file>
+    <file preprocess="to-pixdata">stock-changeformat.png</file>
+    <file preprocess="to-pixdata">stock-color.png</file>
+    <file preprocess="to-pixdata">stock-crop.png</file>
+    <file preprocess="to-pixdata">stock-flip-horizontal.png</file>
+    <file preprocess="to-pixdata">stock-flip-vertical.png</file>
+    <file preprocess="to-pixdata">stock-rename.png</file>
+    <file preprocess="to-pixdata">stock-resize.png</file>
+    <file preprocess="to-pixdata">stock-rotate.png</file>
+    <file preprocess="to-pixdata">stock-sharp.png</file>
+    <file preprocess="to-pixdata">stock-userdef.png</file>
+    <file preprocess="to-pixdata">stock-watermark.png</file>
+  </gresource>
+</gresources>

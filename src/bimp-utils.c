@@ -7,6 +7,7 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <libgimp/gimp.h>
+#include "images/bimp-icons.h"
 #include "bimp-utils.h"
 
 #ifdef __unix__
@@ -48,7 +49,7 @@ char* str_replace(char *orig, char *rep, char *with)
 
     len_with = strlen(with);
 
-    for (count = 0; tmp = strstr(ins, rep); ++count) {
+    for (count = 0; (tmp = strstr(ins, rep)); ++count) {
         ins = tmp + len_rep;
     }
 
@@ -235,4 +236,22 @@ int set_modification_time(char* filename, time_t mtime)
         return -1;
     }
     else return 0;
+}
+
+GdkPixbuf* pixbuf_new_from_resource(const char* path) 
+{
+	GdkPixbuf* pixbuf;
+	pixbuf = gdk_pixbuf_new_from_resource(path, NULL);
+
+    return pixbuf;
+}
+
+GtkWidget* image_new_from_resource(const char* path) 
+{
+    GdkPixbuf* pixbuf = pixbuf_new_from_resource(path);
+
+    GtkWidget* image;
+    image = gtk_image_new_from_pixbuf(pixbuf);
+
+    return image;
 }

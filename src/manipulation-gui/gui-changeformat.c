@@ -196,6 +196,38 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
         
         g_signal_connect(G_OBJECT(expander_advanced), "activate", G_CALLBACK(adv_expanded), combo_format);
     }
+    else if (selected_format == FORMAT_HEIF) {
+        GtkWidget *hbox_quality, *check_lossless, *label_quality;
+
+        inner_widget = gtk_vbox_new(FALSE, 5);
+        gtk_container_set_border_width(GTK_CONTAINER(inner_widget), 8);
+        check_lossless = gtk_check_button_new_with_label(_("Lossless"));
+        
+        hbox_quality = gtk_hbox_new(FALSE, 5);
+        label_quality = gtk_label_new(_("Quality"));
+        gtk_widget_set_size_request (label_quality, 100, LABEL_H);
+        gtk_misc_set_alignment(GTK_MISC(label_quality), 0.5, 0.8);
+        scale_quality = gtk_hscale_new_with_range(0, 100, 1);
+        gtk_widget_set_size_request (scale_quality, 160, SCALE_H);
+        
+        if (selected_format == settings->format) {
+            format_params_heif settings_heif = (format_params_heif)(settings->params);
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_lossless), settings_heif->lossless);
+
+            gtk_range_set_value(GTK_RANGE(scale_quality), settings_heif->quality);
+        }
+        else {
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_lossless), FALSE);
+
+            gtk_range_set_value(GTK_RANGE(scale_quality), 85.0);
+        }
+        
+        gtk_box_pack_start(GTK_BOX(inner_widget), check_lossless, FALSE, FALSE, 0);
+
+        gtk_box_pack_start(GTK_BOX(hbox_quality), label_quality, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(hbox_quality), scale_quality, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(inner_widget), hbox_quality, FALSE, FALSE, 0);
+    } 
     else if (selected_format == FORMAT_PNG) {
         GtkWidget *hbox_compression, *label_compression;
         GtkWidget *vbox_advanced;

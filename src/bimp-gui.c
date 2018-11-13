@@ -15,7 +15,6 @@
 #include "bimp-manipulations-gui.h"
 #include "bimp-operate.h"
 #include "bimp-serialize.h"
-#include "bimp-icons.h"
 #include "bimp-utils.h"
 #include "plugin-intl.h"
 
@@ -77,7 +76,7 @@ enum /* TreeView stuff... */
 manipulation clicked_man; /* temporary manipulation, selected by clicking on panel_seq buttons */
 
 void bimp_show_gui() 
-{
+{	
     GtkWidget* vbox_main;
     
     gimp_ui_init (PLUG_IN_BINARY, FALSE);
@@ -317,7 +316,7 @@ static void add_input_folder_r(char* folder, gboolean with_subdirs)
     dp = g_dir_open (folder, 0, NULL);
     
     if (dp != NULL) {
-        while (entry = g_dir_read_name (dp)) {            
+        while ((entry = g_dir_read_name (dp))) {
             
             char* filename = g_strconcat(folder, FILE_SEPARATOR_STR, entry, NULL);
             char* file_extension = g_strdup(strrchr(filename, '.'));
@@ -338,11 +337,16 @@ static void add_input_folder_r(char* folder, gboolean with_subdirs)
                 g_ascii_strcasecmp(file_extension, ".jpeg") == 0 ||
                 g_ascii_strcasecmp(file_extension, ".jpg") == 0 ||
                 g_ascii_strcasecmp(file_extension, ".jpe") == 0 ||
+                g_ascii_strcasecmp(file_extension, ".jp2") == 0 ||
                 g_ascii_strcasecmp(file_extension, ".gif") == 0 ||
+                g_ascii_strcasecmp(file_extension, ".heif") == 0 ||
+                g_ascii_strcasecmp(file_extension, ".heic") == 0 ||
                 g_ascii_strcasecmp(file_extension, ".png") == 0 ||
                 g_ascii_strcasecmp(file_extension, ".tif") == 0 ||
                 g_ascii_strcasecmp(file_extension, ".tiff") == 0 ||
+                g_ascii_strcasecmp(file_extension, ".tga") == 0 ||
                 g_ascii_strcasecmp(file_extension, ".svg") == 0 ||
+                g_ascii_strcasecmp(file_extension, ".xpm") == 0 ||
                 g_ascii_strcasecmp(file_extension, ".xcf") == 0) && 
                 g_slist_find_custom(bimp_input_filenames, filename, (GCompareFunc)strcmp) == NULL)
             {
@@ -597,7 +601,7 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
 {
     GSList *selection;
     
-    GtkFileFilter *filter_all, *supported[9];
+    GtkFileFilter *filter_all, *supported[12];
 
     GtkWidget* file_chooser = gtk_file_chooser_dialog_new(
         _("Select images"), 
@@ -627,40 +631,56 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
     gtk_file_filter_add_pattern (filter_all, "*.[jJ][pP][eE]");
 
     supported[2] = gtk_file_filter_new();
-    gtk_file_filter_set_name(supported[2], "GIF (*.gif)");
-    gtk_file_filter_add_pattern (supported[2], "*.[gG][iI][fF]");
+    gtk_file_filter_set_name(supported[2], "JPEG2000 (*.jp2)");
+    gtk_file_filter_add_pattern (supported[2], "*.[jJ][pP][2]");
+
+    supported[3] = gtk_file_filter_new();
+    gtk_file_filter_set_name(supported[3], "GIF (*.gif)");
+    gtk_file_filter_add_pattern (supported[3], "*.[gG][iI][fF]");
     gtk_file_filter_add_pattern (filter_all, "*.[gG][iI][fF]");
     
-    supported[3] = gtk_file_filter_new();
-    gtk_file_filter_set_name(supported[3], "PNG (*.png)");
-    gtk_file_filter_add_pattern (supported[3], "*.[pP][nN][gG]");
+    supported[4] = gtk_file_filter_new();
+    gtk_file_filter_set_name(supported[4], "PNG (*.png)");
+    gtk_file_filter_add_pattern (supported[4], "*.[pP][nN][gG]");
     gtk_file_filter_add_pattern (filter_all, "*.[pP][nN][gG]");
     
-    supported[4] = gtk_file_filter_new();
-    gtk_file_filter_set_name(supported[4], "Icon (*.ico)");
-    gtk_file_filter_add_pattern (supported[4], "*.[iI][cC][oO]");
+    supported[5] = gtk_file_filter_new();
+    gtk_file_filter_set_name(supported[5], "HEIF/HEIC (*.heif, *.heic)");
+    gtk_file_filter_add_pattern (supported[5], "*.[hH][eE][iI][fF]");
+    gtk_file_filter_add_pattern (supported[5], "*.[hH][eE][iI][cC]");
+    gtk_file_filter_add_pattern (filter_all, "*.[hH][eE][iI][fF]");
+    gtk_file_filter_add_pattern (filter_all, "*.[hH][eE][iI][cC]");
+    
+    supported[6] = gtk_file_filter_new();
+    gtk_file_filter_set_name(supported[6], "Icon (*.ico)");
+    gtk_file_filter_add_pattern (supported[6], "*.[iI][cC][oO]");
     gtk_file_filter_add_pattern (filter_all, "*.[iI][cC][oO]");
     
-    supported[5] = gtk_file_filter_new();
-    gtk_file_filter_set_name(supported[5], "Scalable Vector Graphics (*.svg)");
-    gtk_file_filter_add_pattern (supported[5], "*.[sS][vV][gG]");
+    supported[7] = gtk_file_filter_new();
+    gtk_file_filter_set_name(supported[7], "Scalable Vector Graphics (*.svg)");
+    gtk_file_filter_add_pattern (supported[7], "*.[sS][vV][gG]");
     gtk_file_filter_add_pattern (filter_all, "*.[sS][vV][gG]");
 
-    supported[6] = gtk_file_filter_new();
-    gtk_file_filter_set_name(supported[6], "TIFF (*tif, *.tiff)");
-    gtk_file_filter_add_pattern (supported[6], "*.[tT][iI][fF][fF]");
-    gtk_file_filter_add_pattern (supported[6], "*.[tT][iI][fF]");
+    supported[8] = gtk_file_filter_new();
+    gtk_file_filter_set_name(supported[8], "TIFF (*tif, *.tiff)");
+    gtk_file_filter_add_pattern (supported[8], "*.[tT][iI][fF][fF]");
+    gtk_file_filter_add_pattern (supported[8], "*.[tT][iI][fF]");
     gtk_file_filter_add_pattern (filter_all, "*.[tT][iI][fF][fF]");
     gtk_file_filter_add_pattern (filter_all, "*.[tT][iI][fF]");
     
-    supported[7] = gtk_file_filter_new();
-    gtk_file_filter_set_name(supported[7], "Targa (*.tga)");
-    gtk_file_filter_add_pattern (supported[7], "*.[tT][gG][aA]");
+    supported[9] = gtk_file_filter_new();
+    gtk_file_filter_set_name(supported[9], "Targa (*.tga)");
+    gtk_file_filter_add_pattern (supported[9], "*.[tT][gG][aA]");
     gtk_file_filter_add_pattern (filter_all, "*.[tT][gG][aA]");
 
-    supported[8] = gtk_file_filter_new();
-    gtk_file_filter_set_name(supported[8], "GIMP XCF (*.xcf)");
-    gtk_file_filter_add_pattern (supported[8], "*.[xX][cC][fF]");
+    supported[10] = gtk_file_filter_new();
+    gtk_file_filter_set_name(supported[10], "XPM (*.xpm)");
+    gtk_file_filter_add_pattern (supported[10], "*.[xX][pP][mM]");
+    gtk_file_filter_add_pattern (filter_all, "*.[xX][pP][mM]");
+
+    supported[11] = gtk_file_filter_new();
+    gtk_file_filter_set_name(supported[11], "GIMP XCF (*.xcf)");
+    gtk_file_filter_add_pattern (supported[11], "*.[xX][cC][fF]");
     gtk_file_filter_add_pattern (filter_all, "*.[xX][cC][fF]");
         
     gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_chooser), filter_all);
@@ -915,7 +935,7 @@ static void add_manipulation_button(manipulation man)
     GtkWidget* button;
     
     button = gtk_button_new();
-    gtk_button_set_image(GTK_BUTTON(button), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(man->icon, TRUE, NULL)));
+    gtk_button_set_image(GTK_BUTTON(button), image_new_from_resource(man->icon));
     gtk_button_set_image_position(GTK_BUTTON(button), GTK_POS_TOP);
     gtk_widget_set_size_request(button, SEQ_BUTTON_W, SEQ_BUTTON_H);
     gtk_box_pack_start(GTK_BOX(hbox_sequence), button, FALSE, FALSE, 3);
@@ -1043,7 +1063,7 @@ static void open_about()
         "program-name", PLUG_IN_FULLNAME,
         "version", PLUG_IN_VERSION,
         "comments", _("Applies GIMP manipulations on groups of images"),
-        "logo", gdk_pixbuf_from_pixdata(&pixdata_bimpicon, FALSE, NULL),
+        "logo", pixbuf_new_from_resource("/gimp/plugin/bimp/icons/bimp-icon.png"),
         "copyright", PLUG_IN_COPYRIGHT,
         "license", license,
         "wrap-license", TRUE,

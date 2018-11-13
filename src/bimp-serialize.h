@@ -8,11 +8,11 @@ gboolean bimp_deserialize_from_file(gchar*);
 
 gboolean parse_curve_file(
     char*, 
-    int*, guint8**, 
-    int*, guint8**, 
-    int*, guint8**, 
-    int*, guint8**, 
-    int*, guint8**
+    int*, gdouble**, 
+    int*, gdouble**, 
+    int*, gdouble**, 
+    int*, gdouble**, 
+    int*, gdouble**
 );
 
 #endif

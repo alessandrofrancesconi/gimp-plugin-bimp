@@ -6,7 +6,6 @@
 #include <gtk/gtk.h>
 #include "bimp-manipulations.h"
 #include "bimp-manipulations-gui.h"
-#include "bimp-icons.h"
 #include "plugin-intl.h"
 
 /* Appends a default manipulation to the step list */
@@ -121,7 +120,7 @@ manipulation manipulation_resize_new()
     manipulation resize;
     resize = (manipulation) g_malloc(sizeof(struct manip_str));
     resize->type = MANIP_RESIZE;
-    resize->icon = &pixdata_resize;
+    resize->icon = "/gimp/plugin/bimp/icons/stock-resize.png";
     resize->settings = (resize_settings) g_malloc(sizeof(struct manip_resize_set));
     ((resize_settings)resize->settings)->new_w_pc = 100.0;
     ((resize_settings)resize->settings)->new_h_pc = 100.0;
@@ -145,7 +144,7 @@ manipulation manipulation_crop_new()
     manipulation crop;
     crop = (manipulation) g_malloc(sizeof(struct manip_str));
     crop->type = MANIP_CROP;
-    crop->icon = &pixdata_crop;
+    crop->icon = "/gimp/plugin/bimp/icons/stock-crop.png";
     crop->settings = (crop_settings) g_malloc(sizeof(struct manip_crop_set));
     ((crop_settings)crop->settings)->new_w = 640;
     ((crop_settings)crop->settings)->new_h = 480;
@@ -163,7 +162,7 @@ manipulation manipulation_fliprotate_new()
     manipulation fliprotate;
     fliprotate = (manipulation) g_malloc(sizeof(struct manip_str));
     fliprotate->type = MANIP_FLIPROTATE;
-    fliprotate->icon = &pixdata_rotate;
+    fliprotate->icon = "/gimp/plugin/bimp/icons/stock-rotate.png";
     fliprotate->settings = (fliprotate_settings) g_malloc(sizeof(struct manip_fliprotate_set));
     ((fliprotate_settings)fliprotate->settings)->flip_h = FALSE;
     ((fliprotate_settings)fliprotate->settings)->flip_v = FALSE;
@@ -178,7 +177,7 @@ manipulation manipulation_color_new()
     manipulation color;
     color = (manipulation) g_malloc(sizeof(struct manip_str));
     color->type = MANIP_COLOR;
-    color->icon = &pixdata_color;
+    color->icon = "/gimp/plugin/bimp/icons/stock-color.png";
     color->settings = (color_settings) g_malloc(sizeof(struct manip_color_set));
     ((color_settings)color->settings)->brightness = 0;
     ((color_settings)color->settings)->contrast = 0;
@@ -194,7 +193,7 @@ manipulation manipulation_sharpblur_new()
     manipulation sharpblur;
     sharpblur = (manipulation) g_malloc(sizeof(struct manip_str));
     sharpblur->type = MANIP_SHARPBLUR;
-    sharpblur->icon = &pixdata_sharp;
+    sharpblur->icon = "/gimp/plugin/bimp/icons/stock-sharp.png";
     sharpblur->settings = (sharpblur_settings) g_malloc(sizeof(struct manip_sharpblur_set));
     ((sharpblur_settings)sharpblur->settings)->amount = 0;
     
@@ -206,7 +205,7 @@ manipulation manipulation_watermark_new()
     manipulation watermark;
     watermark = (manipulation) g_malloc(sizeof(struct manip_str));
     watermark->type = MANIP_WATERMARK;
-    watermark->icon = &pixdata_watermark;
+    watermark->icon = "/gimp/plugin/bimp/icons/stock-watermark.png";
     watermark->settings = (watermark_settings) g_malloc(sizeof(struct manip_watermark_set));
     ((watermark_settings)watermark->settings)->mode = TRUE;
     ((watermark_settings)watermark->settings)->text = "";
@@ -228,7 +227,7 @@ manipulation manipulation_changeformat_new()
     manipulation changeformat;
     changeformat = (manipulation) g_malloc(sizeof(struct manip_str));
     changeformat->type = MANIP_CHANGEFORMAT;
-    changeformat->icon = &pixdata_changeformat;
+    changeformat->icon = "/gimp/plugin/bimp/icons/stock-changeformat.png";
     changeformat->settings = (changeformat_settings) g_malloc(sizeof(struct manip_changeformat_set));
     ((changeformat_settings)changeformat->settings)->format = FORMAT_JPEG;
     ((changeformat_settings)changeformat->settings)->params = (format_params_jpeg) g_malloc(sizeof(struct changeformat_params_jpeg));
@@ -250,7 +249,7 @@ manipulation manipulation_rename_new()
     manipulation rename;
     rename = (manipulation) g_malloc(sizeof(struct manip_str));
     rename->type = MANIP_RENAME;
-    rename->icon = &pixdata_rename;
+    rename->icon = "/gimp/plugin/bimp/icons/stock-rename.png";
     rename->settings = (rename_settings) g_malloc(sizeof(struct manip_rename_set));
     ((rename_settings)rename->settings)->pattern = RENAME_KEY_ORIG;
     
@@ -262,7 +261,7 @@ manipulation manipulation_userdef_new()
     manipulation userdef;
     userdef = (manipulation) g_malloc(sizeof(struct manip_str));
     userdef->type = MANIP_USERDEF;
-    userdef->icon = &pixdata_userdef;
+    userdef->icon = "/gimp/plugin/bimp/icons/stock-userdef.png";
     userdef->settings = (userdef_settings) g_malloc(sizeof(struct manip_userdef_set));
     ((userdef_settings)userdef->settings)->procedure = NULL;
     ((userdef_settings)userdef->settings)->num_params = 0;

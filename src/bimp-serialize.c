@@ -64,7 +64,7 @@ gboolean bimp_deserialize_from_file(gchar* filename)
     GKeyFile* input_file = g_key_file_new();
     g_key_file_set_list_separator(input_file, ';');
     
-    if (result = g_key_file_load_from_file (input_file, filename, G_KEY_FILE_KEEP_COMMENTS, NULL)) {
+    if ((result = g_key_file_load_from_file (input_file, filename, G_KEY_FILE_KEEP_COMMENTS, NULL))) {
         
         GSList* new_list = parse_manipulations(input_file);
         if (new_list != NULL) {
@@ -319,8 +319,8 @@ static void write_color(color_settings settings, GKeyFile* file)
 {
     gchar* group_name = "COLOR";
     
-    g_key_file_set_integer(file, group_name, "brightness", settings->brightness);
-    g_key_file_set_integer(file, group_name, "contrast", settings->contrast);
+    g_key_file_set_double(file, group_name, "brightness", settings->brightness);
+    g_key_file_set_double(file, group_name, "contrast", settings->contrast);
     g_key_file_set_boolean(file, group_name, "levels_auto", settings->levels_auto);
     g_key_file_set_boolean(file, group_name, "grayscale", settings->grayscale);
     if (settings->curve_file != NULL) g_key_file_set_string(file, group_name, "curve_file", settings->curve_file);
@@ -336,10 +336,10 @@ static manipulation read_color(GKeyFile* file)
         color_settings settings = ((color_settings)man->settings);
         
         if (g_key_file_has_key(file, group_name, "brightness", NULL)) 
-            settings->brightness = g_key_file_get_integer(file, group_name, "brightness", NULL);
+            settings->brightness = g_key_file_get_double(file, group_name, "brightness", NULL);
             
         if (g_key_file_has_key(file, group_name, "contrast", NULL)) 
-            settings->contrast = g_key_file_get_integer(file, group_name, "contrast", NULL);
+            settings->contrast = g_key_file_get_double(file, group_name, "contrast", NULL);
             
         if (g_key_file_has_key(file, group_name, "levels_auto", NULL)) 
             settings->levels_auto = g_key_file_get_boolean(file, group_name, "levels_auto", NULL);
@@ -359,15 +359,15 @@ static manipulation read_color(GKeyFile* file)
 gboolean parse_curve_file(
     char* file, 
     int* num_points_v, 
-    guint8** ctr_points_v,
+    gdouble** ctr_points_v,
     int* num_points_r, 
-    guint8** ctr_points_r,
+    gdouble** ctr_points_r,
     int* num_points_g, 
-    guint8** ctr_points_g,
+    gdouble** ctr_points_g,
     int* num_points_b, 
-    guint8** ctr_points_b,
+    gdouble** ctr_points_b,
     int* num_points_a, 
-    guint8** ctr_points_a
+    gdouble** ctr_points_a
 ) {
     FILE* pFile;
     pFile = fopen (file, "r");
@@ -378,7 +378,7 @@ gboolean parse_curve_file(
     char line[2400];
     char channel_name[6];
     int num_points_temp = 0;
-    guint8* ctr_points_temp = NULL;
+    gdouble* ctr_points_temp = NULL;
     
     if (pFile == NULL) goto err;
     else {
@@ -430,9 +430,9 @@ gboolean parse_curve_file(
                     pY >= 0 && pY <= 1) 
                 {
                     // save X and Y
-                    ctr_points_temp = (guint8*)g_realloc(ctr_points_temp, sizeof(guint8) * (p_count + 2)); // add one element to the array
-                    ctr_points_temp[p_count]     = (guint8)(255 * pX); // round, map to [0;255] and save
-                    ctr_points_temp[p_count + 1] = (guint8)(255 * pY);
+                    ctr_points_temp = (gdouble*)g_realloc(ctr_points_temp, sizeof(gdouble) * (p_count + 2)); // add one element to the array
+                    ctr_points_temp[p_count]     = (gdouble)(255 * pX); // round, map to [0;255] and save
+                    ctr_points_temp[p_count + 1] = (gdouble)(255 * pY);
                     
                     p_count += 2;
                 }
@@ -454,23 +454,23 @@ gboolean parse_curve_file(
             // save in the proper variables
             if (strcmp(channel_name, "value") == 0) {
                 *num_points_v = num_points_temp;
-                *ctr_points_v = g_memdup(ctr_points_temp, num_points_temp * sizeof(guint8));
+                *ctr_points_v = g_memdup(ctr_points_temp, num_points_temp * sizeof(gdouble));
             }
             else if (strcmp(channel_name, "red") == 0) {
                 *num_points_r = num_points_temp;
-                *ctr_points_r = g_memdup(ctr_points_temp, num_points_temp * sizeof(guint8));
+                *ctr_points_r = g_memdup(ctr_points_temp, num_points_temp * sizeof(gdouble));
             }
             else if (strcmp(channel_name, "green") == 0) {
                 *num_points_g = num_points_temp;
-                *ctr_points_g = g_memdup(ctr_points_temp, num_points_temp * sizeof(guint8));
+                *ctr_points_g = g_memdup(ctr_points_temp, num_points_temp * sizeof(gdouble));
             }
             else if (strcmp(channel_name, "blue") == 0) {
                 *num_points_b = num_points_temp;
-                *ctr_points_b = g_memdup(ctr_points_temp, num_points_temp * sizeof(guint8));
+                *ctr_points_b = g_memdup(ctr_points_temp, num_points_temp * sizeof(gdouble));
             }
             else if (strcmp(channel_name, "alpha") == 0) {
                 *num_points_a = num_points_temp;
-                *ctr_points_a = g_memdup(ctr_points_temp, num_points_temp * sizeof(guint8));
+                *ctr_points_a = g_memdup(ctr_points_temp, num_points_temp * sizeof(gdouble));
             }
             else goto err;
             

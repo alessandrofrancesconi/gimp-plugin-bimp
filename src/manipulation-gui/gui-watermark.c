@@ -4,7 +4,7 @@
 #include "gui-watermark.h"
 #include "../bimp-manipulations.h"
 #include "../bimp-manipulations-gui.h"
-#include "../bimp-icons.h"
+#include "../bimp-utils.h"
 #include "../plugin-intl.h"
 
 static void toggle_group(GtkToggleButton*, gpointer);
@@ -148,14 +148,14 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
     gtk_widget_set_size_request (table_position, 250, 120);
     
     button_tl = gtk_radio_button_new (NULL);
-    gtk_button_set_image(GTK_BUTTON(button_tl), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_postl, TRUE, NULL)));
+    gtk_button_set_image(GTK_BUTTON(button_tl), image_new_from_resource("/gimp/plugin/bimp/icons/pos-tl-icon.png"));
     gtk_widget_set_tooltip_text (button_tl, watermark_pos_get_string(WM_POS_TL));
     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_tl), FALSE);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_tl), settings->position == WM_POS_TL);
     gtk_widget_set_size_request (button_tl, BUTTON_POSITION_W, BUTTON_POSITION_H);
     gtk_table_attach(GTK_TABLE(table_position), button_tl, 0, 1, 0, 1, GTK_EXPAND, GTK_EXPAND, 0, 0);
     button_tc = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
-    gtk_button_set_image(GTK_BUTTON(button_tc), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_postc, TRUE, NULL)));
+    gtk_button_set_image(GTK_BUTTON(button_tc), image_new_from_resource("/gimp/plugin/bimp/icons/pos-tc-icon.png"));
     gtk_widget_set_tooltip_text (button_tc, watermark_pos_get_string(WM_POS_TC));
     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_tc), FALSE);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_tc), settings->position == WM_POS_TC);
@@ -163,14 +163,14 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
     gtk_table_attach(GTK_TABLE(table_position), button_tc, 1, 2, 0, 1, GTK_EXPAND, GTK_EXPAND, 0, 0);
     
     button_tr = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
-    gtk_button_set_image(GTK_BUTTON(button_tr), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_postr, TRUE, NULL)));
+    gtk_button_set_image(GTK_BUTTON(button_tr), image_new_from_resource("/gimp/plugin/bimp/icons/pos-tr-icon.png"));
     gtk_widget_set_tooltip_text (button_tr, watermark_pos_get_string(WM_POS_TR));
     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_tr), FALSE);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_tr), settings->position == WM_POS_TR);
     gtk_widget_set_size_request (button_tr, BUTTON_POSITION_W, BUTTON_POSITION_H);
     gtk_table_attach(GTK_TABLE(table_position), button_tr, 2, 3, 0, 1, GTK_EXPAND, GTK_EXPAND, 0, 0);
     button_cl = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
-    gtk_button_set_image(GTK_BUTTON(button_cl), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_poscl, TRUE, NULL)));
+    gtk_button_set_image(GTK_BUTTON(button_cl), image_new_from_resource("/gimp/plugin/bimp/icons/pos-cl-icon.png"));
     gtk_widget_set_tooltip_text (button_cl, watermark_pos_get_string(WM_POS_CL));
     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_cl), FALSE);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_cl), settings->position == WM_POS_CL);
@@ -178,14 +178,14 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
     gtk_table_attach(GTK_TABLE(table_position), button_cl, 0, 1, 1, 2, GTK_EXPAND, GTK_EXPAND, 0, 0);
     
     button_cc = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
-    gtk_button_set_image(GTK_BUTTON(button_cc), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_poscc, TRUE, NULL)));
+    gtk_button_set_image(GTK_BUTTON(button_cc), image_new_from_resource("/gimp/plugin/bimp/icons/pos-cc-icon.png"));
     gtk_widget_set_tooltip_text (button_cc, watermark_pos_get_string(WM_POS_CC));
     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_cc), FALSE);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_cc), settings->position == WM_POS_CC);
     gtk_widget_set_size_request (button_cc, BUTTON_POSITION_W, BUTTON_POSITION_H);
     gtk_table_attach(GTK_TABLE(table_position), button_cc, 1, 2, 1, 2, GTK_EXPAND, GTK_EXPAND, 0, 0);
     button_cr = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
-    gtk_button_set_image(GTK_BUTTON(button_cr), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_poscr, TRUE, NULL)));
+    gtk_button_set_image(GTK_BUTTON(button_cr), image_new_from_resource("/gimp/plugin/bimp/icons/pos-cr-icon.png"));
     gtk_widget_set_tooltip_text (button_cr, watermark_pos_get_string(WM_POS_CR));
     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_cr), FALSE);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_cr), settings->position == WM_POS_CR);
@@ -193,14 +193,14 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
     gtk_table_attach(GTK_TABLE(table_position), button_cr, 2, 3, 1, 2, GTK_EXPAND, GTK_EXPAND, 0, 0);
     
     button_bl = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
-    gtk_button_set_image(GTK_BUTTON(button_bl), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_posbl, TRUE, NULL)));
+    gtk_button_set_image(GTK_BUTTON(button_bl), image_new_from_resource("/gimp/plugin/bimp/icons/pos-bl-icon.png"));
     gtk_widget_set_tooltip_text (button_bl, watermark_pos_get_string(WM_POS_BL));
     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_bl), FALSE);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_bl), settings->position == WM_POS_BL);
     gtk_widget_set_size_request (button_bl, BUTTON_POSITION_W, BUTTON_POSITION_H);
     gtk_table_attach(GTK_TABLE(table_position), button_bl, 0, 1, 2, 3, GTK_EXPAND, GTK_EXPAND, 0, 0);
     button_bc = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
-    gtk_button_set_image(GTK_BUTTON(button_bc), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_posbc, TRUE, NULL)));
+    gtk_button_set_image(GTK_BUTTON(button_bc), image_new_from_resource("/gimp/plugin/bimp/icons/pos-bc-icon.png"));
     gtk_widget_set_tooltip_text (button_bc, watermark_pos_get_string(WM_POS_BC));
     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_bc), FALSE);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_bc), settings->position == WM_POS_BC);
@@ -208,7 +208,7 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
     gtk_table_attach(GTK_TABLE(table_position), button_bc, 1, 2, 2, 3, GTK_EXPAND, GTK_EXPAND, 0, 0);
     
     button_br = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
-    gtk_button_set_image(GTK_BUTTON(button_br), gtk_image_new_from_pixbuf(gdk_pixbuf_from_pixdata(&pixdata_posbr, TRUE, NULL)));
+    gtk_button_set_image(GTK_BUTTON(button_br), image_new_from_resource("/gimp/plugin/bimp/icons/pos-br-icon.png"));
     gtk_widget_set_tooltip_text (button_br, watermark_pos_get_string(WM_POS_BR));
     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_br), FALSE);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_br), settings->position == WM_POS_BR);

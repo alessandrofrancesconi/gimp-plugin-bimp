@@ -1,7 +1,7 @@
 /*
  * BIMP - Batch Image Manipulation Plugin for GIMP
  * 
- * (C)2013 - Alessandro Francesconi
+ * (C) 2018 - Alessandro Francesconi
  * http://www.alessandrofrancesconi.it/projects/bimp
  *  
  * This program is free software; you can redistribute it and/or modify
@@ -22,8 +22,8 @@
  */
 
 
-#include <gtk/gtk.h>
 #include <libgimp/gimp.h>
+#include <gtk/gtk.h>
 #include <stdlib.h>
 #include <string.h>
 #include "bimp.h"
@@ -67,7 +67,7 @@ static void query (void)
         "Alessandro Francesconi <alessandrofrancesconi@live.it>",
         "Copyright (C) Alessandro Francesconi\n"
         "http://www.alessandrofrancesconi.it/projects/bimp",
-        "2014",
+        "2018",
         "Batch Image Manipulation...",
         "",
         GIMP_PLUGIN,
