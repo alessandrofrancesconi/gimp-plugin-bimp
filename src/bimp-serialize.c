@@ -16,7 +16,7 @@
 #include "bimp-serialize.h"
 
 static void append_manipulation_details(manipulation, GKeyFile*);
-static GSList* parse_manipulations(GKeyFile*); 
+static GSList* parse_manipulations(GKeyFile*, int); 
 static void write_resize(resize_settings, GKeyFile*);
 static manipulation read_resize(GKeyFile*);
 static void write_crop(crop_settings, GKeyFile*);
@@ -24,7 +24,7 @@ static manipulation read_crop(GKeyFile*);
 static void write_fliprotate(fliprotate_settings, GKeyFile*);
 static manipulation read_fliprotate(GKeyFile*);
 static void write_color(color_settings, GKeyFile*);
-static manipulation read_color(GKeyFile*);
+static manipulation read_color(GKeyFile*, int);
 static void write_sharpblur(sharpblur_settings, GKeyFile*);
 static manipulation read_sharpblur(GKeyFile*);
 static void write_watermark(watermark_settings, GKeyFile*);
@@ -37,6 +37,7 @@ static void write_userdef(userdef_settings, GKeyFile*, int);
 static manipulation read_userdef(GKeyFile*, int);
 
 int userdef_count;
+int loaded_build;
 
 gboolean bimp_serialize_to_file(gchar* filename)
 {
@@ -66,7 +67,28 @@ gboolean bimp_deserialize_from_file(gchar* filename)
     
     if ((result = g_key_file_load_from_file (input_file, filename, G_KEY_FILE_KEEP_COMMENTS, NULL))) {
         
-        GSList* new_list = parse_manipulations(input_file);
+		// read build code
+		int buildnumber = 0;
+		gchar* header = g_key_file_get_comment(input_file, NULL, NULL, NULL);
+		GRegex *regex = g_regex_new ("^BIMP\\s(\\d+)\\.(\\d+)", 0, 0, NULL);
+		
+		GMatchInfo *match_info;
+		g_regex_match (regex, header, 0, &match_info);
+		while (g_match_info_matches (match_info))
+		{
+			gchar *major = g_match_info_fetch (match_info, 1);
+			int major_i = g_ascii_strtoll(major, NULL, 10);
+			gchar *minor = g_match_info_fetch (match_info, 2);
+			int minor_i = g_ascii_strtoll(major, NULL, 10);
+			buildnumber = (major_i * 1000) + minor_i;
+			if (buildnumber > 0) break;
+			
+			g_match_info_next (match_info, NULL);
+		}
+		g_match_info_free (match_info);
+		g_regex_unref (regex);
+		
+        GSList* new_list = parse_manipulations(input_file, buildnumber);
         if (new_list != NULL) {
             g_slist_free(bimp_selected_manipulations);
             bimp_selected_manipulations = new_list;
@@ -115,7 +137,7 @@ static void append_manipulation_details(manipulation man, GKeyFile* output_file)
     }
 }
 
-static GSList* parse_manipulations(GKeyFile* file) 
+static GSList* parse_manipulations(GKeyFile* file, int version) 
 {
     GSList* manipulations = NULL;
     manipulation newman = NULL;
@@ -136,7 +158,7 @@ static GSList* parse_manipulations(GKeyFile* file)
             newman = read_fliprotate(file);
         }
         else if (strcmp(groups[i], "COLOR") == 0) {
-            newman = read_color(file);
+            newman = read_color(file, version);
         }
         else if (strcmp(groups[i], "SHARPBLUR") == 0) {
             newman = read_sharpblur(file);
@@ -326,7 +348,7 @@ static void write_color(color_settings settings, GKeyFile* file)
     if (settings->curve_file != NULL) g_key_file_set_string(file, group_name, "curve_file", settings->curve_file);
 }
 
-static manipulation read_color(GKeyFile* file) 
+static manipulation read_color(GKeyFile* file, int version) 
 {
     gchar* group_name = "COLOR";
     manipulation man = NULL;
@@ -336,10 +358,34 @@ static manipulation read_color(GKeyFile* file)
         color_settings settings = ((color_settings)man->settings);
         
         if (g_key_file_has_key(file, group_name, "brightness", NULL)) 
-            settings->brightness = g_key_file_get_double(file, group_name, "brightness", NULL);
+		{
+			double b = g_key_file_get_double(file, group_name, "brightness", NULL);
+			if (version < 2000)
+			{
+				// prior to BIMP 2.0, brightness range was [-127;127]
+				// now map to [-0.5;0.5]
+				settings->brightness = -0.5 + ((0.5 - (-0.5)) / (127 - (-127)) * (b - (-127)));
+			}
+			else
+			{
+				settings->brightness = b;
+			}
+		}
             
         if (g_key_file_has_key(file, group_name, "contrast", NULL)) 
-            settings->contrast = g_key_file_get_double(file, group_name, "contrast", NULL);
+		{
+			double c = g_key_file_get_double(file, group_name, "contrast", NULL);
+			if (version < 2000)
+			{
+				// prior to BIMP 2.0, contrast range was [-127;127]
+				// now map to [-0.5;0.5]
+				settings->contrast = -0.5 + ((0.5 - (-0.5)) / (127 - (-127)) * (c - (-127)));
+			}
+			else
+			{
+				settings->contrast = c;
+			}
+		}
             
         if (g_key_file_has_key(file, group_name, "levels_auto", NULL)) 
             settings->levels_auto = g_key_file_get_boolean(file, group_name, "levels_auto", NULL);
