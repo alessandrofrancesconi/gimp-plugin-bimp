@@ -4,6 +4,13 @@ BIMP. Batch Image Manipulation Plugin for GIMP.
 Changelog
 ---------
 
+2.0 (aka "hey what's up?")
+ - BIMP codebase has been updated to be natively compatible with GIMP 2.10, while it does not work anymore with GIMP <= 2.8.
+ - Added support to HEIF, XPM and JPEG2000 images (#182, #141, #138)
+ - Use GResources instead of Pixdata
+ - Many compiler warnings fixed
+ - Enhanced Win32 make procedure (needs MSYS2)
+
 1.18
  - Windows installer updated to better handle errors (#131)
  - ICO and TGA added as image input (#126, #127) 
