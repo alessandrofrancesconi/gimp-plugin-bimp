@@ -27,7 +27,7 @@ and dependences needed to compile BIMP (names can differ depending on the distro
 
 For Ubuntu / Linux Mint:
 
-	sudo apt-get install libgimp2.0-dev libpcre3-dev
+	sudo apt-get install libgimp2.0-dev libgegl-dev libpcre3-dev
 
 For Fedora:
 
