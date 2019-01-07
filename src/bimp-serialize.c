@@ -477,8 +477,8 @@ gboolean parse_curve_file(
                 {
                     // save X and Y
                     ctr_points_temp = (gdouble*)g_realloc(ctr_points_temp, sizeof(gdouble) * (p_count + 2)); // add one element to the array
-                    ctr_points_temp[p_count]     = (gdouble)(255 * pX); // round, map to [0;255] and save
-                    ctr_points_temp[p_count + 1] = (gdouble)(255 * pY);
+                    ctr_points_temp[p_count]     = pX;
+                    ctr_points_temp[p_count + 1] = pY;
                     
                     p_count += 2;
                 }
