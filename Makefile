@@ -1,7 +1,7 @@
 GIMPARGS = $(shell gimptool-2.0 --cflags --libs)
 PCREARGS = $(shell pcre-config --cflags --libs)
-SYSTEM_INSTALL_DIR = $(shell gimptool-2.0 --dry-run --install-admin-bin ./bin/bimp | sed 's/cp \S* \(\S*\)/\1/')
-USER_INSTALL_DIR = $(shell gimptool-2.0 --dry-run --install-bin ./bin/bimp | sed 's/cp \S* \(\S*\)/\1/')
+SYSTEM_INSTALL_DIR = $(shell gimptool-2.0 --dry-run --install-admin-bin ./bin/bimp | sed 's/cp \S* \(\S*\)/\1/'|tr -d [\'])
+USER_INSTALL_DIR = $(shell gimptool-2.0 --dry-run --install-bin ./bin/bimp | sed 's/cp \S* \(\S*\)/\1/'|tr -d [\'])
 
 make: 
 	which gimptool-2.0 && which pcre-config && \
