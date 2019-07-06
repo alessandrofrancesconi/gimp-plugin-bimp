@@ -6,6 +6,7 @@
 
 !define APPNAME "Batch Image Manipulation Plugin for GIMP"
 !define APPID "gimp-plugin-bimp"
+!define APPVERSION "2.0"
 
 Name "${APPNAME}"
 OutFile "gimp-plugin-bimp_win32.exe"
@@ -156,6 +157,7 @@ Section "File copy" SecInstall
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "Publisher" "Alessandro Francesconi"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "HelpLink" "http://www.alessandrofrancesconi.it/projects/bimp"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "URLInfoAbout" "http://www.alessandrofrancesconi.it/projects/bimp"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "DisplayVersion" "${APPVERSION}"
 	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "NoModify" 1
 	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "NoRepair" 1
 
