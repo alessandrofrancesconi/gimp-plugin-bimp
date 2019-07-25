@@ -1,0 +1,699 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: gimp-plugin-bimp\n"
+"POT-Creation-Date: 2016-11-19 11:50+0400\n"
+"PO-Revision-Date: 2019-07-25 00:25+0200\n"
+"Last-Translator: Валентина Рутовић <rvanja7@gmail.com>\n"
+"Language-Team: Alessandro Francesconi <alessandrofrancesconi@live.it>\n"
+"Language: sr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.3\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ../../../src\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: bimp-gui.c:130 bimp-gui.c:928
+msgid "The manipulations set is empty!"
+msgstr "Листа обраде је празна!"
+
+#: bimp-gui.c:133
+msgid "The file list is empty!"
+msgstr "Листа датотека је празна!"
+
+#: bimp-gui.c:163
+msgid "Manipulation set"
+msgstr "Листа обраде"
+
+#: bimp-gui.c:193
+msgid "Input files and options"
+msgstr "Улазне датотеке и опције"
+
+#: bimp-gui.c:215
+msgid "Add images"
+msgstr "Додај слике"
+
+#: bimp-gui.c:217
+msgid "Remove images"
+msgstr "Уклони слике"
+
+#: bimp-gui.c:225
+msgid "Output folder"
+msgstr "Излазна фасцикла"
+
+#: bimp-gui.c:239
+msgid "Use the selected file's location as the output"
+msgstr "Користи локацију селектоване датотеке за излазну датотеку"
+
+#: bimp-gui.c:247
+msgid "Keep folder hierarchy"
+msgstr "Задржи хијерархију фасцикле"
+
+#: bimp-gui.c:252
+msgid "Delete original file when done"
+msgstr "Обриши оригиналну датотеку након обраде"
+
+#: bimp-gui.c:256
+msgid "Keep the modification dates"
+msgstr "Сачувај датум промене"
+
+#: bimp-gui.c:262
+msgid "Click for preview"
+msgstr "Кликни за преглед"
+
+#: bimp-gui.c:355
+#, c-format
+msgid "Couldn't read into \"%s\" directory."
+msgstr "Није могуће учитавање из фасцилке \"%s\""
+
+#: bimp-gui.c:375
+msgid ""
+"Some images were not imported because they have not been saved on filesystem "
+"yet."
+msgstr "Неке слике нису увезене јер још нису сачуване"
+
+#: bimp-gui.c:474
+msgid "Can't show a preview because the manipulations set is empty"
+msgstr "Није могуће приказати зато што је листа обраде празна"
+
+#: bimp-gui.c:502
+msgid "Preview"
+msgstr "Преглед"
+
+#: bimp-gui.c:514
+msgid "This is how the selected image will look like after the batch process"
+msgstr "Овако ће селектована слика изгледати након аутоматске серијске обраде"
+
+#: bimp-gui.c:603
+msgid "Select images"
+msgstr "Селектуј слике"
+
+#: bimp-gui.c:613 manipulation-gui/gui-watermark.c:87
+msgid "All supported types"
+msgstr "Све подржане врсте"
+
+#: bimp-gui.c:691
+msgid "Select folders containing images"
+msgstr "Селектуј фасциклу која садржи слике"
+
+#: bimp-gui.c:700
+msgid "Add files from the whole hierarchy"
+msgstr "Додај датотеке из целе хијерархијске листе"
+
+#: bimp-gui.c:722
+msgid "Select output folder"
+msgstr "Селектуј излазну фасциклу"
+
+#: bimp-gui.c:779 bimp-gui.c:934
+msgid "Save this set..."
+msgstr "Сачувај дату листу..."
+
+#: bimp-gui.c:783 bimp-gui.c:989
+msgid "Load set..."
+msgstr "Учитај листу..."
+
+#: bimp-gui.c:794
+msgid "Edit properties..."
+msgstr "Измени подешавања..."
+
+#: bimp-gui.c:797
+msgid "Remove this manipulation"
+msgstr "Уклони дату обраду"
+
+#: bimp-gui.c:804
+msgid "Add single images..."
+msgstr "Додај појединачне слике..."
+
+#: bimp-gui.c:807
+msgid "Add folders..."
+msgstr "Додај фасцикле..."
+
+#: bimp-gui.c:810
+msgid "Add all opened images"
+msgstr "Додај све отворене слике"
+
+#: bimp-gui.c:817
+msgid "Remove selected"
+msgstr "Уклони селектоване"
+
+#: bimp-gui.c:820
+msgid "Remove all"
+msgstr "Уклони све"
+
+#: bimp-gui.c:864
+msgid "Can't add another manipulation of this kind. Only one is permitted!"
+msgstr ""
+"Није могуће додати још једну обраду дате врсте. Дозвољена је само једна!"
+
+#: bimp-gui.c:955 bimp-gui.c:1006
+msgid "An error occured when importing a saved batch file :("
+msgstr "Дошло је до грешке при увозу сачуваног пакета датотека :("
+
+#: bimp-gui.c:977
+msgid "This will overwrite current manipulations set. Continue?"
+msgstr ""
+"Текућа листа обраде ће бити преписана преко претходне листе. Наставити?"
+
+#: bimp-gui.c:1045 bimp.c:66
+msgid "Applies GIMP manipulations on groups of images"
+msgstr "Аутоматска серијска GIMP обрада дигиталних слика"
+
+#: bimp-gui.c:1052
+msgid "translator-name <translator-email>"
+msgstr "Valentina Rutović <https://github.com/nstVanja>"
+
+#: bimp-manipulations.c:279
+msgid "Resize"
+msgstr "Размера"
+
+#: bimp-manipulations.c:282
+msgid "Crop"
+msgstr "Исецање"
+
+#: bimp-manipulations.c:285
+msgid "Flip or Rotate"
+msgstr "Извртање или ротација"
+
+#: bimp-manipulations.c:288
+msgid "Color correction"
+msgstr "Корекција боје"
+
+#: bimp-manipulations.c:291
+msgid "Sharp or Blur"
+msgstr "Изоштравање или замућење"
+
+#: bimp-manipulations.c:294
+msgid "Add a Watermark"
+msgstr "Додавање воденог печата"
+
+#: bimp-manipulations.c:297
+msgid "Change format and compression"
+msgstr "Промена формата и компресије"
+
+#: bimp-manipulations.c:300
+msgid "Rename with a pattern"
+msgstr "Преименовање према узорку"
+
+#: bimp-manipulations.c:303
+msgid "Other GIMP procedure..."
+msgstr "Друге GIMP процедуре..."
+
+#: bimp-operate.c:177
+#, c-format
+msgid ""
+"Can't save image \"%s\": input file has no extension.\n"
+"You can solve this error by adding a \"Change format or compression\" step"
+msgstr ""
+"Није могуће сачувати слику \"%s\": улазна датотека нема екстензију.\n"
+"Додај корак \"Промени формат и компресију\" како би исправио грешку."
+
+#: bimp-operate.c:183
+#, c-format
+msgid ""
+"GIMP can't save %s back to its original SVG format.\n"
+"You can solve this error by adding a \"Change format or compression\" step"
+msgstr ""
+"GIMP ne može sačuvati %s nazad u njegov originalni SVG format.\n"
+"Dodaj korak \"Promeni format i kompresiju\" kako bi ispravio grešku."
+
+#: bimp-operate.c:189
+#, c-format
+msgid "Working on file \"%s\"..."
+msgstr "Обрада датотеке \"%s\"..."
+
+#: bimp-operate.c:329
+msgid "Operations stopped"
+msgstr "Извршење је прекинуто"
+
+#: bimp-operate.c:336
+#, c-format
+msgid "End, all files have been processed with %d errors"
+msgstr "Завршена обрада, све датотеке су обрађене са %d грешака"
+
+#: bimp-operate.c:1380
+#, c-format
+msgid "File %s already exists, overwrite it?"
+msgstr "Датотека %s већ постоји. Сачувати преко већ постојеће?"
+
+#: bimp-operate.c:1385
+msgid "Always apply this decision"
+msgstr "Увек примените дати избор"
+
+#: bimp-operate.c:1397
+msgid "Overwrite?"
+msgstr "Преписати?"
+
+#: manipulation-gui/gui-changeformat.c:37
+msgid "Format settings"
+msgstr "Подешавање формата"
+
+#: manipulation-gui/gui-changeformat.c:58
+msgid "Interlaced"
+msgstr "Преплетен"
+
+#: manipulation-gui/gui-changeformat.c:78
+#: manipulation-gui/gui-changeformat.c:118
+msgid "Quality"
+msgstr "Квалитет"
+
+#: manipulation-gui/gui-changeformat.c:84
+#: manipulation-gui/gui-changeformat.c:213
+msgid "Advanced params"
+msgstr "Напредно подешавање"
+
+#: manipulation-gui/gui-changeformat.c:88
+msgid "Smoothing"
+msgstr "Умекшавање"
+
+#: manipulation-gui/gui-changeformat.c:95
+msgid "Optimize"
+msgstr "Оптимизирај"
+
+#: manipulation-gui/gui-changeformat.c:96
+msgid "Progressive"
+msgstr "Напредно"
+
+#: manipulation-gui/gui-changeformat.c:97
+msgid "Save baseline"
+msgstr ""
+"Сачувај основни\n"
+"режим"
+
+#: manipulation-gui/gui-changeformat.c:100
+msgid "Comment"
+msgstr "Коментар"
+
+#: manipulation-gui/gui-changeformat.c:107
+msgid "Markers rows"
+msgstr "Обележени редови"
+
+#: manipulation-gui/gui-changeformat.c:112 msgstr
+#: "Субдискретизация"
+msgid "Subsampling"
+msgstr "Subsampling"
+
+#: manipulation-gui/gui-changeformat.c:116
+msgid "Small size"
+msgstr "Мала величина"
+
+#: manipulation-gui/gui-changeformat.c:123
+msgid "DCT algorithm"
+msgstr "DCT алгоритам"
+
+#: manipulation-gui/gui-changeformat.c:127
+msgid "Integer"
+msgstr "Цео број"
+
+#: manipulation-gui/gui-changeformat.c:128
+msgid "Fast integer"
+msgstr "Цео број (Fast integer)"
+
+#: manipulation-gui/gui-changeformat.c:129
+msgid "Float"
+msgstr "Децимални број"
+
+#: manipulation-gui/gui-changeformat.c:205
+msgid "Interlace (Adam7)"
+msgstr "Interlace (Adam7)"
+
+#: manipulation-gui/gui-changeformat.c:207
+#: manipulation-gui/gui-changeformat.c:303
+msgid "Compression"
+msgstr "Компресија"
+
+#: manipulation-gui/gui-changeformat.c:216
+msgid "Save background color"
+msgstr "Сачувај боју позадине"
+
+#: manipulation-gui/gui-changeformat.c:217
+msgid "Save gamma"
+msgstr "Сачувај GAMMA подешавање"
+
+#: manipulation-gui/gui-changeformat.c:218
+msgid "Save layer offset"
+msgstr "Сачувај OFFSET слоја"
+
+#: manipulation-gui/gui-changeformat.c:219
+msgid "Save resolution"
+msgstr "Сачувај резолуцију"
+
+#: manipulation-gui/gui-changeformat.c:220
+msgid "Save creation date"
+msgstr "Сачувај датум креирања"
+
+#: manipulation-gui/gui-changeformat.c:221
+msgid "Save comments"
+msgstr "Сачувај коментаре"
+
+#: manipulation-gui/gui-changeformat.c:222
+msgid "Save color from transparent pixels"
+msgstr "Сачувај боју провидних пиксела"
+
+#: manipulation-gui/gui-changeformat.c:270
+msgid "RLE compression"
+msgstr "RLE компресија"
+
+#: manipulation-gui/gui-changeformat.c:273
+msgid "Image origin"
+msgstr "Оригинал слике"
+
+#: manipulation-gui/gui-changeformat.c:278 manipulation-gui/gui-crop.c:71
+#: manipulation-gui/gui-watermark.c:301
+msgid "Top-left"
+msgstr "Горе-лево"
+
+#: manipulation-gui/gui-changeformat.c:279 manipulation-gui/gui-crop.c:73
+#: manipulation-gui/gui-watermark.c:319
+msgid "Bottom-left"
+msgstr "Доле-лево"
+
+#: manipulation-gui/gui-changeformat.c:308 manipulation-gui/gui-fliprotate.c:39
+msgid "None"
+msgstr "Ништа"
+
+#: manipulation-gui/gui-changeformat.c:309
+msgid "LZW"
+msgstr "LZW"
+
+#: manipulation-gui/gui-changeformat.c:310
+msgid "Pack bits"
+msgstr "Pack bits"
+
+#: manipulation-gui/gui-changeformat.c:311
+msgid "Deflate"
+msgstr "Deflate"
+
+#: manipulation-gui/gui-changeformat.c:312
+msgid "JPEG"
+msgstr "JPEG"
+
+#: manipulation-gui/gui-changeformat.c:313
+msgid "CCITT G3 Fax"
+msgstr "CCITT G3 Fax"
+
+#: manipulation-gui/gui-changeformat.c:314
+msgid "CCITT G4 Fax"
+msgstr "CCITT G4 Fax"
+
+#: manipulation-gui/gui-changeformat.c:329
+msgid "This format has no params"
+msgstr "Дати формат нема параметре"
+
+#: manipulation-gui/gui-color.c:22
+msgid "Brightness"
+msgstr "Осветљеност"
+
+#: manipulation-gui/gui-color.c:30
+msgid "Contrast"
+msgstr "Контраст"
+
+#: manipulation-gui/gui-color.c:37
+msgid "Convert to grayscale"
+msgstr "Претвори у сиве нијансе"
+
+#: manipulation-gui/gui-color.c:39
+msgid "Automatic color levels correction"
+msgstr "Аутоматска исправка боја"
+
+#: manipulation-gui/gui-color.c:42
+msgid "Change color curve from settings file:"
+msgstr ""
+"Промени боју криве\n"
+"из датотеке са подешавањима:"
+
+#: manipulation-gui/gui-color.c:47
+msgid "Select GIMP Curve file"
+msgstr "Селектуј GIMP датотеку криве"
+
+#: manipulation-gui/gui-crop.c:28
+msgid "Crop to a standard aspect ratio"
+msgstr "Исецање са стандардним пропорцијама"
+
+#: manipulation-gui/gui-crop.c:54
+msgid "Manual crop (pixel values)"
+msgstr "Ручно исецање (вредности у пикселима)"
+
+#: manipulation-gui/gui-crop.c:59 manipulation-gui/gui-resize.c:82
+#: manipulation-gui/gui-watermark.c:80
+msgid "Width"
+msgstr "Ширина"
+
+#: manipulation-gui/gui-crop.c:63 manipulation-gui/gui-resize.c:85
+#: manipulation-gui/gui-watermark.c:81
+msgid "Height"
+msgstr "Висина"
+
+#: manipulation-gui/gui-crop.c:68
+msgid "Start from"
+msgstr "Почетна тачка"
+
+#: manipulation-gui/gui-crop.c:70 manipulation-gui/gui-watermark.c:313
+msgid "Center"
+msgstr "Средина"
+
+#: manipulation-gui/gui-crop.c:72 manipulation-gui/gui-watermark.c:307
+msgid "Top-right"
+msgstr "Горе-десно"
+
+#: manipulation-gui/gui-crop.c:74 manipulation-gui/gui-watermark.c:325
+msgid "Bottom-right"
+msgstr "Доле-десно"
+
+#: manipulation-gui/gui-crop.c:133
+msgid "One-to-one"
+msgstr "Један на један"
+
+#: manipulation-gui/gui-crop.c:136
+msgid "Classic 35 mm film"
+msgstr "Стандардни 35 mm филм"
+
+#: manipulation-gui/gui-crop.c:139
+msgid "Standard VGA monitor"
+msgstr "Стандардни VGA монитор"
+
+#: manipulation-gui/gui-crop.c:142
+msgid "Widescreen"
+msgstr "Широки екран (Widescreen)"
+
+#: manipulation-gui/gui-crop.c:145
+msgid "Widescreen extended"
+msgstr "Проширени широки екран (Widescreen extended)"
+
+#: manipulation-gui/gui-crop.c:148
+msgid "EU Passport portrait"
+msgstr "Слика за EU пасош"
+
+#: manipulation-gui/gui-crop.c:151
+msgid "Classic smartphone screen"
+msgstr "Стандардни екран паметног телефона"
+
+#: manipulation-gui/gui-crop.c:154
+msgid "Tall smartphone screen"
+msgstr "Високи екран паметног телефона"
+
+#: manipulation-gui/gui-crop.c:157
+msgid "Classic tablet screen"
+msgstr "Стандардни екран таблета"
+
+#: manipulation-gui/gui-crop.c:160
+msgid "Custom ratio"
+msgstr "Произвољна пропорција"
+
+#: manipulation-gui/gui-fliprotate.c:19
+msgid "Flip"
+msgstr "Извртање"
+
+#: manipulation-gui/gui-fliprotate.c:23
+msgid "Horizontally"
+msgstr "Хоризонтално"
+
+#: manipulation-gui/gui-fliprotate.c:29
+msgid "Vertically"
+msgstr "Вертикално"
+
+#: manipulation-gui/gui-fliprotate.c:37
+msgid "Rotation"
+msgstr "Ротација"
+
+#: manipulation-gui/gui-rename.c:26
+msgid "Keywords"
+msgstr "Кључне речи"
+
+#: manipulation-gui/gui-rename.c:30
+msgid "Original filename (without extension)"
+msgstr "Оригинални назив датотеке (без екстензије)"
+
+#: manipulation-gui/gui-rename.c:31
+msgid "Incremental number"
+msgstr "Умножак"
+
+#: manipulation-gui/gui-rename.c:32
+msgid "Date and time (YYYY-MM-DD_hh-mm)"
+msgstr "Датум и време (GGGG-MM-DD_hh-mm)"
+
+#: manipulation-gui/gui-rename.c:52
+#, c-format
+msgid ""
+"Can't save!\n"
+"'%s' or '%s' symbol must be present."
+msgstr ""
+"Није могуће сачувати!\n"
+"\"%s\" или \"%s\" симбол мора бити присутан."
+
+#: manipulation-gui/gui-rename.c:64
+msgid ""
+"Can't save!\n"
+"Pattern contains invalid characters."
+msgstr ""
+"Није могуће сачувати!\n"
+"Узорак садржи недозвољене знаке. "
+
+#: manipulation-gui/gui-resize.c:43
+msgid "Set to a percentage of the original"
+msgstr "Подеси проценат од оригиналне слике"
+
+#: manipulation-gui/gui-resize.c:45
+msgid "Set exact size in pixel"
+msgstr "Подеси тачну величину у пикселима (px)"
+
+#: manipulation-gui/gui-resize.c:52
+msgid "For both dimensions"
+msgstr "За обе димензије"
+
+#: manipulation-gui/gui-resize.c:53
+msgid "Width only"
+msgstr "Само ширина"
+
+#: manipulation-gui/gui-resize.c:54
+msgid "Height only"
+msgstr "Само висина"
+
+#: manipulation-gui/gui-resize.c:64
+msgid "Allow stretching"
+msgstr "Дозволи истезање"
+
+#: manipulation-gui/gui-resize.c:66
+msgid "Preserve aspect ratio"
+msgstr "Сачувај однос ширине и висине"
+
+#: manipulation-gui/gui-resize.c:68
+msgid "Fill with padding"
+msgstr "Попуни бојом"
+
+#: manipulation-gui/gui-resize.c:92
+msgid "Interpolation quality"
+msgstr "Квалитет интерполације"
+
+#: manipulation-gui/gui-resize.c:101
+msgid "Change resolution"
+msgstr "Промени резолуцију"
+
+#: manipulation-gui/gui-resize.c:107
+msgid "X axis"
+msgstr "X оса"
+
+#: manipulation-gui/gui-resize.c:111
+msgid "Y axis"
+msgstr "Y оса"
+
+#: manipulation-gui/gui-sharpblur.c:17
+msgid "More sharpen"
+msgstr "Оштрије"
+
+#: manipulation-gui/gui-sharpblur.c:23
+msgid "More blurred"
+msgstr "Замућеније"
+
+#: manipulation-gui/gui-userdef.c:49
+msgid ""
+"Choose a supported GIMP procedure from the list on the left\n"
+"and define its parameters on the right."
+msgstr ""
+"Изабери подржану GIMP функцију\n"
+"из листе која се налази са леве стране\n"
+"и подеси њене параметре на десној страни."
+
+#: manipulation-gui/gui-userdef.c:61
+msgid "Search"
+msgstr "Претражи"
+
+#: manipulation-gui/gui-userdef.c:305
+msgid ""
+"Can't save because\n"
+"no procedure has been selected"
+msgstr ""
+"Није могуће сачувати,\n"
+"зато што није селектована ниједна процедура"
+
+#: manipulation-gui/gui-userdef.c:351
+msgid "Author"
+msgstr "Аутор"
+
+#: manipulation-gui/gui-userdef.c:603
+msgid "This procedure takes no editable params"
+msgstr "У датој процедури нема параметара који су изменљиви"
+
+#: manipulation-gui/gui-watermark.c:41
+msgid "Text watermark"
+msgstr "Водени печат у облику текста"
+
+#: manipulation-gui/gui-watermark.c:45
+msgid "Text"
+msgstr "Текст"
+
+#: manipulation-gui/gui-watermark.c:54
+msgid "Font"
+msgstr "Врста слова"
+
+#: manipulation-gui/gui-watermark.c:60
+msgid "Color"
+msgstr "Боја"
+
+#: manipulation-gui/gui-watermark.c:67
+msgid "Image watermark"
+msgstr "Водени печат у облику слике"
+
+#: manipulation-gui/gui-watermark.c:71
+msgid "Select image"
+msgstr "Селектуј слику"
+
+#: manipulation-gui/gui-watermark.c:73
+msgid "Adaptive size"
+msgstr "Прилагођена величина"
+
+#: manipulation-gui/gui-watermark.c:77
+#, c-format
+msgid "%% of"
+msgstr "%% од"
+
+#: manipulation-gui/gui-watermark.c:133
+msgid "Opacity"
+msgstr "Непровидност"
+
+#: manipulation-gui/gui-watermark.c:142
+msgid "Distance to edge"
+msgstr "Удаљеност од ивице"
+
+#: manipulation-gui/gui-watermark.c:146
+msgid "Position on the image"
+msgstr "Позиција на слици"
+
+#: manipulation-gui/gui-watermark.c:304
+msgid "Top-center"
+msgstr "Горе-средина"
+
+#: manipulation-gui/gui-watermark.c:310
+msgid "Center-left"
+msgstr "Средина-лево"
+
+#: manipulation-gui/gui-watermark.c:316
+msgid "Center-right"
+msgstr "Средина-десно"
+
+#: manipulation-gui/gui-watermark.c:322
+msgid "Bottom-center"
+msgstr "Доле-средина"
