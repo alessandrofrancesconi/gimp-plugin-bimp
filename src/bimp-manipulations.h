@@ -24,9 +24,8 @@ typedef enum manipulation_type {
 
 typedef enum resize_mode {
     RESIZE_PERCENT = 0,
-    RESIZE_PIXEL_BOTH,
-    RESIZE_PIXEL_WIDTH,
-    RESIZE_PIXEL_HEIGHT,
+    RESIZE_PIXEL,
+    RESIZE_DISABLE,
     RESIZE_END
 } resize_mode;
 
@@ -94,17 +93,18 @@ static const char* format_type_string[][2] = {
     {"tiff", "Tagged Image File Format (.tiff)"}        /* FORMAT_TIFF */
 };
 
+// First two bits = column, second two bits = row
 typedef enum watermark_position {
-    WM_POS_TL = 0,
-    WM_POS_TC,
-    WM_POS_TR,
-    WM_POS_CL,
-    WM_POS_CC,
-    WM_POS_CR,
-    WM_POS_BL,
-    WM_POS_BC,
-    WM_POS_BR,
-    WM_POS_END
+    WM_POS_TL = (0 << 0) | 0,
+    WM_POS_TC = (0 << 0) | 1,
+    WM_POS_TR = (0 << 0) | 2,
+    WM_POS_CL = (1 << 2) | 0,
+    WM_POS_CC = (1 << 2) | 1,
+    WM_POS_CR = (1 << 2) | 2,
+    WM_POS_BL = (2 << 2) | 0,
+    WM_POS_BC = (2 << 2) | 1,
+    WM_POS_BR = (2 << 2) | 2,
+    WM_POS_END = 1 << 4
 } watermark_position;
 
 typedef enum watermark_image_sizemode {
@@ -131,7 +131,8 @@ typedef struct manip_resize_set {
     gdouble new_h_pc;
     gint new_w_px;
     gint new_h_px;
-    resize_mode resize_mode;
+    resize_mode resize_mode_width;
+    resize_mode resize_mode_height;
     stretch_mode stretch_mode;
     GdkColor padding_color;
     guint16 padding_color_alpha;

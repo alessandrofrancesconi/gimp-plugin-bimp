@@ -20,11 +20,9 @@ GtkWidget* bimp_rename_gui_new(rename_settings settings, GtkWidget* parent)
     
     entry_pattern = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(entry_pattern), 50);
-    gtk_widget_set_size_request (entry_pattern, ENTRY_W, ENTRY_H);
     gtk_entry_set_text(GTK_ENTRY(entry_pattern), settings->pattern);
     
     frame_help = gtk_frame_new(_("Keywords"));
-    gtk_widget_set_size_request (frame_help, FRAME_HELP_W, FRAME_HELP_H);
     
     label_help = gtk_label_new(g_strconcat(
         RENAME_KEY_ORIG, " = ", _("Original filename (without extension)"), "\n", 
@@ -33,7 +31,6 @@ GtkWidget* bimp_rename_gui_new(rename_settings settings, GtkWidget* parent)
     gtk_container_add(GTK_CONTAINER(frame_help), label_help);
     
     label_preview = gtk_label_new("");
-    gtk_widget_set_size_request (label_preview, PREVIEW_W, PREVIEW_H);
     
     gtk_box_pack_start(GTK_BOX(gui), entry_pattern, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(gui), frame_help, FALSE, FALSE, 0);

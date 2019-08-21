@@ -195,7 +195,8 @@ static void write_resize(resize_settings settings, GKeyFile* file)
     g_key_file_set_double(file, group_name, "new_h_pc", settings->new_h_pc);
     g_key_file_set_integer(file, group_name, "new_w_px", settings->new_w_px);
     g_key_file_set_integer(file, group_name, "new_h_px", settings->new_h_px);
-    g_key_file_set_integer(file, group_name, "resize_mode", settings->resize_mode);
+    g_key_file_set_integer(file, group_name, "resize_mode_width", settings->resize_mode_width);
+    g_key_file_set_integer(file, group_name, "resize_mode_height", settings->resize_mode_height);
     g_key_file_set_integer(file, group_name, "stretch_mode", settings->stretch_mode);
     g_key_file_set_string(file, group_name, "padding_color", gdk_color_to_string(&(settings->padding_color)));
     g_key_file_set_integer(file, group_name, "padding_color_alpha", settings->padding_color_alpha);
@@ -227,8 +228,34 @@ static manipulation read_resize(GKeyFile* file)
         if (g_key_file_has_key(file, group_name, "new_h_px", NULL)) 
             settings->new_h_px = g_key_file_get_integer(file, group_name, "new_h_px", NULL);
             
-        if (g_key_file_has_key(file, group_name, "resize_mode", NULL)) 
-            settings->resize_mode = g_key_file_get_integer(file, group_name, "resize_mode", NULL);
+        // for backwards compatibility
+        if (g_key_file_has_key(file, group_name, "resize_mode", NULL)) {
+            switch(g_key_file_get_integer(file, group_name, "resize_mode", NULL)) {
+                case 0: // RESIZE_PERCENT
+                    settings->resize_mode_width = settings->resize_mode_height = RESIZE_PERCENT;
+                    break;
+                case 1: // RESIZE_PIZEL_BOTH
+                    settings->resize_mode_width = settings->resize_mode_height = RESIZE_PIXEL;
+                    break;
+                case 2: // RESIZE_PIXEL_WIDTH
+                    settings->resize_mode_width = RESIZE_PIXEL;
+                    settings->resize_mode_height = RESIZE_DISABLE;
+                    break;
+                case 3: // RESIZE_PIXEL_HEIGHT
+                    settings->resize_mode_width = RESIZE_DISABLE;
+                    settings->resize_mode_height = RESIZE_PIXEL;
+                    break;
+                case 4: // RESIZE_END
+                default:
+                    settings->resize_mode_width = settings->resize_mode_height = RESIZE_END;
+            }
+        }
+            
+        if (g_key_file_has_key(file, group_name, "resize_mode_width", NULL)) 
+            settings->resize_mode_width = g_key_file_get_integer(file, group_name, "resize_mode_width", NULL);
+            
+        if (g_key_file_has_key(file, group_name, "resize_mode_height", NULL)) 
+            settings->resize_mode_height = g_key_file_get_integer(file, group_name, "resize_mode_height", NULL);
             
         if (g_key_file_has_key(file, group_name, "stretch_mode", NULL)) 
             settings->stretch_mode = g_key_file_get_integer(file, group_name, "stretch_mode", NULL);

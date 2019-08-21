@@ -15,17 +15,15 @@ GtkWidget* bimp_sharpblur_gui_new(sharpblur_settings settings)
     
     hbox_control = gtk_hbox_new(FALSE, 5);
     label_sharp = gtk_label_new(_("More sharpen"));
-    gtk_widget_set_size_request (label_sharp, LABEL_SCALE_W, LABEL_SCALE_H);
     gtk_misc_set_alignment(GTK_MISC(label_sharp), 0.5, 0.7);
     scale_sharpblur = gtk_hscale_new_with_range(-100, 100, 1);
     gtk_range_set_value(GTK_RANGE(scale_sharpblur), settings->amount);
-    gtk_widget_set_size_request (scale_sharpblur, SCALE_AMOUNT_W, SCALE_AMOUNT_H);
+    gtk_widget_set_size_request (scale_sharpblur, SCALE_AMOUNT_W, -1);
     label_blur = gtk_label_new(_("More blurred"));
-    gtk_widget_set_size_request (label_blur, LABEL_SCALE_W, LABEL_SCALE_H);
     gtk_misc_set_alignment(GTK_MISC(label_blur), 0.5, 0.7);
     
     gtk_box_pack_start(GTK_BOX(hbox_control), label_sharp, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox_control), scale_sharpblur, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(hbox_control), scale_sharpblur, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(hbox_control), label_blur, FALSE, FALSE, 0);
     
     gtk_box_pack_start(GTK_BOX(gui), hbox_control, FALSE, FALSE, 0);

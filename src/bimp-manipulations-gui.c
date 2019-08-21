@@ -38,7 +38,6 @@ void bimp_open_editwindow(manipulation man, gboolean first_time)
         GTK_RESPONSE_REJECT,
         NULL
     );
-    gtk_window_set_resizable (GTK_WINDOW(window), FALSE);
     gtk_container_set_border_width(GTK_CONTAINER(window), 10);
     
     vbox = gtk_vbox_new(FALSE, 10);

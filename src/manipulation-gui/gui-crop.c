@@ -8,7 +8,7 @@ static void toggle_group(GtkToggleButton*, gpointer);
 static void set_customratio(GtkComboBox*, gpointer);
 static char* crop_preset_get_string(crop_preset);
 
-GtkWidget *hbox_ratio, *vbox_manual, *hbox_customratio;
+GtkWidget *hbox_ratio, *table_manual, *hbox_customratio;
 GtkWidget *radio_stratio, *radio_manual;
 GtkWidget *combo_ratio, *spin_ratio1, *spin_ratio2;
 GtkWidget *spin_width, *spin_height;
@@ -16,7 +16,7 @@ GtkWidget *hbox_startpos, *combo_startpos;
 
 GtkWidget* bimp_crop_gui_new(crop_settings settings)
 {
-    GtkWidget *gui, *hbox_manual_width, *hbox_manual_height;
+    GtkWidget *gui;
     GtkWidget *label_manual_width, *label_manual_height, *label_manual_ratio, *label_startpos;
     GtkWidget *align_radio_stratio, *align_radio_manual;
     
@@ -37,10 +37,8 @@ GtkWidget* bimp_crop_gui_new(crop_settings settings)
     
     hbox_customratio = gtk_hbox_new(FALSE, 5);
     spin_ratio1 = gtk_spin_button_new(GTK_ADJUSTMENT(gtk_adjustment_new (settings->custom_ratio1, 0.1, 100.0, 0.1, 1, 0)), 1, 1);
-    gtk_widget_set_size_request (spin_ratio1, 50, LABEL_CROP_H);
     label_manual_ratio = gtk_label_new(":");
     spin_ratio2 = gtk_spin_button_new(GTK_ADJUSTMENT(gtk_adjustment_new (settings->custom_ratio2, 0.1, 100.0, 0.1, 1, 0)), 1, 1);
-    gtk_widget_set_size_request (spin_ratio2, 50, LABEL_CROP_H);
     
     gtk_box_pack_start(GTK_BOX(hbox_customratio), spin_ratio1, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(hbox_customratio), label_manual_ratio, FALSE, FALSE, 0);
@@ -54,14 +52,14 @@ GtkWidget* bimp_crop_gui_new(crop_settings settings)
     radio_manual = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON(radio_stratio), _("Manual crop (pixel values)"));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_manual), (settings->manual));
     
-    vbox_manual = gtk_vbox_new(FALSE, 5);
-    hbox_manual_width = gtk_hbox_new(FALSE, 5);
+    table_manual = gtk_table_new(2, 2, FALSE);
+    gtk_table_set_row_spacings(GTK_TABLE(table_manual), 5);
+    gtk_table_set_col_spacings(GTK_TABLE(table_manual), 5);
     label_manual_width = gtk_label_new(g_strconcat(_("Width"), ": ", NULL));
-    gtk_widget_set_size_request (label_manual_width, LABEL_CROP_W, LABEL_CROP_H);
+    gtk_misc_set_alignment(GTK_MISC(label_manual_width), 0, .5);
     spin_width = gtk_spin_button_new(GTK_ADJUSTMENT(gtk_adjustment_new (settings->new_w, 1, 40960, 1, 1, 0)), 1, 0);
-    hbox_manual_height = gtk_hbox_new(FALSE, 5);
     label_manual_height = gtk_label_new(g_strconcat(_("Height"), ": ", NULL));
-    gtk_widget_set_size_request (label_manual_height, LABEL_CROP_W, LABEL_CROP_H);
+    gtk_misc_set_alignment(GTK_MISC(label_manual_height), 0, .5);
     spin_height = gtk_spin_button_new(GTK_ADJUSTMENT(gtk_adjustment_new (settings->new_h, 1, 40960, 1, 1, 0)), 1, 0);
     
     hbox_startpos = gtk_hbox_new(FALSE, 5);
@@ -93,14 +91,11 @@ GtkWidget* bimp_crop_gui_new(crop_settings settings)
     
     gtk_box_pack_start(GTK_BOX(gui), radio_manual, FALSE, FALSE, 0);
     
-    gtk_box_pack_start(GTK_BOX(hbox_manual_width), label_manual_width, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox_manual_width), spin_width, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox_manual_height), label_manual_height, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox_manual_height), spin_height, FALSE, FALSE, 0);
-    
-    gtk_box_pack_start(GTK_BOX(vbox_manual), hbox_manual_width, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox_manual), hbox_manual_height, FALSE, FALSE, 0);
-    gtk_container_add(GTK_CONTAINER(align_radio_manual), vbox_manual);
+    gtk_table_attach(GTK_TABLE(table_manual), label_manual_width, 0, 1, 0, 1, GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+    gtk_table_attach_defaults(GTK_TABLE(table_manual), spin_width, 1, 2, 0, 1);
+    gtk_table_attach_defaults(GTK_TABLE(table_manual), label_manual_height, 0, 1, 1, 2);
+    gtk_table_attach_defaults(GTK_TABLE(table_manual), spin_height, 1, 2, 1, 2);
+    gtk_container_add(GTK_CONTAINER(align_radio_manual), table_manual);
     gtk_box_pack_start(GTK_BOX(gui), align_radio_manual, FALSE, FALSE, 0);
     
     gtk_box_pack_start(GTK_BOX(hbox_startpos), label_startpos, FALSE, FALSE, 0);
@@ -118,7 +113,7 @@ GtkWidget* bimp_crop_gui_new(crop_settings settings)
 static void toggle_group(GtkToggleButton *togglebutton, gpointer user_data)
 {
     gtk_widget_set_sensitive(GTK_WIDGET(hbox_ratio), gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_stratio)));
-    gtk_widget_set_sensitive(GTK_WIDGET(vbox_manual), !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_stratio)));
+    gtk_widget_set_sensitive(GTK_WIDGET(table_manual), !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_stratio)));
 }
 
 static void set_customratio(GtkComboBox *combobox, gpointer user_data)

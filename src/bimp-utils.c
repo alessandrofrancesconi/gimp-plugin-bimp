@@ -246,9 +246,51 @@ GdkPixbuf* pixbuf_new_from_resource(const char* path)
     return pixbuf;
 }
 
-GtkWidget* image_new_from_resource(const char* path) 
+GtkWidget* image_new_from_resource(const char* path)
+{
+    return image_new_from_resource_scaled(path, NULL);
+}
+
+GtkWidget* image_new_from_resource_scaled(const char* path, GdkWindow *window) 
 {
     GdkPixbuf* pixbuf = pixbuf_new_from_resource(path);
+    
+    // Must wait for GTK3
+    /*if (window) {
+        gint scaleFactor = gdk_window_get_scale_factor(window);
+        if (scaleFactor > 1) {
+            // Add "-x2" to the end of the filename in path but before the extension
+            char *iptr = strrchar(path, '.');
+            int index;
+            if(iptr) {
+                index = iptr - path;
+            }
+            else {
+                index = strlen(path);
+            }
+            char highResPath[strlen(path)+4];
+            memcpy(highResPath, path, index);
+            highResPath[index] = '-';
+            highResPath[index+1] = 'x';
+            highResPath[index+2] = '2';
+            memcpy(&highResPath[index+3], &path[index], strlen(path)-index);
+            highResPath[strlen(path)+3] = '\0';
+            
+            // Try and get high resolution version of the icon if it exists
+            GdkPixbuf* pixbuf2 = pixbuf_new_from_resource(highResPath);
+            if (pixbuf2) {
+               pixbuf = pixbuf2;
+               scaleFactor /= 2;
+            }
+            
+            // Scale the image if we still need to
+            if (scaleFactor != 1) {
+                gint width = gdk_pixbuf_get_width(pixbuf);
+                gint height = gdk_pixbuf_get_height(pixbuf);
+                pixbuf = gdk_pixbuf_scale_simple(pixbuf, width*scaleFactor, height*scaleFactor, GDK_INTERP_NEAREST);
+            }
+        }
+    }*/
 
     GtkWidget* image;
     image = gtk_image_new_from_pixbuf(pixbuf);

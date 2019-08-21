@@ -12,27 +12,24 @@ GtkWidget *chooser_curve;
     
 GtkWidget* bimp_color_gui_new(color_settings settings)
 {
-    GtkWidget *gui, *hbox_brightness, *hbox_contrast;
+    GtkWidget *gui;
     GtkWidget *label_bright, *label_contrast;
-    GtkWidget *align_choosercurve;
     
-    gui = gtk_vbox_new(FALSE, 5);
+    gui = gtk_table_new(6, 2, FALSE);
+    gtk_table_set_row_spacings(GTK_TABLE(gui), 5);
+    gtk_table_set_col_spacings(GTK_TABLE(gui), 5);
     
-    hbox_brightness = gtk_hbox_new(FALSE, 5);
-    label_bright = gtk_label_new(_("Brightness"));
-    gtk_widget_set_size_request (label_bright, LABEL_BC_W, LABEL_BC_H);
-    gtk_misc_set_alignment(GTK_MISC(label_bright), 0.5, 0.8);
+    label_bright = gtk_label_new(g_strconcat(_("Brightness"), ":", NULL));
+    gtk_misc_set_alignment(GTK_MISC(label_bright), 0, 0.5);
     scale_bright = gtk_hscale_new_with_range(-0.5, +0.5, 0.01);
+    gtk_misc_set_alignment(GTK_MISC(scale_bright), 0, 0.5);
     gtk_range_set_value(GTK_RANGE(scale_bright), settings->brightness);
-    gtk_widget_set_size_request (scale_bright, SCALE_BC_W, SCALE_BC_H);
     
-    hbox_contrast = gtk_hbox_new(FALSE, 5);
-    label_contrast = gtk_label_new(_("Contrast"));
-    gtk_widget_set_size_request (label_contrast, LABEL_BC_W, LABEL_BC_H);
-    gtk_misc_set_alignment(GTK_MISC(label_contrast), 0.5, 0.8);
+    label_contrast = gtk_label_new(g_strconcat(_("Contrast"), ":", NULL));
+    gtk_misc_set_alignment(GTK_MISC(label_contrast), 0, 0.5);
     scale_contrast = gtk_hscale_new_with_range(-0.5, +0.5, 0.01);
+    gtk_misc_set_alignment(GTK_MISC(scale_contrast), 0, 0.5);
     gtk_range_set_value(GTK_RANGE(scale_contrast), settings->contrast);
-    gtk_widget_set_size_request (scale_contrast, SCALE_BC_W, SCALE_BC_H);
     
     check_grayscale = gtk_check_button_new_with_label(_("Convert to grayscale"));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_grayscale), settings->grayscale);
@@ -40,9 +37,6 @@ GtkWidget* bimp_color_gui_new(color_settings settings)
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_autolevels), settings->levels_auto);
     
     check_curve = gtk_check_button_new_with_label(_("Change color curve from settings file:"));
-    
-    align_choosercurve = gtk_alignment_new(0, 0, 0, 0);
-    gtk_alignment_set_padding(GTK_ALIGNMENT(align_choosercurve), 0, 5, 20, 0);
     
     chooser_curve = gtk_file_chooser_button_new(_("Select GIMP Curve file"), GTK_FILE_CHOOSER_ACTION_OPEN);
     if (settings->curve_file != NULL) {
@@ -52,21 +46,17 @@ GtkWidget* bimp_color_gui_new(color_settings settings)
     else {
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_curve), FALSE);
     }
-    gtk_widget_set_size_request (chooser_curve, INPUT_W, INPUT_H);
-    gtk_container_add(GTK_CONTAINER(align_choosercurve), chooser_curve);
     
-    gtk_box_pack_start(GTK_BOX(hbox_brightness), label_bright, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox_brightness), scale_bright, FALSE, FALSE, 0);
+    gtk_table_attach(GTK_TABLE(gui), label_bright, 0, 1, 0, 1, GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+    gtk_table_attach_defaults(GTK_TABLE(gui), scale_bright, 1, 2, 0, 1);
     
-    gtk_box_pack_start(GTK_BOX(hbox_contrast), label_contrast, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox_contrast), scale_contrast, FALSE, FALSE, 0);
-        
-    gtk_box_pack_start(GTK_BOX(gui), hbox_brightness, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(gui), hbox_contrast, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(gui), check_grayscale, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(gui), check_autolevels, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(gui), check_curve, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(gui), align_choosercurve, FALSE, FALSE, 0);
+    gtk_table_attach(GTK_TABLE(gui), label_contrast, 0, 1, 1, 2, GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+    gtk_table_attach_defaults(GTK_TABLE(gui), scale_contrast, 1, 2, 1, 2);
+    
+    gtk_table_attach_defaults(GTK_TABLE(gui), check_grayscale, 0, 2, 2, 3);
+    gtk_table_attach_defaults(GTK_TABLE(gui), check_autolevels, 0, 2, 3, 4);
+    gtk_table_attach_defaults(GTK_TABLE(gui), check_curve, 0, 2, 4, 5);
+    gtk_table_attach_defaults(GTK_TABLE(gui), chooser_curve, 0, 2, 5, 6);
     
     toggle_curve(NULL, NULL);
     g_signal_connect(G_OBJECT(check_curve), "toggled", G_CALLBACK(toggle_curve), NULL);

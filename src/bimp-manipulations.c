@@ -126,7 +126,8 @@ manipulation manipulation_resize_new()
     ((resize_settings)resize->settings)->new_h_pc = 100.0;
     ((resize_settings)resize->settings)->new_w_px = 640;
     ((resize_settings)resize->settings)->new_h_px = 480;
-    ((resize_settings)resize->settings)->resize_mode = RESIZE_PERCENT;
+    ((resize_settings)resize->settings)->resize_mode_width = RESIZE_PERCENT;
+    ((resize_settings)resize->settings)->resize_mode_height = RESIZE_PERCENT;
     ((resize_settings)resize->settings)->stretch_mode = STRETCH_ALLOW;
     gdk_color_parse("black", &(((resize_settings)resize->settings)->padding_color));
     gdk_colormap_alloc_color(gdk_colormap_get_system(), &(((resize_settings)resize->settings)->padding_color), TRUE, TRUE);

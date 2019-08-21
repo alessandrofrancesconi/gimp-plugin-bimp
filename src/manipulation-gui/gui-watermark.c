@@ -9,22 +9,23 @@
 
 static void toggle_group(GtkToggleButton*, gpointer);
 static void toggle_image_size(GtkToggleButton*, gpointer);
-static char* watermark_pos_get_string(watermark_position);
+static watermark_position xy_to_watermark_pos(int x, int y);
+static const char* watermark_pos_get_string(watermark_position);
+static const char* watermark_pos_get_abbreviation(watermark_position);
+static void file_filters_add_patterns(GtkFileFilter*, GtkFileFilter*, ...);
 
-GtkWidget *vbox_text, *vbox_image, *hbox_image_size;
+GtkWidget *table_text, *vbox_image, *hbox_image_size;
 GtkWidget *radio_text, *radio_image;
 GtkWidget *entry_text;
 GtkWidget *chooser_font, *chooser_color, *chooser_image;
 GtkWidget *check_image_adaptsize, *spin_image_sizepercent, *spin_edge, *combo_image_sizemode;
 GtkWidget *scale_opacity;
-GtkWidget *button_tl, *button_tc, *button_tr,
-          *button_cl, *button_cc, *button_cr,
-          *button_bl, *button_bc, *button_br;
+GtkWidget *position_buttons[3][3];
 
 GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 {
-    GtkWidget *gui, *hbox_mode, *vbox_mode_text, *vbox_mode_image, *vbox_position_sx, *hbox_position;
-    GtkWidget *hbox_text_entry, *hbox_text_font, *hbox_text_color, *hbox_opacity, *hbox_edge;
+    GtkWidget *gui, *hbox_mode, *vbox_mode_text, *vbox_mode_image, *vbox_position;
+    GtkWidget *hbox_opacity, *hbox_edge;
     GtkWidget *frame_position, *table_position;
     GtkWidget *align_radio_text, *align_radio_image;
     GtkWidget *label_text, *label_font, *label_color, *label_opacity, *label_percent, *label_edge, *label_percentof, *label_px;
@@ -40,32 +41,33 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
     gtk_alignment_set_padding(GTK_ALIGNMENT(align_radio_text), 0, 5, 20, 0);
     radio_text = gtk_radio_button_new_with_label(NULL, _("Text watermark"));
     
-    vbox_text = gtk_vbox_new(FALSE, 5);
-    hbox_text_entry = gtk_hbox_new(FALSE, 5);
+    align_radio_text = gtk_alignment_new(0, 0, 1, 1);
+    gtk_alignment_set_padding(GTK_ALIGNMENT(align_radio_text), 0, 0, 20, 0);
+    table_text = gtk_table_new(3, 2, FALSE);
+    gtk_table_set_row_spacings(GTK_TABLE(table_text), 5);
+    gtk_table_set_col_spacings(GTK_TABLE(table_text), 5);
+    
     label_text = gtk_label_new(g_strconcat(_("Text"), ":", NULL));
-    gtk_widget_set_size_request (label_text, LABEL_W, LABEL_H);
+    gtk_misc_set_alignment(GTK_MISC(label_text), 0, .5);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_text), settings->mode);
     entry_text = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(entry_text), 50);
     gtk_entry_set_text(GTK_ENTRY(entry_text), settings->text);
-    gtk_widget_set_size_request (entry_text, INPUT_W, INPUT_H);
     
-    hbox_text_font = gtk_hbox_new(FALSE, 5);
     label_font = gtk_label_new(g_strconcat(_("Font"), ":", NULL));
-    gtk_widget_set_size_request (label_font, LABEL_W, LABEL_H);
+    gtk_misc_set_alignment(GTK_MISC(label_font), 0, .5);
     chooser_font = gtk_font_button_new_with_font(pango_font_description_to_string(settings->font));
-    gtk_widget_set_size_request (chooser_font, INPUT_W, INPUT_H);
     
-    hbox_text_color = gtk_hbox_new(FALSE, 5);
     label_color = gtk_label_new(g_strconcat(_("Color"), ":", NULL));
-    gtk_widget_set_size_request (label_color, LABEL_W, LABEL_H);
+    gtk_misc_set_alignment(GTK_MISC(label_color), 0, .5);
     chooser_color = gtk_color_button_new_with_color(&(settings->color));
-    gtk_widget_set_size_request (chooser_color, INPUT_W, INPUT_H);
     
     align_radio_image = gtk_alignment_new(0, 0, 0, 0);
     gtk_alignment_set_padding(GTK_ALIGNMENT(align_radio_image), 0, 5, 20, 0);
     radio_image = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON(radio_text), _("Image watermark"));
     
+    align_radio_image = gtk_alignment_new(0, 0, 1, 1);
+    gtk_alignment_set_padding(GTK_ALIGNMENT(align_radio_image), 0, 0, 20, 0);
     vbox_image = gtk_vbox_new(FALSE, 5);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_image), !settings->mode);
     chooser_image = gtk_file_chooser_button_new(_("Select image"), GTK_FILE_CHOOSER_ACTION_OPEN);
@@ -74,7 +76,7 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_image_adaptsize), settings->image_sizemode != WM_IMG_NOSIZE);
     hbox_image_size = gtk_hbox_new(FALSE, 5);
     spin_image_sizepercent = gtk_spin_button_new(GTK_ADJUSTMENT(gtk_adjustment_new (settings->image_size_percent, 0.1, 100.0, 0.1, 1, 0)), 1, 1);
-    label_percentof = gtk_label_new(g_strconcat(_("%% of"), NULL));
+    label_percentof = gtk_label_new(g_strconcat(_("% of"), NULL));
     
     combo_image_sizemode = gtk_combo_box_new_text();
     gtk_combo_box_append_text(GTK_COMBO_BOX(combo_image_sizemode), _("Width"));
@@ -88,46 +90,33 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
     
     supported[0] = gtk_file_filter_new();
     gtk_file_filter_set_name(supported[0], "Bitmap (*.bmp)");
-    gtk_file_filter_add_pattern (supported[0], "*.bmp");
-    gtk_file_filter_add_pattern (filter_all, "*.bmp");
+    file_filters_add_patterns(supported[0], filter_all, "*.bmp", NULL);
     
     supported[1] = gtk_file_filter_new();
     gtk_file_filter_set_name(supported[1], "JPEG (*.jpg, *.jpeg, *jpe)");
-    gtk_file_filter_add_pattern (supported[1], "*.jpg");
-    gtk_file_filter_add_pattern (supported[1], "*.jpeg");
-    gtk_file_filter_add_pattern (supported[1], "*.jpe");
-    gtk_file_filter_add_pattern (filter_all, "*.jpg");
-    gtk_file_filter_add_pattern (filter_all, "*.jpeg");
-    gtk_file_filter_add_pattern (filter_all, "*.jpe");
+    file_filters_add_patterns(supported[1], filter_all, "*.jpg", "*.jpeg", "*.jpe", NULL);
 
     supported[2] = gtk_file_filter_new();
     gtk_file_filter_set_name(supported[2], "GIF (*.gif)");
-    gtk_file_filter_add_pattern (supported[2], "*.gif");
-    gtk_file_filter_add_pattern (filter_all, "*.gif");
+    file_filters_add_patterns(supported[2], filter_all, "*.gif", NULL);
     
     supported[3] = gtk_file_filter_new();
     gtk_file_filter_set_name(supported[3], "PNG (*.png)");
-    gtk_file_filter_add_pattern (supported[3], "*.png");
-    gtk_file_filter_add_pattern (filter_all, "*.png");
+    file_filters_add_patterns(supported[3], filter_all, "*.png", NULL);
     
     supported[4] = gtk_file_filter_new();
     gtk_file_filter_set_name(supported[4], "TIFF (*tif, *.tiff)");
-    gtk_file_filter_add_pattern (supported[4], "*.tiff");
-    gtk_file_filter_add_pattern (supported[4], "*.tif");
-    gtk_file_filter_add_pattern (filter_all, "*.tiff");
-    gtk_file_filter_add_pattern (filter_all, "*.tif");
+    file_filters_add_patterns(supported[4], filter_all, "*.tiff", "*.tif", NULL);
     
     gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(chooser_image), filter_all);
-    int i;
-    for(i = 0; i < 5; i++) {
+    for(int i = 0; i < 5; i++) {
         gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(chooser_image), supported[i]);
     }
     
     if (settings->image_file != NULL) gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(chooser_image), settings->image_file);
-    gtk_widget_set_size_request (chooser_image, LABEL_W + INPUT_W, INPUT_H);
     
-    hbox_position = gtk_hbox_new(FALSE, 10);
-    vbox_position_sx = gtk_vbox_new(FALSE, 5);
+    GtkWidget* separator2 = gtk_hseparator_new();
+    vbox_position = gtk_vbox_new(FALSE, 5);
     
     hbox_opacity = gtk_hbox_new(FALSE, 5);
     label_opacity = gtk_label_new(g_strconcat(_("Opacity"), ":", NULL));
@@ -147,91 +136,38 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
     table_position = gtk_table_new(3, 3, TRUE);
     gtk_widget_set_size_request (table_position, 250, 120);
     
-    button_tl = gtk_radio_button_new (NULL);
-    gtk_button_set_image(GTK_BUTTON(button_tl), image_new_from_resource("/gimp/plugin/bimp/icons/pos-tl-icon.png"));
-    gtk_widget_set_tooltip_text (button_tl, watermark_pos_get_string(WM_POS_TL));
-    gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_tl), FALSE);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_tl), settings->position == WM_POS_TL);
-    gtk_widget_set_size_request (button_tl, BUTTON_POSITION_W, BUTTON_POSITION_H);
-    gtk_table_attach(GTK_TABLE(table_position), button_tl, 0, 1, 0, 1, GTK_EXPAND, GTK_EXPAND, 0, 0);
-    button_tc = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
-    gtk_button_set_image(GTK_BUTTON(button_tc), image_new_from_resource("/gimp/plugin/bimp/icons/pos-tc-icon.png"));
-    gtk_widget_set_tooltip_text (button_tc, watermark_pos_get_string(WM_POS_TC));
-    gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_tc), FALSE);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_tc), settings->position == WM_POS_TC);
-    gtk_widget_set_size_request (button_tc, BUTTON_POSITION_W, BUTTON_POSITION_H);
-    gtk_table_attach(GTK_TABLE(table_position), button_tc, 1, 2, 0, 1, GTK_EXPAND, GTK_EXPAND, 0, 0);
-    
-    button_tr = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
-    gtk_button_set_image(GTK_BUTTON(button_tr), image_new_from_resource("/gimp/plugin/bimp/icons/pos-tr-icon.png"));
-    gtk_widget_set_tooltip_text (button_tr, watermark_pos_get_string(WM_POS_TR));
-    gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_tr), FALSE);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_tr), settings->position == WM_POS_TR);
-    gtk_widget_set_size_request (button_tr, BUTTON_POSITION_W, BUTTON_POSITION_H);
-    gtk_table_attach(GTK_TABLE(table_position), button_tr, 2, 3, 0, 1, GTK_EXPAND, GTK_EXPAND, 0, 0);
-    button_cl = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
-    gtk_button_set_image(GTK_BUTTON(button_cl), image_new_from_resource("/gimp/plugin/bimp/icons/pos-cl-icon.png"));
-    gtk_widget_set_tooltip_text (button_cl, watermark_pos_get_string(WM_POS_CL));
-    gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_cl), FALSE);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_cl), settings->position == WM_POS_CL);
-    gtk_widget_set_size_request (button_cl, BUTTON_POSITION_W, BUTTON_POSITION_H);
-    gtk_table_attach(GTK_TABLE(table_position), button_cl, 0, 1, 1, 2, GTK_EXPAND, GTK_EXPAND, 0, 0);
-    
-    button_cc = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
-    gtk_button_set_image(GTK_BUTTON(button_cc), image_new_from_resource("/gimp/plugin/bimp/icons/pos-cc-icon.png"));
-    gtk_widget_set_tooltip_text (button_cc, watermark_pos_get_string(WM_POS_CC));
-    gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_cc), FALSE);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_cc), settings->position == WM_POS_CC);
-    gtk_widget_set_size_request (button_cc, BUTTON_POSITION_W, BUTTON_POSITION_H);
-    gtk_table_attach(GTK_TABLE(table_position), button_cc, 1, 2, 1, 2, GTK_EXPAND, GTK_EXPAND, 0, 0);
-    button_cr = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
-    gtk_button_set_image(GTK_BUTTON(button_cr), image_new_from_resource("/gimp/plugin/bimp/icons/pos-cr-icon.png"));
-    gtk_widget_set_tooltip_text (button_cr, watermark_pos_get_string(WM_POS_CR));
-    gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_cr), FALSE);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_cr), settings->position == WM_POS_CR);
-    gtk_widget_set_size_request (button_cr, BUTTON_POSITION_W, BUTTON_POSITION_H);
-    gtk_table_attach(GTK_TABLE(table_position), button_cr, 2, 3, 1, 2, GTK_EXPAND, GTK_EXPAND, 0, 0);
-    
-    button_bl = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
-    gtk_button_set_image(GTK_BUTTON(button_bl), image_new_from_resource("/gimp/plugin/bimp/icons/pos-bl-icon.png"));
-    gtk_widget_set_tooltip_text (button_bl, watermark_pos_get_string(WM_POS_BL));
-    gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_bl), FALSE);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_bl), settings->position == WM_POS_BL);
-    gtk_widget_set_size_request (button_bl, BUTTON_POSITION_W, BUTTON_POSITION_H);
-    gtk_table_attach(GTK_TABLE(table_position), button_bl, 0, 1, 2, 3, GTK_EXPAND, GTK_EXPAND, 0, 0);
-    button_bc = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
-    gtk_button_set_image(GTK_BUTTON(button_bc), image_new_from_resource("/gimp/plugin/bimp/icons/pos-bc-icon.png"));
-    gtk_widget_set_tooltip_text (button_bc, watermark_pos_get_string(WM_POS_BC));
-    gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_bc), FALSE);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_bc), settings->position == WM_POS_BC);
-    gtk_widget_set_size_request (button_bc, BUTTON_POSITION_W, BUTTON_POSITION_H);
-    gtk_table_attach(GTK_TABLE(table_position), button_bc, 1, 2, 2, 3, GTK_EXPAND, GTK_EXPAND, 0, 0);
-    
-    button_br = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON(button_tl));
-    gtk_button_set_image(GTK_BUTTON(button_br), image_new_from_resource("/gimp/plugin/bimp/icons/pos-br-icon.png"));
-    gtk_widget_set_tooltip_text (button_br, watermark_pos_get_string(WM_POS_BR));
-    gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(button_br), FALSE);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_br), settings->position == WM_POS_BR);
-    gtk_widget_set_size_request (button_br, BUTTON_POSITION_W, BUTTON_POSITION_H);
-    gtk_table_attach(GTK_TABLE(table_position), button_br, 2, 3, 2, 3, GTK_EXPAND, GTK_EXPAND, 0, 0);
+    GtkRadioButton *first_button = NULL;
+    watermark_position current_pos;
+    for(int y=0; y < 3; y++) {
+        for(int x=0; x < 3; x++) {
+            current_pos = xy_to_watermark_pos(x, y);
+            position_buttons[y][x] = gtk_radio_button_new_from_widget(first_button);
+            gtk_button_set_image(GTK_BUTTON(position_buttons[y][x]), image_new_from_resource(g_strconcat("/gimp/plugin/bimp/icons/pos-", watermark_pos_get_abbreviation(current_pos), "-icon.png", NULL)));
+            gtk_widget_set_tooltip_text (position_buttons[y][x], watermark_pos_get_string(current_pos));
+            gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(position_buttons[y][x]), FALSE);
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(position_buttons[y][x]), settings->position == current_pos);
+            gtk_table_attach_defaults(GTK_TABLE(table_position), position_buttons[y][x], x, x+1, y, y+1);
+            
+            if(first_button == NULL) {
+                first_button = GTK_RADIO_BUTTON(position_buttons[y][x]);
+            }
+        }
+    }
     
     // left side (text mode)
     gtk_box_pack_start(GTK_BOX(vbox_mode_text), radio_text, FALSE, FALSE, 0);
     
-    gtk_box_pack_start(GTK_BOX(hbox_text_entry), label_text, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox_text_entry), entry_text, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox_text_font), label_font, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox_text_font), chooser_font, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox_text_color), label_color, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox_text_color), chooser_color, FALSE, FALSE, 0);
+    gtk_table_attach(GTK_TABLE(table_text), label_text, 0, 1, 0, 1, GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+    gtk_table_attach_defaults(GTK_TABLE(table_text), entry_text, 1, 2, 0, 1);
+    gtk_table_attach(GTK_TABLE(table_text), label_font, 0, 1, 1, 2, GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+    gtk_table_attach_defaults(GTK_TABLE(table_text), chooser_font, 1, 2, 1, 2);
+    gtk_table_attach(GTK_TABLE(table_text), label_color, 0, 1, 2, 3, GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+    gtk_table_attach_defaults(GTK_TABLE(table_text), chooser_color, 1, 2, 2, 3);
     
-    gtk_box_pack_start(GTK_BOX(vbox_text), hbox_text_entry, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox_text), hbox_text_font, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox_text), hbox_text_color, FALSE, FALSE, 0);
-    gtk_container_add(GTK_CONTAINER(align_radio_text), vbox_text);
-    gtk_box_pack_start(GTK_BOX(vbox_mode_text), align_radio_text, FALSE, FALSE, 0);
+    gtk_container_add(GTK_CONTAINER(align_radio_text), table_text);
+    gtk_box_pack_start(GTK_BOX(vbox_mode_text), align_radio_text, TRUE, TRUE, 0);
     
-    gtk_box_pack_start(GTK_BOX(hbox_mode), vbox_mode_text, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(hbox_mode), vbox_mode_text, TRUE, TRUE, 0);
     
     gtk_box_pack_start(GTK_BOX(hbox_mode), separator1, FALSE, FALSE, 0);
     
@@ -248,31 +184,30 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
     
     gtk_container_add(GTK_CONTAINER(align_radio_image), vbox_image);
     
-    gtk_box_pack_start(GTK_BOX(vbox_mode_image), align_radio_image, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox_mode_image), align_radio_image, TRUE, TRUE, 0);
     
-    gtk_box_pack_start(GTK_BOX(hbox_mode), vbox_mode_image, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(hbox_mode), vbox_mode_image, TRUE, TRUE, 0);
     
     gtk_box_pack_start(GTK_BOX(gui), hbox_mode, FALSE, FALSE, 0);
     
     // opacity
     gtk_box_pack_start(GTK_BOX(hbox_opacity), label_opacity, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox_opacity), scale_opacity, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(hbox_opacity), scale_opacity, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(hbox_opacity), label_percent, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox_position_sx), hbox_opacity, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox_position), hbox_opacity, TRUE, TRUE, 0);
+    
+    // table
+    gtk_container_add(GTK_CONTAINER(frame_position), table_position);
+    gtk_box_pack_start(GTK_BOX(vbox_position), frame_position, FALSE, FALSE, 0);
     
     // distance to edge
     gtk_box_pack_start(GTK_BOX(hbox_edge), label_edge, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(hbox_edge), spin_edge, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(hbox_edge), label_px, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox_position_sx), hbox_edge, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox_position), hbox_edge, FALSE, FALSE, 0);
     
-    gtk_box_pack_start(GTK_BOX(hbox_position), vbox_position_sx, FALSE, FALSE, 0);
-    
-    // table
-    gtk_container_add(GTK_CONTAINER(frame_position), table_position);
-    gtk_box_pack_start(GTK_BOX(hbox_position), frame_position, FALSE, FALSE, 0);
-    
-    gtk_box_pack_start(GTK_BOX(gui), hbox_position, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(gui), separator2, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(gui), vbox_position, FALSE, FALSE, 0);
     
     toggle_group(NULL, NULL);
     toggle_image_size(NULL, NULL);
@@ -285,7 +220,7 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 
 static void toggle_group(GtkToggleButton *togglebutton, gpointer user_data)
 {
-    gtk_widget_set_sensitive(GTK_WIDGET(vbox_text), gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_text)));
+    gtk_widget_set_sensitive(GTK_WIDGET(table_text), gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_text)));
     gtk_widget_set_sensitive(GTK_WIDGET(vbox_image), !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_text)));
 }
 
@@ -294,38 +229,43 @@ static void toggle_image_size(GtkToggleButton *togglebutton, gpointer user_data)
     gtk_widget_set_sensitive(GTK_WIDGET(hbox_image_size), gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_image_adaptsize)));
 }
 
-static char* watermark_pos_get_string(watermark_position wp) {
-    char* pos_string = "";
-    
-    if (wp == WM_POS_TL) {
-        pos_string = _("Top-left");
+static watermark_position xy_to_watermark_pos(int x, int y) {
+    if (x > 2 || y > 2 || x < 0 || y < 0) {
+        return WM_POS_END;
     }
-    else if (wp == WM_POS_TC) {
-        pos_string = _("Top-center");
+    return (watermark_position)(((y & 3) << 2) | (x & 3));
+}
+
+static const char* watermark_pos_strings[3][3] =
+        { 
+            { "Top-left", "Top-center", "Top-right" },
+            { "Center-left", "Center", "Center-right" },
+            { "Bottom-left", "Bottom-center", "Bottom-right" }
+        };
+static const char* watermark_pos_get_string(watermark_position wp) {
+    return _(watermark_pos_strings[wp >> 2][wp & 3]);
+}
+
+static const char* watermark_pos_abbreviations[3][3] =
+    {
+        { "tl", "tc", "tr" },
+        { "cl", "cc", "cr" },
+        { "bl", "bc", "br" }
+    };
+static const char* watermark_pos_get_abbreviation(watermark_position wp) {
+    return watermark_pos_abbreviations[wp >> 2][wp & 3];
+}
+
+static void file_filters_add_patterns(GtkFileFilter *filter1, GtkFileFilter *filter2, ...)
+{
+    va_list patterns;
+    va_start(patterns, filter2);
+    gchar *pattern = (gchar*)va_arg(patterns, void*);
+    while (pattern != NULL) {
+        gtk_file_filter_add_pattern (filter1, pattern);
+        gtk_file_filter_add_pattern (filter2, pattern);
+        pattern = (gchar*)va_arg(patterns, void*);
     }
-    else if (wp == WM_POS_TR) {
-        pos_string = _("Top-right");
-    }
-    else if (wp == WM_POS_CL) {
-        pos_string = _("Center-left");
-    }
-    else if (wp == WM_POS_CC) {
-        pos_string = _("Center");
-    }
-    else if (wp == WM_POS_CR) {
-        pos_string = _("Center-right");
-    }
-    else if (wp == WM_POS_BL) {
-        pos_string = _("Bottom-left");
-    }
-    else if (wp == WM_POS_BC) {
-        pos_string = _("Bottom-center");
-    }
-    else if (wp == WM_POS_BR) {
-        pos_string = _("Bottom-right");
-    }
-    
-    return pos_string;
 }
 
 void bimp_watermark_save(watermark_settings orig_settings) 
@@ -352,31 +292,12 @@ void bimp_watermark_save(watermark_settings orig_settings)
     orig_settings->opacity = (float)gtk_range_get_value(GTK_RANGE(scale_opacity));
     orig_settings->edge_distance = gtk_spin_button_get_value (GTK_SPIN_BUTTON(spin_edge));
     
-    if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button_tr))) {
-        orig_settings->position = WM_POS_TR;
-    }
-    else if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button_tc))) {
-        orig_settings->position = WM_POS_TC;
-    }
-    else if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button_tl))) {
-        orig_settings->position = WM_POS_TL;
-    }
-    else if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button_cr))) {
-        orig_settings->position = WM_POS_CR;
-    }
-    else if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button_cc))) {
-        orig_settings->position = WM_POS_CC;
-    }
-    else if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button_cl))) {
-        orig_settings->position = WM_POS_CL;
-    }
-    else if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button_br))) {
-        orig_settings->position = WM_POS_BR;
-    }
-    else if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button_bc))) {
-        orig_settings->position = WM_POS_BC;
-    }
-    else {
-        orig_settings->position = WM_POS_BL;
+    for (int y=0; y < 3; y++) {
+        for (int x=0; x < 3; x++) {
+            if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(position_buttons[y][x]))) {
+                orig_settings->position = xy_to_watermark_pos(x, y);
+                break;
+            }
+        }
     }
 }

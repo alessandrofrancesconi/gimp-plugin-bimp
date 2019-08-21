@@ -428,90 +428,51 @@ static gboolean apply_resize(resize_settings settings, image_output out)
     orig_w = gimp_image_width(out->image_id);
     orig_h = gimp_image_height(out->image_id);
     
-    if (settings->resize_mode == RESIZE_PERCENT) {
-        
-        if (settings->stretch_mode == STRETCH_ASPECT) {
-            gdouble newpct = min(settings->new_w_pc, settings->new_h_pc);
-            
-            final_w = view_w = round((orig_w * newpct) / 100.0);
-            final_h = view_h = round((orig_h * newpct) / 100.0);
-        }
-        else if (settings->stretch_mode == STRETCH_PADDED) {
-            gdouble newpct = min(settings->new_w_pc, settings->new_h_pc);
-            
-            final_w = round((orig_w * newpct) / 100.0);
-            final_h = round((orig_h * newpct) / 100.0);
-            view_w = round((orig_w * settings->new_w_pc) / 100.0);
-            view_h = round((orig_h * settings->new_h_pc) / 100.0);
-        }
-        else {
-            final_w = view_w = round((orig_w * settings->new_w_pc) / 100.0);
-            final_h = view_h = round((orig_h * settings->new_h_pc) / 100.0);
-        }
+    if (settings->resize_mode_width == RESIZE_DISABLE && settings->resize_mode_height == RESIZE_DISABLE) {
+        return !settings->change_res || success;
+    }
+    
+    gdouble newwpct, newwpctmax;
+    if (settings->resize_mode_width == RESIZE_PERCENT) {
+        newwpct = newwpctmax = settings->new_w_pc / 100.0;
+    }
+    else if(settings->resize_mode_width == RESIZE_PIXEL) {
+        newwpct = newwpctmax = (double)settings->new_w_px / (double)orig_w;
     }
     else {
-        // user typed exact pixel size 
-        if (settings->resize_mode == RESIZE_PIXEL_WIDTH) {
-            view_w = settings->new_w_px; // width is fixed 
+        newwpct = 1;
+        newwpctmax = DBL_MAX;
+    }
+    
+    gdouble newhpct, newhpctmax;
+    if (settings->resize_mode_height == RESIZE_PERCENT) {
+        newhpct = newhpctmax = settings->new_h_pc / 100.0;
+    }
+    else if(settings->resize_mode_height == RESIZE_PIXEL) {
+        newhpct = newhpctmax = (double)settings->new_h_px / (double)orig_h;
+    }
+    else {
+        newhpct = 1;
+        newhpctmax = DBL_MAX;
+    }
+    
+    if(settings->stretch_mode == STRETCH_ASPECT) {
+        gdouble newpct = min(newwpctmax, newhpctmax);
             
-            if (settings->stretch_mode == STRETCH_ASPECT) {
-                final_w = view_w;
-                final_h = view_h = round(((float)final_w * orig_h) / orig_w);
-            }
-            else if (settings->stretch_mode == STRETCH_PADDED) {
-                final_w = min(view_w, orig_w);
-                final_h = round(((float)final_w * orig_h) / orig_w);
-                view_h = max(orig_h, final_h);
-            }
-            else {
-                final_w = view_w;
-                final_h = view_h = orig_h;
-            }
-        }
-        else if (settings->resize_mode == RESIZE_PIXEL_HEIGHT) {
-            view_h = settings->new_h_px; // height is fixed
+        final_w = view_w = round(orig_w * newpct);
+        final_h = view_h = round(orig_h * newpct);
+    }
+    else if (settings->stretch_mode == STRETCH_PADDED) {
+        gdouble newpct = min(newwpctmax, newhpctmax);
             
-            if (settings->stretch_mode == STRETCH_ASPECT) {
-                final_h = view_h;
-                final_w = view_w = round(((float)final_h * orig_w) / orig_h);
-            }
-            else if (settings->stretch_mode == STRETCH_PADDED) {
-                final_h = min(view_h, orig_h);
-                final_w = round(((float)final_h * orig_w) / orig_h);
-                view_w = max(orig_w, final_w);
-            }
-            else {
-                final_h = view_h;
-                final_w = view_w = orig_w;
-            }
-        }
-        else {
-            // both dimensions are defined 
-            if (settings->stretch_mode == STRETCH_ASPECT) {
-                // Find which new dimension is the smallest percentage of the existing image dimension
-                gdouble newwpct = (float)settings->new_w_px / (float)orig_w;
-                gdouble newhpct = (float)settings->new_h_px / (float)orig_h;
-                gdouble newpct = min(newwpct, newhpct);
-
-                final_w = view_w = round(orig_w * newpct);
-                final_h = view_h = round(orig_h * newpct);
-            }
-            else if (settings->stretch_mode == STRETCH_PADDED) {
-                // Find which new dimension is the smallest percentage of the existing image dimension
-                gdouble newwpct = (float)settings->new_w_px / (float)orig_w;
-                gdouble newhpct = (float)settings->new_h_px / (float)orig_h;
-                gdouble newpct = min(newwpct, newhpct);
-                
-                final_w = round(orig_w * newpct);
-                final_h = round(orig_h * newpct);
-                view_w = round(orig_w * newwpct);
-                view_h = round(orig_h * newhpct);
-            }
-            else {
-                final_w = view_w = settings->new_w_px;
-                final_h = view_h = settings->new_h_px;
-            }
-        }
+        final_w = round(orig_w * newpct);
+        final_h = round(orig_h * newpct);
+        view_w = round(orig_w * newwpct);
+        view_h = round(orig_h * newhpct);
+    }
+    else {
+        final_w = view_w = round(orig_w * newwpct);
+        final_h = view_h = round(orig_h * newhpct);
     }
     
     // use gimp_image_scale instead
