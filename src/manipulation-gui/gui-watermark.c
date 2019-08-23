@@ -9,7 +9,6 @@
 
 static void toggle_group(GtkToggleButton*, gpointer);
 static void toggle_image_size(GtkToggleButton*, gpointer);
-static watermark_position xy_to_watermark_pos(int x, int y);
 static const char* watermark_pos_get_string(watermark_position);
 static const char* watermark_pos_get_abbreviation(watermark_position);
 static void file_filters_add_patterns(GtkFileFilter*, GtkFileFilter*, ...);
@@ -20,7 +19,7 @@ GtkWidget *entry_text;
 GtkWidget *chooser_font, *chooser_color, *chooser_image;
 GtkWidget *check_image_adaptsize, *spin_image_sizepercent, *spin_edge, *combo_image_sizemode;
 GtkWidget *scale_opacity;
-GtkWidget *position_buttons[3][3];
+GtkWidget *position_buttons[9];
 
 GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 {
@@ -137,20 +136,16 @@ GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
     gtk_widget_set_size_request (table_position, 250, 120);
     
     GtkRadioButton *first_button = NULL;
-    watermark_position current_pos;
-    for(int y=0; y < 3; y++) {
-        for(int x=0; x < 3; x++) {
-            current_pos = xy_to_watermark_pos(x, y);
-            position_buttons[y][x] = gtk_radio_button_new_from_widget(first_button);
-            gtk_button_set_image(GTK_BUTTON(position_buttons[y][x]), image_new_from_resource(g_strconcat("/gimp/plugin/bimp/icons/pos-", watermark_pos_get_abbreviation(current_pos), "-icon.png", NULL)));
-            gtk_widget_set_tooltip_text (position_buttons[y][x], watermark_pos_get_string(current_pos));
-            gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(position_buttons[y][x]), FALSE);
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(position_buttons[y][x]), settings->position == current_pos);
-            gtk_table_attach_defaults(GTK_TABLE(table_position), position_buttons[y][x], x, x+1, y, y+1);
-            
-            if(first_button == NULL) {
-                first_button = GTK_RADIO_BUTTON(position_buttons[y][x]);
-            }
+    for(watermark_position current_pos = WM_POS_TL; current_pos < WM_POS_END; current_pos++) {
+        position_buttons[current_pos] = gtk_radio_button_new_from_widget(first_button);
+        gtk_button_set_image(GTK_BUTTON(position_buttons[current_pos]), image_new_from_resource(g_strconcat("/gimp/plugin/bimp/icons/pos-", watermark_pos_get_abbreviation(current_pos), "-icon.png", NULL)));
+        gtk_widget_set_tooltip_text (position_buttons[current_pos], watermark_pos_get_string(current_pos));
+        gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(position_buttons[current_pos]), FALSE);
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(position_buttons[current_pos]), settings->position == current_pos);
+        gtk_table_attach_defaults(GTK_TABLE(table_position), position_buttons[current_pos], current_pos % 3, (current_pos % 3) + 1, current_pos / 3, (current_pos / 3) + 1);
+        
+        if(first_button == NULL) {
+            first_button = GTK_RADIO_BUTTON(position_buttons[current_pos]);
         }
     }
     
@@ -229,31 +224,24 @@ static void toggle_image_size(GtkToggleButton *togglebutton, gpointer user_data)
     gtk_widget_set_sensitive(GTK_WIDGET(hbox_image_size), gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_image_adaptsize)));
 }
 
-static watermark_position xy_to_watermark_pos(int x, int y) {
-    if (x > 2 || y > 2 || x < 0 || y < 0) {
-        return WM_POS_END;
-    }
-    return (watermark_position)(((y & 3) << 2) | (x & 3));
-}
-
-static const char* watermark_pos_strings[3][3] =
-        { 
-            { "Top-left", "Top-center", "Top-right" },
-            { "Center-left", "Center", "Center-right" },
-            { "Bottom-left", "Bottom-center", "Bottom-right" }
-        };
+static const char* watermark_pos_strings[9] =
+{ 
+    "Top-left", "Top-center", "Top-right",
+    "Center-left", "Center", "Center-right",
+    "Bottom-left", "Bottom-center", "Bottom-right"
+};
 static const char* watermark_pos_get_string(watermark_position wp) {
-    return _(watermark_pos_strings[wp >> 2][wp & 3]);
+    return _(watermark_pos_strings[wp]);
 }
 
-static const char* watermark_pos_abbreviations[3][3] =
-    {
-        { "tl", "tc", "tr" },
-        { "cl", "cc", "cr" },
-        { "bl", "bc", "br" }
-    };
+static const char* watermark_pos_abbreviations[9] =
+{
+    "tl", "tc", "tr",
+    "cl", "cc", "cr",
+    "bl", "bc", "br"
+};
 static const char* watermark_pos_get_abbreviation(watermark_position wp) {
-    return watermark_pos_abbreviations[wp >> 2][wp & 3];
+    return watermark_pos_abbreviations[wp];
 }
 
 static void file_filters_add_patterns(GtkFileFilter *filter1, GtkFileFilter *filter2, ...)
@@ -292,12 +280,10 @@ void bimp_watermark_save(watermark_settings orig_settings)
     orig_settings->opacity = (float)gtk_range_get_value(GTK_RANGE(scale_opacity));
     orig_settings->edge_distance = gtk_spin_button_get_value (GTK_SPIN_BUTTON(spin_edge));
     
-    for (int y=0; y < 3; y++) {
-        for (int x=0; x < 3; x++) {
-            if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(position_buttons[y][x]))) {
-                orig_settings->position = xy_to_watermark_pos(x, y);
-                break;
-            }
+    for (watermark_position current_pos = WM_POS_TL; current_pos < WM_POS_END; current_pos++) {
+        if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(position_buttons[current_pos]))) {
+            orig_settings->position = current_pos;
+            break;
         }
     }
 }
