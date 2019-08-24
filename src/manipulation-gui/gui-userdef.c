@@ -102,6 +102,8 @@ GtkWidget* bimp_userdef_gui_new(userdef_settings settings, GtkWidget *parent)
         gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(treeview_procedures), path, NULL, TRUE, 0.5, 0.0);
     }
     
+    gtk_window_set_default_size(GTK_WINDOW(parent), PROCLIST_W * 3, -1);
+    
     update_procedure_box(settings); 
     
     g_signal_connect(G_OBJECT(entry_search), "changed", G_CALLBACK(search_procedure), NULL);
