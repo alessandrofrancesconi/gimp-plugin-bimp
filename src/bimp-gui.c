@@ -33,6 +33,7 @@ static void remove_all_input_files(GtkWidget*, gpointer);
 static void select_filename (GtkTreeView*, gpointer);
 static void update_selection(char*);
 static void show_preview(GtkTreeView*, gpointer);
+static char* get_outputfolder_name();
 static void open_outputfolder_chooser(GtkWidget*, gpointer);
 static void set_source_output_folder(GtkWidget*, gpointer);
 static void popmenus_init(void);
@@ -209,9 +210,8 @@ static GtkWidget* option_panel_new()
     
     bimp_output_folder = get_user_dir();
     
-    char* last_folder = g_strrstr(bimp_output_folder, FILE_SEPARATOR_STR) + 1;
-    if (last_folder == NULL || strlen(last_folder) == 0) last_folder = bimp_output_folder;
-    button_outfolder = gtk_button_new_with_label(last_folder);
+    
+    button_outfolder = gtk_button_new_with_label(get_outputfolder_name());
     
     gtk_widget_set_tooltip_text (button_outfolder, bimp_output_folder);
     
@@ -496,7 +496,7 @@ static void show_preview (GtkTreeView *tree_view, gpointer data)
         
         vbox = gtk_vbox_new(FALSE, 10);
         label_descr = gtk_label_new(_("This is how the selected image will look like after the batch process"));
-        gtk_label_set_line_wrap (label_descr, TRUE);
+        gtk_label_set_line_wrap (GTK_LABEL(label_descr), TRUE);
         gtk_label_set_justify(GTK_LABEL(label_descr), GTK_JUSTIFY_CENTER);
         
         align = gtk_alignment_new(0.5, 0.5, 0, 0);
@@ -722,6 +722,23 @@ static void open_folder_chooser(GtkWidget *widget, gpointer data)
     gtk_widget_destroy (folder_chooser);
 }
 
+static char* get_outputfolder_name()
+{
+    char* last_folder = g_strrstr(bimp_output_folder, FILE_SEPARATOR_STR) + 1;
+    if (last_folder == NULL || strlen(last_folder) == 0) last_folder = bimp_output_folder;
+    char *folder_name = malloc(25);
+    if (strlen(last_folder) > 24) {
+        char *folder_name = malloc(25);
+        memcpy(folder_name, last_folder, 21);
+        folder_name[21] = folder_name[22] = folder_name[23] = '.';
+        folder_name[24] = '\0';
+        return folder_name;
+    }
+    else {
+        return last_folder;
+    }
+}
+
 static void open_outputfolder_chooser(GtkWidget *widget, gpointer data) 
 {
     GtkWidget* chooser = gtk_file_chooser_dialog_new(
@@ -737,9 +754,7 @@ static void open_outputfolder_chooser(GtkWidget *widget, gpointer data)
     if (gtk_dialog_run (GTK_DIALOG(chooser)) == GTK_RESPONSE_ACCEPT) {
         bimp_output_folder = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(chooser))->data;
         
-        char* last_folder = g_strrstr(bimp_output_folder, FILE_SEPARATOR_STR) + 1;
-        if (last_folder == NULL || strlen(last_folder) == 0) last_folder = bimp_output_folder;
-        gtk_button_set_label(GTK_BUTTON(button_outfolder), last_folder);
+        gtk_button_set_label(GTK_BUTTON(button_outfolder), get_outputfolder_name());
         
         gtk_widget_set_tooltip_text(button_outfolder, bimp_output_folder);
     }
@@ -750,10 +765,7 @@ static void open_outputfolder_chooser(GtkWidget *widget, gpointer data)
 static void set_source_output_folder(GtkWidget *widget, gpointer data) 
 {
     if (selected_source_folder != NULL) {
-        char* last_folder = g_strrstr(selected_source_folder, FILE_SEPARATOR_STR) + 1;
-        if (last_folder == NULL || strlen(last_folder) == 0) last_folder = selected_source_folder;
-        
-        gtk_button_set_label(GTK_BUTTON(button_outfolder), last_folder);
+        gtk_button_set_label(GTK_BUTTON(button_outfolder), get_outputfolder_name());
         gtk_widget_set_tooltip_text(button_outfolder, selected_source_folder);
         bimp_output_folder = g_strdup(selected_source_folder);
     }
