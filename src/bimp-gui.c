@@ -97,6 +97,7 @@ void bimp_show_gui()
     
     gimp_window_set_transient (GTK_WINDOW(bimp_window_main));
     gtk_window_set_position(GTK_WINDOW(bimp_window_main), GTK_WIN_POS_CENTER);
+    gtk_window_set_default_size(GTK_WINDOW(bimp_window_main), (int)(PREVIEW_IMG_W * 2.5), SEQ_BUTTON_H + PREVIEW_IMG_H + 160);
     gtk_container_set_border_width(GTK_CONTAINER(bimp_window_main), 5);
     
     // Forces the visualization of label AND images on buttons (especially for Windows)
