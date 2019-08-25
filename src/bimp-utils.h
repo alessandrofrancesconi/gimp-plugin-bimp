@@ -20,6 +20,7 @@ time_t get_modification_time(char*);
 int set_modification_time(char*, time_t);
 GdkPixbuf* pixbuf_new_from_resource(const char*);
 GtkWidget* image_new_from_resource(const char*);
+GtkWidget* image_new_from_resource_scaled(const char*, GdkWindow*);
 
 #if defined _WIN32
 #define FILE_SEPARATOR '\\'

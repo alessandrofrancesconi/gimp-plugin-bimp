@@ -24,9 +24,8 @@ typedef enum manipulation_type {
 
 typedef enum resize_mode {
     RESIZE_PERCENT = 0,
-    RESIZE_PIXEL_BOTH,
-    RESIZE_PIXEL_WIDTH,
-    RESIZE_PIXEL_HEIGHT,
+    RESIZE_PIXEL,
+    RESIZE_DISABLE,
     RESIZE_END
 } resize_mode;
 
@@ -94,6 +93,7 @@ static const char* format_type_string[][2] = {
     {"tiff", "Tagged Image File Format (.tiff)"}        /* FORMAT_TIFF */
 };
 
+// First two bits = column, second two bits = row
 typedef enum watermark_position {
     WM_POS_TL = 0,
     WM_POS_TC,
@@ -131,7 +131,8 @@ typedef struct manip_resize_set {
     gdouble new_h_pc;
     gint new_w_px;
     gint new_h_px;
-    resize_mode resize_mode;
+    resize_mode resize_mode_width;
+    resize_mode resize_mode_height;
     stretch_mode stretch_mode;
     GdkColor padding_color;
     guint16 padding_color_alpha;

@@ -2,3 +2,5 @@
 *.exe
 *.db
 .vscode
+
+bin/bimp

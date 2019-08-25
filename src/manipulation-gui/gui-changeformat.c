@@ -5,8 +5,8 @@
 #include "../plugin-intl.h"
 
 static void update_frame_params(GtkComboBox*, changeformat_settings);
-static void adv_expanded (GtkExpander *, gpointer);
-static void increase_dialog_height(int);
+static void adv_expanded (GtkWidget*, GtkRequisition*, gpointer);
+static void update_window_size();
 
 GtkWidget *frame_params, *inner_widget;
 GtkWidget *combo_format, *scale_quality, *scale_smoothing, *check_interlace, *scale_compression, *check_baseline;
@@ -27,15 +27,12 @@ GtkWidget* bimp_changeformat_gui_new(changeformat_settings settings, GtkWidget* 
     gui = gtk_vbox_new(FALSE, 5);
     
     combo_format = gtk_combo_box_new_text();
-    gtk_widget_set_size_request (combo_format, COMBO_FORMAT_W, COMBO_H);
-    int i;
-    for(i = 0; i < FORMAT_END; i++) {
+    for(int i = 0; i < FORMAT_END; i++) {
         gtk_combo_box_append_text(GTK_COMBO_BOX(combo_format), format_type_string[i][1]);
     }
     gtk_combo_box_set_active(GTK_COMBO_BOX(combo_format), settings->format);
     
     frame_params = gtk_frame_new(_("Format settings"));
-    gtk_widget_set_size_request (frame_params, FRAME_PARAMS_W, FRAME_PARAMS_H);
     
     gtk_box_pack_start(GTK_BOX(gui), combo_format, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(gui), frame_params, FALSE, FALSE, 0);
@@ -49,12 +46,12 @@ GtkWidget* bimp_changeformat_gui_new(changeformat_settings settings, GtkWidget* 
 
 static void update_frame_params(GtkComboBox *widget, changeformat_settings settings) 
 {
-    increase_dialog_height(0);
+    update_window_size();
     format_type selected_format = (format_type)gtk_combo_box_get_active(widget);
     
+    inner_widget = gtk_vbox_new(FALSE, 5);
+    gtk_container_set_border_width(GTK_CONTAINER(inner_widget), 8);
     if (selected_format == FORMAT_GIF) {
-        inner_widget = gtk_vbox_new(FALSE, 5);
-        gtk_container_set_border_width(GTK_CONTAINER(inner_widget), 8);
         check_interlace = gtk_check_button_new_with_label(_("Interlaced"));
         
         if (selected_format == settings->format) {
@@ -71,25 +68,18 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
         GtkWidget *hbox_quality, *hbox_smoothing, *hbox_checks, *hbox_comment, *hbox_markers, *hbox_subsampling, *hbox_dct;
         GtkWidget *vbox_advanced, *label_quality, *label_smoothing, *label_markers, *label_comment, *label_subsampling, *label_dct, *text_comment;
         
-        inner_widget = gtk_vbox_new(FALSE, 5);
-        gtk_container_set_border_width(GTK_CONTAINER(inner_widget), 8);
-        
         hbox_quality = gtk_hbox_new(FALSE, 5);
-        label_quality = gtk_label_new(_("Quality"));
-        gtk_widget_set_size_request (label_quality, 100, LABEL_H);
+        label_quality = gtk_label_new(g_strconcat(_("Quality"), ":", NULL));
         gtk_misc_set_alignment(GTK_MISC(label_quality), 0.5, 0.8);
         scale_quality = gtk_hscale_new_with_range(0, 100, 1);
-        gtk_widget_set_size_request (scale_quality, 160, SCALE_H);
         
         expander_advanced = gtk_expander_new(_("Advanced params"));
         vbox_advanced = gtk_vbox_new(FALSE, 5);
         
         hbox_smoothing = gtk_hbox_new(FALSE, 5);
-        label_smoothing = gtk_label_new(_("Smoothing"));
-        gtk_widget_set_size_request (label_smoothing, 100, LABEL_H);
+        label_smoothing = gtk_label_new(g_strconcat(_("Smoothing"), ":", NULL));
         gtk_misc_set_alignment(GTK_MISC(label_smoothing), 0.5, 0.8);
         scale_smoothing = gtk_hscale_new_with_range(0, 1, 0.01);
-        gtk_widget_set_size_request (scale_smoothing, 160, SCALE_H);
         
         hbox_checks = gtk_hbox_new(FALSE, 5);
         check_entrophy = gtk_check_button_new_with_label(_("Optimize"));
@@ -97,22 +87,17 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
         check_baseline = gtk_check_button_new_with_label(_("Save baseline"));
         
         hbox_comment = gtk_hbox_new(FALSE, 5);
-        label_comment = gtk_label_new(g_strconcat(_("Comment"), ": ", NULL));
-        gtk_widget_set_size_request (label_comment, 100, LABEL_H);
+        label_comment = gtk_label_new(g_strconcat(_("Comment"), ":", NULL));
         text_comment =  gtk_text_view_new();
         buffer_comment = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_comment));
-        gtk_widget_set_size_request (text_comment, 160, TEXT_H);
         
         hbox_markers = gtk_hbox_new(FALSE, 5);
-        label_markers = gtk_label_new(g_strconcat(_("Markers rows"), ": ", NULL));
-        gtk_widget_set_size_request (label_markers, 100, LABEL_H);
+        label_markers = gtk_label_new(g_strconcat(_("Markers rows"), ":", NULL));
         spin_markers = gtk_spin_button_new(NULL, 1, 0);
         
         hbox_subsampling = gtk_hbox_new(FALSE, 5);
-        label_subsampling = gtk_label_new(g_strconcat(_("Subsampling"), ": ", NULL));
-        gtk_widget_set_size_request (label_subsampling, 100, LABEL_H);
+        label_subsampling = gtk_label_new(g_strconcat(_("Subsampling"), ":", NULL));
         combo_subsampling = gtk_combo_box_new_text();
-        gtk_widget_set_size_request (combo_subsampling, 180, COMBO_H);
         gtk_combo_box_append_text(GTK_COMBO_BOX(combo_subsampling), g_strconcat("2x2, 1x1, 1x1 (", _("Small size"), ")", NULL));
         gtk_combo_box_append_text(GTK_COMBO_BOX(combo_subsampling), "2x1, 1x1, 1x1 (4:2:2)");
         gtk_combo_box_append_text(GTK_COMBO_BOX(combo_subsampling), g_strconcat("1x1, 1x1, 1x1 (", _("Quality"), ")", NULL));
@@ -120,10 +105,8 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
         
         
         hbox_dct = gtk_hbox_new(FALSE, 5);
-        label_dct = gtk_label_new(g_strconcat(_("DCT algorithm"), ": ", NULL));
-        gtk_widget_set_size_request (label_dct, 100, LABEL_H);
+        label_dct = gtk_label_new(g_strconcat(_("DCT algorithm"), ":", NULL));
         combo_dct = gtk_combo_box_new_text();
-        gtk_widget_set_size_request (combo_dct, 150, COMBO_H);
         gtk_combo_box_append_text(GTK_COMBO_BOX(combo_dct), _("Integer"));
         gtk_combo_box_append_text(GTK_COMBO_BOX(combo_dct), _("Fast integer"));
         gtk_combo_box_append_text(GTK_COMBO_BOX(combo_dct), _("Float"));
@@ -162,14 +145,14 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
         }
         
         gtk_box_pack_start(GTK_BOX(hbox_quality), label_quality, FALSE, FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(hbox_quality), scale_quality, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(hbox_quality), scale_quality, TRUE, TRUE, 0);
         gtk_box_pack_start(GTK_BOX(inner_widget), hbox_quality, FALSE, FALSE, 0);
         
         gtk_box_pack_start(GTK_BOX(inner_widget), expander_advanced, FALSE, FALSE, 0);
         
         gtk_box_pack_start(GTK_BOX(hbox_smoothing), label_smoothing, FALSE, FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(hbox_smoothing), scale_smoothing, FALSE, FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(vbox_advanced), hbox_smoothing, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(hbox_smoothing), scale_smoothing, TRUE, TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(vbox_advanced), hbox_smoothing, TRUE, TRUE, 0);
         
         gtk_box_pack_start(GTK_BOX(hbox_checks), check_entrophy, FALSE, FALSE, 0);
         gtk_box_pack_start(GTK_BOX(hbox_checks), check_progressive, FALSE, FALSE, 0);
@@ -177,8 +160,8 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
         gtk_box_pack_start(GTK_BOX(vbox_advanced), hbox_checks, FALSE, FALSE, 0);
                 
         gtk_box_pack_start(GTK_BOX(hbox_comment), label_comment, FALSE, FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(hbox_comment), text_comment, FALSE, FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(vbox_advanced), hbox_comment, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(hbox_comment), text_comment, TRUE, TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(vbox_advanced), hbox_comment, TRUE, TRUE, 0);
         
         gtk_box_pack_start(GTK_BOX(hbox_markers), label_markers, FALSE, FALSE, 0);
         gtk_box_pack_start(GTK_BOX(hbox_markers), spin_markers, FALSE, FALSE, 0);
@@ -194,21 +177,17 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
         
         gtk_container_add (GTK_CONTAINER(expander_advanced), vbox_advanced);
         
-        g_signal_connect(G_OBJECT(expander_advanced), "activate", G_CALLBACK(adv_expanded), combo_format);
+        g_signal_connect(G_OBJECT(expander_advanced), "size-request", G_CALLBACK(adv_expanded), combo_format);
     }
     /*else if (selected_format == FORMAT_HEIF) {
         GtkWidget *hbox_quality, *check_lossless, *label_quality;
 
-        inner_widget = gtk_vbox_new(FALSE, 5);
-        gtk_container_set_border_width(GTK_CONTAINER(inner_widget), 8);
         check_lossless = gtk_check_button_new_with_label(_("Lossless"));
         
         hbox_quality = gtk_hbox_new(FALSE, 5);
-        label_quality = gtk_label_new(_("Quality"));
-        gtk_widget_set_size_request (label_quality, 100, LABEL_H);
+        label_quality = gtk_label_new(g_strconcat(_("Quality"), ":", NULL));
         gtk_misc_set_alignment(GTK_MISC(label_quality), 0.5, 0.8);
         scale_quality = gtk_hscale_new_with_range(0, 100, 1);
-        gtk_widget_set_size_request (scale_quality, 160, SCALE_H);
         
         if (selected_format == settings->format) {
             format_params_heif settings_heif = (format_params_heif)(settings->params);
@@ -225,22 +204,18 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
         gtk_box_pack_start(GTK_BOX(inner_widget), check_lossless, FALSE, FALSE, 0);
 
         gtk_box_pack_start(GTK_BOX(hbox_quality), label_quality, FALSE, FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(hbox_quality), scale_quality, FALSE, FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(inner_widget), hbox_quality, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(hbox_quality), scale_quality, TRUE, TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(inner_widget), hbox_quality, TRUE, TRUE, 0);
     }*/ 
     else if (selected_format == FORMAT_PNG) {
         GtkWidget *hbox_compression, *label_compression;
         GtkWidget *vbox_advanced;
         
-        inner_widget = gtk_vbox_new(FALSE, 5);
-        gtk_container_set_border_width(GTK_CONTAINER(inner_widget), 8);
         check_interlace = gtk_check_button_new_with_label(_("Interlace (Adam7)"));
         hbox_compression = gtk_hbox_new(FALSE, 5);
-        label_compression = gtk_label_new(_("Compression"));
-        gtk_widget_set_size_request (label_compression, 100, LABEL_H);
+        label_compression = gtk_label_new(g_strconcat(_("Compression"), ":", NULL));
         gtk_misc_set_alignment(GTK_MISC(label_compression), 0.5, 0.8);
         scale_compression = gtk_hscale_new_with_range(0, 9, 1);
-        gtk_widget_set_size_request (scale_compression, 100, SCALE_H);
         
         expander_advanced = gtk_expander_new(_("Advanced params"));
         vbox_advanced = gtk_vbox_new(FALSE, 5);
@@ -287,26 +262,22 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
         
         gtk_box_pack_start(GTK_BOX(inner_widget), check_interlace, FALSE, FALSE, 0);
         gtk_box_pack_start(GTK_BOX(hbox_compression), label_compression, FALSE, FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(hbox_compression), scale_compression, FALSE, FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(inner_widget), hbox_compression, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(hbox_compression), scale_compression, TRUE, TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(inner_widget), hbox_compression, TRUE, TRUE, 0);
         gtk_box_pack_start(GTK_BOX(inner_widget), expander_advanced, FALSE, FALSE, 0);
         gtk_container_add (GTK_CONTAINER(expander_advanced), vbox_advanced);
         
-        g_signal_connect(G_OBJECT(expander_advanced), "activate", G_CALLBACK(adv_expanded), combo_format);
+        g_signal_connect(G_OBJECT(expander_advanced), "size-request", G_CALLBACK(adv_expanded), combo_format);
     }
-    else if (selected_format == FORMAT_TGA) {    
+    else if (selected_format == FORMAT_TGA) {
         GtkWidget *hbox_origin, *label_origin;
-            
-        inner_widget = gtk_vbox_new(FALSE, 5);
-        gtk_container_set_border_width(GTK_CONTAINER(inner_widget), 8);
+        
         check_rle = gtk_check_button_new_with_label(_("RLE compression"));
         
         hbox_origin = gtk_hbox_new(FALSE, 5);
-        label_origin = gtk_label_new(g_strconcat(_("Image origin"), ": ", NULL));
-        gtk_widget_set_size_request (label_origin, 100, LABEL_H);
+        label_origin = gtk_label_new(g_strconcat(_("Image origin"), ":", NULL));
         
         combo_origin = gtk_combo_box_new_text();
-        gtk_widget_set_size_request (combo_origin, 100, COMBO_H);
         gtk_combo_box_append_text(GTK_COMBO_BOX(combo_origin), _("Top-left"));
         gtk_combo_box_append_text(GTK_COMBO_BOX(combo_origin), _("Bottom-left"));
         
@@ -321,22 +292,18 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
         }
         
         gtk_box_pack_start(GTK_BOX(hbox_origin), label_origin, FALSE, FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(hbox_origin), combo_origin, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(hbox_origin), combo_origin, TRUE, TRUE, 0);
         
         gtk_box_pack_start(GTK_BOX(inner_widget), check_rle, FALSE, FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(inner_widget), hbox_origin, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(inner_widget), hbox_origin, TRUE, TRUE, 0);
     }
     else if (selected_format == FORMAT_TIFF) {
         GtkWidget *hbox_compression, *label_compression;
         
-        inner_widget = gtk_vbox_new(FALSE, 5);
-        gtk_container_set_border_width(GTK_CONTAINER(inner_widget), 8);
         hbox_compression = gtk_hbox_new(FALSE, 5);
-        label_compression = gtk_label_new(_("Compression"));
-        gtk_widget_set_size_request (label_compression, 80, LABEL_H);
+        label_compression = gtk_label_new(g_strconcat(_("Compression"), ":", NULL));
         gtk_misc_set_alignment(GTK_MISC(label_compression), 0.5, 0.5);
         combo_compression = gtk_combo_box_new_text();
-        gtk_widget_set_size_request (combo_compression, 130, COMBO_H);
         gtk_combo_box_append_text(GTK_COMBO_BOX(combo_compression), _("None"));
         gtk_combo_box_append_text(GTK_COMBO_BOX(combo_compression), _("LZW"));
         gtk_combo_box_append_text(GTK_COMBO_BOX(combo_compression), _("Pack bits"));
@@ -354,11 +321,15 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
         }
         
         gtk_box_pack_start(GTK_BOX(hbox_compression), label_compression, FALSE, FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(hbox_compression), combo_compression, FALSE, FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(inner_widget), hbox_compression, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(hbox_compression), combo_compression, TRUE, TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(inner_widget), hbox_compression, TRUE, TRUE, 0);
     }
     else {
-        inner_widget = gtk_label_new(_("This format has no params"));
+        GtkWidget *label_no_param ;
+        
+        label_no_param = gtk_label_new(_("This format has no params"));
+        
+        gtk_box_pack_start(GTK_BOX(inner_widget), label_no_param, FALSE, FALSE, 0);
     }
     
     if (gtk_bin_get_child(GTK_BIN(frame_params)) != NULL) {
@@ -368,24 +339,13 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
     gtk_widget_show_all(frame_params);
 }
 
-static void adv_expanded (GtkExpander *expander, gpointer combo)
+static void adv_expanded (GtkWidget *expander, GtkRequisition *requisition, gpointer data)
 {
-    if (!gtk_expander_get_expanded (GTK_EXPANDER(expander))) {
-        if (gtk_combo_box_get_active(GTK_COMBO_BOX(combo)) == FORMAT_JPEG) {
-            increase_dialog_height(200);
-        }
-        else if (gtk_combo_box_get_active(GTK_COMBO_BOX(combo)) == FORMAT_PNG) {
-            increase_dialog_height(180);
-        }
-    }
-    else {
-        increase_dialog_height(0);
-    }
+    update_window_size();
 }
 
-static void increase_dialog_height(int inc) {
-    gtk_widget_set_size_request (parentwin, CHANGEFORMAT_WINDOW_W, CHANGEFORMAT_WINDOW_H + inc);
-    gtk_widget_set_size_request (frame_params, FRAME_PARAMS_W, FRAME_PARAMS_H + inc);
+static void update_window_size() {
+    gtk_window_resize(GTK_WINDOW(parentwin), 1, 1);
 }
 
 void bimp_changeformat_save(changeformat_settings orig_settings) 

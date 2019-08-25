@@ -22,13 +22,11 @@ GtkWidget* bimp_fliprotate_gui_new(fliprotate_settings settings)
     align_flip = gtk_alignment_new(0.5, 0, 0, 0);
     
     button_flipH = gtk_toggle_button_new_with_label(_("Horizontally"));
-    gtk_widget_set_size_request (button_flipH, BUTTON_FLIP_W, BUTTON_FLIP_H);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_flipH), settings->flip_h);
     gtk_button_set_image(GTK_BUTTON(button_flipH), image_new_from_resource("/gimp/plugin/bimp/icons/stock-flip-horizontal.png"));
     gtk_button_set_image_position(GTK_BUTTON(button_flipH), GTK_POS_TOP);
     
     button_flipV = gtk_toggle_button_new_with_label(_("Vertically"));
-    gtk_widget_set_size_request (button_flipV, BUTTON_FLIP_W, BUTTON_FLIP_H);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button_flipV), settings->flip_v);
     gtk_button_set_image(GTK_BUTTON(button_flipV), image_new_from_resource("/gimp/plugin/bimp/icons/stock-flip-vertical.png"));
     gtk_button_set_image_position(GTK_BUTTON(button_flipV), GTK_POS_TOP);

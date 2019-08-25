@@ -33,6 +33,7 @@ static void remove_all_input_files(GtkWidget*, gpointer);
 static void select_filename (GtkTreeView*, gpointer);
 static void update_selection(char*);
 static void show_preview(GtkTreeView*, gpointer);
+static char* get_outputfolder_name();
 static void open_outputfolder_chooser(GtkWidget*, gpointer);
 static void set_source_output_folder(GtkWidget*, gpointer);
 static void popmenus_init(void);
@@ -95,8 +96,6 @@ void bimp_show_gui()
     );
     
     gimp_window_set_transient (GTK_WINDOW(bimp_window_main));
-    gtk_widget_set_size_request (bimp_window_main, MAIN_WINDOW_W, MAIN_WINDOW_H);
-    gtk_window_set_resizable (GTK_WINDOW(bimp_window_main), FALSE);
     gtk_window_set_position(GTK_WINDOW(bimp_window_main), GTK_WIN_POS_CENTER);
     gtk_container_set_border_width(GTK_CONTAINER(bimp_window_main), 5);
     
@@ -109,11 +108,11 @@ void bimp_show_gui()
     panel_options = option_panel_new();
     
     progressbar_visible = gtk_progress_bar_new();
-    gtk_widget_set_size_request (progressbar_visible, PROGRESSBAR_W, PROGRESSBAR_H);
+    gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbar_visible), " ");
     progressbar_data = progressbar_init_hidden();
     
     gtk_box_pack_start(GTK_BOX(vbox_main), panel_sequence, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox_main), panel_options, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox_main), panel_options, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(vbox_main), progressbar_visible, FALSE, FALSE, 0);
 
     gtk_container_add (GTK_CONTAINER (GTK_DIALOG(bimp_window_main)->vbox), vbox_main);
@@ -160,7 +159,6 @@ static GtkWidget* sequence_panel_new()
     GtkWidget *panel;
     
     panel = gtk_frame_new(_("Manipulation set"));
-    gtk_widget_set_size_request (panel, SEQ_PANEL_W, SEQ_PANEL_H);
     
     scroll_sequence = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll_sequence), GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER);
@@ -180,9 +178,7 @@ static GtkWidget* sequence_panel_new()
 /* builds and returns the panel with file list and options */
 static GtkWidget* option_panel_new()
 {
-    GtkWidget *panel, *hbox;
-    GtkWidget *hbox_buttons;
-    GtkWidget *vbox_input;
+    GtkWidget *panel, *table;
     GtkWidget *scroll_input;
     GtkWidget *button_add, *button_remove;
     
@@ -190,53 +186,39 @@ static GtkWidget* option_panel_new()
     GtkWidget *label_chooser;
     
     panel = gtk_frame_new(_("Input files and options"));
-    gtk_widget_set_size_request (panel, OPTION_PANEL_W, OPTION_PANEL_H);
-    hbox = gtk_hbox_new(FALSE, 5);
-    
-    /* Sub-panel for input file listing and buttons */
-    vbox_input = gtk_vbox_new(FALSE, 1);
-    gtk_widget_set_size_request(vbox_input, INPUT_PANEL_W, INPUT_PANEL_H);
+    table = gtk_table_new(2, 3, FALSE);
+    gtk_table_set_row_spacings(GTK_TABLE(table), 5);
+    gtk_table_set_col_spacings(GTK_TABLE(table), 5);
     
     /* Sub-sub-panel for input file listing */
     scroll_input = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll_input), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_widget_set_size_request(scroll_input, FILE_LIST_PANEL_W, FILE_LIST_PANEL_H);
     
     treeview_files = gtk_tree_view_new();
     gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(treeview_files), FALSE);
     gtk_tree_selection_set_mode (gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview_files)), GTK_SELECTION_MULTIPLE);
     
-    /* Sub-panel for input file buttons */
-    
-    hbox_buttons = gtk_hbox_new(FALSE, 1);
-    gtk_widget_set_size_request(hbox_buttons, FILE_LIST_BUTTONS_PANEL_W, FILE_LIST_BUTTONS_PANEL_H);
-    
     button_add = gtk_button_new_with_label(_("Add images"));
-    gtk_widget_set_size_request(button_add, FILE_LIST_BUTTON_W, FILE_LIST_BUTTON_H);
     button_remove = gtk_button_new_with_label(_("Remove images"));
-    gtk_widget_set_size_request(button_remove, FILE_LIST_BUTTON_W, FILE_LIST_BUTTON_H);
     
     /* Sub-panel for options */
     vbox_useroptions = gtk_vbox_new(FALSE, 3);
-    gtk_widget_set_size_request(vbox_useroptions, USEROPTIONS_PANEL_W, USEROPTIONS_PANEL_H);
     
     hbox_outfolder = gtk_hbox_new(FALSE, 3);
-    label_chooser = gtk_label_new(_("Output folder"));
+    label_chooser = gtk_label_new(g_strconcat(_("Output folder"), ":", NULL));
+    gtk_misc_set_alignment(GTK_MISC(label_chooser), 0, .5);
     
     bimp_output_folder = get_user_dir();
     
-    char* last_folder = g_strrstr(bimp_output_folder, FILE_SEPARATOR_STR) + 1;
-    if (last_folder == NULL || strlen(last_folder) == 0) last_folder = bimp_output_folder;
-    button_outfolder = gtk_button_new_with_label(last_folder);
+    
+    button_outfolder = gtk_button_new_with_label(get_outputfolder_name());
     
     gtk_widget_set_tooltip_text (button_outfolder, bimp_output_folder);
-    gtk_widget_set_size_request(button_outfolder, 175, 30);
     
     button_samefolder = gtk_button_new();
     GtkWidget* samefolder_icon = gtk_image_new_from_stock(GTK_STOCK_UNDO, GTK_ICON_SIZE_BUTTON);
     gtk_button_set_image(GTK_BUTTON(button_samefolder), samefolder_icon);
     gtk_widget_set_tooltip_text (button_samefolder, _("Use the selected file's location as the output"));
-    gtk_widget_set_size_request(button_samefolder, 30, 30);
     
     bimp_opt_alertoverwrite = BIMP_ASK_OVERWRITE; 
     //check_alertoverwrite = gtk_check_button_new_with_label(_("Alert when overwriting existing files"));
@@ -256,34 +238,32 @@ static GtkWidget* option_panel_new()
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_keepdates), bimp_opt_keepdates);
     
     button_preview = gtk_button_new();
-    gtk_widget_set_size_request(button_preview, FILE_PREVIEW_W, FILE_PREVIEW_H);
     gtk_button_set_image_position (GTK_BUTTON(button_preview), GTK_POS_TOP);
     gtk_button_set_label(GTK_BUTTON(button_preview), _("Click for preview"));
     
     /* All together */
-    gtk_box_pack_start(GTK_BOX(hbox_buttons), button_add, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox_buttons), button_remove, FALSE, FALSE, 0);
     
     gtk_container_add (GTK_CONTAINER(scroll_input), treeview_files);
-        
-    gtk_box_pack_start(GTK_BOX(vbox_input), scroll_input, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox_input), hbox_buttons, FALSE, FALSE, 0);
     
-    gtk_box_pack_start(GTK_BOX(hbox_outfolder), label_chooser, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox_useroptions), label_chooser, FALSE, FALSE, 0);
+    
     gtk_box_pack_start(GTK_BOX(hbox_outfolder), button_outfolder, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(hbox_outfolder), button_samefolder, FALSE, FALSE, 0);
-    
     gtk_box_pack_start(GTK_BOX(vbox_useroptions), hbox_outfolder, FALSE, FALSE, 0);
+    
     //gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_alertoverwrite, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_keepfolderhierarchy, FALSE, FALSE, 0);
     // TODO: delete on done? gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_deleteondone, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(vbox_useroptions), check_keepdates, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(vbox_useroptions), button_preview, FALSE, FALSE, 2);
     
-    gtk_box_pack_start(GTK_BOX(hbox), vbox_input, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox), vbox_useroptions, FALSE, FALSE, 10);
+    gtk_table_attach_defaults(GTK_TABLE(table), scroll_input, 0, 2, 0, 1);
+    gtk_table_attach(GTK_TABLE(table), button_add, 0, 1, 1, 2, GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
+    gtk_table_attach(GTK_TABLE(table), button_remove, 1, 2, 1, 2, GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
     
-    gtk_container_add(GTK_CONTAINER(panel), hbox);
+    gtk_table_attach(GTK_TABLE(table), vbox_useroptions, 2, 3, 0, 2, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
+    
+    gtk_container_add(GTK_CONTAINER(panel), table);
 
     g_signal_connect(G_OBJECT(button_add), "clicked", G_CALLBACK(open_addfiles_popupmenu), NULL);
     g_signal_connect(G_OBJECT(button_remove), "clicked", G_CALLBACK(open_removefiles_popupmenu), NULL);
@@ -478,7 +458,7 @@ static void show_preview (GtkTreeView *tree_view, gpointer data)
         bimp_show_error_dialog(_("Can't show a preview because the manipulations set is empty"), bimp_window_main);
     } else {
         GtkWidget *dialog_preview;
-        GtkWidget *vbox, *hbox;
+        GtkWidget *vbox, *hbox, *align;
         GtkWidget *label_descr;
         GdkPixbuf *pixbuf_orig, *pixbuf_final; 
         GtkWidget *image_orig, *image_final;
@@ -509,13 +489,17 @@ static void show_preview (GtkTreeView *tree_view, gpointer data)
             GTK_STOCK_CLOSE,
             GTK_RESPONSE_CLOSE, NULL
         );
-        gtk_widget_set_size_request (dialog_preview, PREVIEW_WINDOW_W, PREVIEW_WINDOW_H);
+        //gtk_widget_set_size_request (dialog_preview, PREVIEW_WINDOW_W, PREVIEW_WINDOW_H);
         gtk_window_set_resizable (GTK_WINDOW(dialog_preview), FALSE);
         gtk_window_set_position(GTK_WINDOW(dialog_preview), GTK_WIN_POS_CENTER);
         gtk_container_set_border_width(GTK_CONTAINER(dialog_preview), 5);
         
         vbox = gtk_vbox_new(FALSE, 10);
         label_descr = gtk_label_new(_("This is how the selected image will look like after the batch process"));
+        gtk_label_set_line_wrap (GTK_LABEL(label_descr), TRUE);
+        gtk_label_set_justify(GTK_LABEL(label_descr), GTK_JUSTIFY_CENTER);
+        
+        align = gtk_alignment_new(0.5, 0.5, 0, 0);
         
         hbox = gtk_hbox_new(FALSE, 10);
         image_orig = gtk_image_new_from_pixbuf(pixbuf_orig);
@@ -525,9 +509,11 @@ static void show_preview (GtkTreeView *tree_view, gpointer data)
         gtk_box_pack_start(GTK_BOX(hbox), image_orig, FALSE, FALSE, 0);
         gtk_box_pack_start(GTK_BOX(hbox), image_forward, FALSE, FALSE, 0);
         gtk_box_pack_start(GTK_BOX(hbox), image_final, FALSE, FALSE, 0);
+        gtk_misc_set_alignment(GTK_MISC(hbox), 0, .5);
         
         gtk_box_pack_start(GTK_BOX(vbox), label_descr, FALSE, FALSE, 7);
-        gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
+        gtk_container_add(GTK_CONTAINER(align), hbox);
+        gtk_box_pack_start(GTK_BOX(vbox), align, FALSE, FALSE, 0);
         
         gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog_preview)->vbox), vbox);
         gtk_widget_show_all(dialog_preview);
@@ -736,6 +722,23 @@ static void open_folder_chooser(GtkWidget *widget, gpointer data)
     gtk_widget_destroy (folder_chooser);
 }
 
+static char* get_outputfolder_name()
+{
+    char* last_folder = g_strrstr(bimp_output_folder, FILE_SEPARATOR_STR) + 1;
+    if (last_folder == NULL || strlen(last_folder) == 0) last_folder = bimp_output_folder;
+    char *folder_name = malloc(25);
+    if (strlen(last_folder) > 24) {
+        char *folder_name = malloc(25);
+        memcpy(folder_name, last_folder, 21);
+        folder_name[21] = folder_name[22] = folder_name[23] = '.';
+        folder_name[24] = '\0';
+        return folder_name;
+    }
+    else {
+        return last_folder;
+    }
+}
+
 static void open_outputfolder_chooser(GtkWidget *widget, gpointer data) 
 {
     GtkWidget* chooser = gtk_file_chooser_dialog_new(
@@ -751,9 +754,7 @@ static void open_outputfolder_chooser(GtkWidget *widget, gpointer data)
     if (gtk_dialog_run (GTK_DIALOG(chooser)) == GTK_RESPONSE_ACCEPT) {
         bimp_output_folder = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(chooser))->data;
         
-        char* last_folder = g_strrstr(bimp_output_folder, FILE_SEPARATOR_STR) + 1;
-        if (last_folder == NULL || strlen(last_folder) == 0) last_folder = bimp_output_folder;
-        gtk_button_set_label(GTK_BUTTON(button_outfolder), last_folder);
+        gtk_button_set_label(GTK_BUTTON(button_outfolder), get_outputfolder_name());
         
         gtk_widget_set_tooltip_text(button_outfolder, bimp_output_folder);
     }
@@ -764,10 +765,7 @@ static void open_outputfolder_chooser(GtkWidget *widget, gpointer data)
 static void set_source_output_folder(GtkWidget *widget, gpointer data) 
 {
     if (selected_source_folder != NULL) {
-        char* last_folder = g_strrstr(selected_source_folder, FILE_SEPARATOR_STR) + 1;
-        if (last_folder == NULL || strlen(last_folder) == 0) last_folder = selected_source_folder;
-        
-        gtk_button_set_label(GTK_BUTTON(button_outfolder), last_folder);
+        gtk_button_set_label(GTK_BUTTON(button_outfolder), get_outputfolder_name());
         gtk_widget_set_tooltip_text(button_outfolder, selected_source_folder);
         bimp_output_folder = g_strdup(selected_source_folder);
     }
@@ -1111,6 +1109,9 @@ void bimp_progress_bar_set(double fraction, char* text) {
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressbar_visible), fraction);
     if (text != NULL) {
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbar_visible), text);
+    }
+    else {
+        gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbar_visible), " ");
     }
 }
 

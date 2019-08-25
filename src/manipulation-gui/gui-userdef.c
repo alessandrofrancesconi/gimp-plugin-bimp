@@ -34,7 +34,7 @@ enum
 
 GtkWidget* bimp_userdef_gui_new(userdef_settings settings, GtkWidget *parent)
 {
-    GtkWidget *gui, *hbox_chooser, *vbox_list, *hbox_search;
+    GtkWidget *gui, *table_chooser;
     GtkWidget *scroll_procedures;
     GtkWidget *label_help, *label_search;
     GtkWidget *entry_search;
@@ -44,23 +44,21 @@ GtkWidget* bimp_userdef_gui_new(userdef_settings settings, GtkWidget *parent)
     gui = gtk_vbox_new(FALSE, 5);
         
     label_help = gtk_label_new(NULL);
-    gtk_widget_set_size_request (label_help, LABEL_HELP_W, LABEL_HELP_H);
     gtk_label_set_markup (GTK_LABEL(label_help), 
         _("Choose a supported GIMP procedure from the list on the left\nand define its parameters on the right.")
     );
     gtk_label_set_justify(GTK_LABEL(label_help), GTK_JUSTIFY_CENTER);
     
-    hbox_chooser = gtk_hbox_new(FALSE, 5);
-    vbox_list = gtk_vbox_new(FALSE, 5);
+    table_chooser = gtk_table_new(2, 3, FALSE);
+    gtk_table_set_row_spacings(GTK_TABLE(table_chooser), 5);
+    gtk_table_set_col_spacings(GTK_TABLE(table_chooser), 5);
     
     scroll_procedures = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll_procedures), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_widget_set_size_request (scroll_procedures, PROCLIST_W, PROCLIST_H);
     
-    hbox_search = gtk_hbox_new(FALSE, 5);
-    label_search = gtk_label_new(g_strconcat(_("Search"), ": ", NULL));
+    label_search = gtk_label_new(g_strconcat(_("Search"), ":", NULL));
     entry_search = gtk_entry_new();
-    gtk_widget_set_size_request (entry_search, SEARCH_W, SEARCH_H);
     
     treeview_procedures = gtk_tree_view_new();
     gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(treeview_procedures), FALSE);
@@ -71,20 +69,17 @@ GtkWidget* bimp_userdef_gui_new(userdef_settings settings, GtkWidget *parent)
     
     scroll_procparam = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll_procparam), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_widget_set_size_request (scroll_procparam, PROCPARAM_W, PROCPARAM_H);
     
-    gtk_box_pack_start(GTK_BOX(hbox_search), label_search, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox_search), entry_search, FALSE, FALSE, 0);
+    gtk_table_attach(GTK_TABLE(table_chooser), label_search, 0, 1, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
+    gtk_table_attach(GTK_TABLE(table_chooser), entry_search, 1, 2, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
     
-    gtk_box_pack_start(GTK_BOX(vbox_list), hbox_search, FALSE, FALSE, 0);
-    gtk_container_add (GTK_CONTAINER(scroll_procedures), treeview_procedures);
-    gtk_box_pack_start(GTK_BOX(vbox_list), scroll_procedures, FALSE, FALSE, 0);
+    gtk_table_attach(GTK_TABLE(table_chooser), scroll_procparam, 2, 3, 0, 2, GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
     
-    gtk_box_pack_start(GTK_BOX(hbox_chooser), vbox_list, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox_chooser), scroll_procparam, FALSE, FALSE, 0);
+    gtk_container_add(GTK_CONTAINER(scroll_procedures), treeview_procedures);
+    gtk_table_attach(GTK_TABLE(table_chooser), scroll_procedures, 0, 2, 1, 2, GTK_FILL, GTK_FILL | GTK_EXPAND, 0, 0);
     
     gtk_box_pack_start(GTK_BOX(gui), label_help, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(gui), hbox_chooser, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(gui), table_chooser, TRUE, TRUE, 0);
     
     if (settings->procedure != NULL) { /* a procedure has been previously selected: copy user settings to temp_settings */
         temp_settings = (userdef_settings)g_malloc(sizeof(struct manip_userdef_set));
@@ -106,6 +101,8 @@ GtkWidget* bimp_userdef_gui_new(userdef_settings settings, GtkWidget *parent)
         gtk_tree_selection_select_path(treesel_proc, path);      
         gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(treeview_procedures), path, NULL, TRUE, 0.5, 0.0);
     }
+    
+    gtk_window_set_default_size(GTK_WINDOW(parent), PROCLIST_W * 3, -1);
     
     update_procedure_box(settings); 
     
@@ -303,7 +300,6 @@ static void update_procedure_box(userdef_settings settings)
         GtkWidget *label_noproc;
         
         label_noproc = gtk_label_new(_("Can't save because\nno procedure has been selected"));
-        gtk_widget_set_size_request (label_noproc, PROCLIST_W, PROCLIST_H);
         gtk_label_set_justify(GTK_LABEL(label_noproc), GTK_JUSTIFY_CENTER);
         
         gtk_box_pack_start(GTK_BOX(vbox_procparam), label_noproc, FALSE, FALSE, 0);
@@ -582,7 +578,7 @@ static void update_procedure_box(userdef_settings settings)
             }
             
             if (editable) {
-                gtk_widget_set_size_request (param_widget[param_i], PARAM_WIDGET_W, PARAM_WIDGET_H);
+                //gtk_widget_set_size_request (param_widget[param_i], PARAM_WIDGET_W, PARAM_WIDGET_H);
                 label_widget_desc = gtk_label_new(param_info.description);
                 gtk_widget_set_tooltip_text (label_widget_desc, param_info.name);
                 gtk_misc_set_alignment(GTK_MISC(label_widget_desc), 0, 0.5);
@@ -601,7 +597,8 @@ static void update_procedure_box(userdef_settings settings)
         if (show_count == 0) {
             GtkWidget* label_noparams;
             label_noparams = gtk_label_new(_("This procedure takes no editable params"));
-            gtk_widget_set_size_request (label_noparams, PROCPARAM_W, 50);
+            gtk_label_set_justify(GTK_LABEL(label_noparams), GTK_JUSTIFY_LEFT);
+            //gtk_widget_set_size_request (label_noparams, PROCPARAM_W, 50);
             
             gtk_box_pack_start(GTK_BOX(vbox_procparam), label_noparams, FALSE, FALSE, 0);
         }
