@@ -4,6 +4,12 @@ BIMP. Batch Image Manipulation Plugin for GIMP.
 Changelog
 ---------
 
+2.1
+ - Improved GUI flexibility and high DPI support (thanks to @scribblemaniac)
+ - Added Serbian language (thanks to @nstVanja)
+ - Fixed spurious tick char generation in makefile (thanks to @ciampix)
+ - Fixed black images after Color Curve
+
 2.0 (aka "hey what's up?")
  - BIMP codebase has been updated to be natively compatible with GIMP 2.10, while it does not work anymore with GIMP <= 2.8.
  - Added support to HEIF, XPM and JPEG2000 images (#182, #141, #138)
