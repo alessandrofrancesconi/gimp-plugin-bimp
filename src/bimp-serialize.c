@@ -695,6 +695,11 @@ static void write_changeformat(changeformat_settings settings, GKeyFile* file)
         format_params_tiff params = settings->params;
         g_key_file_set_integer(file, group_name, "compression", params->compression);
     }
+    else if(settings->format == FORMAT_HEIF) {
+        format_params_heif params = settings->params;
+        g_key_file_set_boolean(file, group_name, "lossless", params->lossless);
+        g_key_file_set_integer(file, group_name, "quality", params->quality);
+    }
 }
 
 static manipulation read_changeformat(GKeyFile* file) 
@@ -795,7 +800,16 @@ static manipulation read_changeformat(GKeyFile* file)
                 if (g_key_file_has_key(file, group_name, "compression", NULL)) 
                     params->compression = g_key_file_get_integer(file, group_name, "compression", NULL);
             }
-        
+            else if (settings->format == FORMAT_HEIF) {
+                settings->params = (format_params_heif) g_malloc(sizeof(struct changeformat_params_heif));
+                format_params_heif params = settings->params;
+                
+                if (g_key_file_has_key(file, group_name, "lossless", NULL)) 
+                    params->lossless = g_key_file_get_boolean(file, group_name, "lossless", NULL);
+                    
+                if (g_key_file_has_key(file, group_name, "quality", NULL)) 
+                    params->quality = g_key_file_get_integer(file, group_name, "quality", NULL);
+            } 
         }
     }
     

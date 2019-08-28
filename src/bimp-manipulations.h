@@ -76,10 +76,10 @@ typedef enum format_type {
     FORMAT_GIF,
     FORMAT_ICON,
     FORMAT_JPEG,
-    // FORMAT_HEIF,  - not yet ready
     FORMAT_PNG,
     FORMAT_TGA,
     FORMAT_TIFF,
+    FORMAT_HEIF,
     FORMAT_END
 } format_type;
 static const char* format_type_string[][2] = {
@@ -87,10 +87,10 @@ static const char* format_type_string[][2] = {
     {"gif", "Gif (.gif)"},                                /* FORMAT_GIF */
     {"ico", "Icon (.ico)"},                                /* FORMAT_ICON */
     {"jpg", "Jpeg (.jpeg)"},                            /* FORMAT_JPEG */
-    // {"heif", "Heif (.heif)"},                            /* FORMAT_HEIF - not yet ready */
     {"png", "Portable Network Graphics (.png)"},        /* FORMAT_PNG */
     {"tga", "Targa (.tga)"},                            /* FORMAT_TGA */
-    {"tiff", "Tagged Image File Format (.tiff)"}        /* FORMAT_TIFF */
+    {"tiff", "Tagged Image File Format (.tiff)"},        /* FORMAT_TIFF */
+    {"heif", "Heif (.heif)"}                            /* FORMAT_HEIF */
 };
 
 // First two bits = column, second two bits = row
@@ -206,8 +206,8 @@ typedef struct changeformat_params_jpeg {
 } *format_params_jpeg;
 
 typedef struct changeformat_params_heif {
-    int quality;
     gboolean lossless;
+    int quality;
 } *format_params_heif;
 
 typedef struct changeformat_params_png {

@@ -11,7 +11,7 @@ static void update_window_size();
 GtkWidget *frame_params, *inner_widget;
 GtkWidget *combo_format, *scale_quality, *scale_smoothing, *check_interlace, *scale_compression, *check_baseline;
 GtkWidget *check_rle, *check_progressive, *check_entrophy, *combo_compression, *spin_markers, *combo_subsampling, *combo_dct, *combo_origin;
-GtkWidget *check_savebgc, *check_savegamma, *check_saveoff, *check_savephys, *check_savetime, *check_savecomm, *check_savetrans;
+GtkWidget *check_savebgc, *check_savegamma, *check_saveoff, *check_savephys, *check_savetime, *check_savecomm, *check_savetrans, *check_lossless;
 GtkWidget *expander_advanced;
 
 GtkTextBuffer *buffer_comment;
@@ -179,34 +179,6 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
         
         g_signal_connect(G_OBJECT(expander_advanced), "size-request", G_CALLBACK(adv_expanded), combo_format);
     }
-    /*else if (selected_format == FORMAT_HEIF) {
-        GtkWidget *hbox_quality, *check_lossless, *label_quality;
-
-        check_lossless = gtk_check_button_new_with_label(_("Lossless"));
-        
-        hbox_quality = gtk_hbox_new(FALSE, 5);
-        label_quality = gtk_label_new(g_strconcat(_("Quality"), ":", NULL));
-        gtk_misc_set_alignment(GTK_MISC(label_quality), 0.5, 0.8);
-        scale_quality = gtk_hscale_new_with_range(0, 100, 1);
-        
-        if (selected_format == settings->format) {
-            format_params_heif settings_heif = (format_params_heif)(settings->params);
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_lossless), settings_heif->lossless);
-
-            gtk_range_set_value(GTK_RANGE(scale_quality), settings_heif->quality);
-        }
-        else {
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_lossless), FALSE);
-
-            gtk_range_set_value(GTK_RANGE(scale_quality), 85.0);
-        }
-        
-        gtk_box_pack_start(GTK_BOX(inner_widget), check_lossless, FALSE, FALSE, 0);
-
-        gtk_box_pack_start(GTK_BOX(hbox_quality), label_quality, FALSE, FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(hbox_quality), scale_quality, TRUE, TRUE, 0);
-        gtk_box_pack_start(GTK_BOX(inner_widget), hbox_quality, TRUE, TRUE, 0);
-    }*/ 
     else if (selected_format == FORMAT_PNG) {
         GtkWidget *hbox_compression, *label_compression;
         GtkWidget *vbox_advanced;
@@ -324,6 +296,34 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
         gtk_box_pack_start(GTK_BOX(hbox_compression), combo_compression, TRUE, TRUE, 0);
         gtk_box_pack_start(GTK_BOX(inner_widget), hbox_compression, TRUE, TRUE, 0);
     }
+    else if (selected_format == FORMAT_HEIF) {
+        GtkWidget *hbox_quality, *label_quality;
+
+        check_lossless = gtk_check_button_new_with_label(_("Lossless"));
+        
+        hbox_quality = gtk_hbox_new(FALSE, 5);
+        label_quality = gtk_label_new(g_strconcat(_("Quality"), ":", NULL));
+        gtk_misc_set_alignment(GTK_MISC(label_quality), 0.5, 0.8);
+        scale_quality = gtk_hscale_new_with_range(0, 100, 1);
+        
+        if (selected_format == settings->format) {
+            format_params_heif settings_heif = (format_params_heif)(settings->params);
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_lossless), settings_heif->lossless);
+
+            gtk_range_set_value(GTK_RANGE(scale_quality), settings_heif->quality);
+        }
+        else {
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_lossless), FALSE);
+
+            gtk_range_set_value(GTK_RANGE(scale_quality), 85.0);
+        }
+        
+        gtk_box_pack_start(GTK_BOX(inner_widget), check_lossless, FALSE, FALSE, 0);
+
+        gtk_box_pack_start(GTK_BOX(hbox_quality), label_quality, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(hbox_quality), scale_quality, TRUE, TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(inner_widget), hbox_quality, TRUE, TRUE, 0);
+    }
     else {
         GtkWidget *label_no_param ;
         
@@ -391,8 +391,13 @@ void bimp_changeformat_save(changeformat_settings orig_settings)
         ((format_params_tga)orig_settings->params)->origin = gtk_combo_box_get_active(GTK_COMBO_BOX(combo_origin));
     }
     else if (orig_settings->format == FORMAT_TIFF) {
-        orig_settings->params = (format_params_png) g_malloc(sizeof(struct changeformat_params_png));
+        orig_settings->params = (format_params_tiff) g_malloc(sizeof(struct changeformat_params_tiff));
         ((format_params_tiff)orig_settings->params)->compression = gtk_combo_box_get_active(GTK_COMBO_BOX(combo_compression));
+    }
+    else if (orig_settings->format == FORMAT_HEIF) {
+        orig_settings->params = (format_params_heif) g_malloc(sizeof(struct changeformat_params_heif));
+        ((format_params_heif)orig_settings->params)->lossless = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_lossless));
+        ((format_params_heif)orig_settings->params)->quality = gtk_range_get_value(GTK_RANGE(scale_quality));
     }
     else {
         orig_settings->params = NULL;
