@@ -1083,14 +1083,25 @@ static gboolean image_save(format_type type, image_output imageout, format_param
                 ""
             );
         }
-    
-        result = gimp_file_save(
-            GIMP_RUN_NONINTERACTIVE, 
-            imageout->image_id, 
-            final_drawable, 
-            imageout->filepath, 
-            imageout->filename
-        );
+        
+        // for HEIF, the default values are "0 quality"... save lossless instead
+        if ((file_has_extension(imageout->filename, ".heif") || file_has_extension(imageout->filename, ".heic"))) {
+            result = image_save_heif(
+                imageout, 
+                100,
+                TRUE
+            );
+        }
+        else
+        {
+            result = gimp_file_save(
+                GIMP_RUN_NONINTERACTIVE, 
+                imageout->image_id, 
+                final_drawable, 
+                imageout->filepath, 
+                imageout->filename
+            );
+        }
     }
     
     return result;
