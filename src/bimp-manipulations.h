@@ -80,17 +80,19 @@ typedef enum format_type {
     FORMAT_TGA,
     FORMAT_TIFF,
     FORMAT_HEIF,
+    FORMAT_WEBP,
     FORMAT_END
 } format_type;
 static const char* format_type_string[][2] = {
-    {"bmp", "Bitmap (.bmp)"},                            /* FORMAT_BMP */
-    {"gif", "Gif (.gif)"},                                /* FORMAT_GIF */
-    {"ico", "Icon (.ico)"},                                /* FORMAT_ICON */
+    {"bmp", "Bitmap (.bmp)"},                           /* FORMAT_BMP */
+    {"gif", "Gif (.gif)"},                              /* FORMAT_GIF */
+    {"ico", "Icon (.ico)"},                             /* FORMAT_ICON */
     {"jpg", "Jpeg (.jpeg)"},                            /* FORMAT_JPEG */
     {"png", "Portable Network Graphics (.png)"},        /* FORMAT_PNG */
     {"tga", "Targa (.tga)"},                            /* FORMAT_TGA */
-    {"tiff", "Tagged Image File Format (.tiff)"},        /* FORMAT_TIFF */
-    {"heif", "Heif (.heif)"}                            /* FORMAT_HEIF */
+    {"tiff", "Tagged Image File Format (.tiff)"},       /* FORMAT_TIFF */
+    {"heif", "Heif (.heif)"},                            /* FORMAT_HEIF */
+    {"webp", "WebP (.webp)"}                            /* FORMAT_HEIF */
 };
 
 // First two bits = column, second two bits = row
@@ -205,11 +207,6 @@ typedef struct changeformat_params_jpeg {
     int dct;
 } *format_params_jpeg;
 
-typedef struct changeformat_params_heif {
-    gboolean lossless;
-    int quality;
-} *format_params_heif;
-
 typedef struct changeformat_params_png {
     gboolean interlace;
     int compression;
@@ -230,6 +227,27 @@ typedef struct changeformat_params_tga {
 typedef struct changeformat_params_tiff {
     int compression;
 } *format_params_tiff;
+
+typedef struct changeformat_params_heif {
+    gboolean lossless;
+    int quality;
+} *format_params_heif;
+
+typedef struct changeformat_params_webp {
+    int preset;
+    gboolean lossless;
+    float quality;
+    float alpha_quality;
+    gboolean animation;
+    gboolean anim_loop;
+    gboolean minimize_size;
+    int kf_distance;
+    gboolean exif;
+    gboolean iptc;
+    gboolean xmp;
+    int delay;
+    int force_delay;
+} *format_params_webp;
 
 typedef struct manip_rename_set {
     gchar* pattern;

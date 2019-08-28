@@ -700,6 +700,22 @@ static void write_changeformat(changeformat_settings settings, GKeyFile* file)
         g_key_file_set_boolean(file, group_name, "lossless", params->lossless);
         g_key_file_set_integer(file, group_name, "quality", params->quality);
     }
+    else if(settings->format == FORMAT_WEBP) {
+        format_params_webp params = settings->params;
+        g_key_file_set_integer(file, group_name, "preset", params->preset);
+        g_key_file_set_boolean(file, group_name, "lossless", params->lossless);
+        g_key_file_set_double(file, group_name, "quality", params->quality);
+        g_key_file_set_double(file, group_name, "alpha_quality", params->alpha_quality);
+        g_key_file_set_boolean(file, group_name, "animation", params->animation);
+        g_key_file_set_boolean(file, group_name, "anim_loop", params->anim_loop);
+        g_key_file_set_boolean(file, group_name, "minimize_size", params->minimize_size);
+        g_key_file_set_integer(file, group_name, "kf_distance", params->kf_distance);
+        g_key_file_set_boolean(file, group_name, "exif", params->exif);
+        g_key_file_set_boolean(file, group_name, "iptc", params->iptc);
+        g_key_file_set_boolean(file, group_name, "xmp", params->xmp);
+        g_key_file_set_integer(file, group_name, "delay", params->delay);
+        g_key_file_set_integer(file, group_name, "force_delay", params->force_delay);
+    }
 }
 
 static manipulation read_changeformat(GKeyFile* file) 
@@ -809,7 +825,50 @@ static manipulation read_changeformat(GKeyFile* file)
                     
                 if (g_key_file_has_key(file, group_name, "quality", NULL)) 
                     params->quality = g_key_file_get_integer(file, group_name, "quality", NULL);
-            } 
+            }
+            else if (settings->format == FORMAT_WEBP) {
+                settings->params = (format_params_webp) g_malloc(sizeof(struct changeformat_params_webp));
+                format_params_webp params = settings->params;
+                
+                if (g_key_file_has_key(file, group_name, "preset", NULL)) 
+                    params->preset = g_key_file_get_integer(file, group_name, "preset", NULL);
+
+                if (g_key_file_has_key(file, group_name, "lossless", NULL)) 
+                    params->lossless = g_key_file_get_boolean(file, group_name, "lossless", NULL);
+                    
+                if (g_key_file_has_key(file, group_name, "quality", NULL)) 
+                    params->quality = g_key_file_get_double(file, group_name, "quality", NULL);
+
+                if (g_key_file_has_key(file, group_name, "alpha_quality", NULL)) 
+                    params->alpha_quality = g_key_file_get_double(file, group_name, "alpha_quality", NULL);
+
+                if (g_key_file_has_key(file, group_name, "animation", NULL)) 
+                    params->animation = g_key_file_get_boolean(file, group_name, "animation", NULL);
+
+                if (g_key_file_has_key(file, group_name, "anim_loop", NULL)) 
+                    params->anim_loop = g_key_file_get_boolean(file, group_name, "anim_loop", NULL);
+
+                if (g_key_file_has_key(file, group_name, "minimize_size", NULL)) 
+                    params->minimize_size = g_key_file_get_boolean(file, group_name, "minimize_size", NULL);
+
+                if (g_key_file_has_key(file, group_name, "kf_distance", NULL)) 
+                    params->kf_distance = g_key_file_get_integer(file, group_name, "kf_distance", NULL);
+
+                if (g_key_file_has_key(file, group_name, "exif", NULL)) 
+                    params->exif = g_key_file_get_boolean(file, group_name, "exif", NULL);
+
+                if (g_key_file_has_key(file, group_name, "iptc", NULL)) 
+                    params->iptc = g_key_file_get_boolean(file, group_name, "iptc", NULL);
+
+                if (g_key_file_has_key(file, group_name, "xmp", NULL)) 
+                    params->xmp = g_key_file_get_boolean(file, group_name, "xmp", NULL);
+
+                if (g_key_file_has_key(file, group_name, "delay", NULL)) 
+                    params->delay = g_key_file_get_boolean(file, group_name, "delay", NULL);
+
+                if (g_key_file_has_key(file, group_name, "force_delay", NULL)) 
+                    params->force_delay = g_key_file_get_integer(file, group_name, "force_delay", NULL);
+            }
         }
     }
     

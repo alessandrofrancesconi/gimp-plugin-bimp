@@ -38,6 +38,7 @@ static gboolean image_save_heif(image_output, int, gboolean);
 static gboolean image_save_png(image_output, gboolean, int, gboolean, gboolean, gboolean, gboolean, gboolean, gboolean, gboolean);
 static gboolean image_save_tga(image_output, gboolean, int);
 static gboolean image_save_tiff(image_output, int);
+static gboolean image_save_webp(image_output, int, gboolean, float, float, gboolean, gboolean, gboolean, int, gboolean, gboolean, gboolean, int, int);
 
 static int overwrite_result(char*, GtkWidget*);
 
@@ -1068,6 +1069,24 @@ static gboolean image_save(format_type type, image_output imageout, format_param
             ((format_params_heif)params)->lossless
         );
     }
+    else if(type == FORMAT_WEBP) {
+        result = image_save_webp(
+            imageout, 
+            ((format_params_webp)params)->preset,
+            ((format_params_webp)params)->lossless,
+            ((format_params_webp)params)->quality,
+            ((format_params_webp)params)->alpha_quality,
+            ((format_params_webp)params)->animation,
+            ((format_params_webp)params)->anim_loop,
+            ((format_params_webp)params)->minimize_size,
+            ((format_params_webp)params)->kf_distance,
+            ((format_params_webp)params)->exif,
+            ((format_params_webp)params)->iptc,
+            ((format_params_webp)params)->xmp,
+            ((format_params_webp)params)->delay,
+            ((format_params_webp)params)->force_delay
+        );
+    }
     else {
         // save in the original format
         int final_drawable = gimp_image_merge_visible_layers(imageout->image_id, GIMP_CLIP_TO_IMAGE);
@@ -1090,6 +1109,25 @@ static gboolean image_save(format_type type, image_output imageout, format_param
                 imageout, 
                 100,
                 TRUE
+            );
+        }
+        // same thing for WEBP
+        else if (file_has_extension(imageout->filename, ".webp")) {
+            result = image_save_webp(
+                imageout, 
+                0,
+                FALSE,
+                90,
+                100,
+                FALSE,
+                TRUE,
+                TRUE,
+                50,
+                TRUE,
+                TRUE,
+                TRUE,
+                200,
+                FALSE
             );
         }
         else
@@ -1298,6 +1336,38 @@ static gboolean image_save_tiff(image_output out, int compression)
         GIMP_PDB_END
     );
         
+    return TRUE;
+}
+
+static gboolean image_save_webp(image_output out, int preset, gboolean lossless, float quality, float alpha_quality, gboolean animation, gboolean anim_loop, gboolean minimize_size, int kf_distance, gboolean exif, gboolean iptc, gboolean xmp, int delay, int force_delay)
+{
+    gint nreturn_vals;
+    int final_drawable = gimp_image_merge_visible_layers(out->image_id, GIMP_CLIP_TO_IMAGE);
+        
+    GimpParam *return_vals = gimp_run_procedure(
+        "file_webp_save",
+        &nreturn_vals,
+        GIMP_PDB_INT32, GIMP_RUN_NONINTERACTIVE,
+        GIMP_PDB_IMAGE, out->image_id,
+        GIMP_PDB_DRAWABLE, final_drawable,
+        GIMP_PDB_STRING, out->filepath,
+        GIMP_PDB_STRING, out->filename,
+        GIMP_PDB_INT32, preset,            // preset (Default=0, Picture=1, Photo=2, Drawing=3, Icon=4, Text=5)
+        GIMP_PDB_INT32, lossless,          // Use lossless encoding (0/1)
+        GIMP_PDB_FLOAT, quality,           // Quality of the image (0 <= quality <= 100)
+        GIMP_PDB_FLOAT, alpha_quality,     // Quality of the image's alpha channel (0 <= alpha-quality <= 100)
+        GIMP_PDB_INT32, animation,         // Use layers for animation (0/1)
+        GIMP_PDB_INT32, anim_loop,         // Loop animation infinitely (0/1)
+        GIMP_PDB_INT32, minimize_size,     // Minimize animation size (0/1)
+        GIMP_PDB_INT32, kf_distance,       // Maximum distance between key-frames (>=0)
+        GIMP_PDB_INT32, exif,              // Toggle saving exif data (0/1)
+        GIMP_PDB_INT32, iptc,              // Toggle saving iptc data (0/1)
+        GIMP_PDB_INT32, xmp,               // Toggle saving xmp data (0/1)
+        GIMP_PDB_INT32, delay,             // Delay to use when timestamps are not available or forced
+        GIMP_PDB_INT32, force_delay,       // Force delay on all frames
+        GIMP_PDB_END
+    );
+    
     return TRUE;
 }
 
