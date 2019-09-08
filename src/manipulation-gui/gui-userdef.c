@@ -2,7 +2,6 @@
 #include <libgimp/gimp.h>
 #include <stdlib.h>
 #include <string.h>
-#include <pcre.h>
 #include "gui-userdef.h"
 #include "../bimp.h"
 #include "../bimp-gui.h"
@@ -365,12 +364,9 @@ static void update_procedure_box(userdef_settings settings)
         
         const char *error;
         int erroffset;
-        pcre* reg_comp_combobox =  pcre_compile("([A-Z\\d-]+)\\s\\((\\d+)\\)", PCRE_DOTALL, &error, &erroffset, 0);
+        GRegex *reg_comp_combobox = g_regex_new ("([A-Za-z\\d-_]+)\\s\\((\\d+)\\)", 0, 0, NULL);
         // (0 = aaaa, 1 = bbbbb, ...) => \((?:\s?\d+\s?=\s?([\w\s]+),?)\) under construction....
-        pcre* reg_comp_minmax =  pcre_compile("(?:(-?[\\d,\\.]+)\\s([<|>]{1}=?)\\s)?([\\w|-]+)\\s([<|>]{1}=?)\\s(-?[\\d,\\.]+)", PCRE_DOTALL, &error, &erroffset, 0);
-        int ovector[186];
-        unsigned int offset = 0;
-        unsigned int desclen = 0;
+        GRegex *reg_comp_minmax = g_regex_new ("(?:(-?[\\d,\\.]+)\\s([<|>]{1}=?)\\s)?([\\w|-]+)\\s([<|>]{1}=?)\\s(-?[\\d,\\.]+)", 0, 0, NULL);
         
         for (param_i = 0; param_i < num_params; param_i++) {
             param_info = pdb_proc_get_param_info(settings->procedure, param_i);
@@ -387,23 +383,24 @@ static void update_procedure_box(userdef_settings settings)
                             param_widget[param_i] = gtk_check_button_new();
                             gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(param_widget[param_i]), (settings->params[param_i]).data.d_int32 == 1 ? TRUE : FALSE);
                         } else {
-                            offset = 0;
-                            desclen = strlen(param_info.description);
-                            int rc = pcre_exec(reg_comp_combobox, 0, param_info.description, desclen, offset, 0, ovector, 186);
-                            if (rc >= 0) {
+
+                            GMatchInfo *match_info;
+		                    int rc = g_regex_match (reg_comp_combobox, param_info.description, 0, &match_info);
+
+                            if (rc == TRUE) {
                                 GtkTreeIter selected;
                                 GtkListStore* combo_store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
                                 
-                                do {
+                                while (g_match_info_matches(match_info)) {
                                     GtkTreeIter iter;
                                     gtk_list_store_append (combo_store, &iter);
                                     
                                     const char* name;
-                                    pcre_get_substring(param_info.description, ovector, rc, 0, &name);
+                                    name = g_match_info_fetch(match_info, 1);
                                     
                                     int id = 0;
                                     const char* id_str;
-                                    pcre_get_substring(param_info.description, ovector, rc, 2, &id_str);
+                                    id_str = g_match_info_fetch(match_info, 2);
                                     if (strlen(id_str) > 0) id = atoi(id_str);
                                     
                                     gtk_list_store_set (combo_store, &iter,
@@ -416,10 +413,10 @@ static void update_procedure_box(userdef_settings settings)
                                         selected = iter;
                                     }
                                     
-                                    offset = ovector[1];
+                                    g_match_info_next (match_info, NULL);
                                 }
-                                while (offset < desclen && (rc = pcre_exec(reg_comp_combobox, 0, param_info.description, desclen, offset, 0, ovector, 186)) >= 0);
-                                
+                                g_match_info_free (match_info);
+
                                 param_widget[param_i] = gtk_combo_box_new_with_model(GTK_TREE_MODEL(combo_store));
                                 g_object_unref(G_OBJECT(combo_store));
                                 
@@ -433,37 +430,33 @@ static void update_procedure_box(userdef_settings settings)
                             else {
                                 param_widget[param_i] = gtk_spin_button_new (NULL, 1, 0);
                                 int min = G_MININT, max = G_MAXINT;
-                                offset = 0;
-                                desclen = strlen(param_info.description);
-                                int i = 1, rc = pcre_exec(reg_comp_minmax, 0, param_info.description, desclen, offset, 0, ovector, 186);
-                                if (rc >= 0) {
+
+                                GMatchInfo *match_info;
+                                int rc = g_regex_match (reg_comp_minmax, param_info.description, 0, &match_info);
+                                
+                                if (rc == TRUE) {
                                     /* intercept regular expressions for forms like:
                                      *  -127 <= brightness <= 127
                                      * or
                                      *  opacity > 0
                                      * and so on...
                                      */
-                                    do {
-                                        i = 1;
-                                        gchar* l_value = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+                                    while (g_match_info_matches(match_info)) {
+                                        gchar* l_value = g_match_info_fetch(match_info, 1);
                                         if (strlen(l_value) > 0) {
                                             min = atoi(l_value);
                                         }
                                         
-                                        i = 2;
-                                        gchar* l_symbol = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+                                        gchar* l_symbol = g_match_info_fetch(match_info, 2);
                                         if (strlen(l_symbol) > 0) {
                                             if (strcmp(l_symbol, "<") == 0) min++;
                                         }
                                         
-                                        i = 3;
-                                        gchar* name = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
-                                        
-                                        i = 4;
-                                        gchar* r_symbol = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
-                                        
-                                        i = 5;
-                                        gchar* r_value = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+                                        gchar* name = g_match_info_fetch(match_info, 3);
+
+                                        gchar* r_symbol = g_match_info_fetch(match_info, 4);
+
+                                        gchar* r_value = g_match_info_fetch(match_info, 5);
                                         if (r_symbol[0] == '>') {
                                             min = atoi(r_value);
                                             if (strcmp(r_symbol, ">=") != 0) min++;
@@ -473,9 +466,9 @@ static void update_procedure_box(userdef_settings settings)
                                             if (strcmp(r_symbol, "<=") != 0) max--;
                                         }
                                         
-                                        offset = ovector[1];
+                                        g_match_info_next (match_info, NULL);
                                     }
-                                    while (offset < desclen && (rc = pcre_exec(reg_comp_minmax, 0, param_info.description, desclen, offset, 0, ovector, 186)) >= 0);
+                                    g_match_info_free (match_info);
                                 }
                                 
                                 gtk_spin_button_configure (GTK_SPIN_BUTTON(param_widget[param_i]), GTK_ADJUSTMENT(gtk_adjustment_new ((settings->params[param_i]).data.d_int32, min, max, 1, 1, 0)), 0, 0);
@@ -497,31 +490,27 @@ static void update_procedure_box(userdef_settings settings)
                 case GIMP_PDB_FLOAT: 
                     param_widget[param_i] = gtk_spin_button_new (NULL, 1, 1);
                     float min = -G_MAXFLOAT, max = G_MAXFLOAT;
-                    offset = 0;
-                    desclen = strlen(param_info.description);
-                    int i = 1, rc = pcre_exec(reg_comp_minmax, 0, param_info.description, desclen, offset, 0, ovector, 186);
-                    if (rc >= 0) {
-                        do {
-                            i = 1;
-                            gchar* l_value = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+
+                    GMatchInfo *match_info;
+                    int rc = g_regex_match (reg_comp_minmax, param_info.description, 0, &match_info);
+                    
+                    if (rc == TRUE) {
+                        while (g_match_info_matches(match_info)) {
+                            gchar* l_value = g_match_info_fetch(match_info, 1);
                             if (strlen(l_value) > 0) {
                                 min = (float)atof(l_value);
                             }
 
-                            i = 2;
-                            gchar* l_symbol = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+                            gchar* l_symbol = g_match_info_fetch(match_info, 2);
                             if (strlen(l_symbol) > 0) {
                                 if (strcmp(l_symbol, "<") == 0) min = min + 0.1;
                             }
 
-                            i = 3;
-                            gchar* name = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+                            gchar* name = g_match_info_fetch(match_info, 3);
 
-                            i = 4;
-                            gchar* r_symbol = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+                            gchar* r_symbol = g_match_info_fetch(match_info, 4);
 
-                            i = 5;
-                            gchar* r_value = g_strdup_printf("%.*s", ovector[2*i+1] - ovector[2*i], param_info.description + ovector[2*i]);
+                            gchar* r_value = g_match_info_fetch(match_info, 5);
                             if (r_symbol[0] == '>') {
                                 min = (float)atof(r_value);
                                 if (strcmp(r_symbol, ">=") != 0) min = min + 0.1;
@@ -531,9 +520,9 @@ static void update_procedure_box(userdef_settings settings)
                                 if (strcmp(r_symbol, "<=") != 0) max = max - 0.1;
                             }
 
-                            offset = ovector[1];
+                            g_match_info_next (match_info, NULL);
                         }
-                        while (offset < desclen && (rc = pcre_exec(reg_comp_minmax, 0, param_info.description, desclen, offset, 0, ovector, 186)) >= 0);
+                        g_match_info_free (match_info);
                     }
                     else if (
                         strcmp(param_info.name, "opacity") == 0 || 
