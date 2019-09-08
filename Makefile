@@ -1,15 +1,18 @@
 GIMPARGS = $(shell gimptool-2.0 --cflags --libs)
-PCREARGS = $(shell pcre-config --cflags --libs)
 SYSTEM_INSTALL_DIR = $(shell gimptool-2.0 --dry-run --install-admin-bin ./bin/bimp | sed 's/cp \S* \(\S*\)/\1/'|tr -d [\'])
 USER_INSTALL_DIR = $(shell gimptool-2.0 --dry-run --install-bin ./bin/bimp | sed 's/cp \S* \(\S*\)/\1/'|tr -d [\'])
 
 make: 
-	which gimptool-2.0 && which pcre-config && \
-	gcc -o ./bin/bimp -Wall -O2 -Wno-unused-variable -Wno-pointer-sign src/*.c src/manipulation-gui/*.c src/images/*.c $(GIMPARGS) $(PCREARGS) -lm -DGIMP_DISABLE_DEPRECATED
+	which gimptool-2.0 && \
+	gcc -o ./bin/bimp -Wall -O2 -Wno-unused-variable -Wno-pointer-sign src/*.c src/manipulation-gui/*.c src/images/*.c $(GIMPARGS) -lm -DGIMP_DISABLE_DEPRECATED
 
+makewin-debug: 
+	which gimptool-2.0 && \
+	gcc -o ./bin/win32/bimp -Wall -Wno-unused-variable -Wno-pointer-sign src/*.c src/manipulation-gui/*.c src/images/*.c $(GIMPARGS) -lm -DGIMP_DISABLE_DEPRECATED
+    
 makewin: 
-	which gimptool-2.0 && which pcre-config && \
-	gcc -mwindows -o ./bin/win32/bimp -Wall -Wno-unused-variable -Wno-pointer-sign src/*.c src/manipulation-gui/*.c src/images/*.c $(GIMPARGS) $(PCREARGS) -lm -DGIMP_DISABLE_DEPRECATED
+	which gimptool-2.0 && \
+	gcc -mwindows -o ./bin/win32/bimp -Wall -Wno-unused-variable -Wno-pointer-sign src/*.c src/manipulation-gui/*.c src/images/*.c $(GIMPARGS) -lm -DGIMP_DISABLE_DEPRECATED
 		
 install: 
 	mkdir -p "$(USER_INSTALL_DIR)"

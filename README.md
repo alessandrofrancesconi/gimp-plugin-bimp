@@ -13,21 +13,18 @@ BIMP can be easily installed on your Windows 32/64bit machine with the
 official installer: https://github.com/alessandrofrancesconi/gimp-plugin-bimp/releases/latest/
 then download `gimp-plugin-bimp_win32.exe`
 
-Instead... to remove BIMP... if you really want... just go to GIMP's plugins directory and remove 
-`bimp.exe` and `bimp-locale` folder.
-
 *Note for GIMP Portable users:* If you experience strange things like missing buttons or totally white windows, 
 first ensure you have installed the latest version of the GTK+ runtime (download it from [here](https://sourceforge.net/projects/gtk-win/files/latest/download?source=files)).
 
 Compiling and installing on Linux
 -----------------------------------------
 
-You must have gimptool and pcre-config installed in order to have the full set of libraries
+You must have gimptool installed in order to have the full set of libraries
 and dependences needed to compile BIMP (names can differ depending on the distro).
 
 For Ubuntu / Linux Mint:
 
-	sudo apt-get install libgimp2.0-dev libgegl-dev libpcre3-dev
+	sudo apt-get install libgimp2.0-dev libgegl-dev
 
 For Fedora:
 
@@ -53,7 +50,7 @@ made by Simone from http://gimp.lisanet.de/Website/Download.html already include
 For those interested in remaining on the cutting edge, the instructions are as follows:
 
 1. Install [MacPorts](https://www.macports.org/install.php)
-2. Install prerequisites: `sudo port install coreutils pcre `
+2. Install prerequisites: `sudo port install coreutils `
 3. Add `/opt/local/libexec/gnubin` to your `PATH` to make them the GNU tools the default: `PATH=/opt/local/libexec/gnubin:$PATH`  (You can also add this to your login profile if you want the change to be permanent).
 3. Install GIMP with MacPorts: `sudo port install gimp +quartz` (You can leave off the `+quartz` if you prefer GIMP to run in the X11 environment instead of natively.)
 4. Follow the build and install instructions for Linux.

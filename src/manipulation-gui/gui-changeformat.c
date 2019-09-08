@@ -324,6 +324,9 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
         gtk_box_pack_start(GTK_BOX(hbox_quality), scale_quality, TRUE, TRUE, 0);
         gtk_box_pack_start(GTK_BOX(inner_widget), hbox_quality, TRUE, TRUE, 0);
     }
+    /*else if (selected_format == FORMAT_WEBP) {
+       TODO 
+    }*/
     else {
         GtkWidget *label_no_param ;
         
