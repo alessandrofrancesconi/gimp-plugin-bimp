@@ -4,6 +4,13 @@ BIMP. Batch Image Manipulation Plugin for GIMP.
 Changelog
 ---------
 
+2.2
+ - Added support to WEBP (issue #184)
+ - Enabled HEIF in "Change Format and Compression" (issue #185)
+ - Saving back to HEIF with default values caused "zero quality" image
+ - Fixed TIFF parameter setup in "Change Format and Compression"
+ - Removed PCRE dependency in favor of GLib (issue #189)
+ 
 2.1
  - Improved GUI flexibility and high DPI support (thanks to @scribblemaniac)
  - Added Serbian language (thanks to @nstVanja)

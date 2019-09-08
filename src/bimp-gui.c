@@ -1044,10 +1044,8 @@ static void load_set(GtkMenuItem *menuitem, gpointer user_data)
 static void open_about() 
 {
     const gchar *auth[] = { 
-        "Alessandro Francesconi <alessandrofrancesconi@live.it>", 
-        "Thomas Mevel <thomas.prog@mevtho.com>", 
-        "Walt9Z <https://github.com/Walt9Z>",
-        "KHam0425 <https://github.com/KHam0425>",
+        "Alessandro Francesconi <alessandrofrancesconi@live.it>",
+        "GitHub contributors <https://github.com/alessandrofrancesconi/gimp-plugin-bimp/graphs/contributors>",
         NULL };
     const gchar *license = 
         "This program is free software; you can redistribute it and/or modify "

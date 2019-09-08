@@ -12,7 +12,7 @@ makewin-debug:
     
 makewin: 
 	which gimptool-2.0 && \
-	gcc -mwindows -o ./bin/win32/bimp -Wall -Wno-unused-variable -Wno-pointer-sign src/*.c src/manipulation-gui/*.c src/images/*.c $(GIMPARGS) -lm -DGIMP_DISABLE_DEPRECATED
+	gcc -mwindows -o ./bin/win32/bimp -O2 -Wall -Wno-unused-variable -Wno-pointer-sign src/*.c src/manipulation-gui/*.c src/images/*.c $(GIMPARGS) -lm -DGIMP_DISABLE_DEPRECATED
 		
 install: 
 	mkdir -p "$(USER_INSTALL_DIR)"
