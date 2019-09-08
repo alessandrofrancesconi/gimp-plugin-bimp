@@ -9,9 +9,10 @@ static void adv_expanded (GtkWidget*, GtkRequisition*, gpointer);
 static void update_window_size();
 
 GtkWidget *frame_params, *inner_widget;
-GtkWidget *combo_format, *scale_quality, *scale_smoothing, *check_interlace, *scale_compression, *check_baseline;
+GtkWidget *combo_format, *scale_quality, *scale_alpha_quality, *scale_smoothing, *check_interlace, *scale_compression, *check_baseline;
 GtkWidget *check_rle, *check_progressive, *check_entrophy, *combo_compression, *spin_markers, *combo_subsampling, *combo_dct, *combo_origin;
 GtkWidget *check_savebgc, *check_savegamma, *check_saveoff, *check_savephys, *check_savetime, *check_savecomm, *check_savetrans, *check_lossless;
+GtkWidget *combo_preset, *check_saveexif, *check_savexmp, *check_savecp;
 GtkWidget *expander_advanced;
 
 GtkTextBuffer *buffer_comment;
@@ -324,9 +325,80 @@ static void update_frame_params(GtkComboBox *widget, changeformat_settings setti
         gtk_box_pack_start(GTK_BOX(hbox_quality), scale_quality, TRUE, TRUE, 0);
         gtk_box_pack_start(GTK_BOX(inner_widget), hbox_quality, TRUE, TRUE, 0);
     }
-    /*else if (selected_format == FORMAT_WEBP) {
-       TODO 
-    }*/
+    else if (selected_format == FORMAT_WEBP) {
+        GtkWidget *hbox_quality, *hbox_alpha_quality, *hbox_preset, *label_quality, *label_alpha_quality, *label_preset;
+
+        check_lossless = gtk_check_button_new_with_label(_("Lossless"));
+        
+        hbox_quality = gtk_hbox_new(FALSE, 5);
+        label_quality = gtk_label_new(g_strconcat(_("Image quality"), ":", NULL));
+        gtk_misc_set_alignment(GTK_MISC(label_quality), 0.5, 0.8);
+        scale_quality = gtk_hscale_new_with_range(0, 100, 1);
+        
+        hbox_alpha_quality = gtk_hbox_new(FALSE, 5);
+        label_alpha_quality = gtk_label_new(g_strconcat(_("Alpha quality"), ":", NULL));
+        gtk_misc_set_alignment(GTK_MISC(label_alpha_quality), 0.5, 0.8);
+        scale_alpha_quality = gtk_hscale_new_with_range(0, 100, 1);
+        
+        hbox_preset = gtk_hbox_new(FALSE, 5);
+        label_preset = gtk_label_new(g_strconcat(_("Preset"), ":", NULL));
+        gtk_misc_set_alignment(GTK_MISC(label_preset), 0.5, 0.5);
+        combo_preset = gtk_combo_box_new_text();
+        gtk_combo_box_append_text(GTK_COMBO_BOX(combo_preset), _("Default"));
+        gtk_combo_box_append_text(GTK_COMBO_BOX(combo_preset), _("Picture"));
+        gtk_combo_box_append_text(GTK_COMBO_BOX(combo_preset), _("Photo"));
+        gtk_combo_box_append_text(GTK_COMBO_BOX(combo_preset), _("Drawing"));
+        gtk_combo_box_append_text(GTK_COMBO_BOX(combo_preset), _("Icon"));
+        gtk_combo_box_append_text(GTK_COMBO_BOX(combo_preset), _("Text"));
+                
+        check_saveexif = gtk_check_button_new_with_label(_("Save EXIF data"));
+        check_savexmp = gtk_check_button_new_with_label(_("Save XMP data"));
+        check_savecp = gtk_check_button_new_with_label(_("Save color profile"));
+        
+        if (selected_format == settings->format) {
+            format_params_webp settings_webp = (format_params_webp)(settings->params);
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_lossless), settings_webp->lossless);
+            
+            gtk_range_set_value(GTK_RANGE(scale_quality), settings_webp->quality);
+            gtk_range_set_value(GTK_RANGE(scale_alpha_quality), settings_webp->alpha_quality);
+            
+            gtk_combo_box_set_active(GTK_COMBO_BOX(combo_preset), settings_webp->preset);
+            
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_saveexif), settings_webp->exif);
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_savexmp), settings_webp->xmp);
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_savecp), settings_webp->iptc);            
+        }
+        else {
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_lossless), FALSE);
+
+            gtk_range_set_value(GTK_RANGE(scale_quality), 90.0);
+            gtk_range_set_value(GTK_RANGE(scale_alpha_quality), 100.0);
+            
+            gtk_combo_box_set_active(GTK_COMBO_BOX(combo_preset), 0);
+            
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_saveexif), TRUE);
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_savexmp), TRUE);
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_savecp), TRUE);    
+        }
+        
+        gtk_box_pack_start(GTK_BOX(inner_widget), check_lossless, FALSE, FALSE, 0);
+
+        gtk_box_pack_start(GTK_BOX(hbox_quality), label_quality, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(hbox_quality), scale_quality, TRUE, TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(inner_widget), hbox_quality, TRUE, TRUE, 0);
+        
+        gtk_box_pack_start(GTK_BOX(hbox_alpha_quality), label_alpha_quality, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(hbox_alpha_quality), scale_alpha_quality, TRUE, TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(inner_widget), hbox_alpha_quality, TRUE, TRUE, 0);
+        
+        gtk_box_pack_start(GTK_BOX(hbox_preset), label_preset, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(hbox_preset), combo_preset, TRUE, TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(inner_widget), hbox_preset, TRUE, TRUE, 0);
+        
+        gtk_box_pack_start(GTK_BOX(inner_widget), check_saveexif, TRUE, TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(inner_widget), check_savexmp, TRUE, TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(inner_widget), check_savecp, TRUE, TRUE, 0);
+    }
     else {
         GtkWidget *label_no_param ;
         
@@ -401,6 +473,24 @@ void bimp_changeformat_save(changeformat_settings orig_settings)
         orig_settings->params = (format_params_heif) g_malloc(sizeof(struct changeformat_params_heif));
         ((format_params_heif)orig_settings->params)->lossless = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_lossless));
         ((format_params_heif)orig_settings->params)->quality = gtk_range_get_value(GTK_RANGE(scale_quality));
+    }
+    else if (orig_settings->format == FORMAT_WEBP) {
+        orig_settings->params = (format_params_webp) g_malloc(sizeof(struct changeformat_params_webp));
+        ((format_params_webp)orig_settings->params)->lossless = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_lossless));
+        ((format_params_webp)orig_settings->params)->quality = gtk_range_get_value(GTK_RANGE(scale_quality));
+        ((format_params_webp)orig_settings->params)->alpha_quality = gtk_range_get_value(GTK_RANGE(scale_alpha_quality));
+        ((format_params_webp)orig_settings->params)->preset = gtk_combo_box_get_active(GTK_COMBO_BOX(combo_preset));
+        ((format_params_webp)orig_settings->params)->exif = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_saveexif));
+        ((format_params_webp)orig_settings->params)->xmp = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_savexmp));
+        ((format_params_webp)orig_settings->params)->iptc = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_savecp));
+        
+        // also other "hidden" params
+        ((format_params_webp)orig_settings->params)->animation = FALSE;
+        ((format_params_webp)orig_settings->params)->anim_loop = TRUE;
+        ((format_params_webp)orig_settings->params)->minimize_size = TRUE;
+        ((format_params_webp)orig_settings->params)->kf_distance = 50;
+        ((format_params_webp)orig_settings->params)->delay = 200;
+        ((format_params_webp)orig_settings->params)->force_delay = FALSE;
     }
     else {
         orig_settings->params = NULL;
