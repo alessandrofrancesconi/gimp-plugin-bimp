@@ -163,16 +163,6 @@ Section "File copy" SecInstall
 
 SectionEnd
 
-# BIMP needs pcre3 DLL to be registered on the system
-Section "Register DLLs" SecRegisterDLL
-    !insertmacro PRINT_SILENT_OUT "Registering pcre3...$\n"
-
-    SetOutPath "$WINDIR\System32"
-    File ..\bin\win32\pcre3.dll
-    
-    ExecWait "regsvr32.exe /s $WINDIR\System32\pcre3.dll"
-SectionEnd
-
 # Uninstaller
 
 function un.onInit
