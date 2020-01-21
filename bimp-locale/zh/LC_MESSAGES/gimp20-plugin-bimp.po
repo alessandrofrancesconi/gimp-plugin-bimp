@@ -68,7 +68,7 @@ msgstr "小尺寸"
 
 #: manipulation-gui/gui-changeformat.c:123
 msgid "DCT algorithm"
-msgstr "DCT-算法"
+msgstr "DCT 算法"
 
 #: manipulation-gui/gui-changeformat.c:127
 msgid "Integer"
@@ -97,7 +97,7 @@ msgstr "保存背景颜色"
 
 #: manipulation-gui/gui-changeformat.c:217
 msgid "Save gamma"
-msgstr "Save gamma"
+msgstr "保存 gamma"
 
 #: manipulation-gui/gui-changeformat.c:218
 msgid "Save layer offset"
@@ -121,7 +121,7 @@ msgstr "从透明像素中保存颜色"
 
 #: manipulation-gui/gui-changeformat.c:270
 msgid "RLE compression"
-msgstr "RLE-压缩"
+msgstr "RLE 压缩"
 
 #: manipulation-gui/gui-changeformat.c:273
 msgid "Image origin"
@@ -159,11 +159,11 @@ msgstr "JPEG"
 
 #: manipulation-gui/gui-changeformat.c:313
 msgid "CCITT G3 Fax"
-msgstr "CCITT G3传真"
+msgstr "CCITT G3 传真"
 
 #: manipulation-gui/gui-changeformat.c:314
 msgid "CCITT G4 Fax"
-msgstr "CCITT G4传真"
+msgstr "CCITT G4 传真"
 
 #: manipulation-gui/gui-changeformat.c:329
 msgid "This format has no params"
@@ -191,7 +191,7 @@ msgstr "根据配置文件调整颜色曲线"
 
 #: manipulation-gui/gui-color.c:47
 msgid "Select GIMP Curve file"
-msgstr "选择GIMP曲线文件"
+msgstr "选择 GIMP 曲线文件"
 
 #: manipulation-gui/gui-crop.c:28
 msgid "Crop to a standard aspect ratio"
@@ -199,7 +199,7 @@ msgstr "裁剪成标准长宽比"
 
 #: manipulation-gui/gui-crop.c:54
 msgid "Manual crop (pixel values)"
-msgstr "手动裁剪(单位px)"
+msgstr "手动裁剪(单位 px)"
 
 #: manipulation-gui/gui-crop.c:59 manipulation-gui/gui-resize.c:82
 #: manipulation-gui/gui-watermark.c:80
@@ -233,11 +233,11 @@ msgstr "1:1"
 
 #: manipulation-gui/gui-crop.c:136
 msgid "Classic 35 mm film"
-msgstr "经典35毫米电影"
+msgstr "经典 35 毫米电影"
 
 #: manipulation-gui/gui-crop.c:139
 msgid "Standard VGA monitor"
-msgstr "标准的VGA显示器"
+msgstr "标准 VGA 显示器"
 
 #: manipulation-gui/gui-crop.c:142
 msgid "Widescreen"
@@ -304,7 +304,7 @@ msgstr "日期(JJJJ-MM-TT_hh-mm)"
 msgid ""
 "Can't save!\n"
 "'%s' or '%s' symbol must be present."
-msgstr "参数 '%s'或'%s'符号必须为设定"
+msgstr "参数 '%s' 或 '%s' 符号必须为设定"
 
 #: manipulation-gui/gui-rename.c:64
 msgid ""
@@ -354,11 +354,11 @@ msgstr "修改分辨率"
 
 #: manipulation-gui/gui-resize.c:107
 msgid "X axis"
-msgstr "X-轴"
+msgstr "X 轴"
 
 #: manipulation-gui/gui-resize.c:111
 msgid "Y axis"
-msgstr "Y-轴"
+msgstr "Y 轴"
 
 #: manipulation-gui/gui-sharpblur.c:17
 msgid "More sharpen"
@@ -373,8 +373,8 @@ msgid ""
 "Choose a supported GIMP procedure from the list on the left\n"
 "and define its parameters on the right."
 msgstr ""
-"在左侧列表选择一个已安装的GIMP扩展\n"
-"然后在右侧区域定义它的参数"
+"在左侧列表选择一个受支持的 GIMP 指令\n"
+"然后在右侧区域定义其参数"
 
 #: manipulation-gui/gui-userdef.c:61
 msgid "Search"
@@ -386,7 +386,7 @@ msgid ""
 "no procedure has been selected"
 msgstr ""
 "不能保存\n"
-"因为没有选择插件进行操作"
+"因为没有选择指令来操作"
 
 #: manipulation-gui/gui-userdef.c:351
 msgid "Author"
@@ -394,7 +394,7 @@ msgstr "作者"
 
 #: manipulation-gui/gui-userdef.c:603
 msgid "This procedure takes no editable params"
-msgstr "本程序不可编辑的参数"
+msgstr "本指令没有可编辑的参数"
 
 #: manipulation-gui/gui-watermark.c:41
 msgid "Text watermark"
@@ -463,11 +463,11 @@ msgstr "底部居中"
 
 #: bimp-gui.c:130 bimp-gui.c:918
 msgid "The manipulations set is empty!"
-msgstr "操作队列为空!"
+msgstr "操作队列为空！"
 
 #: bimp-gui.c:133
 msgid "The file list is empty!"
-msgstr "待处理图片列表为空!"
+msgstr "待处理图片列表为空！"
 
 #: bimp-gui.c:163
 msgid "Manipulation set"
@@ -518,7 +518,7 @@ msgstr "不能读取目录 \"%s\" "
 msgid ""
 "Some images were not imported because they have not been saved on filesystem "
 "yet."
-msgstr "一些图片没有被倒入，因为它们还没有被保存在磁盘上"
+msgstr "一些图片没有被导入，因为它们还没有被保存"
 
 #: bimp-gui.c:474
 msgid "Can't show a preview because the manipulations set is empty"
@@ -574,7 +574,7 @@ msgstr "添加文件夹"
 
 #: bimp-gui.c:800
 msgid "Add all opened images"
-msgstr "添加在GIMP中打开的图像"
+msgstr "添加在 GIMP 中打开的图像"
 
 #: bimp-gui.c:807
 msgid "Remove selected"
@@ -586,11 +586,11 @@ msgstr "清空全部图片"
 
 #: bimp-gui.c:854
 msgid "Can't add another manipulation of this kind. Only one is permitted!"
-msgstr "同类型的操作只能添加一个!"
+msgstr "同类型的操作只能添加一个！"
 
 #: bimp-gui.c:945 bimp-gui.c:996
 msgid "An error occured when importing a saved batch file :("
-msgstr "当导入一个batch文件时发生了一个错误 :("
+msgstr "当导入一个批处理文件时发生了一个错误 :("
 
 #: bimp-gui.c:967
 msgid "This will overwrite current manipulations set. Continue?"
@@ -598,7 +598,7 @@ msgstr "这将会覆盖最近的操作设定, 继续吗？"
 
 #: bimp-gui.c:1035 bimp.c:66
 msgid "Applies GIMP manipulations on groups of images"
-msgstr "使用GIMP操作图片组"
+msgstr "应用 GIMP 操作图片组"
 
 #: bimp-gui.c:1042
 msgid "translator-name <translator-email>"
@@ -638,7 +638,7 @@ msgstr "重命名"
 
 #: bimp-manipulations.c:303
 msgid "Other GIMP procedure..."
-msgstr "其它GIMP程序"
+msgstr "其它 GIMP 指令"
 
 #: bimp-operate.c:177
 #, c-format
@@ -646,8 +646,8 @@ msgid ""
 "Can't save image \"%s\": input file has no extension.\n"
 "You can solve this error by adding a \"Change format or compression\" step"
 msgstr ""
-"不能保存图像 \"%s\": 输入文件没又扩展\n"
-"你可以通过添加'修改格式和质量'操作来解决这个问题"
+"不能保存图像 \"%s\": 输入文件没有扩展名\n"
+"你可以通过添加“修改格式和质量”操作来解决这个问题"
 
 #: bimp-operate.c:183
 #, c-format
@@ -655,8 +655,8 @@ msgid ""
 "GIMP can't save %s back to its original SVG format.\n"
 "You can solve this error by adding a \"Change format or compression\" step"
 msgstr ""
-"GIMP不能保存%s为原始的SVG格式\n"
-"你可以通过添加'修改格式和质量'操作来解决这个问题"
+"GIMP 不能保存 %s 为原始的 SVG 格式\n"
+"你可以通过添加“修改格式和质量”操作来解决这个问题"
 
 #: bimp-operate.c:189
 #, c-format
@@ -683,7 +683,7 @@ msgstr "总是应用这个设定"
 
 #: bimp-operate.c:1383
 msgid "Overwrite?"
-msgstr "覆盖?"
+msgstr "是否覆盖？"
 
 #~ msgid "Set width only"
 #~ msgstr "只设置宽度"
