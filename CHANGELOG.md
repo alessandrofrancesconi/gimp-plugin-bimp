@@ -4,6 +4,10 @@ BIMP. Batch Image Manipulation Plugin for GIMP.
 Changelog
 ---------
 
+2.3
+ - Added Dutch translation (thanks to Just Vecht & Paul Matthijsse from Dutch Helpmij Magazine)
+ - Fixed zh-CN locale (thanks to @KrasnayaPloshchad)
+ 
 2.2
  - Added support to WEBP (issue #184)
  - Enabled HEIF in "Change Format and Compression" (issue #185)
