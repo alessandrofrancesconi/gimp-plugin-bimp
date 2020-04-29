@@ -81,6 +81,7 @@ typedef enum format_type {
     FORMAT_TIFF,
     FORMAT_HEIF,
     FORMAT_WEBP,
+    FORMAT_EXR,
     FORMAT_END
 } format_type;
 static const char* format_type_string[][2] = {
@@ -91,8 +92,9 @@ static const char* format_type_string[][2] = {
     {"png", "Portable Network Graphics (.png)"},        /* FORMAT_PNG */
     {"tga", "Targa (.tga)"},                            /* FORMAT_TGA */
     {"tiff", "Tagged Image File Format (.tiff)"},       /* FORMAT_TIFF */
-    {"heif", "Heif (.heif)"},                            /* FORMAT_HEIF */
-    {"webp", "WebP (.webp)"}                            /* FORMAT_HEIF */
+    {"heif", "Heif (.heif)"},                           /* FORMAT_HEIF */
+    {"webp", "WebP (.webp)"},                           /* FORMAT_WEBP */
+    {"exr", "OpenEXR (.exr)"}                           /* FORMAT_EXR */
 };
 
 // First two bits = column, second two bits = row

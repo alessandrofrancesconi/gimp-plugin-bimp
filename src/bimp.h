@@ -10,7 +10,7 @@
 #define PLUG_IN_WEBSITE "http://www.alessandrofrancesconi.it/projects/bimp"
 #define PLUG_IN_BINARY "bimp"
 #define PLUG_IN_PROC "plug-in-bimp"
-#define PLUG_IN_VERSION "2.3"
+#define PLUG_IN_VERSION "2.4"
 
 #define BIMP_RESULT_OK 1
 #define BIMP_RESULT_WARNING 0

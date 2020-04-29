@@ -4,6 +4,9 @@ BIMP. Batch Image Manipulation Plugin for GIMP.
 Changelog
 ---------
 
+2.4
+ - Added support to OpenEXR images
+ 
 2.3
  - Added Dutch translation (thanks to Just Vecht & Paul Matthijsse from Dutch Helpmij Magazine)
  - Fixed zh-CN locale (thanks to @KrasnayaPloshchad)
