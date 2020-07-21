@@ -22,7 +22,7 @@ Compiling and installing on Linux
 You must have gimptool installed in order to have the full set of libraries
 and dependences needed to compile BIMP (names can differ depending on the distro).
 
-For Ubuntu / Linux Mint:
+For Debian-based (Ubuntu, Linux Mint, ...)
 
 	sudo apt-get install libgimp2.0-dev libgegl-dev
 
