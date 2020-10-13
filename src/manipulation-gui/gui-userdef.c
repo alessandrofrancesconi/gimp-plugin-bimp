@@ -16,14 +16,14 @@ static gboolean select_procedure (GtkTreeSelection*, GtkTreeModel*, GtkTreePath*
 static void update_selected_procedure(gchar*);
 static void update_procedure_box(userdef_settings);
 
-GtkWidget *treeview_procedures;
-GtkWidget *scroll_procparam, *vbox_procparam;
-GtkWidget *parent_dialog;
+static GtkWidget *treeview_procedures;
+static GtkWidget *scroll_procparam, *vbox_procparam;
+static GtkWidget *parent_dialog;
 
-userdef_settings temp_settings;
-GtkWidget **param_widget; /* array of showable widgets for customizing the selected procedure */
+static userdef_settings temp_settings;
+static GtkWidget **param_widget; /* array of showable widgets for customizing the selected procedure */
 
-GtkTreeSelection *treesel_proc;
+static GtkTreeSelection *treesel_proc;
 
 enum
 {

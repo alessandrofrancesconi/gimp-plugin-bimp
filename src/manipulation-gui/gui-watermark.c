@@ -13,13 +13,13 @@ static const char* watermark_pos_get_string(watermark_position);
 static const char* watermark_pos_get_abbreviation(watermark_position);
 static void file_filters_add_patterns(GtkFileFilter*, GtkFileFilter*, ...);
 
-GtkWidget *table_text, *vbox_image, *hbox_image_size;
-GtkWidget *radio_text, *radio_image;
-GtkWidget *entry_text;
-GtkWidget *chooser_font, *chooser_color, *chooser_image;
-GtkWidget *check_image_adaptsize, *spin_image_sizepercent, *spin_edge, *combo_image_sizemode;
-GtkWidget *scale_opacity;
-GtkWidget *position_buttons[9];
+static GtkWidget *table_text, *vbox_image, *hbox_image_size;
+static GtkWidget *radio_text, *radio_image;
+static GtkWidget *entry_text;
+static GtkWidget *chooser_font, *chooser_color, *chooser_image;
+static GtkWidget *check_image_adaptsize, *spin_image_sizepercent, *spin_edge, *combo_image_sizemode;
+static GtkWidget *scale_opacity;
+static GtkWidget *position_buttons[9];
 
 GtkWidget* bimp_watermark_gui_new(watermark_settings settings)
 {

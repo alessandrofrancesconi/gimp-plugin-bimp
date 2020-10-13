@@ -8,17 +8,17 @@ static void update_frame_params(GtkComboBox*, changeformat_settings);
 static void adv_expanded (GtkWidget*, GtkRequisition*, gpointer);
 static void update_window_size();
 
-GtkWidget *frame_params, *inner_widget;
-GtkWidget *combo_format, *scale_quality, *scale_alpha_quality, *scale_smoothing, *check_interlace, *scale_compression, *check_baseline;
-GtkWidget *check_rle, *check_progressive, *check_entrophy, *combo_compression, *spin_markers, *combo_subsampling, *combo_dct, *combo_origin;
-GtkWidget *check_savebgc, *check_savegamma, *check_saveoff, *check_savephys, *check_savetime, *check_savecomm, *check_savetrans, *check_lossless;
-GtkWidget *combo_preset, *check_saveexif, *check_savexmp, *check_savecp;
-GtkWidget *expander_advanced;
+static GtkWidget *frame_params, *inner_widget;
+static GtkWidget *combo_format, *scale_quality, *scale_alpha_quality, *scale_smoothing, *check_interlace, *scale_compression, *check_baseline;
+static GtkWidget *check_rle, *check_progressive, *check_entrophy, *combo_compression, *spin_markers, *combo_subsampling, *combo_dct, *combo_origin;
+static GtkWidget *check_savebgc, *check_savegamma, *check_saveoff, *check_savephys, *check_savetime, *check_savecomm, *check_savetrans, *check_lossless;
+static GtkWidget *combo_preset, *check_saveexif, *check_savexmp, *check_savecp;
+static GtkWidget *expander_advanced;
 
-GtkTextBuffer *buffer_comment;
-GtkTextIter start_comment, end_comment;
+static GtkTextBuffer *buffer_comment;
+static GtkTextIter start_comment, end_comment;
 
-GtkWidget* parentwin;
+static GtkWidget* parentwin;
 
 GtkWidget* bimp_changeformat_gui_new(changeformat_settings settings, GtkWidget* parent)
 {

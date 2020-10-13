@@ -43,31 +43,31 @@ static gboolean image_save_exr(image_output);
 
 static int overwrite_result(char*, GtkWidget*);
 
-char* current_datetime;
-int processed_count;
-int success_count;
-int total_images;
+static char* current_datetime;
+static int processed_count;
+static int success_count;
+static int total_images;
 
-char* common_folder_path;
+static char* common_folder_path;
 
-gboolean list_contains_changeformat;
-gboolean list_contains_rename;
-gboolean list_contains_watermark;
-gboolean list_contains_savingplugin;
+static gboolean list_contains_changeformat;
+static gboolean list_contains_rename;
+static gboolean list_contains_watermark;
+static gboolean list_contains_savingplugin;
 
 // set of variables to be used when doing Curve color correction
 // they are global so the batch process will read the source curve file once
-gboolean colorcurve_init;
-int colorcurve_num_points_v;
-gdouble* colorcurve_ctr_points_v;
-int colorcurve_num_points_r;
-gdouble* colorcurve_ctr_points_r;
-int colorcurve_num_points_g;
-gdouble* colorcurve_ctr_points_g;
-int colorcurve_num_points_b;
-gdouble* colorcurve_ctr_points_b;
-int colorcurve_num_points_a;
-gdouble* colorcurve_ctr_points_a;
+static gboolean colorcurve_init;
+static int colorcurve_num_points_v;
+static gdouble* colorcurve_ctr_points_v;
+static int colorcurve_num_points_r;
+static gdouble* colorcurve_ctr_points_r;
+static int colorcurve_num_points_g;
+static gdouble* colorcurve_ctr_points_g;
+static int colorcurve_num_points_b;
+static gdouble* colorcurve_ctr_points_b;
+static int colorcurve_num_points_a;
+static gdouble* colorcurve_ctr_points_a;
 
 void bimp_start_batch(gpointer parent_dialog)
 {

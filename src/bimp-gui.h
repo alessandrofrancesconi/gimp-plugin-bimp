@@ -21,6 +21,6 @@ void bimp_progress_bar_set(double, char*);
 void bimp_show_error_dialog(char*, GtkWidget*);
 void bimp_set_busy(gboolean);
 
-GtkWidget* bimp_window_main;
+extern GtkWidget* bimp_window_main;
 
 #endif

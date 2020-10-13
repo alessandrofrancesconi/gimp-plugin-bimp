@@ -278,6 +278,6 @@ manipulation manipulation_changeformat_new(void);
 manipulation manipulation_rename_new(void); 
 manipulation manipulation_userdef_new(void); 
 
-GSList* bimp_selected_manipulations; /* Manipulations selected by user */
+extern GSList* bimp_selected_manipulations; /* Manipulations selected by user */
 
 #endif

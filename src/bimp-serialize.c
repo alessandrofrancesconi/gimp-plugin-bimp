@@ -36,8 +36,8 @@ static manipulation read_rename(GKeyFile*);
 static void write_userdef(userdef_settings, GKeyFile*, int);
 static manipulation read_userdef(GKeyFile*, int);
 
-int userdef_count;
-int loaded_build;
+static int userdef_count;
+static int loaded_build;
 
 gboolean bimp_serialize_to_file(gchar* filename)
 {

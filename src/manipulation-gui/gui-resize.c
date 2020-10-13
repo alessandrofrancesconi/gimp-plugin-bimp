@@ -11,17 +11,17 @@ static void toggle_resolution(GtkToggleButton*, gpointer);
 static void update_dimensions();
 
 
-GtkWidget *table_res;
-GtkWidget *check_resolution;
-GtkWidget *combo_unitW, *combo_unitH, *combo_aspectratio, *combo_quality;
-GtkWidget *chooser_paddingcolor;
-GtkWidget *spin_width, *spin_height, *spin_resX, *spin_resY;
+static GtkWidget *table_res;
+static GtkWidget *check_resolution;
+static GtkWidget *combo_unitW, *combo_unitH, *combo_aspectratio, *combo_quality;
+static GtkWidget *chooser_paddingcolor;
+static GtkWidget *spin_width, *spin_height, *spin_resX, *spin_resY;
 
-resize_mode previous_resize_w, previous_resize_h;
-gdouble last_percent_w_value;
-gdouble last_percent_h_value;
-gint last_pixel_w_value;
-gint last_pixel_h_value;
+static resize_mode previous_resize_w, previous_resize_h;
+static gdouble last_percent_w_value;
+static gdouble last_percent_h_value;
+static gint last_pixel_w_value;
+static gint last_pixel_h_value;
 
 GtkWidget* bimp_resize_gui_new(resize_settings settings)
 {

@@ -4,7 +4,7 @@
 #include "../bimp-manipulations.h"
 #include "../plugin-intl.h"
 
-GtkWidget *scale_sharpblur;
+static GtkWidget *scale_sharpblur;
 
 GtkWidget* bimp_sharpblur_gui_new(sharpblur_settings settings)
 {

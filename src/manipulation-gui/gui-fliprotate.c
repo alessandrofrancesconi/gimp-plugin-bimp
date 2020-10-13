@@ -7,7 +7,7 @@
 #include "../bimp-utils.h"
 #include "../plugin-intl.h"
     
-GtkWidget *button_flipH, *button_flipV, *combo_rotate;
+static GtkWidget *button_flipH, *button_flipV, *combo_rotate;
 
 GtkWidget* bimp_fliprotate_gui_new(fliprotate_settings settings)
 {

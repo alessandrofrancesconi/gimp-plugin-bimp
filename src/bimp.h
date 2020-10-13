@@ -20,17 +20,17 @@
 #define BIMP_OVERWRITE_SKIP_ASK 1
 #define BIMP_DONT_OVERWRITE_SKIP_ASK 2
 
-GSList* bimp_input_filenames;
-char* bimp_output_folder;
+extern GSList* bimp_input_filenames;
+extern char* bimp_output_folder;
 
-gint bimp_opt_alertoverwrite;
-gboolean bimp_opt_keepfolderhierarchy;
-gboolean bimp_opt_deleteondone;
-gboolean bimp_opt_keepdates;
+extern gint bimp_opt_alertoverwrite;
+extern gboolean bimp_opt_keepfolderhierarchy;
+extern gboolean bimp_opt_deleteondone;
+extern gboolean bimp_opt_keepdates;
 
-gboolean bimp_is_busy;
+extern gboolean bimp_is_busy;
 
-GSList* bimp_supported_procedures;
+extern GSList* bimp_supported_procedures;
 void init_supported_procedures(void);
 
 #endif

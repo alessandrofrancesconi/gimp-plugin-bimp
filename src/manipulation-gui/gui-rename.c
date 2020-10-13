@@ -9,7 +9,7 @@
 #include "../plugin-intl.h"
 
 static void check_entrytext (GtkEditable*, gpointer);
-GtkWidget *entry_pattern, *label_preview;
+static GtkWidget *entry_pattern, *label_preview;
 
 GtkWidget* bimp_rename_gui_new(rename_settings settings, GtkWidget* parent)
 {
