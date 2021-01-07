@@ -480,19 +480,19 @@ gboolean parse_curve_file(
                 if (fgets(line, sizeof(line), pFile) == NULL) goto err;
             }
             
-            // number of points
-            int n_points;
+            // n-points, ignored (also it is missing since GIMP 2.10)
+            // the actual number of points is parsed from "(points N..."
             if (g_str_has_prefix(line, "    (n-points")) {
-                if (sscanf (line, "    (n-points %d)", &n_points) != 1) goto err;
                 if (fgets(line, sizeof(line), pFile) == NULL) goto err;
             }
             
-            // points list
-            
+            // number of points and list
             double pX, pY;
             int p_count = 0;
-            char* token = strtok(line + strlen(g_strdup_printf("    (points %d", n_points * 2)), " ");
+            char* token = strtok(line + strlen(g_strdup_printf("    (points ")), " ");
+            int num_points = atoi(token); // first token holds the number of points
             
+            token = strtok(NULL, " "); 
             while (token) {
                 pX = atof(token);
                 token = strtok(NULL, " ");
