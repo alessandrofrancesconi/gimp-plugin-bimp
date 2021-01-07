@@ -4,6 +4,10 @@ BIMP. Batch Image Manipulation Plugin for GIMP.
 Changelog
 ---------
 
+2.5
+ - Fixed Color Curve not working if exported using GIMP 2.10 (issue #255)
+ - Fixed Windows uninstaller not working in both normal and silent mode (issues #258 #240 #196)
+ 
 2.4
  - Added support to OpenEXR images
  

@@ -6,7 +6,7 @@
 
 !define APPNAME "Batch Image Manipulation Plugin for GIMP"
 !define APPID "gimp-plugin-bimp"
-!define APPVERSION "2.3"
+!define APPVERSION "2.5"
 
 Name "${APPNAME}"
 OutFile "gimp-plugin-bimp_win32.exe"
