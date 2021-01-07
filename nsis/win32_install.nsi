@@ -14,6 +14,7 @@ RequestExecutionLevel admin
 ShowInstDetails show
 
 Var GIMP_dir
+Var GIMP_dir_usr210
 Var GIMP_dir_usr28
 Var GIMP_dir_usr26
 Var UNINSTDIR
@@ -51,11 +52,9 @@ ${If} $0 != "admin" ;Require admin rights on NT4+
 ${EndIf}
 !macroend
 
-# Before start, check for GIMP installation existence (for both 32 and 64 machines)
-Function .onInit
-    !insertmacro PRINT_SILENT_OUT "$\nBIMP. Batch Image Manipulation Plugin for GIMP.$\n"
-    
-    SetRegView 32 ; try on 32-bit
+!macro FillGimpDir UN
+Function ${UN}FillGimpDir
+   SetRegView 32 ; try on 32-bit
     ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GIMP-2_is1" InstallLocation
 
     StrCmp $0 "" 0 GimpFound
@@ -67,7 +66,7 @@ Function .onInit
         MessageBox MB_OK|MB_ICONEXCLAMATION "The installer cannot find GIMP installation by itself. Please click OK and manually select the folder where GIMP is installed." /SD IDOK
         
         ; but if in Silent mode, abort everything
-        !insertmacro PRINT_SILENT_OUT "GIMP installation was not found. Please install GIMP before running this installer.$\n"
+        !insertmacro PRINT_SILENT_OUT "GIMP installation was not found. Please install GIMP before running this.$\n"
         IfSilent 0 +2
         Abort
 
@@ -77,11 +76,21 @@ Function .onInit
         ; check if user aborted it
         StrCmp $0 "error" 0 GimpFound
         Abort
+	
+	GimpFound: ; great!
+	StrCpy $GIMP_dir $0
+FunctionEnd
+!macroend
+!insertmacro FillGimpDir "" 
+!insertmacro FillGimpDir "un."
 
-    GimpFound: ; great!
-    StrCpy $GIMP_dir $0
-    StrCpy $INSTDIR $GIMP_dir"\lib\gimp\2.0\plug-ins" ; fill $INSTDIR with the plugin's directory
-    StrCpy $UNINSTDIR $GIMP_dir"\etc\gimp\2.0" ; fill $UNINSTDIR with the plugin's uninstaller
+# Before start, check for GIMP installation existence (for both 32 and 64 machines)
+Function .onInit
+    !insertmacro PRINT_SILENT_OUT "$\nBIMP. Batch Image Manipulation Plugin for GIMP.$\n"
+    
+	Call FillGimpDir
+    StrCpy $INSTDIR "$GIMP_dir\lib\gimp\2.0\plug-ins" ; fill $INSTDIR with the plugin's directory
+    StrCpy $UNINSTDIR "$GIMP_dir\etc\gimp\2.0" ; fill $UNINSTDIR with the plugin's uninstaller
     
     ; if $INSTDIR does not exists, don't let us continue
     IfFileExists $INSTDIR PathGood
@@ -92,7 +101,8 @@ Function .onInit
     
     !insertmacro PRINT_SILENT_OUT "GIMP folder found in $INSTDIR.$\n"
     
-    StrCpy $GIMP_dir_usr28 $PROFILE\.gimp-2.8\plug-ins ; also fills the user's data folder (to remove old files)
+    StrCpy $GIMP_dir_usr210 $PROFILE\.gimp-2.10\plug-ins ; also fills the user's data folder (to remove old files)
+    StrCpy $GIMP_dir_usr28 $PROFILE\.gimp-2.8\plug-ins ; do the same for GIMP 2.8
     StrCpy $GIMP_dir_usr26 $PROFILE\.gimp-2.6\plug-ins ; do the same for GIMP 2.6
     
     InitPluginsDir
@@ -125,6 +135,8 @@ FunctionEnd
 Section "Remove old files" SecRemOld
     !insertmacro PRINT_SILENT_OUT "Cleaning up old files...$\n"
     
+    Delete $GIMP_dir_usr210\bimp.exe
+	Delete $GIMP_dir_usr210\bimp-uninstall.exe
     Delete $GIMP_dir_usr28\bimp.exe
 	Delete $GIMP_dir_usr28\bimp-uninstall.exe
     Delete $GIMP_dir_usr26\bimp.exe
@@ -132,6 +144,7 @@ Section "Remove old files" SecRemOld
     Delete $INSTDIR\bimp.exe
 	Delete $INSTDIR\bimp-uninstall.exe
     
+    RMDir /r $GIMP_dir_usr210\bimp-locale
     RMDir /r $GIMP_dir_usr28\bimp-locale
     RMDir /r $GIMP_dir_usr26\bimp-locale
     RMDir /r $INSTDIR\bimp-locale
@@ -152,7 +165,7 @@ Section "File copy" SecInstall
     # Registry information for add/remove programs
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "DisplayName" "${APPNAME}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "UninstallString" "$\"$UNINSTDIR\bimp-uninstall.exe$\""
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "QuietUninstallString" "$\"$UNINSTDIR\bimp-uninstall.exe$\" /S"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "QuietUninstallString" "$\"$UNINSTDIR\bimp-uninstall.exe /S$\""
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "InstallLocation" "$\"$INSTDIR$\""
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "Publisher" "Alessandro Francesconi"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" "HelpLink" "http://www.alessandrofrancesconi.it/projects/bimp"
@@ -165,18 +178,22 @@ SectionEnd
 
 # Uninstaller
 
-function un.onInit
+Function un.onInit
 	SetShellVarContext all
  
 	# verify the uninstaller - last chance to back out
-	MessageBox MB_OKCANCEL "Remove ${APPNAME}?" IDOK next
+	MessageBox MB_OKCANCEL "Remove ${APPNAME}?" /SD IDOK IDOK next
 		Abort
 	next:
 	!insertmacro VerifyUserIsAdmin
-functionEnd
+FunctionEnd
 
-section "uninstall"
+Section "uninstall"
  
+	Call un.FillGimpDir
+    StrCpy $INSTDIR "$GIMP_dir\lib\gimp\2.0\plug-ins" ; fill $INSTDIR with the plugin's directory
+    StrCpy $UNINSTDIR "$GIMP_dir\etc\gimp\2.0" ; fill $UNINSTDIR with the plugin's uninstaller
+	
 	# Remove files
 	Delete $INSTDIR\bimp.exe
 	RMDir /r $INSTDIR\bimp-locale
@@ -186,4 +203,4 @@ section "uninstall"
  
 	# Remove uninstaller information from the registry
 	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}"
-sectionEnd
+SectionEnd
