@@ -1093,6 +1093,7 @@ void bimp_show_error_dialog(char* message, GtkWidget* parent)
         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
         GTK_MESSAGE_ERROR,
         GTK_BUTTONS_OK,
+        "%s",
         message
     );
     gtk_dialog_run(GTK_DIALOG(dialog));
