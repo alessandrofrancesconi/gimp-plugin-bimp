@@ -8,6 +8,9 @@
 #include "bimp-manipulations-gui.h"
 #include "plugin-intl.h"
 
+
+GSList* bimp_selected_manipulations;
+
 /* Appends a default manipulation to the step list */
 manipulation bimp_append_manipulation(manipulation_type type)
 {

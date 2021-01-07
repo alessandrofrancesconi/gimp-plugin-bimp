@@ -8,11 +8,11 @@ static void toggle_group(GtkToggleButton*, gpointer);
 static void set_customratio(GtkComboBox*, gpointer);
 static char* crop_preset_get_string(crop_preset);
 
-GtkWidget *hbox_ratio, *table_manual, *hbox_customratio;
-GtkWidget *radio_stratio, *radio_manual;
-GtkWidget *combo_ratio, *spin_ratio1, *spin_ratio2;
-GtkWidget *spin_width, *spin_height;
-GtkWidget *hbox_startpos, *combo_startpos;
+static GtkWidget *hbox_ratio, *table_manual, *hbox_customratio;
+static GtkWidget *radio_stratio, *radio_manual;
+static GtkWidget *combo_ratio, *spin_ratio1, *spin_ratio2;
+static GtkWidget *spin_width, *spin_height;
+static GtkWidget *hbox_startpos, *combo_startpos;
 
 GtkWidget* bimp_crop_gui_new(crop_settings settings)
 {

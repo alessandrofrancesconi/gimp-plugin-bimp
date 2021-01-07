@@ -6,9 +6,9 @@
 
 static void toggle_curve(GtkToggleButton*, gpointer);
 
-GtkWidget *scale_bright, *scale_contrast;
-GtkWidget *check_autolevels, *check_grayscale, *check_curve;
-GtkWidget *chooser_curve;
+static GtkWidget *scale_bright, *scale_contrast;
+static GtkWidget *check_autolevels, *check_grayscale, *check_curve;
+static GtkWidget *chooser_curve;
     
 GtkWidget* bimp_color_gui_new(color_settings settings)
 {

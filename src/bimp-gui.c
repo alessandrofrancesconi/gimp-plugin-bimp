@@ -55,18 +55,20 @@ static void progressbar_end_hidden (gpointer);
 static void progressbar_settext_hidden (const gchar*, gpointer);
 static void progressbar_setvalue_hidden (double, gpointer);
 
-GtkWidget *panel_sequence, *panel_options;
-GtkWidget *hbox_sequence;
-GtkWidget *scroll_sequence;
-GtkWidget *popmenu_add, *popmenu_edit, *popmenu_addfiles, *popmenu_removefiles;
-GtkWidget *check_keepfolderhierarchy, *check_deleteondone, *check_keepdates;
-GtkWidget *treeview_files;
-GtkWidget *button_preview, *button_outfolder, *button_samefolder;
-GtkWidget* progressbar_visible;
+GtkWidget* bimp_window_main;
 
-char* selected_source_folder;
-char* last_input_location;
-const gchar* progressbar_data;
+static GtkWidget *panel_sequence, *panel_options;
+static GtkWidget *hbox_sequence;
+static GtkWidget *scroll_sequence;
+static GtkWidget *popmenu_add, *popmenu_edit, *popmenu_addfiles, *popmenu_removefiles;
+static GtkWidget *check_keepfolderhierarchy, *check_deleteondone, *check_keepdates;
+static GtkWidget *treeview_files;
+static GtkWidget *button_preview, *button_outfolder, *button_samefolder;
+static GtkWidget* progressbar_visible;
+
+static char* selected_source_folder;
+static char* last_input_location;
+static const gchar* progressbar_data;
 
 enum /* TreeView stuff... */
 {
@@ -74,7 +76,7 @@ enum /* TreeView stuff... */
   N_COLUMNS
 };
 
-manipulation clicked_man; /* temporary manipulation, selected by clicking on panel_seq buttons */
+static manipulation clicked_man; /* temporary manipulation, selected by clicking on panel_seq buttons */
 
 void bimp_show_gui() 
 {	

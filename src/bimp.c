@@ -32,6 +32,18 @@
 #include "bimp-utils.h"
 #include "plugin-intl.h"
 
+GSList* bimp_input_filenames;
+char* bimp_output_folder;
+
+gint bimp_opt_alertoverwrite;
+gboolean bimp_opt_keepfolderhierarchy;
+gboolean bimp_opt_deleteondone;
+gboolean bimp_opt_keepdates;
+
+gboolean bimp_is_busy;
+
+GSList* bimp_supported_procedures;
+
 static void query (void);
 static gboolean pdb_proc_has_compatible_params (gchar*);
 
@@ -43,7 +55,7 @@ static void run (
     GimpParam **return_vals
     );
 
-const GimpPlugInInfo PLUG_IN_INFO = {
+static const GimpPlugInInfo PLUG_IN_INFO = {
     NULL,  /* init_proc  */
     NULL,  /* quit_proc  */
     query, /* query_proc */
