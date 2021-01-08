@@ -79,7 +79,7 @@ char* comp_get_filename(char* path)
     pfile = path + strlen(path);
     for (; pfile > path; pfile--)
     {
-        if ((*pfile == FILE_SEPARATOR)) //'\\') || (*pfile == '/'))
+        if (*pfile == FILE_SEPARATOR)
         {
             pfile++;
             break;
@@ -98,7 +98,7 @@ char* comp_get_filefolder(char* path)
 
     for (i = strlen(folder); i > 0 ; i--)
     {
-        if ((folder[i-1] == FILE_SEPARATOR))
+        if (folder[i-1] == FILE_SEPARATOR)
         {
             folder[i] = '\0';
             break;
