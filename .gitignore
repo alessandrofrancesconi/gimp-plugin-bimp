@@ -1,6 +1,14 @@
+bin/bimp
 *.zip
 *.exe
-*.db
-.vscode
+*.o
+*.so
 
-bin/bimp
+.vscode
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
