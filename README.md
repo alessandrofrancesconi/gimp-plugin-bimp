@@ -43,11 +43,9 @@ to make and install for every user in the system (needs root privileges).
 
 For Mac OSX users
 -----------------
-There's no need to install or compile BIMP on Mac, because the default native build of GIMP for Mac OSX 10.8 
-made by Simone from http://gimp.lisanet.de/Website/Download.html already includes BIMP!
-(however, it's not guaranteed to be the very latest version of either BIMP or GIMP)
+Starting from BIMP 2.5, the MacOS version is available in the Release page: https://github.com/alessandrofrancesconi/gimp-plugin-bimp/releases. Please note: it may not work in every GIMP/MacOS version. See the release page for details.
 
-For those interested in remaining on the cutting edge, the instructions are as follows:
+For those interested in remaining on the cutting edge, the instructions to compile are as follows:
 
 1. Install [MacPorts](https://www.macports.org/install.php)
 2. Install prerequisites: `sudo port install coreutils `
