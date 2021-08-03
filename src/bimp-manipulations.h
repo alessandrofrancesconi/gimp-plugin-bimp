@@ -266,6 +266,7 @@ void bimp_remove_manipulation(manipulation);
 gboolean bimp_list_contains_manip(manipulation_type);
 gboolean bimp_list_contains_savingplugin(void);
 manipulation bimp_list_get_manip(manipulation_type);
+GSList* bimp_list_get_manip_all(manipulation_type);
 char* bimp_manip_get_string(manipulation_type);
 
 manipulation manipulation_sharpblur_new(void);

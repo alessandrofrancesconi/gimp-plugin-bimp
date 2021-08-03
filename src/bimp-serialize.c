@@ -27,8 +27,8 @@ static void write_color(color_settings, GKeyFile*);
 static manipulation read_color(GKeyFile*, int);
 static void write_sharpblur(sharpblur_settings, GKeyFile*);
 static manipulation read_sharpblur(GKeyFile*);
-static void write_watermark(watermark_settings, GKeyFile*);
-static manipulation read_watermark(GKeyFile*);
+static void write_watermark(watermark_settings, GKeyFile*, int);
+static manipulation read_watermark(GKeyFile*, int);
 static void write_changeformat(changeformat_settings, GKeyFile*);
 static manipulation read_changeformat(GKeyFile*);
 static void write_rename(rename_settings, GKeyFile*);
@@ -36,7 +36,7 @@ static manipulation read_rename(GKeyFile*);
 static void write_userdef(userdef_settings, GKeyFile*, int);
 static manipulation read_userdef(GKeyFile*, int);
 
-static int userdef_count;
+static int watermark_count, userdef_count;
 static int loaded_build;
 
 gboolean bimp_serialize_to_file(gchar* filename)
@@ -48,6 +48,7 @@ gboolean bimp_serialize_to_file(gchar* filename)
     
     g_key_file_set_comment (output_file, NULL, NULL, g_strdup_printf("BIMP %s\nMANIPULATION SET DEFINITION", PLUG_IN_VERSION), NULL);
     
+    watermark_count = 0;
     userdef_count = 0;
     g_slist_foreach(bimp_selected_manipulations, (GFunc)append_manipulation_details, output_file);
     
@@ -123,7 +124,8 @@ static void append_manipulation_details(manipulation man, GKeyFile* output_file)
         write_sharpblur((sharpblur_settings)man->settings, output_file);
     }
     else if (man->type == MANIP_WATERMARK) {
-        write_watermark((watermark_settings)man->settings, output_file);
+        write_watermark((watermark_settings)man->settings, output_file, watermark_count);
+        watermark_count++;
     }
     else if (man->type == MANIP_CHANGEFORMAT) {
         write_changeformat((changeformat_settings)man->settings, output_file);
@@ -163,8 +165,16 @@ static GSList* parse_manipulations(GKeyFile* file, int version)
         else if (strcmp(groups[i], "SHARPBLUR") == 0) {
             newman = read_sharpblur(file);
         }
-        else if (strcmp(groups[i], "WATERMARK") == 0) {
-            newman = read_watermark(file);
+        else if (strncmp(groups[i], "WATERMARK", strlen("WATERMARK")) == 0) {
+            if (strcmp(groups[i], "WATERMARK") == 0) {
+                newman = read_watermark(file, -1);
+            }
+            else {
+                int watermark_id;
+                if (sscanf(groups[i], "WATERMARK%d", &watermark_id) == 1) {
+                    newman = read_watermark(file, watermark_id);
+                }
+            }            
         }
         else if (strcmp(groups[i], "CHANGEFORMAT") == 0) {
             newman = read_changeformat(file);
@@ -593,9 +603,9 @@ static manipulation read_sharpblur(GKeyFile* file)
     return man;
 }
 
-static void write_watermark(watermark_settings settings, GKeyFile* file) 
+static void write_watermark(watermark_settings settings, GKeyFile* file, int id) 
 {
-    gchar* group_name = "WATERMARK";
+    gchar* group_name = g_strdup_printf("WATERMARK%d", id);
     
     g_key_file_set_boolean(file, group_name, "mode", settings->mode);
     g_key_file_set_string(file, group_name, "text", settings->text);
@@ -609,9 +619,11 @@ static void write_watermark(watermark_settings settings, GKeyFile* file)
     g_key_file_set_integer(file, group_name, "position", settings->position);
 }
 
-static manipulation read_watermark(GKeyFile* file) 
+static manipulation read_watermark(GKeyFile* file, int id) 
 {
-    gchar* group_name = "WATERMARK";
+    gchar* group_name;
+    if (id == -1) group_name = "WATERMARK";
+    else group_name = g_strdup_printf("WATERMARK%d", id);
     manipulation man = NULL;
     
     if (g_key_file_has_group(file, group_name)) {

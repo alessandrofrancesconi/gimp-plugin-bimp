@@ -16,7 +16,7 @@ manipulation bimp_append_manipulation(manipulation_type type)
 {
     manipulation newman = NULL; /* newman, paul newman. */
     
-    if (type != MANIP_USERDEF && bimp_list_contains_manip(type)) {
+    if (type != MANIP_WATERMARK && type != MANIP_USERDEF && bimp_list_contains_manip(type)) {
         return NULL;
     }
     else {
@@ -115,6 +115,20 @@ manipulation bimp_list_get_manip(manipulation_type search)
     
     return found_man;
 }
+
+GSList* bimp_list_get_manip_all(manipulation_type search) 
+{
+    GSList *result = NULL;
+    GSList *iterator = NULL;
+    
+    for (iterator = bimp_selected_manipulations; iterator; iterator = iterator->next) {
+        manipulation found_man = (manipulation)(iterator->data);
+        if (found_man->type == search) result = g_slist_append (result, iterator->data);
+    }
+    
+    return result;
+}
+
 
 /* set of constructors for each type of manipulation (with default values) */
 

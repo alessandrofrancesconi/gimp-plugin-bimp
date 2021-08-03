@@ -364,8 +364,14 @@ void bimp_apply_drawable_manipulations(image_output imageout, gchar* orig_filena
     
     //  watermark at last 
     if(list_contains_watermark) {
-        g_print("Applying WATERMARK...\n");
-        apply_watermark((watermark_settings)(bimp_list_get_manip(MANIP_WATERMARK))->settings, imageout);
+        GSList* watermarks = bimp_list_get_manip_all(MANIP_WATERMARK);
+        GSList *iterator = NULL;
+        for (iterator = watermarks; iterator; iterator = iterator->next) {
+            g_print("Applying WATERMARK...\n");
+            apply_watermark((watermark_settings)(((manipulation)(iterator->data))->settings), imageout);
+        }
+
+        
     }
     
     // re-enable undo 
