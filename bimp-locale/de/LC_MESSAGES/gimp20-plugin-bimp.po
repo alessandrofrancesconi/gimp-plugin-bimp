@@ -38,7 +38,7 @@ msgstr "Qualität"
 #: manipulation-gui/gui-changeformat.c:84
 #: manipulation-gui/gui-changeformat.c:213
 msgid "Advanced params"
-msgstr "erweiterte Optionen"
+msgstr "Erweiterte Optionen"
 
 #: .\manipulation-gui/gui-changeformat.c:88
 #: manipulation-gui/gui-changeformat.c:88
@@ -223,19 +223,19 @@ msgstr "Kontrast"
 
 #: .\manipulation-gui/gui-color.c:36 manipulation-gui/gui-color.c:36
 msgid "Convert to grayscale"
-msgstr "in Graustufen umwandeln"
+msgstr "In Graustufen umwandeln"
 
 #: .\manipulation-gui/gui-color.c:38 manipulation-gui/gui-color.c:38
 msgid "Automatic color levels correction"
-msgstr "automatische Farbwertkorrektur"
+msgstr "Automatische Farbwertkorrektur"
 
 #: .\manipulation-gui/gui-color.c:41 manipulation-gui/gui-color.c:41
 msgid "Change color curve from settings file:"
-msgstr ""
+msgstr "Farbkurve aus Einstellungsdatei ändern"
 
 #: .\manipulation-gui/gui-color.c:42 manipulation-gui/gui-color.c:42
 msgid "Select GIMP Curve file"
-msgstr ""
+msgstr "GIMP Farbkurvendatei auswählen"
 
 #: .\manipulation-gui/gui-crop.c:28 manipulation-gui/gui-crop.c:28
 msgid "Crop to a standard aspect ratio"
@@ -243,7 +243,7 @@ msgstr "Vorlagen"
 
 #: .\manipulation-gui/gui-crop.c:54 manipulation-gui/gui-crop.c:54
 msgid "Manual crop (pixel values)"
-msgstr "manuell Pixelwerte eingeben"
+msgstr "Manuell Pixelwerte eingeben"
 
 #: .\manipulation-gui/gui-crop.c:59 .\manipulation-gui/gui-resize.c:63
 #: manipulation-gui/gui-crop.c:59 manipulation-gui/gui-resize.c:63
@@ -257,7 +257,7 @@ msgstr "Höhe"
 
 #: .\manipulation-gui/gui-crop.c:68 manipulation-gui/gui-crop.c:68
 msgid "Start from"
-msgstr ""
+msgstr "Start von"
 
 #: .\manipulation-gui/gui-crop.c:70 .\manipulation-gui/gui-watermark.c:253
 #: manipulation-gui/gui-crop.c:70 manipulation-gui/gui-watermark.c:253
@@ -280,7 +280,7 @@ msgstr "1:1"
 
 #: .\manipulation-gui/gui-crop.c:136 manipulation-gui/gui-crop.c:136
 msgid "Classic 35 mm film"
-msgstr "klassischer 35 mm-Film"
+msgstr "Klassischer 35 mm-Film"
 
 #: .\manipulation-gui/gui-crop.c:139 manipulation-gui/gui-crop.c:139
 msgid "Standard VGA monitor"
@@ -292,7 +292,7 @@ msgstr "Breitbildformat"
 
 #: .\manipulation-gui/gui-crop.c:145 manipulation-gui/gui-crop.c:145
 msgid "Widescreen extended"
-msgstr "erweitertes Breitbildformat"
+msgstr "Erweitertes Breitbildformat"
 
 #: .\manipulation-gui/gui-crop.c:148 manipulation-gui/gui-crop.c:148
 msgid "EU Passport portrait"
@@ -300,19 +300,19 @@ msgstr "Passfoto für den EU-Pass"
 
 #: .\manipulation-gui/gui-crop.c:151 manipulation-gui/gui-crop.c:151
 msgid "Classic smartphone screen"
-msgstr "klassischer Smartphone-Bildschirm"
+msgstr "Klassischer Smartphone-Bildschirm"
 
 #: .\manipulation-gui/gui-crop.c:154 manipulation-gui/gui-crop.c:154
 msgid "Tall smartphone screen"
-msgstr ""
+msgstr "Kleiner Smartphone-Bildschirm"
 
 #: .\manipulation-gui/gui-crop.c:157 manipulation-gui/gui-crop.c:157
 msgid "Classic tablet screen"
-msgstr "klassischer Tablettbildschirm"
+msgstr "Klassischer Tablett-Bildschirm"
 
 #: .\manipulation-gui/gui-crop.c:160 manipulation-gui/gui-crop.c:160
 msgid "Custom ratio"
-msgstr "individuelles Seitenverhältnis"
+msgstr "Individuelles Seitenverhältnis"
 
 #: .\manipulation-gui/gui-fliprotate.c:19 manipulation-gui/gui-fliprotate.c:19
 msgid "Flip"
@@ -352,13 +352,13 @@ msgid ""
 "Can't save!\n"
 "'%s' or '%s' symbol must be present."
 msgstr ""
-"Speichern nicht möglich ! Es muss ein Symbol '%s' oder '%s' vorhanden sein!"
+"Speichern nicht möglich! Es muss ein Symbol '%s' oder '%s' vorhanden sein!"
 
 #: .\manipulation-gui/gui-rename.c:64 manipulation-gui/gui-rename.c:64
 msgid ""
 "Can't save!\n"
 "Pattern contains invalid characters."
-msgstr "Speichern nicht möglich ! Enthält unzulässige Zeichen !"
+msgstr "Speichern nicht möglich! Enthält unzulässige Zeichen!"
 
 #: .\manipulation-gui/gui-resize.c:37 manipulation-gui/gui-resize.c:37
 msgid "Set to a percentage of the original"
@@ -402,11 +402,11 @@ msgstr "Y-Achse"
 
 #: .\manipulation-gui/gui-sharpblur.c:17 manipulation-gui/gui-sharpblur.c:17
 msgid "More sharpen"
-msgstr "schärfer"
+msgstr "Schärfer"
 
 #: .\manipulation-gui/gui-sharpblur.c:23 manipulation-gui/gui-sharpblur.c:23
 msgid "More blurred"
-msgstr "weicher"
+msgstr "Weicher"
 
 #: .\manipulation-gui/gui-userdef.c:49 manipulation-gui/gui-userdef.c:49
 msgid ""
@@ -454,7 +454,7 @@ msgstr "Farbe"
 
 #: .\manipulation-gui/gui-watermark.c:58 manipulation-gui/gui-watermark.c:58
 msgid "Image watermark"
-msgstr "ein Bild für das Wasserzeichen verwenden"
+msgstr "Ein Bild für das Wasserzeichen verwenden"
 
 #: .\manipulation-gui/gui-watermark.c:62 manipulation-gui/gui-watermark.c:62
 msgid "Select image"
@@ -475,19 +475,19 @@ msgstr "Position des Bildes"
 
 #: .\manipulation-gui/gui-watermark.c:244 manipulation-gui/gui-watermark.c:244
 msgid "Top-center"
-msgstr ""
+msgstr "Oben mitte"
 
 #: .\manipulation-gui/gui-watermark.c:250 manipulation-gui/gui-watermark.c:250
 msgid "Center-left"
-msgstr ""
+msgstr "Mitte links"
 
 #: .\manipulation-gui/gui-watermark.c:256 manipulation-gui/gui-watermark.c:256
 msgid "Center-right"
-msgstr ""
+msgstr "Mitte rechts"
 
 #: .\manipulation-gui/gui-watermark.c:262 manipulation-gui/gui-watermark.c:262
 msgid "Bottom-center"
-msgstr ""
+msgstr "Unten mitte"
 
 #: bimp-gui.c:129 bimp-gui.c:907
 msgid "The manipulations set is empty!"
@@ -507,7 +507,7 @@ msgstr "Eingabedateien und Optionen"
 
 #: bimp-gui.c:214
 msgid "Add images"
-msgstr "Hinzufügen von Bildern"
+msgstr "Bilder hinzufügen"
 
 #: bimp-gui.c:216
 msgid "Remove images"
@@ -519,7 +519,7 @@ msgstr "Speichern in"
 
 #: bimp-gui.c:238
 msgid "Use the selected file's location as the output"
-msgstr ""
+msgstr "Pfad der ausgewählten Datei für Ausgabe verwenden"
 
 #: bimp-gui.c:246
 msgid "Keep folder hierarchy"
@@ -527,7 +527,7 @@ msgstr "Ordnerstruktur beibehalten"
 
 #: bimp-gui.c:251
 msgid "Delete original file when done"
-msgstr "nach Fertigstellung Originaldatei löschen"
+msgstr "Nach Fertigstellung Originaldatei löschen"
 
 #: bimp-gui.c:255
 msgid "Keep the modification dates"
@@ -546,7 +546,7 @@ msgstr "Verzeichnis \"%s\" konnte nicht eingelesen werden "
 msgid ""
 "Some images were not imported because they have not been saved on filesystem "
 "yet."
-msgstr ""
+msgstr "Einige Bilder wurden nicht importiert, da diese noch nicht gespeichert wurden."
 
 #: bimp-gui.c:473
 msgid "Can't show a preview because the manipulations set is empty"
@@ -588,11 +588,11 @@ msgstr "Aufgaben-Satz laden..."
 
 #: bimp-gui.c:773
 msgid "Edit properties..."
-msgstr "bearbeiten der Eigenschaften..."
+msgstr "Bearbeiten der Eigenschaften..."
 
 #: bimp-gui.c:776
 msgid "Remove this manipulation"
-msgstr "entfernen dieser Aufgabe"
+msgstr "Entfernen dieser Aufgabe"
 
 #: bimp-gui.c:783
 msgid "Add single images..."
@@ -604,7 +604,7 @@ msgstr "Ordner hinzufügen..."
 
 #: bimp-gui.c:789
 msgid "Add all opened images"
-msgstr "alle geöffneten Bilder hinzufügen"
+msgstr "Alle geöffneten Bilder hinzufügen"
 
 #: bimp-gui.c:796
 msgid "Remove selected"
@@ -636,7 +636,7 @@ msgstr "Wendet GIMP Bearbeitungen auf Gruppen von Bildern an."
 msgid "translator-name <translator-email>"
 msgstr ""
 "Irene Tugnoli <iretugna@icloud.com>\n"
-"Vito Zaccaria <vito.zaccaria@email.it>"
+"Vito Zaccaria <vito.zaccaria@email.it>\n"
 "Christian Kühnemund <http://gimp-science-labs.blogspot.de/>"
 
 #: bimp-manipulations.c:273
@@ -669,7 +669,7 @@ msgstr "Dateiformat und Kompression ändern"
 
 #: bimp-manipulations.c:294
 msgid "Rename with a pattern"
-msgstr "nach einem Schema umbenennen"
+msgstr "Nach einem Schema umbenennen"
 
 #: bimp-manipulations.c:297
 msgid "Other GIMP procedure..."
@@ -692,11 +692,11 @@ msgstr ""
 #: bimp-operate.c:186
 #, c-format
 msgid "Working on file \"%s\"..."
-msgstr ""
+msgstr "Bearbeite Datei \"%s\"..."
 
 #: bimp-operate.c:326
 msgid "Operations stopped"
-msgstr "Operation beendet"
+msgstr "Bearbeitungen beendet"
 
 #: bimp-operate.c:333
 #, c-format
@@ -710,11 +710,11 @@ msgstr "Datei %s ist bereits vorhanden, überschreiben?"
 
 #: bimp-operate.c:1253
 msgid "Always apply this decision"
-msgstr "Änderungsdatum beibehalten"
+msgstr "Diese Entscheidung immer anwenden"
 
 #: bimp-operate.c:1265
 msgid "Overwrite?"
-msgstr "Überschreiben ?"
+msgstr "Überschreiben?"
 
 #~ msgid "Add folders"
 #~ msgstr "Hinzufügen von Ordnern"
