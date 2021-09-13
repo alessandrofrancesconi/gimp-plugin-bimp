@@ -1007,7 +1007,7 @@ static gboolean apply_rename(rename_settings settings, image_output out, char* o
     // same thing for count and datetime 
     
     if(strstr(out->filename, RENAME_KEY_COUNT) != NULL)    {
-        char strcount[5];
+        char strcount[12];
         sprintf(strcount, "%i", processed_count + 1);
         out->filename = str_replace(out->filename, RENAME_KEY_COUNT, strcount);
     }
