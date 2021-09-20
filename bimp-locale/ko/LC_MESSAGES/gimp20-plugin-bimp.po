@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gimp-plugin-bimp\n"
 "POT-Creation-Date: 2016-07-06 18:54+0100\n"
-"PO-Revision-Date: 2016-07-12 21:54+0200\n"
-"Last-Translator: JJangfree < jjangfree@gmail.com>\n"
-"Language-Team: JJangfree <jjangfree@gmail.com>\n"
+"PO-Revision-Date: 2021-09-21 07:00+0900\n"
+"Last-Translator: Sebul <sebuls@gmail.com>\n"
+"Language-Team: Sebul <sebuls@gmail.com>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -78,7 +78,7 @@ msgstr "Subsampling"
 #: .\manipulation-gui/gui-changeformat.c:116
 #: manipulation-gui/gui-changeformat.c:116
 msgid "Small size"
-msgstr "저품질"
+msgstr "작은 크기"
 
 #: .\manipulation-gui/gui-changeformat.c:123
 #: manipulation-gui/gui-changeformat.c:123
@@ -145,7 +145,7 @@ msgstr "코멘트 저장"
 #: .\manipulation-gui/gui-changeformat.c:222
 #: manipulation-gui/gui-changeformat.c:222
 msgid "Save color from transparent pixels"
-msgstr "투명픽셀에서 색상 저장"
+msgstr "투명 픽셀에서 색상 저장"
 
 #: .\manipulation-gui/gui-changeformat.c:270
 #: manipulation-gui/gui-changeformat.c:270
@@ -155,7 +155,7 @@ msgstr "RLE 압축"
 #: .\manipulation-gui/gui-changeformat.c:273
 #: manipulation-gui/gui-changeformat.c:273
 msgid "Image origin"
-msgstr "Image origin"
+msgstr "이미지 원점"
 
 #: .\manipulation-gui/gui-changeformat.c:278
 #: .\manipulation-gui/gui-watermark.c:241
@@ -294,7 +294,7 @@ msgstr "커스텀 비율"
 
 #: .\manipulation-gui/gui-fliprotate.c:19 manipulation-gui/gui-fliprotate.c:19
 msgid "Flip"
-msgstr "상하반전"
+msgstr "뒤집기"
 
 #: .\manipulation-gui/gui-fliprotate.c:23 manipulation-gui/gui-fliprotate.c:23
 msgid "Horizontally"
@@ -322,7 +322,7 @@ msgstr "숫자 일련번호"
 
 #: .\manipulation-gui/gui-rename.c:32 manipulation-gui/gui-rename.c:32
 msgid "Date and time (YYYY-MM-DD_hh-mm)"
-msgstr "날짜와시간 (YYYY-MM-DD_hh-mm)"
+msgstr "날짜와 시간 (YYYY-MM-DD_hh-mm)"
 
 #: .\manipulation-gui/gui-rename.c:52 manipulation-gui/gui-rename.c:52
 #, c-format
@@ -331,7 +331,7 @@ msgid ""
 "'%s' or '%s' symbol must be present."
 msgstr ""
 "저장할 수 없습니다!\n"
-"%s' 나 '%s' 가 있어야 합니다. "
+"%s' 또는 '%s' 가 있어야 합니다. "
 
 #: .\manipulation-gui/gui-rename.c:64 manipulation-gui/gui-rename.c:64
 msgid ""
@@ -339,7 +339,7 @@ msgid ""
 "Pattern contains invalid characters."
 msgstr ""
 "저장할 수 없습니다! \n"
-"패턴부분에 무효한 문자가 있습니다."
+"패턴에 무효한 문자가 있습니다."
 
 #: .\manipulation-gui/gui-resize.c:37 manipulation-gui/gui-resize.c:37
 msgid "Set to a percentage of the original"
@@ -394,7 +394,7 @@ msgid ""
 "Choose a supported GIMP procedure from the list on the left\n"
 "and define its parameters on the right."
 msgstr ""
-"왼쪽 목록에서, 처리할 Gimp필터를 선택하고\n"
+"왼쪽 목록에서, 처리할 Gimp 프로시저를 선택하고\n"
 "우측에 변수를 지정합니다."
 
 #: .\manipulation-gui/gui-userdef.c:61 manipulation-gui/gui-userdef.c:61
@@ -609,15 +609,15 @@ msgstr "저장된 배치파일 불러오기 에러 : ("
 
 #: bimp-gui.c:946
 msgid "This will overwrite current manipulations set. Continue?"
-msgstr "기존 처리를, 덮어쓰게 됩니다. 계속합니까?"
+msgstr "기존 처리를 덮어쓰게 됩니다. 계속합니까?"
 
 #: bimp-gui.c:1013 bimp.c:67
 msgid "Applies GIMP manipulations on groups of images"
-msgstr "이미지 그룹을, 처리함"
+msgstr "이미지 그룹을 처리함"
 
 #: bimp-gui.c:1020
 msgid "translator-name <translator-email>"
-msgstr "번역자 <@gmail.com>"
+msgstr ""
 
 #: bimp-manipulations.c:275
 msgid "Resize"
@@ -629,7 +629,7 @@ msgstr "잘라내기"
 
 #: bimp-manipulations.c:281
 msgid "Flip or Rotate"
-msgstr "상하반전 or 좌우미러"
+msgstr "반전 or 회전"
 
 #: bimp-manipulations.c:284
 msgid "Color correction"
@@ -649,11 +649,11 @@ msgstr "형식과 압축비율 변경"
 
 #: bimp-manipulations.c:296
 msgid "Rename with a pattern"
-msgstr "패턴으로, 파일명 변경"
+msgstr "패턴으로 파일명 변경"
 
 #: bimp-manipulations.c:299
 msgid "Other GIMP procedure..."
-msgstr "다른 GIMP필터 사용.."
+msgstr "다른 GIMP필터 사용..."
 
 #: bimp-operate.c:171
 #, c-format
@@ -700,14 +700,3 @@ msgstr "덮어쓰기 설정 저장"
 msgid "Overwrite?"
 msgstr "덮어쓸까요?"
 
-#~ msgid "Alert when overwriting existing files"
-#~ msgstr "기존 파일 덮어쓸 때, 경고?"
-
-#~ msgid "Yes, don't ask again"
-#~ msgstr "네, 다시 묻지 않습니다"
-
-#~ msgid "Save this set"
-#~ msgstr "이 세트 저장"
-
-#~ msgid "Load set"
-#~ msgstr "세트 불러오기"
