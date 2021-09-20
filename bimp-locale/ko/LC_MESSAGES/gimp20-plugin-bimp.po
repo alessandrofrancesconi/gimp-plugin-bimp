@@ -232,7 +232,7 @@ msgstr "색상커브 변경할 설정파일:"
 
 #: .\manipulation-gui/gui-color.c:42 manipulation-gui/gui-color.c:42
 msgid "Select GIMP Curve file"
-msgstr "Gimp 커브 파일 선택"
+msgstr "GIMP 커브 파일 선택"
 
 #: .\manipulation-gui/gui-crop.c:27 manipulation-gui/gui-crop.c:27
 msgid "Crop to a standard aspect ratio"
@@ -407,7 +407,7 @@ msgid ""
 "no procedure has been selected"
 msgstr ""
 "저장할 수 없습니다. \n"
-"왼쪽에서 처리할 필터를, 선택하지 않았습니다."
+"왼쪽에서 처리할 필터를 선택하지 않았습니다."
 
 #: .\manipulation-gui/gui-userdef.c:349 manipulation-gui/gui-userdef.c:349
 msgid "Author"
@@ -653,7 +653,7 @@ msgstr "패턴으로 파일명 변경"
 
 #: bimp-manipulations.c:299
 msgid "Other GIMP procedure..."
-msgstr "다른 GIMP필터 사용..."
+msgstr "다른 GIMP 필터 사용..."
 
 #: bimp-operate.c:171
 #, c-format
@@ -699,4 +699,3 @@ msgstr "덮어쓰기 설정 저장"
 #: bimp-operate.c:1182
 msgid "Overwrite?"
 msgstr "덮어쓸까요?"
-
