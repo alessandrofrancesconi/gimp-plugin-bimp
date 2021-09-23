@@ -322,7 +322,7 @@ msgstr "숫자 일련번호"
 
 #: .\manipulation-gui/gui-rename.c:32 manipulation-gui/gui-rename.c:32
 msgid "Date and time (YYYY-MM-DD_hh-mm)"
-msgstr "날짜와 시간 (YYYY-MM-DD_hh-mm)"
+msgstr "날짜 및 시간 (YYYY-MM-DD_hh-mm)"
 
 #: .\manipulation-gui/gui-rename.c:52 manipulation-gui/gui-rename.c:52
 #, c-format
@@ -617,7 +617,7 @@ msgstr "이미지 그룹을 처리함"
 
 #: bimp-gui.c:1020
 msgid "translator-name <translator-email>"
-msgstr ""
+msgstr "Sebul <sebuls@gmail.com>"
 
 #: bimp-manipulations.c:275
 msgid "Resize"
@@ -662,7 +662,7 @@ msgid ""
 "You can solve this error by adding a \"Change format or compression\" step"
 msgstr ""
 "이미지 저장 실패 \"%s\": 입력파일에 확장자가 없습니다.\n"
-" \"형식과 압축비율 변경\" 부분을, 설정해 주십시오."
+" \"형식과 압축비율 변경\" 부분을 설정해 주십시오."
 
 #: bimp-operate.c:177
 #, c-format
@@ -670,8 +670,8 @@ msgid ""
 "GIMP can't save %s back to its original SVG format.\n"
 "You can solve this error by adding a \"Change format or compression\" step"
 msgstr ""
-"Gimp는 %s 을, 원래의 SVG 형식으로 저장할 수 없습니다. \n"
-"\"형식과 압축비율 변경\" 부분을, 설정해 주십시오."
+"GIMP는 %s 을 원래의 SVG 형식으로 저장할 수 없습니다. \n"
+"\"형식과 압축비율 변경\" 부분을 설정해 주십시오."
 
 #: bimp-operate.c:183
 #, c-format
