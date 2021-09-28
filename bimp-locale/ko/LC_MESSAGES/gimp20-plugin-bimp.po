@@ -533,7 +533,7 @@ msgstr "미리보기"
 #: bimp-gui.c:354
 #, c-format
 msgid "Couldn't read into \"%s\" directory."
-msgstr " \"%s\" 디렉토리로 읽을 수 없습니다"
+msgstr " \"%s\" 디렉터리로 읽을 수 없습니다"
 
 #: bimp-gui.c:464
 msgid "Can't show a preview because the manipulations set is empty"
