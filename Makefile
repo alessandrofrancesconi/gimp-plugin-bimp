@@ -18,8 +18,7 @@ makewin:
 	gcc -mwindows -o ./bin/win32/bimp -O2 $(CFLAGS) src/*.c src/manipulation-gui/*.c src/images/*.c $(LDFLAGS)
 		
 install: 
-	mkdir -p "$(USER_INSTALL_DIR)"
-	gimptool-2.0 --install-bin ./bin/bimp
+	install -Dt "$(USER_INSTALL_DIR)" ./bin/bimp
 	cp -Rf ./bimp-locale/ "$(USER_INSTALL_DIR)"
 	
 uninstall: 
@@ -27,8 +26,7 @@ uninstall:
 	rm -R $(USER_INSTALL_DIR)/bimp-locale
 
 install-admin:
-	mkdir -p "$(SYSTEM_INSTALL_DIR)"
-	gimptool-2.0 --install-admin-bin ./bin/bimp
+	install -Dt "$(SYSTEM_INSTALL_DIR)" ./bin/bimp
 	cp -Rf ./bimp-locale/ "$(SYSTEM_INSTALL_DIR)"
 
 uninstall-admin:
