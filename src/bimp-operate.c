@@ -948,7 +948,7 @@ static gboolean apply_userdef(userdef_settings settings, image_output out)
     gboolean saving_function = (strstr(settings->procedure, "-save") != NULL);
     
     int single_drawable = gimp_image_merge_visible_layers(out->image_id, GIMP_CLIP_TO_IMAGE);
-	gimp_selection_all(out->image_id);
+	gimp_selection_none(out->image_id);
     
     for (param_i = 0; param_i < settings->num_params; param_i++) {
         switch((settings->params[param_i]).type) {
