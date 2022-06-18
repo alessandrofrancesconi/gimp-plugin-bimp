@@ -81,6 +81,7 @@ typedef enum format_type {
     FORMAT_TIFF,
     FORMAT_HEIF,
     FORMAT_WEBP,
+    FORMAT_AVIF,
     FORMAT_EXR,
     FORMAT_END
 } format_type;
@@ -94,6 +95,7 @@ static const char* format_type_string[][2] = {
     {"tiff", "Tagged Image File Format (.tiff)"},       /* FORMAT_TIFF */
     {"heif", "Heif (.heif)"},                           /* FORMAT_HEIF */
     {"webp", "WebP (.webp)"},                           /* FORMAT_WEBP */
+    {"avif", "AV1 Image Format (.avif)"},               /* FORMAT_AVIF */
     {"exr", "OpenEXR (.exr)"}                           /* FORMAT_EXR */
 };
 
@@ -250,6 +252,11 @@ typedef struct changeformat_params_webp {
     int delay;
     int force_delay;
 } *format_params_webp;
+
+typedef struct changeformat_params_avif {
+    gboolean lossless;
+    int quality;
+} *format_params_avif;
 
 typedef struct manip_rename_set {
     gchar* pattern;
