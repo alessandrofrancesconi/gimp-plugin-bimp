@@ -728,6 +728,11 @@ static void write_changeformat(changeformat_settings settings, GKeyFile* file)
         g_key_file_set_integer(file, group_name, "delay", params->delay);
         g_key_file_set_integer(file, group_name, "force_delay", params->force_delay);
     }
+    else if(settings->format == FORMAT_AVIF) {
+        format_params_avif params = settings->params;
+        g_key_file_set_boolean(file, group_name, "lossless", params->lossless);
+        g_key_file_set_integer(file, group_name, "quality", params->quality);
+    }
 }
 
 static manipulation read_changeformat(GKeyFile* file) 
@@ -880,6 +885,16 @@ static manipulation read_changeformat(GKeyFile* file)
 
                 if (g_key_file_has_key(file, group_name, "force_delay", NULL)) 
                     params->force_delay = g_key_file_get_integer(file, group_name, "force_delay", NULL);
+            }
+            else if (settings->format == FORMAT_AVIF) {
+                settings->params = (format_params_avif) g_malloc(sizeof(struct changeformat_params_avif));
+                format_params_avif params = settings->params;
+
+                if (g_key_file_has_key(file, group_name, "lossless", NULL)) 
+                    params->lossless = g_key_file_get_boolean(file, group_name, "lossless", NULL);
+
+                if (g_key_file_has_key(file, group_name, "quality", NULL)) 
+                    params->quality = g_key_file_get_integer(file, group_name, "quality", NULL);
             }
         }
     }

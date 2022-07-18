@@ -330,6 +330,7 @@ static void add_input_folder_r(char* folder, gboolean with_subdirs)
                 g_ascii_strcasecmp(file_extension, ".tga") == 0 ||
                 g_ascii_strcasecmp(file_extension, ".svg") == 0 ||
                 g_ascii_strcasecmp(file_extension, ".webp") == 0 ||
+                g_ascii_strcasecmp(file_extension, ".avif") == 0 ||
                 g_ascii_strcasecmp(file_extension, ".xpm") == 0 ||
                 g_ascii_strcasecmp(file_extension, ".exr") == 0 ||
                 g_ascii_strcasecmp(file_extension, ".dds") == 0 ||
@@ -593,7 +594,7 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
 {
     GSList *selection;
     
-    GtkFileFilter *filter_all, *supported[15];
+    GtkFileFilter *filter_all, *supported[16];
 
     GtkWidget* file_chooser = gtk_file_chooser_dialog_new(
         _("Select images"), 
@@ -676,23 +677,28 @@ static void open_file_chooser(GtkWidget *widget, gpointer data)
     gtk_file_filter_add_pattern (filter_all, "*.[wW][eE][bB][pP]");
 
     supported[12] = gtk_file_filter_new();
-    gtk_file_filter_set_name(supported[12], "XPM (*.xpm)");
-    gtk_file_filter_add_pattern (supported[12], "*.[xX][pP][mM]");
-    gtk_file_filter_add_pattern (filter_all, "*.[xX][pP][mM]");
+    gtk_file_filter_set_name(supported[12], "AVIF (*.avif)");
+    gtk_file_filter_add_pattern (supported[12], "*.[aA][vV][iI][fF]");
+    gtk_file_filter_add_pattern (filter_all, "*.[aA][vV][iI][fF]");
 
     supported[13] = gtk_file_filter_new();
-    gtk_file_filter_set_name(supported[13], "OpenEXR (*.exr)");
-    gtk_file_filter_add_pattern (supported[13], "*.[eE][xX][rR]");
-    gtk_file_filter_add_pattern (filter_all, "*.[eE][xX][rR]");
+    gtk_file_filter_set_name(supported[13], "XPM (*.xpm)");
+    gtk_file_filter_add_pattern (supported[13], "*.[xX][pP][mM]");
+    gtk_file_filter_add_pattern (filter_all, "*.[xX][pP][mM]");
 
     supported[14] = gtk_file_filter_new();
-    gtk_file_filter_set_name(supported[14], "GIMP XCF (*.xcf)");
-    gtk_file_filter_add_pattern (supported[14], "*.[xX][cC][fF]");
+    gtk_file_filter_set_name(supported[14], "OpenEXR (*.exr)");
+    gtk_file_filter_add_pattern (supported[14], "*.[eE][xX][rR]");
+    gtk_file_filter_add_pattern (filter_all, "*.[eE][xX][rR]");
+
+    supported[15] = gtk_file_filter_new();
+    gtk_file_filter_set_name(supported[15], "GIMP XCF (*.xcf)");
+    gtk_file_filter_add_pattern (supported[15], "*.[xX][cC][fF]");
     gtk_file_filter_add_pattern (filter_all, "*.[xX][cC][fF]");
         
     gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_chooser), filter_all);
     size_t i;
-    for(i = 0; i < 15; i++) {
+    for(i = 0; i < 16; i++) {
         gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(file_chooser), supported[i]);
     }
     
