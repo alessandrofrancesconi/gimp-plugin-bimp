@@ -1,6 +1,6 @@
 GIMP_CFLAGS = $(shell gimptool-2.0 --cflags)
 GIMP_LIBS = $(shell gimptool-2.0 --libs)
-CFLAGS += $(GIMP_CFLAGS) -Wall -Wno-unused-variable -Wno-pointer-sign -DGIMP_DISABLE_DEPRECATED
+CFLAGS += $(GIMP_CFLAGS) -Wall -Wno-unused-variable -Wno-pointer-sign -Wno-deprecated-declarations -DGIMP_DISABLE_DEPRECATED
 LDFLAGS += $(GIMP_LIBS) -lm
 SYSTEM_INSTALL_DIR = $(shell gimptool-2.0 --dry-run --install-admin-bin ./bin/bimp | sed 's/cp \S* \(\S*\)/\1/'|tr -d [\'])
 USER_INSTALL_DIR = $(shell gimptool-2.0 --dry-run --install-bin ./bin/bimp | sed 's/cp \S* \(\S*\)/\1/'|tr -d [\'])
@@ -17,7 +17,7 @@ makewin:
 	which gimptool-2.0 && \
 	gcc -mwindows -o ./bin/win32/bimp -O2 $(CFLAGS) src/*.c src/manipulation-gui/*.c src/images/*.c $(LDFLAGS)
 		
-install: 
+install:
 	mkdir -p "$(USER_INSTALL_DIR)"
 	gimptool-2.0 --install-bin ./bin/bimp
 	cp -Rf ./bimp-locale/ "$(USER_INSTALL_DIR)"
@@ -35,8 +35,11 @@ uninstall-admin:
 	gimptool-2.0 --uninstall-admin-bin bimp
 	rm -R $(SYSTEM_INSTALL_DIR)/bimp-locale
 
+strip:
+	strip ./bin/bimp
+
 clean:
-	rm ./bin/bimp
+	rm -f ./bin/bimp
 	
 all:
 	make
