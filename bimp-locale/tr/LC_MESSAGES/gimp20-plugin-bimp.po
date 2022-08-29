@@ -1,0 +1,725 @@
+# Turkish translation for GIMP bimp plug-in.
+#
+# Copyright (C) 2022 GIMP bimp plug-in's COPYRIGHT HOLDER
+# This file is distributed under the same license as the GIMP bimp plug-in package.
+#
+# Sabri Ünal <libreajans@gmail.com>, 2022.
+#
+# Not: Çevirilerin GIMP çevirileri ile uyumlu olmasına özen gösterilmiştir.
+# Çeviriye katkı vermeden önce en son çevirmen ile lütfen iletişime geçmeye çalışın.
+# İletişim kuramazsanız çevirileri devam ettirmekten veya iyileştirmekten çekinmeyin.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: GIMP bimp plug-in\n"
+"Report-Msgid-Bugs-To: https://github.com/alessandrofrancesconi/gimp-plugin-bimp\n"
+"POT-Creation-Date: 2022-08-30 01:07+0300\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"Language-Team: Turkish <gnome-turk@gnome.org>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.1.1\n"
+"X-Poedit-KeywordsList: _;NC_;G_;N_\n"
+"X-Poedit-Basepath: ../../../src\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: bimp-gui.c:131 bimp-gui.c:973
+msgid "The manipulations set is empty!"
+msgstr ""
+
+#: bimp-gui.c:134
+msgid "The file list is empty!"
+msgstr ""
+
+#: bimp-gui.c:164
+msgid "Manipulation set"
+msgstr ""
+
+#: bimp-gui.c:191
+msgid "Input files and options"
+msgstr ""
+
+#: bimp-gui.c:204
+msgid "Add images"
+msgstr ""
+
+#: bimp-gui.c:205
+msgid "Remove images"
+msgstr ""
+
+#: bimp-gui.c:211
+msgid "Output folder"
+msgstr ""
+
+#: bimp-gui.c:224
+msgid "Use the selected file's location as the output"
+msgstr ""
+
+#: bimp-gui.c:231
+msgid "Keep folder hierarchy"
+msgstr ""
+
+#: bimp-gui.c:236
+msgid "Delete original file when done"
+msgstr ""
+
+#: bimp-gui.c:240
+msgid "Keep the modification dates"
+msgstr ""
+
+#: bimp-gui.c:245
+msgid "Click for preview"
+msgstr ""
+
+#: bimp-gui.c:346
+#, c-format
+msgid "Couldn't read into \"%s\" directory."
+msgstr ""
+
+#: bimp-gui.c:366
+msgid ""
+"Some images were not imported because they have not been saved on filesystem "
+"yet."
+msgstr ""
+
+#: bimp-gui.c:465
+msgid "Can't show a preview because the manipulations set is empty"
+msgstr ""
+
+#: bimp-gui.c:493
+msgid "Preview"
+msgstr ""
+
+#: bimp-gui.c:505
+msgid "This is how the selected image will look like after the batch process"
+msgstr ""
+
+#: bimp-gui.c:600
+msgid "Select images"
+msgstr ""
+
+#: bimp-gui.c:610 manipulation-gui/gui-watermark.c:88
+msgid "All supported types"
+msgstr ""
+
+#: bimp-gui.c:724
+msgid "Select folders containing images"
+msgstr ""
+
+#: bimp-gui.c:733
+msgid "Add files from the whole hierarchy"
+msgstr ""
+
+#: bimp-gui.c:772
+msgid "Select output folder"
+msgstr ""
+
+#: bimp-gui.c:824 bimp-gui.c:979
+msgid "Save this set..."
+msgstr ""
+
+#: bimp-gui.c:828 bimp-gui.c:1034
+msgid "Load set..."
+msgstr ""
+
+#: bimp-gui.c:839
+msgid "Edit properties..."
+msgstr ""
+
+#: bimp-gui.c:842
+msgid "Remove this manipulation"
+msgstr ""
+
+#: bimp-gui.c:849
+msgid "Add single images..."
+msgstr ""
+
+#: bimp-gui.c:852
+msgid "Add folders..."
+msgstr ""
+
+#: bimp-gui.c:855
+msgid "Add all opened images"
+msgstr ""
+
+#: bimp-gui.c:862
+msgid "Remove selected"
+msgstr ""
+
+#: bimp-gui.c:865
+msgid "Remove all"
+msgstr ""
+
+#: bimp-gui.c:909
+msgid "Can't add another manipulation of this kind. Only one is permitted!"
+msgstr ""
+
+#: bimp-gui.c:1000 bimp-gui.c:1051
+msgid "An error occured when importing a saved batch file :("
+msgstr ""
+
+#: bimp-gui.c:1022
+msgid "This will overwrite current manipulations set. Continue?"
+msgstr ""
+
+#: bimp-gui.c:1088 bimp.c:78
+msgid "Applies GIMP manipulations on groups of images"
+msgstr ""
+
+#: bimp-gui.c:1095
+msgid "translator-name <translator-email>"
+msgstr ""
+
+#: bimp-manipulations.c:296
+msgid "Resize"
+msgstr ""
+
+#: bimp-manipulations.c:299
+msgid "Crop"
+msgstr ""
+
+#: bimp-manipulations.c:302
+msgid "Flip or Rotate"
+msgstr ""
+
+#: bimp-manipulations.c:305
+msgid "Color correction"
+msgstr ""
+
+#: bimp-manipulations.c:308
+msgid "Sharp or Blur"
+msgstr ""
+
+#: bimp-manipulations.c:311
+msgid "Add a Watermark"
+msgstr ""
+
+#: bimp-manipulations.c:314
+msgid "Change format and compression"
+msgstr ""
+
+#: bimp-manipulations.c:317
+msgid "Rename with a pattern"
+msgstr ""
+
+#: bimp-manipulations.c:320
+msgid "Other GIMP procedure..."
+msgstr ""
+
+#: bimp-operate.c:179
+#, c-format
+msgid ""
+"Can't save image \"%s\": input file has no extension.\n"
+"You can solve this error by adding a \"Change format or compression\" step"
+msgstr ""
+
+#: bimp-operate.c:185
+#, c-format
+msgid ""
+"GIMP can't save %s back to its original SVG format.\n"
+"You can solve this error by adding a \"Change format or compression\" step"
+msgstr ""
+
+#: bimp-operate.c:191
+#, c-format
+msgid "Working on file \"%s\"..."
+msgstr ""
+
+#: bimp-operate.c:331
+msgid "Operations stopped"
+msgstr ""
+
+#: bimp-operate.c:338
+#, c-format
+msgid "End, all files have been processed with %d errors"
+msgstr ""
+
+#: bimp-operate.c:1448
+#, c-format
+msgid "File %s already exists, overwrite it?"
+msgstr ""
+
+#: bimp-operate.c:1453
+msgid "Always apply this decision"
+msgstr ""
+
+#: bimp-operate.c:1465
+msgid "Overwrite?"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:36
+msgid "Format settings"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:56
+msgid "Interlaced"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:73
+#: manipulation-gui/gui-changeformat.c:104
+#: manipulation-gui/gui-changeformat.c:306
+#: manipulation-gui/gui-changeformat.c:408
+msgid "Quality"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:77
+#: manipulation-gui/gui-changeformat.c:193
+msgid "Advanced params"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:81
+msgid "Smoothing"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:86
+msgid "Optimize"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:87
+msgid "Progressive"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:88
+msgid "Save baseline"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:91
+msgid "Comment"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:96
+msgid "Markers rows"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:100
+msgid "Subsampling"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:102
+msgid "Small size"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:109
+msgid "DCT algorithm"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:111
+msgid "Integer"
+msgstr "Tamsayı"
+
+#: manipulation-gui/gui-changeformat.c:112
+msgid "Fast integer"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:113
+msgid "Float"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:187
+msgid "Interlace (Adam7)"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:189
+#: manipulation-gui/gui-changeformat.c:277
+msgid "Compression"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:196
+msgid "Save background color"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:197
+msgid "Save gamma"
+msgstr "Gamayı kaydet"
+
+#: manipulation-gui/gui-changeformat.c:198
+msgid "Save layer offset"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:199
+msgid "Save resolution"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:200
+msgid "Save creation date"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:201
+msgid "Save comments"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:202
+msgid "Save color from transparent pixels"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:248
+msgid "RLE compression"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:251
+msgid "Image origin"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:254 manipulation-gui/gui-crop.c:69
+msgid "Top-left"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:255 manipulation-gui/gui-crop.c:71
+msgid "Bottom-left"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:280 manipulation-gui/gui-fliprotate.c:38
+msgid "None"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:281
+msgid "LZW"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:282
+msgid "Pack bits"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:283
+msgid "Deflate"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:284
+msgid "JPEG"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:285
+msgid "CCITT G3 Fax"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:286
+msgid "CCITT G4 Fax"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:303
+#: manipulation-gui/gui-changeformat.c:331
+msgid "Lossless"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:334
+msgid "Image quality"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:339
+msgid "Alpha quality"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:344
+msgid "Preset"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:347
+msgid "Default"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:348
+msgid "Picture"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:349
+msgid "Photo"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:350
+msgid "Drawing"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:351
+msgid "Icon"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:352 manipulation-gui/gui-watermark.c:49
+msgid "Text"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:354
+msgid "Save EXIF data"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:355
+msgid "Save XMP data"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:356
+msgid "Save color profile"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:405
+msgid "Nearly lossless"
+msgstr ""
+
+#: manipulation-gui/gui-changeformat.c:433
+msgid "This format has no params"
+msgstr ""
+
+#: manipulation-gui/gui-color.c:22
+msgid "Brightness"
+msgstr ""
+
+#: manipulation-gui/gui-color.c:28
+msgid "Contrast"
+msgstr ""
+
+#: manipulation-gui/gui-color.c:34
+msgid "Convert to grayscale"
+msgstr ""
+
+#: manipulation-gui/gui-color.c:36
+msgid "Automatic color levels correction"
+msgstr ""
+
+#: manipulation-gui/gui-color.c:39
+msgid "Change color curve from settings file:"
+msgstr ""
+
+#: manipulation-gui/gui-color.c:41
+msgid "Select GIMP Curve file"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:28
+msgid "Crop to a standard aspect ratio"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:52
+msgid "Manual crop (pixel values)"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:58 manipulation-gui/gui-resize.c:49
+#: manipulation-gui/gui-watermark.c:81
+msgid "Width"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:61 manipulation-gui/gui-resize.c:58
+#: manipulation-gui/gui-watermark.c:82
+msgid "Height"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:66
+msgid "Start from"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:68
+msgid "Center"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:70
+msgid "Top-right"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:72
+msgid "Bottom-right"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:128
+msgid "One-to-one"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:131
+msgid "Classic 35 mm film"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:134
+msgid "Standard VGA monitor"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:137
+msgid "Widescreen"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:140
+msgid "Widescreen extended"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:143
+msgid "EU Passport portrait"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:146
+msgid "Classic smartphone screen"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:149
+msgid "Tall smartphone screen"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:152
+msgid "Classic tablet screen"
+msgstr ""
+
+#: manipulation-gui/gui-crop.c:155
+msgid "Custom ratio"
+msgstr ""
+
+#: manipulation-gui/gui-fliprotate.c:20
+msgid "Flip"
+msgstr ""
+
+#: manipulation-gui/gui-fliprotate.c:24
+msgid "Horizontally"
+msgstr ""
+
+#: manipulation-gui/gui-fliprotate.c:29
+msgid "Vertically"
+msgstr ""
+
+#: manipulation-gui/gui-fliprotate.c:36
+msgid "Rotation"
+msgstr ""
+
+#: manipulation-gui/gui-rename.c:25
+msgid "Keywords"
+msgstr ""
+
+#: manipulation-gui/gui-rename.c:28
+msgid "Original filename (without extension)"
+msgstr ""
+
+#: manipulation-gui/gui-rename.c:29
+msgid "Incremental number"
+msgstr ""
+
+#: manipulation-gui/gui-rename.c:30
+msgid "Date and time (YYYY-MM-DD_hh-mm)"
+msgstr ""
+
+#: manipulation-gui/gui-rename.c:49
+#, c-format
+msgid ""
+"Can't save!\n"
+"'%s' or '%s' symbol must be present."
+msgstr ""
+
+#: manipulation-gui/gui-rename.c:61
+msgid ""
+"Can't save!\n"
+"Pattern contains invalid characters."
+msgstr ""
+
+#: manipulation-gui/gui-resize.c:53 manipulation-gui/gui-resize.c:62
+msgid "%"
+msgstr ""
+
+#: manipulation-gui/gui-resize.c:54 manipulation-gui/gui-resize.c:63
+msgid "px"
+msgstr ""
+
+#: manipulation-gui/gui-resize.c:55 manipulation-gui/gui-resize.c:64
+msgid "Disable"
+msgstr ""
+
+#: manipulation-gui/gui-resize.c:70
+msgid "Aspect ratio"
+msgstr ""
+
+#: manipulation-gui/gui-resize.c:72
+msgid "Stretch"
+msgstr ""
+
+#: manipulation-gui/gui-resize.c:73
+msgid "Preserve"
+msgstr ""
+
+#: manipulation-gui/gui-resize.c:74
+msgid "Pad"
+msgstr ""
+
+#: manipulation-gui/gui-resize.c:80
+msgid "Padding color"
+msgstr ""
+
+#: manipulation-gui/gui-resize.c:89
+msgid "Interpolation"
+msgstr ""
+
+#: manipulation-gui/gui-resize.c:101
+msgid "Change resolution"
+msgstr ""
+
+#: manipulation-gui/gui-resize.c:106
+msgid "X axis"
+msgstr ""
+
+#: manipulation-gui/gui-resize.c:110
+msgid "Y axis"
+msgstr ""
+
+#: manipulation-gui/gui-sharpblur.c:17
+msgid "More sharpen"
+msgstr ""
+
+#: manipulation-gui/gui-sharpblur.c:22
+msgid "More blurred"
+msgstr ""
+
+#: manipulation-gui/gui-userdef.c:47
+msgid ""
+"Choose a supported GIMP procedure from the list on the left\n"
+"and define its parameters on the right."
+msgstr ""
+
+#: manipulation-gui/gui-userdef.c:59
+msgid "Search"
+msgstr ""
+
+#: manipulation-gui/gui-userdef.c:301
+msgid ""
+"Can't save because\n"
+"no procedure has been selected"
+msgstr ""
+
+#: manipulation-gui/gui-userdef.c:346
+msgid "Author"
+msgstr ""
+
+#: manipulation-gui/gui-userdef.c:588
+msgid "This procedure takes no editable params"
+msgstr ""
+
+#: manipulation-gui/gui-watermark.c:41
+msgid "Text watermark"
+msgstr ""
+
+#: manipulation-gui/gui-watermark.c:56
+msgid "Font"
+msgstr ""
+
+#: manipulation-gui/gui-watermark.c:60
+msgid "Color"
+msgstr ""
+
+#: manipulation-gui/gui-watermark.c:66
+msgid "Image watermark"
+msgstr ""
+
+#: manipulation-gui/gui-watermark.c:72
+msgid "Select image"
+msgstr ""
+
+#: manipulation-gui/gui-watermark.c:74
+msgid "Adaptive size"
+msgstr ""
+
+#: manipulation-gui/gui-watermark.c:78
+#, c-format
+msgid "% of"
+msgstr ""
+
+#: manipulation-gui/gui-watermark.c:121
+msgid "Opacity"
+msgstr ""
+
+#: manipulation-gui/gui-watermark.c:130
+msgid "Distance to edge"
+msgstr ""
+
+#: manipulation-gui/gui-watermark.c:134
+msgid "Position on the image"
+msgstr ""
