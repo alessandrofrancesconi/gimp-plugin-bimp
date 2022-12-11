@@ -12,8 +12,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GIMP bimp plug-in\n"
-"Report-Msgid-Bugs-To: https://github.com/alessandrofrancesconi/gimp-plugin-bimp\n"
-"POT-Creation-Date: 2022-08-30 01:07+0300\n"
+"Report-Msgid-Bugs-To: https://github.com/alessandrofrancesconi/gimp-plugin-"
+"bimp\n"
+"POT-Creation-Date: 2022-12-11 17:17+0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -23,703 +24,724 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.1.1\n"
 "X-Poedit-KeywordsList: _;NC_;G_;N_\n"
-"X-Poedit-Basepath: ../../../src\n"
-"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-Basepath: ../../..\n"
+"X-Poedit-SearchPath-0: src\n"
+"X-Poedit-SearchPath-1: nsis\n"
+"X-Poedit-SearchPath-2: bin\n"
 
-#: bimp-gui.c:131 bimp-gui.c:973
+#: src/bimp-gui.c:131 src/bimp-gui.c:973
 msgid "The manipulations set is empty!"
-msgstr ""
+msgstr "İşleme kümesi boş!"
 
-#: bimp-gui.c:134
+#: src/bimp-gui.c:134
 msgid "The file list is empty!"
-msgstr ""
+msgstr "Dosya listesi boş!"
 
-#: bimp-gui.c:164
+#: src/bimp-gui.c:164
 msgid "Manipulation set"
-msgstr ""
+msgstr "İşleme kümesi"
 
-#: bimp-gui.c:191
+#: src/bimp-gui.c:191
 msgid "Input files and options"
-msgstr ""
+msgstr "Girdi dosyaları ve seçenekleri"
 
-#: bimp-gui.c:204
+#: src/bimp-gui.c:204
 msgid "Add images"
-msgstr ""
+msgstr "Görüntü ekle"
 
-#: bimp-gui.c:205
+#: src/bimp-gui.c:205
 msgid "Remove images"
-msgstr ""
+msgstr "Görüntüleri kaldır"
 
-#: bimp-gui.c:211
+#: src/bimp-gui.c:211
 msgid "Output folder"
-msgstr ""
+msgstr "Çıktı klasörü"
 
-#: bimp-gui.c:224
+#: src/bimp-gui.c:224
 msgid "Use the selected file's location as the output"
-msgstr ""
+msgstr "Çıktı olarak seçilen dosyanın konumunu kullan"
 
-#: bimp-gui.c:231
+#: src/bimp-gui.c:231
 msgid "Keep folder hierarchy"
-msgstr ""
+msgstr "Klasör hiyerarşisini koru"
 
-#: bimp-gui.c:236
+#: src/bimp-gui.c:236
 msgid "Delete original file when done"
-msgstr ""
+msgstr "Tamamlandığında özgün dosyayı sil"
 
-#: bimp-gui.c:240
+#: src/bimp-gui.c:240
 msgid "Keep the modification dates"
-msgstr ""
+msgstr "Değişiklik tarihlerini koru"
 
-#: bimp-gui.c:245
+#: src/bimp-gui.c:245
 msgid "Click for preview"
-msgstr ""
+msgstr "Önizleme için tıklayın"
 
-#: bimp-gui.c:346
+#: src/bimp-gui.c:346
 #, c-format
 msgid "Couldn't read into \"%s\" directory."
-msgstr ""
+msgstr "\"%s\" dizini okunamadı."
 
-#: bimp-gui.c:366
+#: src/bimp-gui.c:366
 msgid ""
 "Some images were not imported because they have not been saved on filesystem "
 "yet."
 msgstr ""
+"Henüz dosya sistemine kaydedilmedikleri için bazı görüntüler içe aktarılmadı."
 
-#: bimp-gui.c:465
+#: src/bimp-gui.c:465
 msgid "Can't show a preview because the manipulations set is empty"
-msgstr ""
+msgstr "İşleme seti boş olduğu için önizleme gösterilemiyor"
 
-#: bimp-gui.c:493
+#: src/bimp-gui.c:493
 msgid "Preview"
-msgstr ""
+msgstr "Önizle"
 
-#: bimp-gui.c:505
+#: src/bimp-gui.c:505
 msgid "This is how the selected image will look like after the batch process"
-msgstr ""
+msgstr "Bu, toplu işlemden sonra seçilen görüntünün nasıl görüneceğidir."
 
-#: bimp-gui.c:600
+#: src/bimp-gui.c:600
 msgid "Select images"
-msgstr ""
+msgstr "Seçilen görüntüler"
 
-#: bimp-gui.c:610 manipulation-gui/gui-watermark.c:88
+#: src/bimp-gui.c:610 src/manipulation-gui/gui-watermark.c:88
 msgid "All supported types"
-msgstr ""
+msgstr "Desteklenen tüm türler"
 
-#: bimp-gui.c:724
+#: src/bimp-gui.c:724
 msgid "Select folders containing images"
-msgstr ""
+msgstr "Görüntüleri içeren klasörleri seçin"
 
-#: bimp-gui.c:733
+#: src/bimp-gui.c:733
 msgid "Add files from the whole hierarchy"
-msgstr ""
+msgstr "Tüm hiyerarşiden dosya ekle"
 
-#: bimp-gui.c:772
+#: src/bimp-gui.c:772
 msgid "Select output folder"
-msgstr ""
+msgstr "Çıktı klasörü seç"
 
-#: bimp-gui.c:824 bimp-gui.c:979
+#: src/bimp-gui.c:824 src/bimp-gui.c:979
 msgid "Save this set..."
-msgstr ""
+msgstr "Bu kümeyi kaydet..."
 
-#: bimp-gui.c:828 bimp-gui.c:1034
+#: src/bimp-gui.c:828 src/bimp-gui.c:1034
 msgid "Load set..."
-msgstr ""
+msgstr "Küme yükle..."
 
-#: bimp-gui.c:839
+#: src/bimp-gui.c:839
 msgid "Edit properties..."
-msgstr ""
+msgstr "Özellikleri düzenle..."
 
-#: bimp-gui.c:842
+#: src/bimp-gui.c:842
 msgid "Remove this manipulation"
-msgstr ""
+msgstr "Bu işlemeyi kaldır"
 
-#: bimp-gui.c:849
+#: src/bimp-gui.c:849
 msgid "Add single images..."
-msgstr ""
+msgstr "Tek görüntü ekle..."
 
-#: bimp-gui.c:852
+#: src/bimp-gui.c:852
 msgid "Add folders..."
-msgstr ""
+msgstr "Klasör ekle..."
 
-#: bimp-gui.c:855
+#: src/bimp-gui.c:855
 msgid "Add all opened images"
-msgstr ""
+msgstr "Açılmış bütün görüntüleri ekle"
 
-#: bimp-gui.c:862
+#: src/bimp-gui.c:862
 msgid "Remove selected"
-msgstr ""
+msgstr "Seçilenleri kaldır"
 
-#: bimp-gui.c:865
+#: src/bimp-gui.c:865
 msgid "Remove all"
-msgstr ""
+msgstr "Hepsini kaldır"
 
-#: bimp-gui.c:909
+#: src/bimp-gui.c:909
 msgid "Can't add another manipulation of this kind. Only one is permitted!"
-msgstr ""
+msgstr "Bu türden başka bir işleme eklenemez. Sadece birine izin veriliyor!"
 
-#: bimp-gui.c:1000 bimp-gui.c:1051
+#: src/bimp-gui.c:1000 src/bimp-gui.c:1051
 msgid "An error occured when importing a saved batch file :("
-msgstr ""
+msgstr "Kaydedilmiş bir toplu iş dosyası içe aktarılırken hata oluştu :("
 
-#: bimp-gui.c:1022
+#: src/bimp-gui.c:1022
 msgid "This will overwrite current manipulations set. Continue?"
-msgstr ""
+msgstr "Bu, mevcut işleme setinin üzerine yazacak. Devam edilsin mi?"
 
-#: bimp-gui.c:1088 bimp.c:78
+#: src/bimp-gui.c:1088 src/bimp.c:78
 msgid "Applies GIMP manipulations on groups of images"
-msgstr ""
+msgstr "GIMP işlemelerini görüntü gruplarına uygular"
 
-#: bimp-gui.c:1095
+#: src/bimp-gui.c:1095
 msgid "translator-name <translator-email>"
-msgstr ""
+msgstr "Sabri Ünal <libreajans@gmail.com>"
 
-#: bimp-manipulations.c:296
+#: src/bimp-manipulations.c:296
 msgid "Resize"
-msgstr ""
+msgstr "Yeniden Boyutlandır"
 
-#: bimp-manipulations.c:299
+#: src/bimp-manipulations.c:299
 msgid "Crop"
-msgstr ""
+msgstr "Kırp"
 
-#: bimp-manipulations.c:302
+#: src/bimp-manipulations.c:302
 msgid "Flip or Rotate"
-msgstr ""
+msgstr "Çevir veya Döndür"
 
-#: bimp-manipulations.c:305
+#: src/bimp-manipulations.c:305
 msgid "Color correction"
-msgstr ""
+msgstr "Renk düzeltmesi"
 
-#: bimp-manipulations.c:308
+#: src/bimp-manipulations.c:308
 msgid "Sharp or Blur"
-msgstr ""
+msgstr "Keskinleştir veya Bulanıklaştır"
 
-#: bimp-manipulations.c:311
+#: src/bimp-manipulations.c:311
 msgid "Add a Watermark"
-msgstr ""
+msgstr "Filigran Ekle"
 
-#: bimp-manipulations.c:314
+#: src/bimp-manipulations.c:314
 msgid "Change format and compression"
-msgstr ""
+msgstr "Biçim ve sıkıştırmayı değiştir"
 
-#: bimp-manipulations.c:317
+#: src/bimp-manipulations.c:317
 msgid "Rename with a pattern"
-msgstr ""
+msgstr "Desen ile yeniden adlandır"
 
-#: bimp-manipulations.c:320
+#: src/bimp-manipulations.c:320
 msgid "Other GIMP procedure..."
-msgstr ""
+msgstr "Diğer GIMP yordamı..."
 
-#: bimp-operate.c:179
+#: src/bimp-operate.c:179
 #, c-format
 msgid ""
 "Can't save image \"%s\": input file has no extension.\n"
 "You can solve this error by adding a \"Change format or compression\" step"
 msgstr ""
+"\"%s\" görüntüsü kaydedilemedi: girdi dosyasının uzantısı yok.\n"
+"\"Biçimi veya sıkıştırmayı değiştir\" adımı ekleyerek bu hatayı "
+"çözebilirsiniz."
 
-#: bimp-operate.c:185
+#: src/bimp-operate.c:185
 #, c-format
 msgid ""
 "GIMP can't save %s back to its original SVG format.\n"
 "You can solve this error by adding a \"Change format or compression\" step"
 msgstr ""
+"GIMP, %s dosyasını özgün SVG biçiminde geri kaydedemez.\n"
+"\"Biçimi veya sıkıştırmayı değiştir\" adımı ekleyerek bu hatayı "
+"çözebilirsiniz."
 
-#: bimp-operate.c:191
+#: src/bimp-operate.c:191
 #, c-format
 msgid "Working on file \"%s\"..."
-msgstr ""
+msgstr "\"%s\" dosyası üzerinde çalışıyor..."
 
-#: bimp-operate.c:331
+#: src/bimp-operate.c:331
 msgid "Operations stopped"
-msgstr ""
+msgstr "İşlem durduruldu."
 
-#: bimp-operate.c:338
+#: src/bimp-operate.c:338
 #, c-format
 msgid "End, all files have been processed with %d errors"
-msgstr ""
+msgstr "Bitti, tüm dosyalar %d hata ile işlendi"
 
-#: bimp-operate.c:1448
+#: src/bimp-operate.c:1448
 #, c-format
 msgid "File %s already exists, overwrite it?"
-msgstr ""
+msgstr "“%s” dosyası zaten var, üzerine yazılsın mı?"
 
-#: bimp-operate.c:1453
+#: src/bimp-operate.c:1453
 msgid "Always apply this decision"
-msgstr ""
+msgstr "Daima bu kararı uygula"
 
-#: bimp-operate.c:1465
+#: src/bimp-operate.c:1465
 msgid "Overwrite?"
-msgstr ""
+msgstr "Üzerine yazılsın mı?"
 
-#: manipulation-gui/gui-changeformat.c:36
+#: src/manipulation-gui/gui-changeformat.c:36
 msgid "Format settings"
-msgstr ""
+msgstr "Biçim ayarları"
 
-#: manipulation-gui/gui-changeformat.c:56
+#: src/manipulation-gui/gui-changeformat.c:56
 msgid "Interlaced"
-msgstr ""
+msgstr "Birleştirilmiş"
 
-#: manipulation-gui/gui-changeformat.c:73
-#: manipulation-gui/gui-changeformat.c:104
-#: manipulation-gui/gui-changeformat.c:306
-#: manipulation-gui/gui-changeformat.c:408
+#: src/manipulation-gui/gui-changeformat.c:73
+#: src/manipulation-gui/gui-changeformat.c:104
+#: src/manipulation-gui/gui-changeformat.c:306
+#: src/manipulation-gui/gui-changeformat.c:408
 msgid "Quality"
-msgstr ""
+msgstr "Kalite"
 
-#: manipulation-gui/gui-changeformat.c:77
-#: manipulation-gui/gui-changeformat.c:193
+#: src/manipulation-gui/gui-changeformat.c:77
+#: src/manipulation-gui/gui-changeformat.c:193
 msgid "Advanced params"
-msgstr ""
+msgstr "Gelişmiş parametreler"
 
-#: manipulation-gui/gui-changeformat.c:81
+#: src/manipulation-gui/gui-changeformat.c:81
 msgid "Smoothing"
-msgstr ""
+msgstr "Pürüzsüzleştirme"
 
-#: manipulation-gui/gui-changeformat.c:86
+#: src/manipulation-gui/gui-changeformat.c:86
 msgid "Optimize"
-msgstr ""
+msgstr "Eniyile"
 
-#: manipulation-gui/gui-changeformat.c:87
+#: src/manipulation-gui/gui-changeformat.c:87
 msgid "Progressive"
-msgstr ""
+msgstr "Aşamalı"
 
-#: manipulation-gui/gui-changeformat.c:88
+#: src/manipulation-gui/gui-changeformat.c:88
 msgid "Save baseline"
-msgstr ""
+msgstr "Tabanı kaydet"
 
-#: manipulation-gui/gui-changeformat.c:91
+#: src/manipulation-gui/gui-changeformat.c:91
 msgid "Comment"
-msgstr ""
+msgstr "Yorum"
 
-#: manipulation-gui/gui-changeformat.c:96
+#: src/manipulation-gui/gui-changeformat.c:96
 msgid "Markers rows"
-msgstr ""
+msgstr "İşaretçi satırları"
 
-#: manipulation-gui/gui-changeformat.c:100
+#: src/manipulation-gui/gui-changeformat.c:100
 msgid "Subsampling"
-msgstr ""
+msgstr "Alt örnekleme"
 
-#: manipulation-gui/gui-changeformat.c:102
+#: src/manipulation-gui/gui-changeformat.c:102
 msgid "Small size"
-msgstr ""
+msgstr "Küçük boyutlu"
 
-#: manipulation-gui/gui-changeformat.c:109
+#: src/manipulation-gui/gui-changeformat.c:109
 msgid "DCT algorithm"
-msgstr ""
+msgstr "DCT algoritması"
 
-#: manipulation-gui/gui-changeformat.c:111
+#: src/manipulation-gui/gui-changeformat.c:111
 msgid "Integer"
 msgstr "Tamsayı"
 
-#: manipulation-gui/gui-changeformat.c:112
+#: src/manipulation-gui/gui-changeformat.c:112
 msgid "Fast integer"
-msgstr ""
+msgstr "Sabit Tam Sayı"
 
-#: manipulation-gui/gui-changeformat.c:113
+#: src/manipulation-gui/gui-changeformat.c:113
 msgid "Float"
-msgstr ""
+msgstr "Kayan sayı"
 
-#: manipulation-gui/gui-changeformat.c:187
+#: src/manipulation-gui/gui-changeformat.c:187
 msgid "Interlace (Adam7)"
-msgstr ""
+msgstr "Birleştir (Adam7)"
 
-#: manipulation-gui/gui-changeformat.c:189
-#: manipulation-gui/gui-changeformat.c:277
+#: src/manipulation-gui/gui-changeformat.c:189
+#: src/manipulation-gui/gui-changeformat.c:277
 msgid "Compression"
-msgstr ""
+msgstr "Sıkıştırma"
 
-#: manipulation-gui/gui-changeformat.c:196
+#: src/manipulation-gui/gui-changeformat.c:196
 msgid "Save background color"
-msgstr ""
+msgstr "Artalan rengini kaydet"
 
-#: manipulation-gui/gui-changeformat.c:197
+#: src/manipulation-gui/gui-changeformat.c:197
 msgid "Save gamma"
 msgstr "Gamayı kaydet"
 
-#: manipulation-gui/gui-changeformat.c:198
+#: src/manipulation-gui/gui-changeformat.c:198
 msgid "Save layer offset"
-msgstr ""
+msgstr "Katman konumunu kaydet"
 
-#: manipulation-gui/gui-changeformat.c:199
+#: src/manipulation-gui/gui-changeformat.c:199
 msgid "Save resolution"
-msgstr ""
+msgstr "Çözünürlüğü kaydet"
 
-#: manipulation-gui/gui-changeformat.c:200
+#: src/manipulation-gui/gui-changeformat.c:200
 msgid "Save creation date"
-msgstr ""
+msgstr "Oluşturma tarihini kaydet"
 
-#: manipulation-gui/gui-changeformat.c:201
+#: src/manipulation-gui/gui-changeformat.c:201
 msgid "Save comments"
-msgstr ""
+msgstr "Yorumları kaydet"
 
-#: manipulation-gui/gui-changeformat.c:202
+#: src/manipulation-gui/gui-changeformat.c:202
 msgid "Save color from transparent pixels"
-msgstr ""
+msgstr "Saydam piksellerden renk kaydet"
 
-#: manipulation-gui/gui-changeformat.c:248
+#: src/manipulation-gui/gui-changeformat.c:248
 msgid "RLE compression"
-msgstr ""
+msgstr "RLE sıkıştırması"
 
-#: manipulation-gui/gui-changeformat.c:251
+#: src/manipulation-gui/gui-changeformat.c:251
 msgid "Image origin"
-msgstr ""
+msgstr "Görüntü kökeni"
 
-#: manipulation-gui/gui-changeformat.c:254 manipulation-gui/gui-crop.c:69
+#: src/manipulation-gui/gui-changeformat.c:254
+#: src/manipulation-gui/gui-crop.c:69
 msgid "Top-left"
-msgstr ""
+msgstr "Üst sol"
 
-#: manipulation-gui/gui-changeformat.c:255 manipulation-gui/gui-crop.c:71
+#: src/manipulation-gui/gui-changeformat.c:255
+#: src/manipulation-gui/gui-crop.c:71
 msgid "Bottom-left"
-msgstr ""
+msgstr "Alt sol"
 
-#: manipulation-gui/gui-changeformat.c:280 manipulation-gui/gui-fliprotate.c:38
+#: src/manipulation-gui/gui-changeformat.c:280
+#: src/manipulation-gui/gui-fliprotate.c:38
 msgid "None"
-msgstr ""
+msgstr "Hiçbiri"
 
-#: manipulation-gui/gui-changeformat.c:281
+#: src/manipulation-gui/gui-changeformat.c:281
 msgid "LZW"
-msgstr ""
+msgstr "LZW"
 
-#: manipulation-gui/gui-changeformat.c:282
+#: src/manipulation-gui/gui-changeformat.c:282
 msgid "Pack bits"
-msgstr ""
+msgstr "Pack bits"
 
-#: manipulation-gui/gui-changeformat.c:283
+#: src/manipulation-gui/gui-changeformat.c:283
 msgid "Deflate"
-msgstr ""
+msgstr "Deflate"
 
-#: manipulation-gui/gui-changeformat.c:284
+#: src/manipulation-gui/gui-changeformat.c:284
 msgid "JPEG"
-msgstr ""
+msgstr "JPEG"
 
-#: manipulation-gui/gui-changeformat.c:285
+#: src/manipulation-gui/gui-changeformat.c:285
 msgid "CCITT G3 Fax"
-msgstr ""
+msgstr "CCITT G3 Faks"
 
-#: manipulation-gui/gui-changeformat.c:286
+#: src/manipulation-gui/gui-changeformat.c:286
 msgid "CCITT G4 Fax"
-msgstr ""
+msgstr "CCITT G4 Faks"
 
-#: manipulation-gui/gui-changeformat.c:303
-#: manipulation-gui/gui-changeformat.c:331
+#: src/manipulation-gui/gui-changeformat.c:303
+#: src/manipulation-gui/gui-changeformat.c:331
 msgid "Lossless"
-msgstr ""
+msgstr "Kayıpsız"
 
-#: manipulation-gui/gui-changeformat.c:334
+#: src/manipulation-gui/gui-changeformat.c:334
 msgid "Image quality"
-msgstr ""
+msgstr "Görüntü kalitesi"
 
-#: manipulation-gui/gui-changeformat.c:339
+#: src/manipulation-gui/gui-changeformat.c:339
 msgid "Alpha quality"
-msgstr ""
+msgstr "Alfa kalitesi"
 
-#: manipulation-gui/gui-changeformat.c:344
+#: src/manipulation-gui/gui-changeformat.c:344
 msgid "Preset"
-msgstr ""
+msgstr "Ön ayar"
 
-#: manipulation-gui/gui-changeformat.c:347
+#: src/manipulation-gui/gui-changeformat.c:347
 msgid "Default"
-msgstr ""
+msgstr "Öntanımlı"
 
-#: manipulation-gui/gui-changeformat.c:348
+#: src/manipulation-gui/gui-changeformat.c:348
 msgid "Picture"
-msgstr ""
+msgstr "Resim"
 
-#: manipulation-gui/gui-changeformat.c:349
+#: src/manipulation-gui/gui-changeformat.c:349
 msgid "Photo"
-msgstr ""
+msgstr "Fotoğraf"
 
-#: manipulation-gui/gui-changeformat.c:350
+#: src/manipulation-gui/gui-changeformat.c:350
 msgid "Drawing"
-msgstr ""
+msgstr "Çizim"
 
-#: manipulation-gui/gui-changeformat.c:351
+#: src/manipulation-gui/gui-changeformat.c:351
 msgid "Icon"
-msgstr ""
+msgstr "Simge"
 
-#: manipulation-gui/gui-changeformat.c:352 manipulation-gui/gui-watermark.c:49
+#: src/manipulation-gui/gui-changeformat.c:352
+#: src/manipulation-gui/gui-watermark.c:49
 msgid "Text"
-msgstr ""
+msgstr "Metin"
 
-#: manipulation-gui/gui-changeformat.c:354
+#: src/manipulation-gui/gui-changeformat.c:354
 msgid "Save EXIF data"
-msgstr ""
+msgstr "Exif verisini kaydet"
 
-#: manipulation-gui/gui-changeformat.c:355
+#: src/manipulation-gui/gui-changeformat.c:355
 msgid "Save XMP data"
-msgstr ""
+msgstr "XMP verisini kaydet"
 
-#: manipulation-gui/gui-changeformat.c:356
+#: src/manipulation-gui/gui-changeformat.c:356
 msgid "Save color profile"
-msgstr ""
+msgstr "Renk profilini kaydet"
 
-#: manipulation-gui/gui-changeformat.c:405
+#: src/manipulation-gui/gui-changeformat.c:405
 msgid "Nearly lossless"
-msgstr ""
+msgstr "Neredeyse kayıpsız"
 
-#: manipulation-gui/gui-changeformat.c:433
+#: src/manipulation-gui/gui-changeformat.c:433
 msgid "This format has no params"
-msgstr ""
+msgstr "Bu biçimin parametresi yok"
 
-#: manipulation-gui/gui-color.c:22
+#: src/manipulation-gui/gui-color.c:22
 msgid "Brightness"
-msgstr ""
+msgstr "Parlaklık"
 
-#: manipulation-gui/gui-color.c:28
+#: src/manipulation-gui/gui-color.c:28
 msgid "Contrast"
-msgstr ""
+msgstr "Karşıtlık"
 
-#: manipulation-gui/gui-color.c:34
+#: src/manipulation-gui/gui-color.c:34
 msgid "Convert to grayscale"
-msgstr ""
+msgstr "Gri tonlamaya dönüştür"
 
-#: manipulation-gui/gui-color.c:36
+#: src/manipulation-gui/gui-color.c:36
 msgid "Automatic color levels correction"
-msgstr ""
+msgstr "Kendiliğinden renk düzeyi düzeltmesi"
 
-#: manipulation-gui/gui-color.c:39
+#: src/manipulation-gui/gui-color.c:39
 msgid "Change color curve from settings file:"
-msgstr ""
+msgstr "Ayarlar dosyasından renk eğrisini değiştir:"
 
-#: manipulation-gui/gui-color.c:41
+#: src/manipulation-gui/gui-color.c:41
 msgid "Select GIMP Curve file"
-msgstr ""
+msgstr "GIMP Eğri dosyası seç"
 
-#: manipulation-gui/gui-crop.c:28
+#: src/manipulation-gui/gui-crop.c:28
 msgid "Crop to a standard aspect ratio"
-msgstr ""
+msgstr "Standart en boy orana kırp"
 
-#: manipulation-gui/gui-crop.c:52
+#: src/manipulation-gui/gui-crop.c:52
 msgid "Manual crop (pixel values)"
-msgstr ""
+msgstr "Elle kırp (piksel değerleri)"
 
-#: manipulation-gui/gui-crop.c:58 manipulation-gui/gui-resize.c:49
-#: manipulation-gui/gui-watermark.c:81
+#: src/manipulation-gui/gui-crop.c:58 src/manipulation-gui/gui-resize.c:49
+#: src/manipulation-gui/gui-watermark.c:81
 msgid "Width"
-msgstr ""
+msgstr "Genişlik"
 
-#: manipulation-gui/gui-crop.c:61 manipulation-gui/gui-resize.c:58
-#: manipulation-gui/gui-watermark.c:82
+#: src/manipulation-gui/gui-crop.c:61 src/manipulation-gui/gui-resize.c:58
+#: src/manipulation-gui/gui-watermark.c:82
 msgid "Height"
-msgstr ""
+msgstr "Yükseklik"
 
-#: manipulation-gui/gui-crop.c:66
+#: src/manipulation-gui/gui-crop.c:66
 msgid "Start from"
-msgstr ""
+msgstr "İtibaren başla:"
 
-#: manipulation-gui/gui-crop.c:68
+#: src/manipulation-gui/gui-crop.c:68
 msgid "Center"
-msgstr ""
+msgstr "Merkez"
 
-#: manipulation-gui/gui-crop.c:70
+#: src/manipulation-gui/gui-crop.c:70
 msgid "Top-right"
-msgstr ""
+msgstr "Üst sağ"
 
-#: manipulation-gui/gui-crop.c:72
+#: src/manipulation-gui/gui-crop.c:72
 msgid "Bottom-right"
-msgstr ""
+msgstr "Alt sağ"
 
-#: manipulation-gui/gui-crop.c:128
+#: src/manipulation-gui/gui-crop.c:128
 msgid "One-to-one"
-msgstr ""
+msgstr "Bire bir"
 
-#: manipulation-gui/gui-crop.c:131
+#: src/manipulation-gui/gui-crop.c:131
 msgid "Classic 35 mm film"
-msgstr ""
+msgstr "Klasik 35 mm film"
 
-#: manipulation-gui/gui-crop.c:134
+#: src/manipulation-gui/gui-crop.c:134
 msgid "Standard VGA monitor"
-msgstr ""
+msgstr "Standart VGA ekran"
 
-#: manipulation-gui/gui-crop.c:137
+#: src/manipulation-gui/gui-crop.c:137
 msgid "Widescreen"
-msgstr ""
+msgstr "Geniş Ekran"
 
-#: manipulation-gui/gui-crop.c:140
+#: src/manipulation-gui/gui-crop.c:140
 msgid "Widescreen extended"
-msgstr ""
+msgstr "Genişletilmiş geniş ekran"
 
-#: manipulation-gui/gui-crop.c:143
+#: src/manipulation-gui/gui-crop.c:143
 msgid "EU Passport portrait"
-msgstr ""
+msgstr "AB Pasaport dikey"
 
-#: manipulation-gui/gui-crop.c:146
+#: src/manipulation-gui/gui-crop.c:146
 msgid "Classic smartphone screen"
-msgstr ""
+msgstr "Klasik akıllı telefon ekranı"
 
-#: manipulation-gui/gui-crop.c:149
+#: src/manipulation-gui/gui-crop.c:149
 msgid "Tall smartphone screen"
-msgstr ""
+msgstr "Uzun akıllı telefon ekranı"
 
-#: manipulation-gui/gui-crop.c:152
+#: src/manipulation-gui/gui-crop.c:152
 msgid "Classic tablet screen"
-msgstr ""
+msgstr "Klasik tablet ekranı"
 
-#: manipulation-gui/gui-crop.c:155
+#: src/manipulation-gui/gui-crop.c:155
 msgid "Custom ratio"
-msgstr ""
+msgstr "Özel en boy oranı"
 
-#: manipulation-gui/gui-fliprotate.c:20
+#: src/manipulation-gui/gui-fliprotate.c:20
 msgid "Flip"
-msgstr ""
+msgstr "Çevir"
 
-#: manipulation-gui/gui-fliprotate.c:24
+#: src/manipulation-gui/gui-fliprotate.c:24
 msgid "Horizontally"
-msgstr ""
+msgstr "Yatay olarak"
 
-#: manipulation-gui/gui-fliprotate.c:29
+#: src/manipulation-gui/gui-fliprotate.c:29
 msgid "Vertically"
-msgstr ""
+msgstr "Dikey olarak"
 
-#: manipulation-gui/gui-fliprotate.c:36
+#: src/manipulation-gui/gui-fliprotate.c:36
 msgid "Rotation"
-msgstr ""
+msgstr "Döndürme"
 
-#: manipulation-gui/gui-rename.c:25
+#: src/manipulation-gui/gui-rename.c:25
 msgid "Keywords"
-msgstr ""
+msgstr "Anahtar Sözcükler"
 
-#: manipulation-gui/gui-rename.c:28
+#: src/manipulation-gui/gui-rename.c:28
 msgid "Original filename (without extension)"
-msgstr ""
+msgstr "Özgün dosya adı (uzantı olmadan)"
 
-#: manipulation-gui/gui-rename.c:29
+#: src/manipulation-gui/gui-rename.c:29
 msgid "Incremental number"
-msgstr ""
+msgstr "Artan sayı"
 
-#: manipulation-gui/gui-rename.c:30
+#: src/manipulation-gui/gui-rename.c:30
 msgid "Date and time (YYYY-MM-DD_hh-mm)"
-msgstr ""
+msgstr "Tarih ve zaman (YYYY-MM-DD_hh-mm)"
 
-#: manipulation-gui/gui-rename.c:49
+#: src/manipulation-gui/gui-rename.c:49
 #, c-format
 msgid ""
 "Can't save!\n"
 "'%s' or '%s' symbol must be present."
 msgstr ""
+"Kaydedilemedi!\n"
+"'%s' ya da '%s' sembolü mutlaka bulunmalı."
 
-#: manipulation-gui/gui-rename.c:61
+#: src/manipulation-gui/gui-rename.c:61
 msgid ""
 "Can't save!\n"
 "Pattern contains invalid characters."
 msgstr ""
+"Kaydedilemedi.\n"
+"Desen geçersiz karakterler içeriyor."
 
-#: manipulation-gui/gui-resize.c:53 manipulation-gui/gui-resize.c:62
+#: src/manipulation-gui/gui-resize.c:53 src/manipulation-gui/gui-resize.c:62
 msgid "%"
-msgstr ""
+msgstr "%"
 
-#: manipulation-gui/gui-resize.c:54 manipulation-gui/gui-resize.c:63
+#: src/manipulation-gui/gui-resize.c:54 src/manipulation-gui/gui-resize.c:63
 msgid "px"
-msgstr ""
+msgstr "px"
 
-#: manipulation-gui/gui-resize.c:55 manipulation-gui/gui-resize.c:64
+#: src/manipulation-gui/gui-resize.c:55 src/manipulation-gui/gui-resize.c:64
 msgid "Disable"
-msgstr ""
+msgstr "Devre Dışı Bırak"
 
-#: manipulation-gui/gui-resize.c:70
+#: src/manipulation-gui/gui-resize.c:70
 msgid "Aspect ratio"
-msgstr ""
+msgstr "En boy oranı"
 
-#: manipulation-gui/gui-resize.c:72
+#: src/manipulation-gui/gui-resize.c:72
 msgid "Stretch"
-msgstr ""
+msgstr "Genişlet"
 
-#: manipulation-gui/gui-resize.c:73
+#: src/manipulation-gui/gui-resize.c:73
 msgid "Preserve"
-msgstr ""
+msgstr "Koru"
 
-#: manipulation-gui/gui-resize.c:74
+#: src/manipulation-gui/gui-resize.c:74
 msgid "Pad"
-msgstr ""
+msgstr "Doldurma"
 
-#: manipulation-gui/gui-resize.c:80
+#: src/manipulation-gui/gui-resize.c:80
 msgid "Padding color"
-msgstr ""
+msgstr "Doldurma rengi"
 
-#: manipulation-gui/gui-resize.c:89
+#: src/manipulation-gui/gui-resize.c:89
 msgid "Interpolation"
-msgstr ""
+msgstr "Aradeğerleme"
 
-#: manipulation-gui/gui-resize.c:101
+#: src/manipulation-gui/gui-resize.c:101
 msgid "Change resolution"
-msgstr ""
+msgstr "Çözünürlüğü değiştir"
 
-#: manipulation-gui/gui-resize.c:106
+#: src/manipulation-gui/gui-resize.c:106
 msgid "X axis"
-msgstr ""
+msgstr "X ekseni"
 
-#: manipulation-gui/gui-resize.c:110
+#: src/manipulation-gui/gui-resize.c:110
 msgid "Y axis"
-msgstr ""
+msgstr "Y ekseni"
 
-#: manipulation-gui/gui-sharpblur.c:17
+#: src/manipulation-gui/gui-sharpblur.c:17
 msgid "More sharpen"
-msgstr ""
+msgstr "Daha fazla Keskinleştir"
 
-#: manipulation-gui/gui-sharpblur.c:22
+#: src/manipulation-gui/gui-sharpblur.c:22
 msgid "More blurred"
-msgstr ""
+msgstr "Daha fazla bulanıklaştır"
 
-#: manipulation-gui/gui-userdef.c:47
+#: src/manipulation-gui/gui-userdef.c:47
 msgid ""
 "Choose a supported GIMP procedure from the list on the left\n"
 "and define its parameters on the right."
 msgstr ""
+"Soldaki listeden desteklenen bir GIMP yordamı seçin \n"
+"ve parametrelerini sağda tanımlayın."
 
-#: manipulation-gui/gui-userdef.c:59
+#: src/manipulation-gui/gui-userdef.c:59
 msgid "Search"
-msgstr ""
+msgstr "Arama"
 
-#: manipulation-gui/gui-userdef.c:301
+#: src/manipulation-gui/gui-userdef.c:301
 msgid ""
 "Can't save because\n"
 "no procedure has been selected"
 msgstr ""
+"Hiçbir yordam \n"
+"seçilmediği için kaydedilemiyor"
 
-#: manipulation-gui/gui-userdef.c:346
+#: src/manipulation-gui/gui-userdef.c:346
 msgid "Author"
-msgstr ""
+msgstr "Yazar"
 
-#: manipulation-gui/gui-userdef.c:588
+#: src/manipulation-gui/gui-userdef.c:588
 msgid "This procedure takes no editable params"
-msgstr ""
+msgstr "Bu yordam düzenlenebilir parametre almaz"
 
-#: manipulation-gui/gui-watermark.c:41
+#: src/manipulation-gui/gui-watermark.c:41
 msgid "Text watermark"
-msgstr ""
+msgstr "Metin filigran"
 
-#: manipulation-gui/gui-watermark.c:56
+#: src/manipulation-gui/gui-watermark.c:56
 msgid "Font"
-msgstr ""
+msgstr "Yazı tipi"
 
-#: manipulation-gui/gui-watermark.c:60
+#: src/manipulation-gui/gui-watermark.c:60
 msgid "Color"
-msgstr ""
+msgstr "Renk"
 
-#: manipulation-gui/gui-watermark.c:66
+#: src/manipulation-gui/gui-watermark.c:66
 msgid "Image watermark"
-msgstr ""
+msgstr "Görüntü fligranı"
 
-#: manipulation-gui/gui-watermark.c:72
+#: src/manipulation-gui/gui-watermark.c:72
 msgid "Select image"
-msgstr ""
+msgstr "Görüntü seç"
 
-#: manipulation-gui/gui-watermark.c:74
+#: src/manipulation-gui/gui-watermark.c:74
 msgid "Adaptive size"
-msgstr ""
+msgstr "Uyarlamalı boyut"
 
-#: manipulation-gui/gui-watermark.c:78
+#: src/manipulation-gui/gui-watermark.c:78
 #, c-format
 msgid "% of"
 msgstr ""
 
-#: manipulation-gui/gui-watermark.c:121
+#: src/manipulation-gui/gui-watermark.c:121
 msgid "Opacity"
-msgstr ""
+msgstr "Matlık"
 
-#: manipulation-gui/gui-watermark.c:130
+#: src/manipulation-gui/gui-watermark.c:130
 msgid "Distance to edge"
-msgstr ""
+msgstr "Kenara uzaklık"
 
-#: manipulation-gui/gui-watermark.c:134
+#: src/manipulation-gui/gui-watermark.c:134
 msgid "Position on the image"
-msgstr ""
+msgstr "Görüntü üzerindeki konum"
