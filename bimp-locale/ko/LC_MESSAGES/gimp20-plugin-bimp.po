@@ -331,7 +331,7 @@ msgid ""
 "'%s' or '%s' symbol must be present."
 msgstr ""
 "저장할 수 없습니다!\n"
-"%s' 또는 '%s' 가 있어야 합니다. "
+"'%s' 또는 '%s' 가 있어야 합니다."
 
 #: .\manipulation-gui/gui-rename.c:64 manipulation-gui/gui-rename.c:64
 msgid ""
@@ -565,7 +565,7 @@ msgstr "저장할 폴더 선택"
 
 #: bimp-gui.c:748 bimp-gui.c:903
 msgid "Save this set..."
-msgstr "이 세트 저장.."
+msgstr "이 세트 저장..."
 
 #: bimp-gui.c:752 bimp-gui.c:958
 msgid "Load set..."
@@ -581,7 +581,7 @@ msgstr "이 처리 제거"
 
 #: bimp-gui.c:773
 msgid "Add single images..."
-msgstr "이미지 하나씩 추가.."
+msgstr "이미지 하나씩 추가..."
 
 #: bimp-gui.c:776
 msgid "Add folders..."
