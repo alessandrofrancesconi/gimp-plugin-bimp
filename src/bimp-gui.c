@@ -997,7 +997,7 @@ static void save_set(GtkMenuItem *menuitem, gpointer user_data)
             gtk_widget_destroy (file_saver);
             
             if (!bimp_serialize_to_file(output_file)) {
-                bimp_show_error_dialog(_("An error occured when importing a saved batch file :("), bimp_window_main);
+                bimp_show_error_dialog(_("An error occurred when importing a saved batch file :("), bimp_window_main);
             }
             
             return;
@@ -1048,7 +1048,7 @@ static void load_set(GtkMenuItem *menuitem, gpointer user_data)
             gtk_widget_destroy (file_loader);
             
             if (!bimp_deserialize_from_file(input_file)) {
-                bimp_show_error_dialog(_("An error occured when importing a saved batch file :("), bimp_window_main);
+                bimp_show_error_dialog(_("An error occurred when importing a saved batch file :("), bimp_window_main);
             }
             else {
                 bimp_refresh_sequence_panel();
