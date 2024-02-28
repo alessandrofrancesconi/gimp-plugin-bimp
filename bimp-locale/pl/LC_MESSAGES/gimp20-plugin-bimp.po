@@ -205,7 +205,7 @@ msgstr ""
 #: bimp-operate.c:183
 #, c-format
 msgid "Working on file \"%s\"..."
-msgstr "Przetworzanie pliku \"%s\"..."
+msgstr "Przetwarzanie pliku \"%s\"..."
 
 #: bimp-operate.c:251
 msgid "Operations stopped"
