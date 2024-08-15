@@ -1,6 +1,6 @@
 GIMP_CFLAGS = $(shell gimptool-2.0 --cflags)
 GIMP_LIBS = $(shell gimptool-2.0 --libs)
-CFLAGS += $(GIMP_CFLAGS) -Wall -Wno-unused-variable -Wno-pointer-sign -DGIMP_DISABLE_DEPRECATED
+CFLAGS += $(GIMP_CFLAGS) -Wall -Wno-unused-variable -Wno-pointer-sign -DGIMP_DISABLE_DEPRECATED -fpermissive
 LDFLAGS += $(GIMP_LIBS) -lm
 SYSTEM_INSTALL_DIR = $(shell gimptool-2.0 --dry-run --install-admin-bin ./bin/bimp | sed 's/cp \S* \(\S*\)/\1/'|tr -d [\'])
 USER_INSTALL_DIR = $(shell gimptool-2.0 --dry-run --install-bin ./bin/bimp | sed 's/cp \S* \(\S*\)/\1/'|tr -d [\'])
